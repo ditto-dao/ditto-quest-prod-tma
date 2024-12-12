@@ -1,0 +1,6 @@
+.crafting-page-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 24px;
+}

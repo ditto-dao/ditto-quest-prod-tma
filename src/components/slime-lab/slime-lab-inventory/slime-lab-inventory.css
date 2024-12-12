@@ -1,0 +1,218 @@
+#slime-lab-inventory-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  padding: 20px;
+  overflow-y: auto;
+  scrollbar-gutter: stable; /* Keeps layout stable when scrollbar appears */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 136, 136, 0.5) transparent; /* Same colors as above for consistency */
+  scroll-behavior: smooth;
+}
+
+.slime-inventory-item {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f0f0f0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 100px;
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.slime-inventory-item:hover {
+  background-color: #e0e0e0;
+  transform: scale(1.05);
+}
+
+.equipped-slime {
+  border: 2px solid #4caf50;
+  background-color: #d4f8d4;
+}
+
+.slime-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.slime-id {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  font-size: 12px;
+  color: #555;
+}
+
+/* MODAL */
+
+.slime-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 500px;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
+}
+
+/* MODAL CONTENT */
+.slime-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  max-height: 80vh; /* Prevent the modal from growing too large */
+  overflow-y: auto; /* Enable vertical scrolling when needed */
+  scrollbar-gutter: stable; /* Keeps layout stable when scrollbar appears */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 136, 136, 0.5) transparent; /* Same colors as above for consistency */
+  scroll-behavior: smooth;
+}
+
+.slime-modal-content::-webkit-scrollbar, #slime-lab-inventory-container::-webkit-scrollbar {
+  width: 3px; /* Narrow width for the scrollbar */
+  background-color: transparent; /* Fully transparent background */
+}
+
+.slime-modal-content::-webkit-scrollbar-track, #slime-lab-inventory-container::-webkit-scrollbar-track {
+  background-color: transparent; /* Transparent track, makes it unnoticeable */
+}
+
+.slime-modal-content::-webkit-scrollbar-thumb, #slime-lab-inventory-container::-webkit-scrollbar-thumb {
+  background-color: rgba(
+    136,
+    136,
+    136,
+    0.3
+  ); /* Semi-transparent thumb for minimal visibility */
+  border-radius: 3px; /* Slightly rounded corners for the scrollbar thumb */
+  transition: background-color 0.3s ease-in-out; /* Add smooth transition for background color */
+}
+
+.slime-modal-content::-webkit-scrollbar-thumb:hover, #slime-lab-inventory-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(
+    85,
+    85,
+    85,
+    0.8
+  ); /* Darker color on hover for better visibility */
+}
+
+.slime-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.close-modal-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: bolder;
+}
+
+.close-modal-button:hover {
+  background: #ff1a1a;
+}
+
+.slime-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+}
+
+.slime-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: #ccc;
+  border-radius: 5px;
+}
+
+.slime-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+.slime-info-row {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+}
+
+.slime-info-id {
+  font-size: 18px;
+  text-align: center;
+  font-weight: bold;
+  color: #333;
+}
+
+.slime-info-gen {
+  font-size: 12px;
+  text-align: center;
+  color: #555;
+}
+
+.slime-traits {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 5px;
+}
+
+.slime-trait p {
+  font-size: 16px;
+  font-weight: bolder;
+}
+
+.trait-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.trait-table th,
+.trait-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+}
+
+.trait-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.trait-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

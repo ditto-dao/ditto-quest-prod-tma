@@ -1,0 +1,79 @@
+#avatar-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: var(--deep-teal);
+  padding: 20px;
+  gap: 30px;
+}
+
+#equipment-slot-wrapper,
+#spellbook-slot-wrapper {
+  background-color: var(--bright-teal);
+  border-radius: 12px;
+  border: 2px solid var(--dark-navy);
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 0 0 var(--dark-navy);
+  padding: 1px;
+}
+
+#equipment-slot-container,
+#spellbook-slot-container {
+  background-color: var(--forest-green);
+  border-radius: 11px;
+  width: 100%;
+  height: 100%;
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.equipment-slot-label,
+.spellbook-slot-label {
+  padding: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  text-align: center;
+  color: var(--cream-white);
+  background-color: var(--emerald-green);
+  border-radius: 9px 9px 0 0;
+}
+
+.avatar-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+  gap: 10%;
+}
+
+.hat-slot,
+.cape-slot,
+.necklace-slot,
+.pet-slot,
+.shield-slot,
+.armour-slot,
+.weapon-slot,
+.spellbook-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 65px;
+  height: 65px;
+  border: 1.5px solid var(--bright-teal);
+  border-radius: 8px;
+  font-size: 8px;
+  font-weight: bold;
+  color: var(--cream-white);
+  text-align: center;
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+.slot-image {
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}

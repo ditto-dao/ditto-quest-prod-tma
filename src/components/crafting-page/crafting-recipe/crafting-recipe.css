@@ -1,0 +1,79 @@
+.crafting-recipe-container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.equipment-name {
+  font-size: 1rem;
+  margin-bottom: 12px;
+  color: #333;
+  text-align: center;
+  font-weight: bolder;
+}
+
+.required-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #555;
+  padding: 6px 8px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.crafting-req-item-name {
+  font-weight: bold;
+}
+
+.craft-button {
+  padding: 10px 16px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.craft-button.crafting-active {
+  background-color: #e74c3c; /* Red when crafting */
+}
+
+.craft-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.craft-button:not(:disabled):hover {
+  transform: translateY(1px);
+}
+
+.timer-bar {
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.timer-bar-progress {
+  height: 100%;
+  background-color: #4caf50;
+  transition: width 0.2s ease-in-out;
+}

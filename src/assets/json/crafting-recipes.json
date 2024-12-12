@@ -1,0 +1,30 @@
+[
+  {
+    "equipmentId": 1,
+    "equipmentName": "Wooden Sword",
+    "durationS": 30,
+    "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
+    "requiredItems": [
+      {
+        "itemId": 1,
+        "itemName": "Wood",
+        "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
+        "quantity": 10
+      }
+    ]
+  },
+  {
+    "equipmentId": 2,
+    "equipmentName": "Wooden Shield",
+    "durationS": 60,
+    "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
+    "requiredItems": [
+      {
+        "itemId": 1,
+        "itemName": "Wood",
+        "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
+        "quantity": 10
+      }
+    ]
+  }
+]
