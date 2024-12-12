@@ -8,5 +8,5 @@ export default defineConfig({
   build: {
     outDir: './docs'
   },
-  base: '/ditto-quest-tma-vite-dev/'
+  base: '/ditto-quest-tma/'
 });
