@@ -100,7 +100,7 @@
 }
 
 .craft-button:not(:disabled):active {
-  transform: translateY(1px);
+  transform: translateY(0.5px);
 }
 
 .craft-timer-container {

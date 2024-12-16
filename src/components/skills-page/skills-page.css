@@ -1,6 +1,27 @@
 .skill-page-container {
+  padding: 12px;
+}
+
+.skills-container {
+  background-color: var(--sage-green);
+  border-radius: 8px;
+  border: 2px solid var(--dark-navy);
+  box-shadow: 0 4px 0 0 var(--dark-navy);
+  padding: 1px;
+}
+
+.skills-header {
+  font-size: 10px;
+  border-radius: 6px 6px 0 0;
+  padding: 3px;
+  background-color: var(--sage-green);
+}
+
+.skills-inner-container {
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 25px;
+  gap: 10px;
+  background-color: var(--forest-green);
+  border-radius: 0 0 6px 6px;
 }

@@ -12,7 +12,7 @@ import { LoginSocketProvider } from "./redux/socket/login/login-context";
 import { IdleSocketProvider } from "./redux/socket/idle/idle-context";
 
 function App() {
-  //initEruda();
+ // initEruda();
   Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
 
   useEffect(() => {

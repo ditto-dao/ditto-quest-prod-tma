@@ -3,39 +3,36 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--sage-green);
   border-radius: 8px;
-  background-color: #f5f5f5;
-  margin-bottom: 10px;
 }
 
 .skill-name {
-  flex: 1;
-  background-color: #ccc; 
-  padding: 8px;
+  background-color: var(--sage-green); 
+  padding: 6px 5px;
   border-radius: 4px;
-  font-weight: bold;
   text-align: center;
+  font-size: 10px;
+  width: 25%;
 }
 
 .skill-level {
-  flex: 1;
-  padding: 8px;
   text-align: center;
+  font-size: 12px;
 }
 
 .skill-breakdown {
-  flex: 1;
   padding: 8px;
   text-align: center;
+  font-size: 10px;
 }
 
 .skill-plus-button {
-  flex: 0;
-  padding: 6px 12px;
-  background-color: #ddd;
-  border: 1px solid #bbb;
+  padding: 4px 8px;
+  border: 1px solid var(--sage-green);
+  background-color: transparent;
   border-radius: 4px;
   cursor: not-allowed;
-  color: #666;
+  color: var(--sage-green);
+  font-size: 12px;
 }
