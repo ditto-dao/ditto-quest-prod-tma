@@ -1,46 +1,64 @@
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 250px;
-    background-color: #333;
-    color: white;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--deep-teal);
+  color: white;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 1;
 }
 
 .sidebar.open {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
 .close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
 }
 
-.sidebar ul {
-    padding: 20px;
-    list-style: none;
+.dq-icon-container {
+  width: 100%;
+  padding: 20px;
+}
+
+.dq-icon {
+  height: 75px;
 }
 
 .sidebar ul li {
-    margin: 10px 0;
+  margin: 10px 0;
+  text-align: left;
+  display: flex;
+  align-items: center; /* Vertically center icon and text */
 }
 
 .sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center; /* Align icon and text */
+  gap: 10px; /* Add space between icon and text */
+  font-size: 13px;
+}
+
+.sidebar-icon {
+  height: 25px; /* Set icon height */
+  width: 25px;
+  width: auto; /* Maintain aspect ratio */
+  display: inline-block;
 }
 
 .gap {
-    margin-bottom: 15px; /* Adds gap between Shop and the rest of the items */
+  margin-bottom: 45px; /* Adds gap between Shop and the rest of the items */
 }
