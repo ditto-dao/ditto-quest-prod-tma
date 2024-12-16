@@ -4,8 +4,8 @@
   left: 0;
   height: 100%;
   width: 100%;
+  color: var(--cream-white);
   background-color: var(--deep-teal);
-  color: white;
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   z-index: 1;
@@ -21,7 +21,7 @@
   right: 10px;
   background: none;
   border: none;
-  color: white;
+  color: var(--cream-white);
   font-size: 24px;
   cursor: pointer;
 }
@@ -43,7 +43,6 @@
 }
 
 .sidebar ul li a {
-  color: white;
   text-decoration: none;
   cursor: pointer;
   display: flex;
