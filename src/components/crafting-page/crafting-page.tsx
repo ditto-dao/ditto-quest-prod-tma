@@ -16,6 +16,7 @@ function CraftingPage() {
           durationS={recipe.durationS}
           requiredItems={recipe.requiredItems}
           craftingStatus={craftingStatuses[recipe.equipmentId] || null}
+          imgsrc={recipe.imgsrc}
         />
       ))}
     </div>

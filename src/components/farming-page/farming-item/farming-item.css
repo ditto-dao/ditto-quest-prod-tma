@@ -1,48 +1,88 @@
 .farming-item-container {
   display: flex;
   flex-direction: column;
-  background-color: #fefefe;
-  border: 1px solid #ddd;
+  align-items: center;
+  width: 100%; /* Takes full grid cell width */
+  height: 100%; /* Ensures consistency across items */
+  max-width: 300px; /* Optional max size constraint */
+  box-sizing: border-box; /* Ensures padding and borders are included in size */
   border-radius: 8px;
+  background-color: var(--sage-green);
+  border: 2px solid var(--dark-navy);
+  box-shadow: 0 4px 0 0 var(--dark-navy);
+  padding: 1px;
+}
+
+.farming-item-inner-container {
   padding: 16px;
+  background-color: var(--pine-green);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
   width: 100%;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  height: 100%;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.farm-item-header {
+  color: var(--cream-white);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .farm-item-name {
-  font-size: 1.2rem;
-  margin-bottom: 8px;
-  color: #2c3e50;
-  text-align: center;
+  font-size: 11px;
   font-weight: bold;
 }
 
+.farm-item-duration-container {
+  display: flex;
+  align-items: center; /* Vertically align content */
+  justify-content: center; /* Align content to the end of the container */
+}
+
+.farm-item-duration-container img {
+  height: 12px;
+  width: auto;
+  margin-right: 4px; /* Add spacing between the icon and text */
+}
+
+.farm-item-duration {
+  font-size: 10px;
+  text-align: right; /* Ensure the duration text aligns to the right */
+}
+
+.farm-item-img-container {
+  width: 100%;
+  padding: 18px 15px 3px 10px;
+}
+
+.farm-item-img-container img {
+  width: 50px;
+  height: auto;
+}
+
 .farm-item-description {
-  font-size: 0.9rem;
+  font-size: 10px;
   margin-bottom: 12px;
   color: #7f8c8d;
   text-align: center;
 }
 
-.farm-timer-bar {
-  height: 8px;
-  background-color: #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 12px;
-}
-
-.farm-timer-bar-progress {
-  height: 100%;
-  background-color: #3498db;
-  transition: width 0.2s ease-in-out;
+.farm-item-name,
+.farm-item-description {
+  text-align: center;
+  word-wrap: break-word; /* Ensure long text wraps correctly */
 }
 
 .farm-button {
-  padding: 10px 16px;
-  font-size: 1rem;
-  color: #fff;
-  background-color: #27ae60;
+  padding: 8px 12px;
+  font-size: 10px;
+  color: var(--cream-white);
+  background-color: var(--burnt-orange);
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -50,29 +90,10 @@
 }
 
 .farm-button.farming-active {
-  background-color: #e74c3c; /* Red when farming is active */
+  background-color: var(--deep-warm-red);
 }
 
 .farm-button:disabled {
   background-color: #95a5a6;
   cursor: not-allowed;
-}
-
-@media screen and (max-width: 768px) {
-  .farming-item-container {
-    padding: 12px;
-  }
-
-  .item-name {
-    font-size: 1rem;
-  }
-
-  .item-description {
-    font-size: 0.85rem;
-  }
-
-  .farm-button {
-    font-size: 0.9rem;
-    padding: 8px 12px;
-  }
 }

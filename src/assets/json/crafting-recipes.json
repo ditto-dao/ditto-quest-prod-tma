@@ -1,14 +1,14 @@
 [
   {
     "equipmentId": 1,
-    "equipmentName": "Wooden Sword",
+    "equipmentName": "Slime Bronze Sword",
     "durationS": 30,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
     "requiredItems": [
       {
         "itemId": 1,
         "itemName": "Wood",
-        "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
+        "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/34/Spruce_Logs_%28item%29.png/250px-Spruce_Logs_%28item%29.png",
         "quantity": 10
       }
     ]
@@ -22,7 +22,7 @@
       {
         "itemId": 1,
         "itemName": "Wood",
-        "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
+        "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/34/Spruce_Logs_%28item%29.png/250px-Spruce_Logs_%28item%29.png",
         "quantity": 10
       }
     ]

@@ -115,6 +115,7 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
   const [breedingStatus, setBreedingStatus] = useState<
     BreedingStatus | undefined
   >();
+
   // Temporary state for unresolved IDs
   const [unresolvedSireId, setUnresolvedSireId] = useState<number | null>(null);
   const [unresolvedDameId, setUnresolvedDameId] = useState<number | null>(null);
@@ -124,13 +125,24 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
       // Farming
       socket.on("farming-start", (data: FarmingStartPayload) => {
         console.log(`Received farming-start: ${JSON.stringify(data, null, 2)}`);
-        setFarmingStatuses((prevStatuses) => ({
-          ...prevStatuses,
-          [data.itemId]: {
-            startTimestamp: data.startTimestamp,
-            durationS: data.durationS,
-          },
-        }));
+        setFarmingStatuses((prevStatuses) => {
+          if (
+            prevStatuses[data.itemId] !== undefined &&
+            prevStatuses[data.itemId] !== null
+          ) {
+            // If the object at data.itemId is not null or undefined, return the previous state unchanged
+            return prevStatuses;
+          }
+
+          // Otherwise, update the state
+          return {
+            ...prevStatuses,
+            [data.itemId]: {
+              startTimestamp: data.startTimestamp,
+              durationS: data.durationS,
+            },
+          };
+        });
       });
 
       socket.on("farming-stop", (data: FarmingStopPayload) => {
@@ -227,6 +239,8 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
       });
 
       return () => {
+        socket.off("farming-start");
+        socket.off("farming-stop");
         socket.off("crafting-start");
         socket.off("crafting-stop");
         socket.off("breeding-start");

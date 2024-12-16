@@ -1,7 +1,7 @@
 .farming-page-container {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-    padding: 24px;
-  }
-  
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+  gap: 10px; /* Space between grid items */
+  padding: 15px;
+  align-items: stretch; /* Ensures all items stretch to the same height */
+}

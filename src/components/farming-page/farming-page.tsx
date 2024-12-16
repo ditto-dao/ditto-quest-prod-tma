@@ -17,6 +17,7 @@ function FarmingPage() {
           description={item.description}
           durationS={item.farmingDurationS}
           farmingStatus={farmingStatuses[item.itemId] || null}
+          imgsrc={item.imgsrc}
         />
       ))}
     </div>

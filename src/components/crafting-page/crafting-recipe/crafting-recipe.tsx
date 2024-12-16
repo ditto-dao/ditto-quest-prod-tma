@@ -1,6 +1,10 @@
 import { CraftingStatus } from "../../../redux/socket/idle/idle-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
+import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
+import TimerIcon from "../../../assets/images/general/timer.svg";
+import Expand from "../../../assets/images/general/down.svg";
+import Minimize from "../../../assets/images/general/up.svg";
 import "./crafting-recipe.css";
 import { useState, useEffect } from "react";
 
@@ -12,8 +16,10 @@ interface CraftingRecipeProps {
     itemId: number;
     itemName: string;
     quantity: number;
+    imgsrc: string;
   }[];
   craftingStatus: CraftingStatus | null; // New prop to track crafting start time
+  imgsrc: string;
 }
 
 function CraftingRecipe(props: CraftingRecipeProps) {
@@ -21,7 +27,11 @@ function CraftingRecipe(props: CraftingRecipeProps) {
   const { socket } = useSocket();
   const [isCraftable, setIsCraftable] = useState(false);
   const [isCrafting, setIsCrafting] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const toggleExpand = () => {
+    setIsExpanded((prev) => !prev);
+  };
 
   const handleCraftButton = () => {
     if (socket) {
@@ -56,88 +66,85 @@ function CraftingRecipe(props: CraftingRecipeProps) {
     setIsCraftable(canCraft);
   }, [props.requiredItems, userData.itemInventory]);
 
-  useEffect(() => {
-    if (props.craftingStatus !== null) {
-      const totalDuration = props.craftingStatus.durationS * 1000; // Total crafting duration in ms
-      const startTime = props.craftingStatus.startTimestamp; // Start timestamp
-      const endTime = startTime + totalDuration; // End timestamp
-
-      const updateProgress = () => {
-        const currentTime = Date.now(); // Dynamically calculate the current time
-        const elapsedTime = currentTime - startTime; // Time passed since the start
-        const progressPercent = Math.min(
-          (elapsedTime / totalDuration) * 100,
-          100
-        );
-
-
-        if (elapsedTime < 0) {
-          setProgress(0); // If crafting hasn't started yet, set progress to 0
-          return;
-        }
-
-        setProgress(progressPercent);
-
-        if (currentTime >= endTime) {
-          clearInterval(interval); // Clear interval when crafting is complete
-          setProgress(100); // Ensure progress is set to 100% at the end
-        }
-      };
-
-      // Skip the interval if the crafting is already complete
-      if (Date.now() >= endTime) {
-        setProgress(100);
-        return;
-      }
-
-      // Initial progress update
-      updateProgress();
-
-      // Set interval for regular progress updates
-      const interval = setInterval(updateProgress, 100);
-
-      return () => clearInterval(interval); // Cleanup interval on unmount or craftingStatus change
-    } else {
-      setProgress(0); // Reset progress if craftingStatus is null
-    }
-  }, [props.craftingStatus]);
-
   return (
     <div className="crafting-recipe-container">
-      <h2 className="equipment-name">
-        {props.equipmentName} [{props.durationS}s]
-      </h2>
-      <div className="required-items">
-        {props.requiredItems.map((item) => {
-          const userItem = userData.itemInventory.find(
-            (userItem) => userItem.itemId === item.itemId
-          );
-          const userQuantity = userItem ? userItem.quantity : 0;
-
-          return (
-            <div key={item.itemId} className="item">
-              <span className="crafting-req-item-name">
-                {item.itemName} {userQuantity}/{item.quantity}
-              </span>
+      <div className="crafting-recipe-inner-container">
+        <div className="crafting-recipe-header">
+          <div className="crafting-equipment-img-container">
+            <img src={props.imgsrc}></img>
+          </div>
+          <div className="crafting-recipe-header-info">
+            <div className="equipment-name">{props.equipmentName}</div>
+            <div className="equipment-craft-duration">
+              <img src={TimerIcon}></img>
+              <div>{props.durationS}s</div>
             </div>
-          );
-        })}
-      </div>
-      {isCrafting && (
-        <div className="timer-bar">
-          <div
-            className="timer-bar-progress"
-            style={{ width: `${progress}%` }}
-          ></div>
+            <button
+              className={`craft-button ${isCrafting ? "crafting-active" : ""}`}
+              disabled={!isCraftable && !isCrafting}
+              onClick={handleCraftButton}
+            >
+              {isCrafting ? "Cancel" : "Craft"}
+            </button>
+          </div>
+          <div className="craft-expand-img-container">
+            <img
+              src={isExpanded ? Minimize : Expand}
+              onClick={toggleExpand}
+              alt="Toggle Expand"
+            />{" "}
+          </div>
         </div>
-      )}
-      <button
-        className={`craft-button ${isCrafting ? "crafting-active" : ""}`}
-        disabled={!isCraftable && !isCrafting}
-        onClick={handleCraftButton}
-      >
-        {isCrafting ? "Cancel Crafting" : "Craft"}
-      </button>
+        {isCrafting && props.craftingStatus && (
+          <div className="craft-timer-container">
+            <LoopingTimerBar
+              durationS={props.craftingStatus.durationS || props.durationS} // Use standard duration for looping
+              startTimestamp={props.craftingStatus.startTimestamp}
+            />
+          </div>
+        )}
+        <div
+          className={`required-items ${isExpanded ? "expanded" : "collapsed"}`}
+        >
+          {isExpanded && (
+            <>
+              <div className="required-items-header">Required Items</div>
+              {props.requiredItems.map((item, index) => {
+                const userItem = userData.itemInventory.find(
+                  (userItem) => userItem.itemId === item.itemId
+                );
+                const userQuantity = userItem ? userItem.quantity : 0;
+
+                // Determine additional classes for styling
+                const isAlternate = index % 2 === 1; // True for alternate items
+                const isLast = index === props.requiredItems.length - 1; // True for last item
+                const itemClassName = `required-item ${
+                  isAlternate ? "alternate" : ""
+                } ${isLast ? "last-item" : ""}`;
+
+                return (
+                  <div key={index} className={itemClassName}>
+                    <img src={item.imgsrc} alt={item.itemName} />
+                    <div className="crafting-req-item-name">
+                      {item.itemName}{" "}
+                      <span
+                        className={`quantity ${
+                          userQuantity >= item.quantity
+                            ? "enough"
+                            : "not-enough"
+                        }`}
+                      >
+                        {userQuantity}
+                      </span>
+                      /{item.quantity}
+                    </div>
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

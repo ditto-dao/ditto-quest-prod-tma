@@ -31,6 +31,13 @@ function App() {
         root.style.setProperty("--golden-yellow", "#EFB950");
         root.style.setProperty("--burnt-orange", "#D97742");
         root.style.setProperty("--bright-cyan", "#4FC3F7");
+        root.style.setProperty("--pine-green", "#234D32");
+        root.style.setProperty("--sage-green", "#8FA68E");
+        root.style.setProperty("--midnight-teal", "#113A4A");
+        root.style.setProperty("--seafoam-green", "#6BBBA8");
+        root.style.setProperty("--deep-warm-red", "#C23B3B");
+        root.style.setProperty("--light-teal", "#2E7C78");
+        root.style.setProperty("--medium-teal", "#1F5B58");
       } else {
       }
     }

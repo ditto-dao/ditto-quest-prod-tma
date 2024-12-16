@@ -114,7 +114,7 @@
 }
 
 .inv-modal-item-description-container {
-  border: 2px solid var(--bright-teal); /* Outer border color */
+  border: 1.5px solid var(--bright-teal); /* Outer border color */
   padding: 5px;
   border-radius: 8px;
   background-color: var(--deep-teal);
