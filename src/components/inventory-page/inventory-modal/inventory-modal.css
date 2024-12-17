@@ -14,7 +14,7 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
+  width: 80%;
   max-width: 90%;
   max-height: 85%;
   overflow-y: scroll;
@@ -24,6 +24,7 @@
   border: 2px solid var(--dark-navy); /* Outer border color */
   font-family: "PixelOperatorMono8", "Impact", sans-serif;
   color: var(--cream-white);
+  outline: none;
 
   animation: slide-up 0.25s ease-in-out forwards;
   -webkit-touch-callout: none; /* iOS Safari */

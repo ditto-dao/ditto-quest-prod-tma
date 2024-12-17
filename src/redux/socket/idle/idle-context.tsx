@@ -74,6 +74,18 @@ interface IdleContext {
     React.SetStateAction<SlimeWithTraits | undefined>
   >;
   breedingStatus: BreedingStatus | undefined;
+  startFarming: (
+    itemId: number,
+    startTimestamp: number,
+    durationS: number
+  ) => void;
+  stopFarming: (itemId: number) => void;
+  startCrafting: (
+    equipmentId: number,
+    startTimestamp: number,
+    durationS: number
+  ) => void;
+  stopCrafting: (equipmentId: number) => void;
 }
 
 const IdleContext = createContext<IdleContext>({
@@ -84,6 +96,10 @@ const IdleContext = createContext<IdleContext>({
   slimeToBreed1: undefined,
   setSlimeToBreed1: () => {},
   breedingStatus: undefined,
+  startFarming: () => {},
+  stopFarming: () => {},
+  startCrafting: () => {},
+  stopCrafting: () => {},
 });
 
 export const useIdleSocket = () => useContext(IdleContext);
@@ -100,10 +116,56 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
     Record<number, FarmingStatus | null>
   >({});
 
+  const startFarming = (
+    itemId: number,
+    startTimestamp: number,
+    durationS: number
+  ) => {
+    /* setFarmingStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [itemId]: { startTimestamp, durationS },
+    })); */
+    setFarmingStatuses({
+      [itemId]: { startTimestamp, durationS }
+    });
+    console.log(`Started farming for item ID ${itemId}`);
+  };
+
+  const stopFarming = (itemId: number) => {
+    setFarmingStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [itemId]: null,
+    }));
+    console.log(`Stopped farming for item ID ${itemId}`);
+  };
+
   // Crafting
   const [craftingStatuses, setCraftingStatuses] = useState<
     Record<number, CraftingStatus | null>
   >({});
+
+  const startCrafting = (
+    equipmentId: number,
+    startTimestamp: number,
+    durationS: number
+  ) => {
+    /* setCraftingStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [equipmentId]: { startTimestamp, durationS },
+    })); */
+    setCraftingStatuses({
+      [equipmentId]: { startTimestamp, durationS }
+    });
+    console.log(`Started crafting for equipment ID ${equipmentId}`);
+  };
+
+  const stopCrafting = (equipmentId: number) => {
+    setCraftingStatuses((prevStatuses) => ({
+      ...prevStatuses,
+      [equipmentId]: null,
+    }));
+    console.log(`Stopped crafting for equipment ID ${equipmentId}`);
+  };
 
   // Breeding
   const [slimeToBreed0, setSlimeToBreed0] = useState<
@@ -121,7 +183,7 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
   const [unresolvedDameId, setUnresolvedDameId] = useState<number | null>(null);
 
   useEffect(() => {
-    if (socket && !loadingSocket && accessGranted) {
+    if (socket && !loadingSocket) {
       // Farming
       socket.on("farming-start", (data: FarmingStartPayload) => {
         console.log(`Received farming-start: ${JSON.stringify(data, null, 2)}`);
@@ -283,6 +345,10 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
         slimeToBreed1,
         setSlimeToBreed1,
         breedingStatus,
+        startFarming,
+        stopFarming,
+        startCrafting,
+        stopCrafting,
       }}
     >
       {children}

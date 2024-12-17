@@ -3,6 +3,7 @@ import { useSocket } from "../../../redux/socket/socket-context";
 import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
 import TimerIcon from "../../../assets/images/general/timer.svg";
 import "./farming-item.css";
+import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
 
 interface FarmingItemProps {
   itemId: number;
@@ -19,14 +20,19 @@ interface FarmingItemProps {
 
 function FarmingItem(props: FarmingItemProps) {
   const { socket } = useSocket();
+  const { startFarming, stopFarming } = useIdleSocket();
   const [isFarming, setIsFarming] = useState(false);
 
   const handleFarmButton = () => {
     if (socket) {
       if (isFarming) {
         socket.emit("stop-farm-item", props.itemId);
+        stopFarming(props.itemId);
+        setIsFarming(false);
       } else {
         socket.emit("farm-item", props.itemId);
+        startFarming(props.itemId, Date.now() + 200, props.durationS);
+        setIsFarming(true);
       }
     }
   };

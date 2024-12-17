@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./looping-timer-bar.css";
 
 interface LoopingTimerBarProps {
-  durationS: number; // Standard duration in seconds for subsequent loops
-  startTimestamp: number; // Unix timestamp in milliseconds indicating when the timer started
+  durationS: number; // Duration for one full loop in seconds
+  startTimestamp: number; // When the first loop started (Unix timestamp in ms)
 }
 
 const LoopingTimerBar: React.FC<LoopingTimerBarProps> = ({
@@ -13,19 +13,31 @@ const LoopingTimerBar: React.FC<LoopingTimerBarProps> = ({
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const durationMs = durationS * 1000; // Convert seconds to milliseconds
+
+    const calculateProgress = () => {
       const currentTime = Date.now();
-      const elapsedTime = (currentTime - startTimestamp) % (durationS * 1000); // Elapsed time in ms (looping)
-      const newProgress = (elapsedTime / (durationS * 1000)) * 100;
+      const elapsedTime = currentTime - startTimestamp;
 
-      setProgress(newProgress);
-    }, 50); // Update every 50ms for smoothness
+      // Find the current loop progress, accounting for the offset
+      const progressPercentage = (elapsedTime % durationMs) / durationMs;
 
-    return () => clearInterval(interval); // Cleanup on unmount
+      return progressPercentage * 100; // Convert to percentage
+    };
+
+    // Initialize the correct progress on mount
+    setProgress(calculateProgress());
+
+    // Update progress continuously
+    const interval = setInterval(() => {
+      setProgress(calculateProgress());
+    }, 50); // Smooth update every 50ms
+
+    return () => clearInterval(interval);
   }, [durationS, startTimestamp]);
 
   return (
-    <div className={`looping-timer-bar`}>
+    <div className="looping-timer-bar">
       <div className="looping-timer-progress-bar">
         <div
           className="looping-timer-progress"

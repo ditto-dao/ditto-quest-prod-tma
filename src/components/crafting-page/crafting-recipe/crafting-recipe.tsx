@@ -1,4 +1,4 @@
-import { CraftingStatus } from "../../../redux/socket/idle/idle-context";
+import { CraftingStatus, useIdleSocket } from "../../../redux/socket/idle/idle-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
@@ -24,6 +24,7 @@ interface CraftingRecipeProps {
 
 function CraftingRecipe(props: CraftingRecipeProps) {
   const { userData } = useUserSocket();
+  const { startCrafting, stopCrafting } = useIdleSocket();
   const { socket } = useSocket();
   const [isCraftable, setIsCraftable] = useState(false);
   const [isCrafting, setIsCrafting] = useState(false);
@@ -37,11 +38,12 @@ function CraftingRecipe(props: CraftingRecipeProps) {
     if (socket) {
       if (isCrafting) {
         socket.emit("stop-craft-equipment", props.equipmentId);
+        stopCrafting(props.equipmentId);
+        setIsCrafting(false);
       } else {
-        console.log(
-          `Emitting socket event for craft-equipment: ${props.equipmentName}`
-        );
         socket.emit("craft-equipment", props.equipmentId);
+        startCrafting(props.equipmentId, Date.now() + 100, props.durationS);
+        setIsCrafting(false);
       }
     }
   };
@@ -57,14 +59,14 @@ function CraftingRecipe(props: CraftingRecipeProps) {
   useEffect(() => {
     // Check if user has all necessary items in sufficient quantity
     const canCraft = props.requiredItems.every((requiredItem) => {
-      const userItem = userData.itemInventory.find(
+      const userItem = userData.inventory.find(
         (item) => item.itemId === requiredItem.itemId
       );
       return userItem && userItem.quantity >= requiredItem.quantity;
     });
 
     setIsCraftable(canCraft);
-  }, [props.requiredItems, userData.itemInventory]);
+  }, [props.requiredItems, userData.inventory]);
 
   return (
     <div className="crafting-recipe-container">
@@ -110,7 +112,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
             <>
               <div className="required-items-header">Required Items</div>
               {props.requiredItems.map((item, index) => {
-                const userItem = userData.itemInventory.find(
+                const userItem = userData.inventory.find(
                   (userItem) => userItem.itemId === item.itemId
                 );
                 const userQuantity = userItem ? userItem.quantity : 0;

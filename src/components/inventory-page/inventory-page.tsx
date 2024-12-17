@@ -8,26 +8,11 @@ import {
   formatNumberWithSuffix,
 } from "../../utils/helpers";
 import InventoryModal from "./inventory-modal/inventory-modal";
-
-interface CombinedInventoryEntry {
-  id: number;
-  name: string;
-  description: string;
-  str: number;
-  def: number;
-  dex: number;
-  magic: number;
-  hp: number;
-  rarity: string;
-  type: string;
-  category: "Equipment" | "Item";
-  quantity: number | null; // null for equipment
-  imgsrc: string;
-}
+import { Inventory } from "../../utils/types";
 
 // Helper function to chunk inventory into rows
-function chunkInventory(array: CombinedInventoryEntry[], size: number) {
-  const chunks: (CombinedInventoryEntry | null)[][] = [];
+function chunkInventory(array: Inventory[], size: number) {
+  const chunks: (Inventory | null)[][] = [];
   for (let i = 0; i < array.length; i += size) {
     chunks.push(array.slice(i, i + size));
   }
@@ -44,60 +29,22 @@ function chunkInventory(array: CombinedInventoryEntry[], size: number) {
 
 function InventoryPage() {
   const { userData } = useUserSocket();
-  const [combinedInventory, setCombinedInventory] = useState<
-    CombinedInventoryEntry[]
-  >([]);
+  const [inventory, setInventory] = useState<Inventory[]>([]);
 
-  const [selectedItem, setSelectedItem] =
-    useState<CombinedInventoryEntry | null>(null);
+  const [selectedItem, setSelectedItem] = useState<Inventory | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (userData) {
-      // Map equipmentInventory to a unified format
-      const equipmentList = userData.equipmentInventory.map((equipment) => ({
-        id: equipment.id,
-        name: equipment.equipment.name,
-        description: equipment.equipment.description,
-        str: equipment.equipment.str,
-        def: equipment.equipment.def,
-        dex: equipment.equipment.dex,
-        magic: equipment.equipment.magic,
-        hp: equipment.equipment.hp,
-        rarity: equipment.equipment.rarity as string,
-        type: equipment.equipment.type as string,
-        category: "Equipment" as const,
-        quantity: null,
-        imgsrc: equipment.equipment.imgsrc,
-      }));
-
-      // Map itemInventory to a unified format
-      const itemList = userData.itemInventory.map((item) => ({
-        id: item.id,
-        name: item.item.name,
-        description: item.item.description,
-        str: 0,
-        def: 0,
-        dex: 0,
-        magic: 0,
-        hp: 0,
-        rarity: item.item.rarity as string,
-        type: "Item",
-        category: "Item" as const,
-        quantity: item.quantity,
-        imgsrc: item.item.imgsrc,
-      }));
-
-      // Combine and set the inventory
-      setCombinedInventory([...equipmentList, ...itemList]);
+      setInventory(userData.inventory);
     }
   }, [userData]);
 
   // Chunk inventory into rows of 4
-  const inventoryRows = chunkInventory(combinedInventory, 4);
+  const inventoryRows = chunkInventory(inventory, 4);
 
   // Modal
-  const handleOpenModal = (item: CombinedInventoryEntry) => {
+  const handleOpenModal = (item: Inventory) => {
     setSelectedItem(item);
     setIsModalOpen(true);
   };
@@ -127,7 +74,7 @@ function InventoryPage() {
       <div className="inventory-page-content-wrapper">
         <div className="inventory-page-content-container">
           <div className="inv-container-label">Inventory</div>
-          {combinedInventory.length === 0 ? (
+          {inventory.length === 0 ? (
             <div className="inventory-empty-message">
               Nothing in inventory yet...
             </div>
@@ -142,16 +89,13 @@ function InventoryPage() {
                         className="inventory-item"
                       >
                         <img
-                          src={entry.imgsrc}
-                          alt={entry.name}
+                          src={entry.equipment?.imgsrc || entry.item?.imgsrc}
+                          alt={entry.equipment?.name || entry.item?.name}
                           className="inv-item-image"
                         />
-                        {entry.category === "Item" &&
-                          entry.quantity !== null && (
-                            <div className="inv-item-quantity">
-                              {formatNumberForInvQty(entry.quantity)}
-                            </div>
-                          )}
+                        <div className="inv-item-quantity">
+                          {formatNumberForInvQty(entry.quantity)}
+                        </div>
                       </div>
                     ) : (
                       <div className="inventory-item empty"></div>

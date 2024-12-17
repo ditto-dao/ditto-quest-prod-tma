@@ -1,24 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   defaultUser,
-  EquipmentInventory,
-  ItemInventory,
+  Inventory,
   SlimeWithTraits,
   SocketProviderProps,
   User,
 } from "../../../utils/types";
 import { useSocket } from "../socket-context";
 import { useLoginSocket } from "../login/login-context";
-
-interface ItemInventoryRes {
-  itemInventory: ItemInventory;
-  qtyReceived?: number;
-}
-
-interface EquipmentInventoryRes {
-  equipmentInventory: EquipmentInventory;
-  remove: boolean;
-}
 
 // Context
 interface UserContext {
@@ -45,13 +34,56 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   const [userContextLoaded, setUserContextLoaded] = useState(false);
 
+  function processInventoryUpdate(
+    inventory: Inventory[],
+    update: Inventory,
+    idKey: "itemId" | "equipmentId"
+  ) {
+    const idToMatch = update[idKey];
+
+    if (update.quantity === 0) {
+      // Remove item/equipment with quantity 0
+      const indexToRemove = inventory.findIndex(
+        (entry) => entry[idKey] === idToMatch
+      );
+      if (indexToRemove !== -1) {
+        inventory.splice(indexToRemove, 1);
+        console.log(`Removed ${idKey} ${idToMatch} from inventory.`);
+      }
+    } else {
+      // Find and replace or add the updated item/equipment
+      const existingIndex = inventory.findIndex(
+        (entry) => entry[idKey] === idToMatch
+      );
+      if (existingIndex !== -1) {
+        inventory[existingIndex] = update; // Replace the existing entry
+        console.log(`Updated ${idKey} ${idToMatch} in inventory.`);
+      } else {
+        inventory.push(update); // Add as a new entry
+        console.log(`Added ${idKey} ${idToMatch} to inventory.`);
+      }
+    }
+  }
+
   useEffect(() => {
     // Listener for login
     if (socket && !loadingSocket) {
       socket.on("user-data-on-login", (userData: User) => {
         console.log(`received user-data-on-login`);
         console.log(JSON.stringify(userData, null, 2));
-        setUserData(userData);
+
+        // Sort the inventory by the `order` field
+        const sortedInventory = [...userData.inventory].sort(
+          (a, b) => a.order - b.order
+        );
+
+        // Replace the original inventory with the sorted version
+        const sortedUserData = {
+          ...userData,
+          inventory: sortedInventory,
+        };
+
+        setUserData(sortedUserData);
         setUserLoaded(true);
       });
 
@@ -71,80 +103,30 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   useEffect(() => {
     if (socket && !loadingSocket && accessGranted) {
-      socket.on("update-item-inventory", (data: ItemInventoryRes[]) => {
-        data.forEach((itemUpdate) => {
-          if (itemUpdate.qtyReceived) {
-            alert(
-              `Received ${itemUpdate.itemInventory.item.name} x${itemUpdate.qtyReceived}!`
-            ); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
-          }
+      socket.on("update-inventory", (data: Inventory[]) => {
+        setUserData((prevUserData) => {
+          const updatedInventory = [...prevUserData.inventory];
 
-          setUserData((prevUserData) => {
-            // Create a copy of the current itemInventory
-            let updatedInventory = [...prevUserData.itemInventory];
-            let itemFound = false;
-
-            // Check if the item quantity is 0 and remove it if necessary
-            if (itemUpdate.itemInventory.quantity === 0) {
-              updatedInventory = updatedInventory.filter(
-                (item) => item.id !== itemUpdate.itemInventory.id
-              );
-              console.log(
-                `Item with ID ${itemUpdate.itemInventory.id} has been removed from the inventory.`
-              );
+          data.forEach((update) => {
+            if (update.equipment && update.equipmentId && !update.item) {
+              // Process equipment updates
+              processInventoryUpdate(updatedInventory, update, "equipmentId");
+            } else if (update.item && update.itemId && !update.equipment) {
+              // Process item updates
+              processInventoryUpdate(updatedInventory, update, "itemId");
             } else {
-              // Iterate through the inventory to find and replace the item if it exists
-              for (let i = 0; i < updatedInventory.length; i++) {
-                if (updatedInventory[i].id === itemUpdate.itemInventory.id) {
-                  updatedInventory[i] = itemUpdate.itemInventory; // Replace the item
-                  itemFound = true;
-                  break;
-                }
-              }
-
-              // If the item was not found, append it to the inventory
-              if (!itemFound) {
-                updatedInventory.push(itemUpdate.itemInventory);
-              }
+              console.error(
+                `Erroneous update-inventory event: ${JSON.stringify(update)}`
+              );
             }
-
-            // Return the updated userData with the modified itemInventory
-            return {
-              ...prevUserData,
-              itemInventory: updatedInventory,
-            };
           });
+
+          return {
+            ...prevUserData,
+            inventory: updatedInventory,
+          };
         });
       });
-
-      socket.on(
-        "update-equipment-inventory",
-        (data: EquipmentInventoryRes[]) => {
-          data.forEach((equipmentUpdate) => {
-            setUserData((prevUserData) => {
-              // Create a copy of the current itemInventory
-              let updatedInventory = [...prevUserData.equipmentInventory];
-              if (equipmentUpdate.remove) {
-                updatedInventory = updatedInventory.filter(
-                  (equipment) =>
-                    equipment.id !== equipmentUpdate.equipmentInventory.id
-                );
-                console.log(
-                  `Equipment with ID ${equipmentUpdate.equipmentInventory.id} has been removed from the inventory.`
-                );
-              } else {
-                updatedInventory.push(equipmentUpdate.equipmentInventory);
-              }
-
-              // Return the updated userData with the modified itemInventory
-              return {
-                ...prevUserData,
-                equipmentInventory: updatedInventory,
-              };
-            });
-          });
-        }
-      );
 
       socket.on("slime-mint-update", (slime: SlimeWithTraits) => {
         setUserData((prevUserData) => {
@@ -163,8 +145,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
       // Clean up on unmount
       return () => {
-        socket.off("update-item-inventory");
-        socket.off("update-equipment-inventory");
+        socket.off("update-inventory");
         socket.off("slime-mint-update");
       };
     }

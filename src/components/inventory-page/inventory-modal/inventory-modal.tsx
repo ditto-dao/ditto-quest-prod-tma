@@ -2,18 +2,12 @@ import Modal from "react-modal";
 import "./inventory-modal.css";
 import EquipmentIcon from "../../../assets/images/general/equipment-icon.png";
 import ItemIcon from "../../../assets/images/general/item-icon.png";
+import { Inventory } from "../../../utils/types";
 
 interface InventoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  item: {
-    id: number;
-    name: string;
-    description: string;
-    imgsrc: string;
-    category: string;
-    rarity: string;
-  } | null; // Modal can handle `null` if no item is selected
+  item: Inventory | null
 }
 
 function InventoryModal({ isOpen, onClose, item }: InventoryModalProps) {
@@ -34,7 +28,7 @@ function InventoryModal({ isOpen, onClose, item }: InventoryModalProps) {
           </button>
           <div className="item-details">
             <div className="item-header">
-              {item.category === "Item" ? (
+              {item.itemId ? (
                 <img src={ItemIcon} alt="Item icon" className="item-icon" />
               ) : (
                 <img
@@ -43,20 +37,20 @@ function InventoryModal({ isOpen, onClose, item }: InventoryModalProps) {
                   className="equipment-icon"
                 />
               )}
-              <div className="inv-modal-header-name">{item.name}</div>
+              <div className="inv-modal-header-name">{item.item?.name || item.equipment?.name}</div>
             </div>
             <div className="item-content">
               <div className="item-image-container">
                 <div
-                  className={`rarity-badge rarity-${item.rarity.toLowerCase()}`}
+                  className={`rarity-badge rarity-${item.item?.rarity.toLowerCase() || item.equipment?.rarity.toLowerCase()}`}
                 >
-                  {item.rarity}
+                  {item.item?.rarity || item.equipment?.rarity}
                 </div>
-                <img src={item.imgsrc} alt={item.name} className="item-image" />
+                <img src={item.item?.imgsrc || item.equipment?.imgsrc} alt={item.item?.name || item.equipment?.name} className="item-image" />
               </div>
 
               <div className="inv-modal-item-description-container">
-                {item.description}
+                {item.item?.description || item.equipment?.description}
               </div>
             </div>
           </div>

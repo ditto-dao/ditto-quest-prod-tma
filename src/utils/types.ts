@@ -27,16 +27,15 @@ export interface User {
     necklaceId?: number;
     petId?: number;
     spellbookId?: number;
-    hat?: EquipmentInventory;
-    armour?: EquipmentInventory;
-    weapon?: EquipmentInventory;
-    shield?: EquipmentInventory;
-    cape?: EquipmentInventory;
-    necklace?: EquipmentInventory;
-    pet?: EquipmentInventory;
-    spellbook?: EquipmentInventory;
-    equipmentInventory: EquipmentInventory[];
-    itemInventory: ItemInventory[];
+    hat?: Inventory;
+    armour?: Inventory;
+    weapon?: Inventory;
+    shield?: Inventory;
+    cape?: Inventory;
+    necklace?: Inventory;
+    pet?: Inventory;
+    spellbook?: Inventory;
+    inventory: Inventory[]
     combat?: Combat;
     slimes?: SlimeWithTraits[];
     equippedSlime?: SlimeWithTraits;
@@ -74,8 +73,7 @@ export const defaultUser: User = {
     necklace: undefined,
     pet: undefined,
     spellbook: undefined,
-    equipmentInventory: [],
-    itemInventory: [],
+    inventory: [],
     combat: undefined
 };
 
@@ -89,12 +87,17 @@ export interface Combat {
     hpLevel: number;
 }
 
-export interface EquipmentInventory {
+export interface Inventory {
     id: number;
-    equipmentId: number;
     userId: number;
-    equipment: Equipment;
-}
+    itemId: number | null;
+    equipmentId: number | null;
+    quantity: number;
+    order: number;
+    createdAt: string; // Date converted to string for JSON compatibility
+    item?: Item | null; // Include Item details if populated
+    equipment?: Equipment | null; // Include Equipment details if populated
+};
 
 export interface Equipment {
     id: number;
@@ -108,14 +111,6 @@ export interface Equipment {
     hp: number;
     rarity: Rarity;
     type: EquipmentType;
-}
-
-export interface ItemInventory {
-    id: number;
-    itemId: number;
-    userId: number;
-    quantity: number;
-    item: Item;
 }
 
 export interface Item {
