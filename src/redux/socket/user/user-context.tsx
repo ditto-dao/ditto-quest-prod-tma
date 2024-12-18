@@ -16,6 +16,9 @@ interface UserContext {
   userData: User;
   userContextLoaded: boolean;
   equip: (inventoryId: number, equipmentType: EquipmentType) => void;
+  unequip: (equipmentType: EquipmentType) => void;
+  canEmitEvent: () => boolean;
+  setLastEventEmittedTimestamp: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const UserContext = createContext<UserContext>({
@@ -23,6 +26,9 @@ const UserContext = createContext<UserContext>({
   userData: defaultUser,
   userContextLoaded: false,
   equip: () => {},
+  unequip: () => {},
+  canEmitEvent: () => false,
+  setLastEventEmittedTimestamp: () => {}
 });
 
 export const useUserSocket = () => useContext(UserContext);
@@ -34,8 +40,10 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   // User
   const [userData, setUserData] = useState<User>(defaultUser);
   const [userLoaded, setUserLoaded] = useState(false);
-
   const [userContextLoaded, setUserContextLoaded] = useState(false);
+
+  // Prevent click spam
+  const [lastEventEmittedTimestamp, setLastEventEmittedTimestamp] = useState(0);
 
   function processInventoryUpdate(
     inventory: Inventory[],
@@ -70,6 +78,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   const equip = (inventoryId: number, equipmentType: EquipmentType) => {
     if (socket) {
+      if (!canEmitEvent()) return;
+
       setUserData((prevUserData) => {
         console.log(`Inventory ID: ${inventoryId}`);
         console.log(`Current Inventory:`, prevUserData.inventory);
@@ -99,8 +109,38 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
       });
       socket.emit("equip-equipment", inventoryId);
+      setLastEventEmittedTimestamp(Date.now());
     }
   };
+
+  const unequip = (equipmentType: EquipmentType) => {
+    if (socket) {
+      if (!canEmitEvent()) return;
+
+      setUserData((prevUserData) => {
+        const equippedEntry = prevUserData[equipmentType];
+
+        if (!equippedEntry) {
+          console.error(`Equipped slot for ${equipmentType} empy.`);
+          return prevUserData;
+        }
+
+        console.log(`Found Equipped slot for ${equipmentType}`);
+        console.log(`Unequipping ${equipmentType}`);
+
+        return {
+          ...prevUserData,
+          [equipmentType]: null,
+        };
+      });
+      socket.emit("unequip-equipment", equipmentType);
+      setLastEventEmittedTimestamp(Date.now());
+    }
+  };
+
+  const canEmitEvent = () => {
+    return Date.now() - lastEventEmittedTimestamp >= 300;
+  }
 
   useEffect(() => {
     // Listener for login
@@ -207,6 +247,19 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
       });
 
+      socket.on("equip-update", (inventory: Inventory) => {
+        setUserData((prevUserData) => {
+          if (!inventory.equipment) {
+            return prevUserData;
+          } else {
+            return {
+              ...prevUserData,
+              [inventory.equipment!.type]: inventory,
+            };
+          }
+        });
+      });
+
       socket.on("error", (msg: string) => {
         console.error(`Socket error: ${msg}`);
       });
@@ -232,6 +285,9 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         userData,
         userContextLoaded,
         equip,
+        unequip,
+        canEmitEvent,
+        setLastEventEmittedTimestamp
       }}
     >
       {children}
