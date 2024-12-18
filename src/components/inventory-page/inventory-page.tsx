@@ -7,8 +7,10 @@ import {
   formatNumberForInvQty,
   formatNumberWithSuffix,
 } from "../../utils/helpers";
-import InventoryModal from "./inventory-modal/inventory-modal";
+import EquipmentIcon from "../../assets/images/general/equipment-icon.png";
+import ItemIcon from "../../assets/images/general/item-icon.png";
 import { Inventory } from "../../utils/types";
+import Modal from "react-modal";
 
 // Helper function to chunk inventory into rows
 function chunkInventory(array: Inventory[], size: number) {
@@ -28,7 +30,7 @@ function chunkInventory(array: Inventory[], size: number) {
 }
 
 function InventoryPage() {
-  const { userData } = useUserSocket();
+  const { userData, equip } = useUserSocket();
   const [inventory, setInventory] = useState<Inventory[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<Inventory | null>(null);
@@ -54,6 +56,17 @@ function InventoryPage() {
   const handleCloseModal = () => {
     setSelectedItem(null);
     setIsModalOpen(false);
+  };
+
+  const isEquipped = () => {
+    return !!(
+      userData &&
+      selectedItem &&
+      selectedItem.equipment &&
+      selectedItem.equipmentId &&
+      userData[selectedItem.equipment.type]?.equipmentId ===
+        selectedItem.equipmentId
+    );
   };
 
   return (
@@ -114,11 +127,92 @@ function InventoryPage() {
         </div>
 
         {/* Render the modal */}
-        <InventoryModal
+        <Modal
           isOpen={isModalOpen}
-          onClose={handleCloseModal}
-          item={selectedItem}
-        />
+          onRequestClose={handleCloseModal}
+          contentLabel="Inventory Item Details"
+          className="inventory-item-modal"
+          overlayClassName="inventory-item-modal-overlay"
+        >
+          {selectedItem && (
+            <div className="modal-content">
+              <div className="modal-border-container">
+                <div className="modal-content">
+                  <button
+                    onClick={handleCloseModal}
+                    className="close-inventory-modal-button"
+                  >
+                    X
+                  </button>
+                  <div className="item-details">
+                    <div className="item-header">
+                      {selectedItem.itemId ? (
+                        <img
+                          src={ItemIcon}
+                          alt="Item icon"
+                          className="item-icon"
+                        />
+                      ) : (
+                        <img
+                          src={EquipmentIcon}
+                          alt="Equipment icon"
+                          className="equipment-icon"
+                        />
+                      )}
+                      <div className="inv-modal-header-name">
+                        {selectedItem.item?.name ||
+                          selectedItem.equipment?.name}
+                      </div>
+                    </div>
+                    <div className="item-content">
+                      <div className="item-image-container">
+                        <div
+                          className={`rarity-badge rarity-${
+                            selectedItem.item?.rarity?.toLowerCase() ||
+                            selectedItem.equipment?.rarity?.toLowerCase()
+                          }`}
+                        >
+                          {selectedItem.item?.rarity ||
+                            selectedItem.equipment?.rarity}
+                        </div>
+                        <img
+                          src={
+                            selectedItem.item?.imgsrc ||
+                            selectedItem.equipment?.imgsrc
+                          }
+                          alt={
+                            selectedItem.item?.name ||
+                            selectedItem.equipment?.name
+                          }
+                          className="item-image"
+                        />
+                      </div>
+                      <div className="inv-modal-item-description-container">
+                        {selectedItem.item?.description ||
+                          selectedItem.equipment?.description}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="inv-buttons-div">
+                    {selectedItem.equipment && selectedItem.equipmentId && (
+                      <button
+                        className={`equip-button ${
+                          isEquipped() ? "equip-active" : ""
+                        }`}
+                        onClick={() =>
+                          equip(selectedItem.id, selectedItem.equipment!.type)
+                        }
+                        disabled={isEquipped()}
+                      >
+                        {isEquipped() ? "Equipped" : "Equip"}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>{" "}
+            </div>
+          )}
+        </Modal>
       </div>
     </div>
   );
