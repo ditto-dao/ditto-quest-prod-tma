@@ -139,7 +139,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   };
 
   const canEmitEvent = () => {
-    return Date.now() - lastEventEmittedTimestamp >= 300;
+    return Date.now() - lastEventEmittedTimestamp >= 500;
   }
 
   useEffect(() => {
