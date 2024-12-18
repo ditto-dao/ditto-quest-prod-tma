@@ -9,9 +9,6 @@ interface SlimeLabInventoryProps {
   equippedSlimeId?: number;
 }
 
-// Set the app element for accessibility (required for react-modal)
-Modal.setAppElement("#root");
-
 function SlimeLabInventory({
   slimes,
   equippedSlimeId,
@@ -71,7 +68,9 @@ function SlimeLabInventory({
             {/* Slime ID and Rarity */}
             <div className="slime-info-row">
               <div className="slime-info-id">{`Slime #${selectedSlime.id}`}</div>
-              <div className="slime-info-gen">Gen {selectedSlime.generation}</div>
+              <div className="slime-info-gen">
+                Gen {selectedSlime.generation}
+              </div>
             </div>
 
             {/* Slime Traits */}

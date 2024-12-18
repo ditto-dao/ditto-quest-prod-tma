@@ -71,7 +71,7 @@
 
 .inv-modal-header-name {
   height: 100%;
-  font-size: 15px;
+  font-size: 12px;
   width: 80%;
   text-align: left;
   text-overflow: wrap;
@@ -120,7 +120,7 @@
   border-radius: 8px;
   background-color: var(--deep-teal);
   padding: 10px;
-  font-size: 10px;
+  font-size: 9px;
   text-align: left;
 }
 
@@ -165,6 +165,35 @@
 
 .rarity-s {
   background-color: #f59e0b; /* Gold for S rank */
+}
+
+.inv-buttons-div {
+  margin-bottom: 20px;
+}
+
+.equip-button {
+  padding: 8px 12px;
+  font-size: 10px;
+  color: var(--cream-white);
+  background-color: var(--burnt-orange);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
+
+.equip-button.equip-active {
+  background-color: var(--deep-warm-red);
+}
+
+.equip-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.equip-button:not(:disabled):active {
+  transform: translateY(0.5px);
 }
 
 @keyframes fade-in {

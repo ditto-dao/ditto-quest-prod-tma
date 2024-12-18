@@ -11,9 +11,10 @@ import MainPage from "./components/main-page/main-page";
 import { LoginSocketProvider } from "./redux/socket/login/login-context";
 import { IdleSocketProvider } from "./redux/socket/idle/idle-context";
 
+//initEruda();
+Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
+
 function App() {
-  //initEruda();
-  Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
 
   useEffect(() => {
     const root = document.documentElement;

@@ -45,8 +45,10 @@ function InventoryPage() {
 
   // Modal
   const handleOpenModal = (item: Inventory) => {
-    setSelectedItem(item);
-    setIsModalOpen(true);
+    if (!isModalOpen) {
+      setSelectedItem(item);
+      setIsModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -81,10 +83,11 @@ function InventoryPage() {
           ) : (
             <div className="inventory-rows-wrapper">
               {inventoryRows.map((row, rowIndex) => (
-                <div key={rowIndex} className="inventory-row">
-                  {row.map((entry) =>
+                <div key={`row-${rowIndex}`} className="inventory-row">
+                  {row.map((entry, colIndex) =>
                     entry ? (
                       <div
+                        key={`entry-${entry.id}`}
                         onClick={() => handleOpenModal(entry)} // Open modal on click
                         className="inventory-item"
                       >
@@ -98,7 +101,10 @@ function InventoryPage() {
                         </div>
                       </div>
                     ) : (
-                      <div className="inventory-item empty"></div>
+                      <div
+                        key={`empty-${rowIndex}-${colIndex}`} // Unique key for empty slots
+                        className="inventory-item empty"
+                      ></div>
                     )
                   )}
                 </div>

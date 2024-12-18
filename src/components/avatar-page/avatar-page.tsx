@@ -21,9 +21,9 @@ function AvatarPage() {
           <div className="avatar-row">
             <div className="hat-slot">
               {userData.hat ? (
-                <img className="slot-image"></img>
+                <img className="slot-image" src={userData.hat.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultHat}></img>
+                <img className="slot-image-default" src={DefaultHat}></img>
               )}
             </div>
           </div>
@@ -32,23 +32,23 @@ function AvatarPage() {
           <div className="avatar-row">
             <div className="cape-slot">
               {userData.cape ? (
-                <img className="slot-image"></img>
+                <img className="slot-image" src={userData.cape.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultCape}></img>
+                <img className="slot-image-default" src={DefaultCape}></img>
               )}
             </div>
             <div className="necklace-slot">
               {userData.necklace ? (
-                <img className="slot-image"></img>
+                <img className="slot-image" src={userData.necklace.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultNecklace}></img>
+                <img className="slot-image-default" src={DefaultNecklace}></img>
               )}
             </div>
             <div className="pet-slot">
               {userData.pet ? (
-                <img className="slot-image"></img>
+                <img className="slot-image" src={userData.pet.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultPet}></img>
+                <img className="slot-image-default" src={DefaultPet}></img>
               )}
             </div>
           </div>
@@ -57,23 +57,23 @@ function AvatarPage() {
           <div className="avatar-row">
             <div className="shield-slot">
               {userData.shield ? (
-                <img className="slot-image"></img>
+                <img className="slot-image" src={userData.shield.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultShield}></img>
+                <img className="slot-image-default" src={DefaultShield}></img>
               )}
             </div>
             <div className="armour-slot">
               {userData.armour ? (
-                <img className="slot-image"></img>
+                <img className="slot-image" src={userData.armour.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultArmour}></img>
+                <img className="slot-image-default" src={DefaultArmour}></img>
               )}
             </div>
             <div className="weapon-slot">
               {userData.weapon ? (
-                <img className="slot-image"></img>
+                <img className="slot-image" src={userData.weapon.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultWeapon}></img>
+                <img className="slot-image-default" src={DefaultWeapon}></img>
               )}
             </div>
           </div>
@@ -86,24 +86,24 @@ function AvatarPage() {
 
           <div className="avatar-row">
             <div className="spellbook-slot">
-              {userData.cape ? (
-                <img className="slot-image"></img>
+              {userData.spellbook ? (
+                <img className="slot-image" src={userData.spellbook?.equipment!.imgsrc}></img>
               ) : (
-                <img className="slot-image" src={DefaultSpellbook}></img>
+                <img className="slot-image-default" src={DefaultSpellbook}></img>
               )}
             </div>
             <div className="spellbook-slot">
               {userData.necklace ? (
                 <img className="slot-image"></img>
               ) : (
-                <img className="slot-image" src={DefaultSpellbook}></img>
+                <img className="slot-image-default" src={DefaultSpellbook}></img>
               )}
             </div>
             <div className="spellbook-slot">
               {userData.pet ? (
                 <img className="slot-image"></img>
               ) : (
-                <img className="slot-image" src={DefaultSpellbook}></img>
+                <img className="slot-image-default" src={DefaultSpellbook}></img>
               )}
             </div>
           </div>

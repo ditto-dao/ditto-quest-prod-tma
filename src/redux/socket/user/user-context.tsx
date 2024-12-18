@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   defaultUser,
+  EquipmentType,
   Inventory,
   SlimeWithTraits,
   SocketProviderProps,
@@ -14,12 +15,14 @@ interface UserContext {
   userLoaded: boolean;
   userData: User;
   userContextLoaded: boolean;
+  equip: (inventoryId: number, equipmentType: EquipmentType) => void;
 }
 
 const UserContext = createContext<UserContext>({
   userLoaded: false,
   userData: defaultUser,
   userContextLoaded: false,
+  equip: () => {},
 });
 
 export const useUserSocket = () => useContext(UserContext);
@@ -64,6 +67,40 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       }
     }
   }
+
+  const equip = (inventoryId: number, equipmentType: EquipmentType) => {
+    if (socket) {
+      setUserData((prevUserData) => {
+        console.log(`Inventory ID: ${inventoryId}`);
+        console.log(`Current Inventory:`, prevUserData.inventory);
+
+        // Find the inventory entry with the matching inventoryId
+        const inventoryEntry = prevUserData.inventory.find(
+          (entry) => entry.id === inventoryId
+        );
+
+        if (!inventoryEntry) {
+          console.error(`Inventory entry with ID ${inventoryId} not found.`);
+          return prevUserData; // Return unchanged user data if entry not found
+        }
+
+        console.log(`Found Inventory Entry:`, inventoryEntry);
+
+        // Check if the inventory entry is equipment (no item and no itemId)
+        if (!inventoryEntry.item && !inventoryEntry.itemId) {
+          console.log(`Equipping item of type ${equipmentType}`);
+          return {
+            ...prevUserData,
+            [equipmentType]: inventoryEntry, // Set the equipment type to the found entry
+          };
+        } else {
+          console.log(`Cannot equip: Inventory entry is not equipment.`);
+          return prevUserData; // Return unchanged user data if not equippable
+        }
+      });
+      socket.emit("equip-equipment", inventoryId);
+    }
+  };
 
   useEffect(() => {
     // Listener for login
@@ -143,10 +180,42 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         alert(`Received Slime #${slime.id}!`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
       });
 
+      socket.on("unequip-update", (inventoryId: number) => {
+        setUserData((prevUserData) => {
+          const inventoryEntry = prevUserData.inventory.find(
+            (entry) => entry.id === inventoryId
+          );
+
+          if (
+            !inventoryEntry ||
+            !inventoryEntry.equipment ||
+            !prevUserData[inventoryEntry.equipment.type]
+          )
+            return prevUserData;
+
+          if (
+            prevUserData[inventoryEntry.equipment.type]!.equipmentId ===
+            inventoryEntry.equipmentId
+          ) {
+            return {
+              ...prevUserData,
+              [inventoryEntry.equipment.type]: null,
+            };
+          } else {
+            return prevUserData;
+          }
+        });
+      });
+
+      socket.on("error", (msg: string) => {
+        console.error(`Socket error: ${msg}`);
+      });
+
       // Clean up on unmount
       return () => {
         socket.off("update-inventory");
         socket.off("slime-mint-update");
+        socket.off("unequip-update");
       };
     }
   }, [socket, loadingSocket, accessGranted]);
@@ -162,6 +231,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         userLoaded,
         userData,
         userContextLoaded,
+        equip,
       }}
     >
       {children}
