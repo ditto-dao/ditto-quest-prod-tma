@@ -1,17 +1,16 @@
 import "./slime-lab-breeding.css";
-import SlimePlaceholderImage from "../../../assets/ditto-on-cloud.png";
-import { getChildTraitProbabilities } from "../../../utils/helpers";
+import SlimePlaceholderImage from "../../../assets/images/general/dq-logo.png";
+import {
+  getChildTraitProbabilities,
+  getHighestDominantTraitRarity,
+} from "../../../utils/helpers";
 import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useEffect, useState } from "react";
 
 function SlimeLabBreedingPage() {
   const { socket } = useSocket();
-  const {
-    slimeToBreed0,
-    slimeToBreed1,
-    breedingStatus,
-  } = useIdleSocket();
+  const { slimeToBreed0, slimeToBreed1, breedingStatus } = useIdleSocket();
 
   // Generate trait probabilities when both slimes are selected
   const traitProbabilities =
@@ -84,61 +83,96 @@ function SlimeLabBreedingPage() {
 
   return (
     <div id="slime-lab-breeding-container">
-      {/* Dropdown Row */}
       <div className="breeding-dropdown-row">
-        {/* Dropdown for selecting Slime 0 */}
         <div className="breeding-dropdown-wrapper">
           <div className="slime-preview-box">
             {slimeToBreed0 ? (
               <img
                 src={SlimePlaceholderImage}
-                alt={`Slime #${slimeToBreed0.id}`}
-                className="slime-preview-image"
+                alt={`Slime ${slimeToBreed0.id}`}
+                className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
+                  slimeToBreed0
+                ).toLowerCase()}`}
               />
             ) : (
               <div className="slime-placeholder"></div>
             )}
           </div>
+          <div className="slime-to-breed-id">
+            {slimeToBreed0 ? `Slime ${slimeToBreed0.id}` : ""}
+          </div>
           <div className="slime-generation">
             {slimeToBreed0 ? `Gen ${slimeToBreed0.generation}` : ""}
           </div>
-          <div className="slime-to-breed-id">
-            {slimeToBreed0 ? `Slime # ${slimeToBreed0.id}` : ""}
-          </div>
         </div>
 
-        {/* Dropdown for selecting Slime 1 */}
         <div className="breeding-dropdown-wrapper">
           <div className="slime-preview-box">
             {slimeToBreed1 ? (
               <img
                 src={SlimePlaceholderImage}
-                alt={`Slime #${slimeToBreed1.id}`}
-                className="slime-preview-image"
+                alt={`Slime ${slimeToBreed1.id}`}
+                className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
+                  slimeToBreed1
+                ).toLowerCase()}`}
               />
             ) : (
               <div className="slime-placeholder"></div>
             )}
           </div>
+          <div className="slime-to-breed-id">
+            {slimeToBreed1 ? `Slime ${slimeToBreed1.id}` : ""}
+          </div>
           <div className="slime-generation">
             {slimeToBreed1 ? `Gen ${slimeToBreed1.generation}` : ""}
           </div>
-          <div className="slime-to-breed-id">
-            {slimeToBreed1 ? `Slime # ${slimeToBreed1.id}` : ""}
-          </div>
         </div>
+      </div>
+
+      {breedingStatus && (
+        <div className="breed-timer-bar">
+          <div
+            className="breed-timer-bar-progress"
+            style={{ width: `${progress}%` }}
+          ></div>
+        </div>
+      )}
+
+      {traitProbabilities && (
+        <div className="breed-button-wrapper">
+          <button
+            className={`breed-button ${
+              breedingStatus ? "breed-button-red" : ""
+            }`}
+            onClick={handleBreed}
+          >
+            {breedingStatus ? "Cancel Breed" : "Breed Slimes"}
+          </button>
+        </div>
+      )}
+
+      <div className="child-trait-table-para">
+        {traitProbabilities ? (
+          <>
+            The tables below show the probabilities of each parent trait being
+            passed down to the child for each gene (D, H1, H2, and H3).
+          </>
+        ) : slimeToBreed0 || slimeToBreed1 ? (
+          <>Only one slime selected. Please select another slime to proceed.</>
+        ) : (
+          <>
+            No parent slimes selected. Please select two slimes from your
+            inventory.
+          </>
+        )}
       </div>
 
       {/* Trait Probabilities Table */}
       {traitProbabilities && (
         <div className="child-trait-probabilities-section">
-          <div className="child-trait-table-para">
-            The tables below show the probabilities of each parent trait being
-            passed down to the child for each gene (D, H1, H2, and H3).
-          </div>
           {Object.entries(traitProbabilities).map(([traitType, traits]) => (
             <div key={traitType} className="child-trait-table-wrapper">
-              <p className="child-trait-type-title">{traitType}</p>
+              <div className="child-trait-type-title">{traitType}</div>
               <table className="child-trait-table">
                 <thead>
                   <tr>
@@ -161,24 +195,6 @@ function SlimeLabBreedingPage() {
               </table>
             </div>
           ))}
-
-          {breedingStatus && (
-            <div className="breed-timer-bar">
-              <div
-                className="breed-timer-bar-progress"
-                style={{ width: `${progress}%` }}
-              ></div>
-            </div>
-          )}
-
-          <button
-            className={`breed-button ${
-              breedingStatus ? "breed-button-red" : ""
-            }`}
-            onClick={handleBreed}
-          >
-            {breedingStatus ? "Cancel Breed" : "Breed Slimes"}
-          </button>
         </div>
       )}
     </div>

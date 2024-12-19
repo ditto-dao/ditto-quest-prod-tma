@@ -60,7 +60,7 @@ function SlimeLabInventory({
                 src={DQLogo}
               ></img>
               <div className="slime-name-container">
-                <div className="slime-name">{`Slime #${slime.id}`}</div>
+                <div className="slime-name">{`Slime ${slime.id}`}</div>
               </div>
             </div>
           ))}
@@ -87,7 +87,7 @@ function SlimeLabInventory({
             <div className="slime-image-container">
               <img
                 src={BasicSlimeImg}
-                alt={`Slime #${selectedSlime.id}`}
+                alt={`#${selectedSlime.id}`}
                 className={`slime-image rarity-${getHighestDominantTraitRarity(
                   selectedSlime
                 ).toLowerCase()}`}
@@ -96,7 +96,7 @@ function SlimeLabInventory({
 
             {/* Slime ID and Rarity */}
             <div className="slime-info-row">
-              <div className="slime-info-id">{`Slime #${selectedSlime.id}`}</div>
+              <div className="slime-info-id">{`Slime ${selectedSlime.id}`}</div>
               <img src={Separator}></img>
               <div className="slime-info-gen">
                 Gen {selectedSlime.generation}

@@ -243,10 +243,6 @@
   word-break: break-all;
 }
 
-.trait-table th {
-  font-weight: bold;
-}
-
 .trait-table tbody tr:nth-child(odd) {
   background-color: var(--light-teal);
 }
