@@ -105,6 +105,7 @@
   border-radius: 0 0 10px 10px;
   border-collapse: collapse;
   background-color: var(--medium-teal);
+  overflow: hidden;
 }
 
 .child-trait-type-title {
@@ -129,12 +130,8 @@
   word-break: break-all;
 }
 
-.child--table tbody tr:nth-child(odd) {
+.child-trait-table tbody tr:nth-child(odd) {
   background-color: var(--light-teal);
-}
-
-.child--table tbody tr:last-child {
-  border-radius: 10px;
 }
 
 .breed-timer-bar {

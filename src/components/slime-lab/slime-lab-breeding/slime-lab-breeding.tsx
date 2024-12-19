@@ -178,7 +178,7 @@ function SlimeLabBreedingPage() {
                   <tr>
                     <th className="child-trait-header-cell">Trait</th>
                     <th className="child-trait-header-cell">Rarity</th>
-                    <th className="child-trait-header-cell">Probability (%)</th>
+                    <th className="child-trait-header-cell">%</th>
                   </tr>
                 </thead>
                 <tbody>

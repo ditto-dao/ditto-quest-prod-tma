@@ -247,10 +247,6 @@
   background-color: var(--light-teal);
 }
 
-.trait-table tbody tr:last-child {
-  border-radius: 10px;
-}
-
 .trait-rarity {
   display: inline-block; /* Ensures the div wraps only the content */
   padding: 2px 6px; /* Add padding to the content */
