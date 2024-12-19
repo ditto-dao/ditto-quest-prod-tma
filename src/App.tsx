@@ -15,7 +15,6 @@ import { IdleSocketProvider } from "./redux/socket/idle/idle-context";
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
 
 function App() {
-
   useEffect(() => {
     const root = document.documentElement;
     if (WebApp.colorScheme) {
@@ -39,6 +38,28 @@ function App() {
         root.style.setProperty("--deep-warm-red", "#C23B3B");
         root.style.setProperty("--light-teal", "#2E7C78");
         root.style.setProperty("--medium-teal", "#1F5B58");
+
+        // Rank Background Colors with Muted Tones
+        root.style.setProperty(
+          "--rarity-d",
+          "#b0b0b0"
+        ); /* Muted Gray for D rank */
+        root.style.setProperty(
+          "--rarity-c",
+          "#8fbf71"
+        ); /* Muted Green for C rank */
+        root.style.setProperty(
+          "--rarity-b",
+          "#5b9eea"
+        ); /* Muted Blue for B rank */
+        root.style.setProperty(
+          "--rarity-a",
+          "#ba78f9"
+        ); /* Muted Purple for A rank */
+        root.style.setProperty(
+          "--rarity-s",
+          "#f6b74c"
+        ); /* Muted Gold for S rank */
       } else {
       }
     }

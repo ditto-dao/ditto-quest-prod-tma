@@ -284,27 +284,6 @@
   transform: scale(1.05);
 }
 
-/* Rarity Colors */
-.rarity-d {
-  background-color: #9e9e9e; /* Gray for D rank */
-}
-
-.rarity-c {
-  background-color: #6eaf49; /* Green for C rank */
-}
-
-.rarity-b {
-  background-color: #3b82f6; /* Blue for B rank */
-}
-
-.rarity-a {
-  background-color: #a855f7; /* Purple for A rank */
-}
-
-.rarity-s {
-  background-color: #f59e0b; /* Gold for S rank */
-}
-
 .inv-buttons-div {
   margin-bottom: 20px;
 }

@@ -43,28 +43,20 @@ function SlimeLabPage() {
         </div>
       </div>
 
-      {/* Overlay Components */}
+      {/* Conditional Rendering */}
       <div className="tab-content">
-        <div
-          className={`tab-panel ${
-            activeTab === "inventory" ? "visible" : "hidden"
-          }`}
-        >
+        {activeTab === "inventory" && (
           <SlimeLabInventory
             slimes={slimes}
             equippedSlimeId={equippedSlimeId}
           />
-        </div>
-        <div
-          className={`tab-panel ${
-            activeTab === "breed" ? "visible" : "hidden"
-          }`}
-        >
+        )}
+        {activeTab === "breed" && (
           <SlimeLabBreedingPage
             slimes={slimes}
             equippedSlimeId={equippedSlimeId}
           />
-        </div>
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,9 @@ import Modal from "react-modal";
 import "./slime-lab-inventory.css";
 import { SlimeWithTraits } from "../../../utils/types";
 import BasicSlimeImg from "../../../assets/ditto-on-cloud.png";
+import DQLogo from "../../../assets/images/general/dq-logo.png";
+import Separator from "../../../assets/images/general/separator.svg";
+import { getHighestDominantTraitRarity } from "../../../utils/helpers";
 
 interface SlimeLabInventoryProps {
   slimes: SlimeWithTraits[];
@@ -29,19 +32,34 @@ function SlimeLabInventory({
   };
 
   return (
-    <>
-      <div id="slime-lab-inventory-container" className="inventory-grid">
-        {slimes.map((slime) => (
-          <div
-            key={slime.id}
-            className={`slime-inventory-item ${
-              slime.id === equippedSlimeId ? "equipped-slime" : ""
-            }`}
-            onClick={() => openModal(slime)}
-          >
-            <div className="slime-name">{`Slime #${slime.id}`}</div>
-          </div>
-        ))}
+    <div className="slime-lab-root">
+      <div className="slime-lab-inventory-wrapper">
+        <div className="slime-lab-inventory-header">Slimes</div>
+        <div id="slime-lab-inventory-container" className="inventory-grid">
+          {slimes.map((slime) => (
+            <div
+              key={slime.id}
+              className={`slime-inventory-item ${
+                slime.id === equippedSlimeId ? "equipped-slime" : ""
+              }`}
+              onClick={() => openModal(slime)}
+            >
+              <img
+                className={`slime-inventory-img rarity-${getHighestDominantTraitRarity(
+                  slime
+                ).toLowerCase()}`}
+                src={DQLogo}
+              ></img>
+              <div className="slime-name-container">
+                <div className="slime-name">{`Slime #${slime.id}`}</div>
+              </div>
+            </div>
+          ))}
+          {/* Add an empty box if the number of slimes is odd */}
+          {slimes.length % 2 !== 0 && (
+            <div className="slime-inventory-item empty"></div>
+          )}
+        </div>
       </div>
 
       <Modal
@@ -61,13 +79,16 @@ function SlimeLabInventory({
               <img
                 src={BasicSlimeImg}
                 alt={`Slime #${selectedSlime.id}`}
-                className="slime-image"
+                className={`slime-image rarity-${getHighestDominantTraitRarity(
+                  selectedSlime
+                ).toLowerCase()}`}
               />
             </div>
 
             {/* Slime ID and Rarity */}
             <div className="slime-info-row">
               <div className="slime-info-id">{`Slime #${selectedSlime.id}`}</div>
+              <img src={Separator}></img>
               <div className="slime-info-gen">
                 Gen {selectedSlime.generation}
               </div>
@@ -89,6 +110,13 @@ function SlimeLabInventory({
                   h1: selectedSlime.BodyHidden1,
                   h2: selectedSlime.BodyHidden2,
                   h3: selectedSlime.BodyHidden3,
+                },
+                {
+                  trait: "Core",
+                  dominant: selectedSlime.CoreDominant,
+                  h1: selectedSlime.CoreHidden1,
+                  h2: selectedSlime.CoreHidden2,
+                  h3: selectedSlime.CoreHidden3,
                 },
                 {
                   trait: "Headpiece",
@@ -127,45 +155,71 @@ function SlimeLabInventory({
                 },
               ].map(({ trait, dominant, h1, h2, h3 }) => (
                 <div key={trait} className="slime-trait">
-                  <p>{trait}</p>
-                  <table className="trait-table">
-                    <thead>
-                      <tr>
-                        <th>Gene</th>
-                        <th>Name</th>
-                        <th>Rarity</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>D</td>
-                        <td>{dominant.name}</td>
-                        <td>{dominant.rarity}</td>
-                      </tr>
-                      <tr>
-                        <td>H1</td>
-                        <td>{h1.name}</td>
-                        <td>{h1.rarity}</td>
-                      </tr>
-                      <tr>
-                        <td>H2</td>
-                        <td>{h2.name}</td>
-                        <td>{h2.rarity}</td>
-                      </tr>
-                      <tr>
-                        <td>H3</td>
-                        <td>{h3.name}</td>
-                        <td>{h3.rarity}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div className="trait-table-container">
+                    <div className="trait-table-label">{trait}</div>
+                    <table className="trait-table">
+                      <thead>
+                        <tr>
+                          <th>Gene</th>
+                          <th>Name</th>
+                          <th>Rarity</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>D</td>
+                          <td>{dominant.name}</td>
+                          <td>
+                            <div
+                              className={`trait-rarity rarity-${dominant.rarity.toLowerCase()}`}
+                            >
+                              {dominant.rarity}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>H1</td>
+                          <td>{h1.name}</td>
+                          <td>
+                            <div
+                              className={`trait-rarity rarity-${h1.rarity.toLowerCase()}`}
+                            >
+                              {h1.rarity}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>H2</td>
+                          <td>{h2.name}</td>
+                          <td>
+                            <div
+                              className={`trait-rarity rarity-${h2.rarity.toLowerCase()}`}
+                            >
+                              {h2.rarity}
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>H3</td>
+                          <td>{h3.name}</td>
+                          <td>
+                            <div
+                              className={`trait-rarity rarity-${h3.rarity.toLowerCase()}`}
+                            >
+                              {h3.rarity}
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         )}
       </Modal>
-    </>
+    </div>
   );
 }
 

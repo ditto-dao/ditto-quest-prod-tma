@@ -1,4 +1,4 @@
-import { SlimeWithTraits } from "./types";
+import { Rarity, SlimeWithTraits } from "./types";
 
 export function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -56,6 +56,36 @@ export function getChildTraitProbabilities(sire: SlimeWithTraits, dame: SlimeWit
     }
 
     return result;
+}
+
+export function getHighestDominantTraitRarity(slime: SlimeWithTraits): Rarity {
+    // Map rarity values to a rank for comparison
+    const rarityRank: Record<Rarity, number> = {
+        [Rarity.S]: 5,
+        [Rarity.A]: 4,
+        [Rarity.B]: 3,
+        [Rarity.C]: 2,
+        [Rarity.D]: 1,
+    };
+
+    // Collect all dominant traits
+    const dominantTraits = [
+        slime.AuraDominant,
+        slime.BodyDominant,
+        slime.CoreDominant,
+        slime.HeadpieceDominant,
+        slime.TailDominant,
+        slime.ArmsDominant,
+        slime.EyesDominant,
+        slime.MouthDominant,
+    ];
+
+    // Find the highest rarity among the dominant traits
+    const highestRarity = dominantTraits.reduce<Rarity>((highest, trait) => {
+        return rarityRank[trait.rarity] > rarityRank[highest] ? trait.rarity : highest;
+    }, Rarity.D); // Start with the lowest rarity as the initial value
+
+    return highestRarity;
 }
 
 export function formatNumberWithSuffix(value: number): string {

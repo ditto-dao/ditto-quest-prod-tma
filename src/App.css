@@ -21,3 +21,24 @@
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
+
+/* General Rank Styles */
+.rarity-s {
+  background-color: var(--rarity-s);
+}
+
+.rarity-a {
+  background-color: var(--rarity-a);
+}
+
+.rarity-b {
+  background-color: var(--rarity-b);
+}
+
+.rarity-c {
+  background-color: var(--rarity-c);
+}
+
+.rarity-d {
+  background-color: var(--rarity-d);
+}
