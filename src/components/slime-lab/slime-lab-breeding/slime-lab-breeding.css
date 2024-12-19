@@ -91,6 +91,14 @@
   gap: 25px;
 }
 
+.child-trait-type-title {
+  background-color: var(--sage-green);
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+  font-size: 9px;
+  padding: 3px;
+}
+
 .child-trait-table-wrapper {
   background-color: var(--sage-green);
   display: flex;
@@ -102,36 +110,39 @@
 
 .child-trait-table {
   width: 100%;
+  table-layout: fixed; /* Ensures fixed-width columns */
   border-radius: 0 0 10px 10px;
   border-collapse: collapse;
   background-color: var(--medium-teal);
   overflow: hidden;
 }
 
-.child-trait-type-title {
-  background-color: var(--sage-green);
-  border-radius: 10px 10px 0 0;
-  text-align: center;
-  font-size: 9px;
-  padding: 3px;
-}
-
 .child-trait-table th,
 .child-trait-table td {
   text-align: center;
   font-size: 8px;
-  padding: 4px;
+  padding: 5px;
+  word-wrap: break-word; /* Break words when necessary */
+  overflow-wrap: break-word; /* Handles word wrapping for modern browsers */
 }
 
-.child-trait-table th:nth-child(1),
+.child-trait-table th:nth-child(1), /* "Trait" column */
 .child-trait-table td:nth-child(1) {
-  width: auto; /* Allow the Name column to grow */
-  white-space: normal; /* Enable text wrapping */
-  word-break: break-all;
+  width: 55%; /* Proportionately wider for the "Name" column */
+}
+
+.child-trait-table th:nth-child(2), /* "Rarity" column */
+.child-trait-table td:nth-child(2) {
+  width: 25%; /* Fixed width for "Rarity" */
+}
+
+.child-trait-table th:nth-child(3), /* "Probability (%)" column */
+.child-trait-table td:nth-child(3) {
+  width: 20%; /* Fixed width for "%" */
 }
 
 .child-trait-table tbody tr:nth-child(odd) {
-  background-color: var(--light-teal);
+  background-color: var(--light-teal); /* Alternate row color */
 }
 
 .breed-timer-bar {

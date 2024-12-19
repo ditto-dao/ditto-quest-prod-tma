@@ -185,7 +185,13 @@ function SlimeLabBreedingPage() {
                   {traits.map(({ name, rarity, probability }) => (
                     <tr key={name} className="child-trait-row">
                       <td className="child-trait-cell">{name}</td>
-                      <td className="child-trait-cell rarity-cell">{rarity}</td>
+                      <td className="child-trait-cell rarity-cell">
+                        <div
+                          className={`trait-rarity rarity-${rarity.toLowerCase()}`}
+                        >
+                          {rarity}
+                        </div>
+                      </td>
                       <td className="child-trait-cell">
                         {probability.toFixed(1)}
                       </td>
