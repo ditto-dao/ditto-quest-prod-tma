@@ -6,6 +6,8 @@ import BasicSlimeImg from "../../../assets/ditto-on-cloud.png";
 import DQLogo from "../../../assets/images/general/dq-logo.png";
 import Separator from "../../../assets/images/general/separator.svg";
 import { getHighestDominantTraitRarity } from "../../../utils/helpers";
+import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
+import { useUserSocket } from "../../../redux/socket/user/user-context";
 
 interface SlimeLabInventoryProps {
   slimes: SlimeWithTraits[];
@@ -16,6 +18,9 @@ function SlimeLabInventory({
   slimes,
   equippedSlimeId,
 }: SlimeLabInventoryProps) {
+  const { setSlimeToBreed, breedingStatus, slimeToBreed0, slimeToBreed1 } = useIdleSocket();
+  const { userData } = useUserSocket();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSlime, setSelectedSlime] = useState<SlimeWithTraits | null>(
     null
@@ -30,6 +35,10 @@ function SlimeLabInventory({
     setSelectedSlime(null);
     setIsModalOpen(false);
   };
+  
+  const canSetSlimeToBreed = (slime: SlimeWithTraits) => {
+    return slime.id !== userData.equippedSlime?.id && !breedingStatus && slime.id !== slimeToBreed0?.id && slime.id !== slimeToBreed1?.id;
+  }
 
   return (
     <div className="slime-lab-root">
@@ -215,6 +224,17 @@ function SlimeLabInventory({
                   </div>
                 </div>
               ))}
+              <div className="set-breed-slime-button-container">
+              <button
+                className={`set-breed-slime-button ${canSetSlimeToBreed(selectedSlime) ? "set-breed-slime-active" : ""}`}
+                onClick={() =>
+                  setSlimeToBreed(selectedSlime)
+                }
+                disabled={!canSetSlimeToBreed(selectedSlime)}
+              >
+                Select for Breeding
+              </button>
+              </div>
             </div>
           </div>
         )}

@@ -1,4 +1,3 @@
-import { SlimeWithTraits } from "../../../utils/types";
 import "./slime-lab-breeding.css";
 import SlimePlaceholderImage from "../../../assets/ditto-on-cloud.png";
 import { getChildTraitProbabilities } from "../../../utils/helpers";
@@ -6,29 +5,13 @@ import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useEffect, useState } from "react";
 
-interface SlimeLabBreedingProps {
-  slimes: SlimeWithTraits[];
-  equippedSlimeId?: number;
-}
-
-function SlimeLabBreedingPage(props: SlimeLabBreedingProps) {
-  const { slimes } = props;
+function SlimeLabBreedingPage() {
   const { socket } = useSocket();
   const {
     slimeToBreed0,
-    setSlimeToBreed0,
     slimeToBreed1,
-    setSlimeToBreed1,
     breedingStatus,
   } = useIdleSocket();
-
-  // Filter dropdown options to exclude the one selected in the other dropdown
-  const slimeOptions0 = slimes.filter(
-    (slime) => slime.id !== slimeToBreed1?.id
-  );
-  const slimeOptions1 = slimes.filter(
-    (slime) => slime.id !== slimeToBreed0?.id
-  );
 
   // Generate trait probabilities when both slimes are selected
   const traitProbabilities =
@@ -105,26 +88,6 @@ function SlimeLabBreedingPage(props: SlimeLabBreedingProps) {
       <div className="breeding-dropdown-row">
         {/* Dropdown for selecting Slime 0 */}
         <div className="breeding-dropdown-wrapper">
-          <select
-            id="slimeToBreed0"
-            className="breeding-dropdown"
-            value={slimeToBreed0?.id || ""}
-            onChange={(e) => {
-              const selectedSlime = slimes.find(
-                (slime) => slime.id === parseInt(e.target.value)
-              );
-              setSlimeToBreed0(selectedSlime);
-            }}
-          >
-            <option value="" disabled>
-              Select slime
-            </option>
-            {slimeOptions0.map((slime) => (
-              <option key={slime.id} value={slime.id}>
-                Slime #{slime.id}
-              </option>
-            ))}
-          </select>
           <div className="slime-preview-box">
             {slimeToBreed0 ? (
               <img
@@ -139,30 +102,13 @@ function SlimeLabBreedingPage(props: SlimeLabBreedingProps) {
           <div className="slime-generation">
             {slimeToBreed0 ? `Gen ${slimeToBreed0.generation}` : ""}
           </div>
+          <div className="slime-to-breed-id">
+            {slimeToBreed0 ? `Slime # ${slimeToBreed0.id}` : ""}
+          </div>
         </div>
 
         {/* Dropdown for selecting Slime 1 */}
         <div className="breeding-dropdown-wrapper">
-          <select
-            id="slimeToBreed1"
-            className="breeding-dropdown"
-            value={slimeToBreed1?.id || ""}
-            onChange={(e) => {
-              const selectedSlime = slimes.find(
-                (slime) => slime.id === parseInt(e.target.value)
-              );
-              setSlimeToBreed1(selectedSlime);
-            }}
-          >
-            <option value="" disabled>
-              Select slime
-            </option>
-            {slimeOptions1.map((slime) => (
-              <option key={slime.id} value={slime.id}>
-                Slime #{slime.id}
-              </option>
-            ))}
-          </select>
           <div className="slime-preview-box">
             {slimeToBreed1 ? (
               <img
@@ -176,6 +122,9 @@ function SlimeLabBreedingPage(props: SlimeLabBreedingProps) {
           </div>
           <div className="slime-generation">
             {slimeToBreed1 ? `Gen ${slimeToBreed1.generation}` : ""}
+          </div>
+          <div className="slime-to-breed-id">
+            {slimeToBreed1 ? `Slime # ${slimeToBreed1.id}` : ""}
           </div>
         </div>
       </div>

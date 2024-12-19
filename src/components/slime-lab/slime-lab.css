@@ -34,6 +34,5 @@
 .tab-content {
   flex-grow: 1; /* Stretch to fill remaining space */
   display: flex;
-  align-items: center;
   overflow-x: hidden;
 }

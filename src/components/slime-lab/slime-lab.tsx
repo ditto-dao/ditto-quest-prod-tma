@@ -53,8 +53,6 @@ function SlimeLabPage() {
         )}
         {activeTab === "breed" && (
           <SlimeLabBreedingPage
-            slimes={slimes}
-            equippedSlimeId={equippedSlimeId}
           />
         )}
       </div>

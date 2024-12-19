@@ -297,7 +297,6 @@
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
-  transition: transform 0.1s ease, background-color 0.2s ease;
 }
 
 .equip-button.equip-active {

@@ -66,13 +66,9 @@ interface IdleContext {
   farmingStatuses: Record<number, FarmingStatus | null>;
   craftingStatuses: Record<number, CraftingStatus | null>;
   slimeToBreed0: SlimeWithTraits | undefined;
-  setSlimeToBreed0: React.Dispatch<
-    React.SetStateAction<SlimeWithTraits | undefined>
-  >;
+
   slimeToBreed1: SlimeWithTraits | undefined;
-  setSlimeToBreed1: React.Dispatch<
-    React.SetStateAction<SlimeWithTraits | undefined>
-  >;
+  setSlimeToBreed: (slime: SlimeWithTraits) => void;
   breedingStatus: BreedingStatus | undefined;
   startFarming: (
     itemId: number,
@@ -92,9 +88,8 @@ const IdleContext = createContext<IdleContext>({
   farmingStatuses: {},
   craftingStatuses: {},
   slimeToBreed0: undefined,
-  setSlimeToBreed0: () => {},
   slimeToBreed1: undefined,
-  setSlimeToBreed1: () => {},
+  setSlimeToBreed: () => {},
   breedingStatus: undefined,
   startFarming: () => {},
   stopFarming: () => {},
@@ -177,6 +172,17 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
   const [breedingStatus, setBreedingStatus] = useState<
     BreedingStatus | undefined
   >();
+  const [lastSlimeToBreedSet, setLastSlimeToBreedSet] = useState<0 | 1>(1);
+
+  const setSlimeToBreed = (slime: SlimeWithTraits) => {
+    if (lastSlimeToBreedSet === 1) {
+      setSlimeToBreed0(slime);
+      setLastSlimeToBreedSet(0);
+    } else {
+      setSlimeToBreed1(slime);
+      setLastSlimeToBreedSet(1);
+    }
+  }
 
   // Temporary state for unresolved IDs
   const [unresolvedSireId, setUnresolvedSireId] = useState<number | null>(null);
@@ -341,9 +347,8 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
         farmingStatuses,
         craftingStatuses,
         slimeToBreed0,
-        setSlimeToBreed0,
         slimeToBreed1,
-        setSlimeToBreed1,
+        setSlimeToBreed,
         breedingStatus,
         startFarming,
         stopFarming,

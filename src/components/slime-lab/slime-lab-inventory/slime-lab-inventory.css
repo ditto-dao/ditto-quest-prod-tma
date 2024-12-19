@@ -262,6 +262,35 @@
   font-weight: bold; /* Makes the text bold */
 }
 
+.set-breed-slime-button-container {
+  display: flex;
+  justify-content: center;
+}
+
+.set-breed-slime-button {
+  padding: 8px 12px;
+  font-size: 9px;
+  color: var(--cream-white);
+  background-color: var(--burnt-orange);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.set-breed-slime-active {
+  background-color: var(--deep-warm-red);
+}
+
+.set-breed-slime-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.set-breed-slime-button:not(:disabled):active {
+  transform: scale(0.98);
+}
+
 .slime-modal-content::-webkit-scrollbar,
 #slime-lab-inventory-container::-webkit-scrollbar {
   width: 3px; /* Narrow width for the scrollbar */
