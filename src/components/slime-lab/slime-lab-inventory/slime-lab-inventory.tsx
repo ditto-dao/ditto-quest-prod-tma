@@ -2,7 +2,6 @@ import { useState } from "react";
 import Modal from "react-modal";
 import "./slime-lab-inventory.css";
 import { SlimeWithTraits } from "../../../utils/types";
-import BasicSlimeImg from "../../../assets/ditto-on-cloud.png";
 import DQLogo from "../../../assets/images/general/dq-logo.png";
 import Separator from "../../../assets/images/general/separator.svg";
 import { getHighestDominantTraitRarity } from "../../../utils/helpers";
@@ -18,13 +17,15 @@ function SlimeLabInventory({
   slimes,
   equippedSlimeId,
 }: SlimeLabInventoryProps) {
-  const { setSlimeToBreed, breedingStatus, slimeToBreed0, slimeToBreed1 } = useIdleSocket();
+  const { setSlimeToBreed, breedingStatus, slimeToBreed0, slimeToBreed1 } =
+    useIdleSocket();
   const { userData } = useUserSocket();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedSlime, setSelectedSlime] = useState<SlimeWithTraits | null>(
     null
   );
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   const openModal = (slime: SlimeWithTraits) => {
     setSelectedSlime(slime);
@@ -34,11 +35,17 @@ function SlimeLabInventory({
   const closeModal = () => {
     setSelectedSlime(null);
     setIsModalOpen(false);
+    setExpanded({});
   };
-  
+
   const canSetSlimeToBreed = (slime: SlimeWithTraits) => {
-    return slime.id !== userData.equippedSlime?.id && !breedingStatus && slime.id !== slimeToBreed0?.id && slime.id !== slimeToBreed1?.id;
-  }
+    return (
+      slime.id !== userData.equippedSlime?.id &&
+      !breedingStatus &&
+      slime.id !== slimeToBreed0?.id &&
+      slime.id !== slimeToBreed1?.id
+    );
+  };
 
   return (
     <div className="slime-lab-root">
@@ -86,7 +93,7 @@ function SlimeLabInventory({
             {/* Slime Image */}
             <div className="slime-image-container">
               <img
-                src={BasicSlimeImg}
+                src={DQLogo}
                 alt={`#${selectedSlime.id}`}
                 className={`slime-image rarity-${getHighestDominantTraitRarity(
                   selectedSlime
@@ -165,7 +172,19 @@ function SlimeLabInventory({
               ].map(({ trait, dominant, h1, h2, h3 }) => (
                 <div key={trait} className="slime-trait">
                   <div className="trait-table-container">
-                    <div className="trait-table-label">{trait}</div>
+                    {/* Add a button to toggle the expanded state */}
+                    <div
+                      className="trait-table-label"
+                      onClick={() =>
+                        setExpanded((prev) => ({
+                          ...prev,
+                          [trait]: !prev[trait],
+                        }))
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      {trait} {expanded[trait] ? "▲" : "▼"}
+                    </div>
                     <table className="trait-table">
                       <thead>
                         <tr>
@@ -175,65 +194,40 @@ function SlimeLabInventory({
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>D</td>
-                          <td>{dominant.name}</td>
-                          <td>
-                            <div
-                              className={`trait-rarity rarity-${dominant.rarity.toLowerCase()}`}
-                            >
-                              {dominant.rarity}
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>H1</td>
-                          <td>{h1.name}</td>
-                          <td>
-                            <div
-                              className={`trait-rarity rarity-${h1.rarity.toLowerCase()}`}
-                            >
-                              {h1.rarity}
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>H2</td>
-                          <td>{h2.name}</td>
-                          <td>
-                            <div
-                              className={`trait-rarity rarity-${h2.rarity.toLowerCase()}`}
-                            >
-                              {h2.rarity}
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>H3</td>
-                          <td>{h3.name}</td>
-                          <td>
-                            <div
-                              className={`trait-rarity rarity-${h3.rarity.toLowerCase()}`}
-                            >
-                              {h3.rarity}
-                            </div>
-                          </td>
-                        </tr>
+                        {/* Show only the first row when collapsed, or all rows when expanded */}
+                        {(expanded[trait]
+                          ? [dominant, h1, h2, h3]
+                          : [dominant]
+                        ).map((row, index) => (
+                          <tr key={index}>
+                            <td>{index === 0 ? "D" : `H${index}`}</td>
+                            <td>{row.name}</td>
+                            <td>
+                              <div
+                                className={`trait-rarity rarity-${row.rarity.toLowerCase()}`}
+                              >
+                                {row.rarity}
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
                 </div>
               ))}
               <div className="set-breed-slime-button-container">
-              <button
-                className={`set-breed-slime-button ${canSetSlimeToBreed(selectedSlime) ? "set-breed-slime-active" : ""}`}
-                onClick={() =>
-                  setSlimeToBreed(selectedSlime)
-                }
-                disabled={!canSetSlimeToBreed(selectedSlime)}
-              >
-                Select for Breeding
-              </button>
+                <button
+                  className={`set-breed-slime-button ${
+                    canSetSlimeToBreed(selectedSlime)
+                      ? "set-breed-slime-active"
+                      : ""
+                  }`}
+                  onClick={() => setSlimeToBreed(selectedSlime)}
+                  disabled={!canSetSlimeToBreed(selectedSlime)}
+                >
+                  Select for Breeding
+                </button>
               </div>
             </div>
           </div>

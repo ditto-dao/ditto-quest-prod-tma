@@ -124,3 +124,32 @@ export function formatNumberForInvQty(num: number): string {
         return (num / 1000000).toFixed(2) + 'm';
     }
 }
+
+export function getBreedingTimesByGeneration(gen: number): number {
+    if (gen < 1) {
+        return 1800;
+    } else if (gen <= 3) {
+        return 2700;
+    } else if (gen <= 5) {
+        return 3600;
+    } else if (gen <= 7) {
+        return 7200;
+    } else {
+        return 10800;
+    }
+}
+
+export function formatDuration(seconds: number): string {
+    const timeUnits = {
+        w: Math.floor(seconds / (7 * 24 * 60 * 60)), // Weeks
+        d: Math.floor((seconds % (7 * 24 * 60 * 60)) / (24 * 60 * 60)), // Days
+        h: Math.floor((seconds % (24 * 60 * 60)) / (60 * 60)), // Hours
+        m: Math.floor((seconds % (60 * 60)) / 60), // Minutes
+        s: seconds % 60, // Seconds
+    };
+
+    return Object.entries(timeUnits)
+        .filter(([_, value]) => value > 0) // Filter out units with 0 value
+        .map(([unit, value]) => `${value}${unit}`) // Format the remaining units
+        .join(" "); // Join them with a space
+}

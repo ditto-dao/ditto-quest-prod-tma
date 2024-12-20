@@ -1,6 +1,9 @@
 import "./slime-lab-breeding.css";
 import SlimePlaceholderImage from "../../../assets/images/general/dq-logo.png";
+import TimerIcon from "../../../assets/images/general/timer.svg";
 import {
+  formatDuration,
+  getBreedingTimesByGeneration,
   getChildTraitProbabilities,
   getHighestDominantTraitRarity,
 } from "../../../utils/helpers";
@@ -148,6 +151,10 @@ function SlimeLabBreedingPage() {
           >
             {breedingStatus ? "Cancel Breed" : "Breed Slimes"}
           </button>
+          <div className="breed-duration-container">
+            <img src={TimerIcon}></img>
+            <div className="breed-duration-text">{formatDuration(getBreedingTimesByGeneration(slimeToBreed0!.generation) + getBreedingTimesByGeneration(slimeToBreed1!.generation))}</div>
+          </div>
         </div>
       )}
 
