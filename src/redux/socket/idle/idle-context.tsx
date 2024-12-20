@@ -64,24 +64,25 @@ export interface ProgressUpdate {
 // Context
 interface IdleContext {
   farmingStatuses: Record<number, FarmingStatus | null>;
-  craftingStatuses: Record<number, CraftingStatus | null>;
-  slimeToBreed0: SlimeWithTraits | undefined;
-
-  slimeToBreed1: SlimeWithTraits | undefined;
-  setSlimeToBreed: (slime: SlimeWithTraits) => void;
-  breedingStatus: BreedingStatus | undefined;
   startFarming: (
     itemId: number,
     startTimestamp: number,
     durationS: number
   ) => void;
   stopFarming: (itemId: number) => void;
+  craftingStatuses: Record<number, CraftingStatus | null>;
   startCrafting: (
     equipmentId: number,
     startTimestamp: number,
     durationS: number
   ) => void;
   stopCrafting: (equipmentId: number) => void;
+  breedingStatus: BreedingStatus | undefined;
+  slimeToBreed0: SlimeWithTraits | undefined;
+  slimeToBreed1: SlimeWithTraits | undefined;
+  setSlimeToBreed: (slime: SlimeWithTraits) => void;
+  startBreeding: (startTimestamp: number, durationS: number) => void;
+  stopBreeding: () => void;
 }
 
 const IdleContext = createContext<IdleContext>({
@@ -95,6 +96,8 @@ const IdleContext = createContext<IdleContext>({
   stopFarming: () => {},
   startCrafting: () => {},
   stopCrafting: () => {},
+  startBreeding: () => {},
+  stopBreeding: () => {},
 });
 
 export const useIdleSocket = () => useContext(IdleContext);
@@ -121,7 +124,7 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
       [itemId]: { startTimestamp, durationS },
     })); */
     setFarmingStatuses({
-      [itemId]: { startTimestamp, durationS }
+      [itemId]: { startTimestamp, durationS },
     });
     console.log(`Started farming for item ID ${itemId}`);
   };
@@ -149,7 +152,7 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
       [equipmentId]: { startTimestamp, durationS },
     })); */
     setCraftingStatuses({
-      [equipmentId]: { startTimestamp, durationS }
+      [equipmentId]: { startTimestamp, durationS },
     });
     console.log(`Started crafting for equipment ID ${equipmentId}`);
   };
@@ -182,7 +185,27 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
       setSlimeToBreed1(slime);
       setLastSlimeToBreedSet(1);
     }
-  }
+  };
+
+  const startBreeding = (startTimestamp: number, durationS: number) => {
+    if (slimeToBreed0 && slimeToBreed1) {
+      setBreedingStatus({
+        startTimestamp: startTimestamp,
+        sireId: slimeToBreed0.id,
+        dameId: slimeToBreed1.id,
+        durationS: durationS,
+      });
+    }
+
+    console.log(
+      `Started breeding for slimes ${slimeToBreed0?.id} and ${slimeToBreed1?.id}`
+    );
+  };
+
+  const stopBreeding = () => {
+    setBreedingStatus(undefined);
+    console.log(`Stopped breeding.`);
+  };
 
   // Temporary state for unresolved IDs
   const [unresolvedSireId, setUnresolvedSireId] = useState<number | null>(null);
@@ -243,6 +266,32 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
         }));
       });
 
+      // Breeding
+      socket.on("breeding-start", (data: BreedingStatus) => {
+        console.log(
+          `Received breeding-start: ${JSON.stringify(data, null, 2)}`
+        );
+        setBreedingStatus(data);
+
+        // Store IDs temporarily if slimes are not yet available
+        const sire = userData.slimes?.find(
+          (element) => element.id === data.sireId
+        );
+        if (sire) setSlimeToBreed0(sire);
+        else setUnresolvedSireId(data.sireId); // Temporarily store the ID
+
+        const dame = userData.slimes?.find(
+          (element) => element.id === data.dameId
+        );
+        if (dame) setSlimeToBreed1(dame);
+        else setUnresolvedDameId(data.dameId); // Temporarily store the ID
+      });
+
+      socket.on("breeding-stop", (data: { sireId: number; dameId: number }) => {
+        console.log(`Received breeding-stop: ${JSON.stringify(data, null, 2)}`);
+        setBreedingStatus(undefined);
+      });
+
       // Idle progress
       socket.on("idle-progress-update", (data: ProgressUpdate[]) => {
         console.log(
@@ -278,32 +327,6 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
         if (alertMessage.trim() !== "") {
           alert(alertMessage.trim());
         }
-      });
-
-      // Breeding
-      socket.on("breeding-start", (data: BreedingStatus) => {
-        console.log(
-          `Received breeding-start: ${JSON.stringify(data, null, 2)}`
-        );
-        setBreedingStatus(data);
-
-        // Store IDs temporarily if slimes are not yet available
-        const sire = userData.slimes?.find(
-          (element) => element.id === data.sireId
-        );
-        if (sire) setSlimeToBreed0(sire);
-        else setUnresolvedSireId(data.sireId); // Temporarily store the ID
-
-        const dame = userData.slimes?.find(
-          (element) => element.id === data.dameId
-        );
-        if (dame) setSlimeToBreed1(dame);
-        else setUnresolvedDameId(data.dameId); // Temporarily store the ID
-      });
-
-      socket.on("breeding-stop", (data: { sireId: number; dameId: number }) => {
-        console.log(`Received breeding-stop: ${JSON.stringify(data, null, 2)}`);
-        setBreedingStatus(undefined);
       });
 
       return () => {
@@ -345,15 +368,17 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
     <IdleContext.Provider
       value={{
         farmingStatuses,
+        startFarming,
+        stopFarming,
         craftingStatuses,
+        startCrafting,
+        stopCrafting,
+        breedingStatus,
         slimeToBreed0,
         slimeToBreed1,
         setSlimeToBreed,
-        breedingStatus,
-        startFarming,
-        stopFarming,
-        startCrafting,
-        stopCrafting,
+        startBreeding,
+        stopBreeding,
       }}
     >
       {children}

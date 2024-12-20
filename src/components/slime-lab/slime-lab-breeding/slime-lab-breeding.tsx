@@ -9,11 +9,13 @@ import {
 } from "../../../utils/helpers";
 import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
 import { useSocket } from "../../../redux/socket/socket-context";
-import { useEffect, useState } from "react";
+import { useUserSocket } from "../../../redux/socket/user/user-context";
+import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
 
 function SlimeLabBreedingPage() {
   const { socket } = useSocket();
-  const { slimeToBreed0, slimeToBreed1, breedingStatus } = useIdleSocket();
+  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket(); 
+  const { slimeToBreed0, slimeToBreed1, breedingStatus, startBreeding, stopBreeding } = useIdleSocket();
 
   // Generate trait probabilities when both slimes are selected
   const traitProbabilities =
@@ -22,67 +24,25 @@ function SlimeLabBreedingPage() {
       : null;
 
   const handleBreed = () => {
-    if (socket && slimeToBreed0 && slimeToBreed1) {
+    if (socket && slimeToBreed0 && slimeToBreed1 && canEmitEvent()) {
       if (!breedingStatus) {
         socket.emit("breed-slimes", {
           sireId: slimeToBreed0.id,
           dameId: slimeToBreed1.id,
         });
+        setLastEventEmittedTimestamp(Date.now());
+        startBreeding(Date.now() + 200, getBreedingTimesByGeneration(slimeToBreed0.generation)  + getBreedingTimesByGeneration(slimeToBreed1.generation))
+
       } else {
         socket.emit("stop-breed-slimes", {
           sireId: slimeToBreed0.id,
           dameId: slimeToBreed1.id,
         });
+        setLastEventEmittedTimestamp(Date.now());
+        stopBreeding();
       }
     }
   };
-
-  const [progress, setProgress] = useState(0);
-
-  useEffect(() => {
-    if (breedingStatus) {
-      const totalDuration = breedingStatus.durationS * 1000;
-      const startTime = breedingStatus.startTimestamp;
-      const endTime = startTime + totalDuration;
-
-      const updateProgress = () => {
-        const currentTime = Date.now(); // Dynamically calculate the current time
-        const elapsedTime = currentTime - startTime; // Time passed since the start
-        const progressPercent = Math.min(
-          (elapsedTime / totalDuration) * 100,
-          100
-        );
-
-        if (elapsedTime < 0) {
-          setProgress(0); // If crafting hasn't started yet, set progress to 0
-          return;
-        }
-
-        setProgress(progressPercent);
-
-        if (currentTime >= endTime) {
-          clearInterval(interval); // Clear interval when crafting is complete
-          setProgress(100); // Ensure progress is set to 100% at the end
-        }
-      };
-
-      // Skip the interval if the crafting is already complete
-      if (Date.now() >= endTime) {
-        setProgress(100);
-        return;
-      }
-
-      // Initial progress update
-      updateProgress();
-
-      // Set interval for regular progress updates
-      const interval = setInterval(updateProgress, 100);
-
-      return () => clearInterval(interval); // Cleanup interval on unmount or craftingStatus change
-    } else {
-      setProgress(0); // Reset progress if craftingStatus is null
-    }
-  }, [breedingStatus]);
 
   return (
     <div id="slime-lab-breeding-container">
@@ -132,13 +92,11 @@ function SlimeLabBreedingPage() {
         </div>
       </div>
 
-      {breedingStatus && (
-        <div className="breed-timer-bar">
-          <div
-            className="breed-timer-bar-progress"
-            style={{ width: `${progress}%` }}
-          ></div>
-        </div>
+      {breedingStatus && slimeToBreed0 && slimeToBreed1 && (
+        <LoopingTimerBar
+            durationS={getBreedingTimesByGeneration(slimeToBreed0.generation) + getBreedingTimesByGeneration(slimeToBreed1.generation)} // Use standard duration for looping
+            startTimestamp={breedingStatus.startTimestamp}
+          />
       )}
 
       {traitProbabilities && (

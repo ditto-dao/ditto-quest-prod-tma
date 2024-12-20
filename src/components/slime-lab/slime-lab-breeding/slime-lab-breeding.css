@@ -4,6 +4,7 @@
   padding: 0 30px 25px 30px;
   box-sizing: border-box;
   width: 100%;
+  gap: 15px;
 }
 
 .breeding-dropdown-row {
@@ -44,14 +45,22 @@
   border-radius: 10px;
 }
 
+.slime-to-breed-id {
+  font-size: 10px;
+  max-width: 100%;
+}
+
+.slime-generation {
+  color: var(--rarity-d);
+  font-size: 9px;
+}
+
 .breed-button-wrapper {
-  margin-top: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
 }
-
 
 .breed-button {
   padding: 10px 16px;
@@ -79,7 +88,6 @@
 
 .breed-duration-container img {
   height: 12px;
-
 }
 
 .breed-duration-text {
@@ -95,22 +103,9 @@
   padding: 14px;
   text-align: left;
   font-size: 9px;
-  margin-top: 20px;
-}
-
-.slime-to-breed-id {
-  font-size: 10px;
-  max-width: 100%;
-  margin: 4px;
-}
-
-.slime-generation {
-  color: var(--rarity-d);
-  font-size: 9px;
 }
 
 .child-trait-probabilities-section {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 25px;
@@ -167,18 +162,4 @@
 
 .child-trait-table tbody tr:nth-child(odd) {
   background-color: var(--light-teal); /* Alternate row color */
-}
-
-.breed-timer-bar {
-  margin-top: 15px;
-  height: 10px;
-  background-color: #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.breed-timer-bar-progress {
-  height: 100%;
-  background-color: #4caf50;
-  transition: width 0.2s ease-in-out;
 }
