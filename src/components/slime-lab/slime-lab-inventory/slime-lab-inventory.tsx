@@ -52,27 +52,35 @@ function SlimeLabInventory({
       <div className="slime-lab-inventory-wrapper">
         <div className="slime-lab-inventory-header">Slimes</div>
         <div id="slime-lab-inventory-container" className="inventory-grid">
-          {slimes.map((slime) => (
-            <div
-              key={slime.id}
-              className={`slime-inventory-item ${
-                slime.id === equippedSlimeId ? "equipped-slime" : ""
-              }`}
-              onClick={() => openModal(slime)}
-            >
-              <img
-                className={`slime-inventory-img rarity-${getHighestDominantTraitRarity(
-                  slime
-                ).toLowerCase()}`}
-                src={DQLogo}
-              ></img>
-              <div className="slime-name-container">
-                <div className="slime-name">{`Slime ${slime.id}`}</div>
-              </div>
-            </div>
-          ))}
+          {slimes.length > 0
+            ? slimes.map((slime) => (
+                <div
+                  key={slime.id}
+                  className={`slime-inventory-item ${
+                    slime.id === equippedSlimeId ? "equipped-slime" : ""
+                  }`}
+                  onClick={() => openModal(slime)}
+                >
+                  <img
+                    className={`slime-inventory-img rarity-${getHighestDominantTraitRarity(
+                      slime
+                    ).toLowerCase()}`}
+                    src={DQLogo}
+                  ></img>
+                  <div className="slime-name-container">
+                    <div className="slime-name">{`Slime ${slime.id}`}</div>
+                  </div>
+                </div>
+              ))
+            : // Render a single row of empty slots when inventory is empty
+              Array.from({ length: 2 }).map((_, index) => (
+                <div
+                  key={`empty-${index}`}
+                  className="slime-inventory-item empty"
+                ></div>
+              ))}
           {/* Add an empty box if the number of slimes is odd */}
-          {slimes.length % 2 !== 0 && (
+          {slimes.length > 0 && slimes.length % 2 !== 0 && (
             <div className="slime-inventory-item empty"></div>
           )}
         </div>

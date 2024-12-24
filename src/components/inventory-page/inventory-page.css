@@ -58,13 +58,6 @@
   height: 100%;
 }
 
-.inventory-empty-message {
-  text-align: center;
-  font-size: 9px;
-  font-weight: bold;
-  padding: 10px;
-}
-
 .inventory-rows-wrapper {
   display: flex;
   flex-direction: column;

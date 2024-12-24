@@ -4,7 +4,7 @@
   padding: 0 30px 25px 30px;
   box-sizing: border-box;
   width: 100%;
-  gap: 15px;
+  gap: 20px;
 }
 
 .breeding-dropdown-row {
@@ -21,7 +21,6 @@
   flex: 1;
 }
 
-/* Box for slime preview */
 .slime-preview-box {
   min-width: 100%;
   min-height: 150px;

@@ -90,8 +90,18 @@ function InventoryPage() {
         <div className="inventory-page-content-container">
           <div className="inv-container-label">Inventory</div>
           {inventory.length === 0 ? (
-            <div className="inventory-empty-message">
-              Nothing in inventory yet...
+            <div className="inventory-rows-wrapper">
+              {/* Render a single row with 4 empty slots */}
+              <div className="inventory-row">
+                {Array(4)
+                  .fill(null)
+                  .map((_, index) => (
+                    <div
+                      key={`empty-${index}`}
+                      className="inventory-item empty"
+                    ></div>
+                  ))}
+              </div>
             </div>
           ) : (
             <div className="inventory-rows-wrapper">
