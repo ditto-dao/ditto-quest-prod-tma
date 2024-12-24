@@ -13,6 +13,8 @@ function CraftingPage() {
           key={recipe.equipmentId}
           equipmentId={recipe.equipmentId}
           equipmentName={recipe.equipmentName}
+          craftingLevelRequired={recipe.craftingLevelRequired}
+          craftingExp={recipe.craftingExp}
           durationS={recipe.durationS}
           requiredItems={recipe.requiredItems}
           craftingStatus={craftingStatuses[recipe.equipmentId] || null}

@@ -1,0 +1,64 @@
+.stats-container {
+  display: flex;
+  align-items: center;
+  width: 60%;
+  gap: 10px;
+}
+
+.stats-level {
+  background-color: var(--golden-yellow);
+  padding: 1.2px;
+  border-radius: 4px;
+  border: 2px solid var(--dark-navy);
+  box-shadow: 0 2px 0 0 var(--dark-navy);
+}
+
+.stats-level-inner {
+  background-color: var(--deep-teal);
+  padding: 4px 7px;
+  border-radius: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.level-text {
+  font-size: 11px;
+  text-align: center;
+  display: inline-block;
+}
+
+.stats-exp-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-exp {
+  flex: 1;
+  height: 4px;
+  background-color: var(--cream-white);
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.stats-exp-progress {
+  height: 100%;
+  background-color: var(--seafoam-green);
+}
+
+.stats-exp-text-container {
+  max-width: 100%;
+}
+
+.stats-exp-text {
+  display: inline-block; /* Shrink-wrap the text */
+  font-size: 8px; /* Adjust font size for clarity */
+  word-wrap: break-word; /* Break long words */
+  word-break: break-word; /* Ensure word breaks occur */
+  text-align: center; /* Align text within its container */
+  background-color: var(--rarity-b);
+  padding: 2px 8px;
+  border-radius: 5px;
+}

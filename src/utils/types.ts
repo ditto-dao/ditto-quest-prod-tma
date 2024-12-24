@@ -19,6 +19,12 @@ export interface User {
     expHp: number;
     expToNextHpLevel: number;
     outstandingSkillPoints: number;
+    farmingLevel: number;
+    farmingExp: number;
+    expToNextFarmingLevel: number;
+    craftingLevel: number;
+    craftingExp: number;
+    expToNextCraftingLevel: number;
     hatId?: number;
     armourId?: number;
     weaponId?: number;
@@ -47,7 +53,7 @@ export const defaultUser: User = {
     username: "",
     goldBalance: 0,
     level: 1,
-    expToNextLevel: 42,
+    expToNextLevel: 83,
     exp: 0,
     str: 1,
     def: 1,
@@ -55,8 +61,14 @@ export const defaultUser: User = {
     magic: 1,
     hpLevel: 1,
     expHp: 0,
-    expToNextHpLevel: 42,
+    expToNextHpLevel: 83,
     outstandingSkillPoints: 0,
+    farmingLevel: 1,
+    farmingExp: 0,
+    expToNextFarmingLevel: 83,
+    craftingLevel: 1,
+    craftingExp: 0,
+    expToNextCraftingLevel: 83,
     hatId: undefined,
     armourId: undefined,
     weaponId: undefined,
@@ -119,6 +131,9 @@ export interface Item {
     description: string;
     imgsrc: string;
     rarity: Rarity;
+    farmingDurationS?: number;
+    farmingLevelRequired?: number;
+    farmingExp?: number;
     consumableId?: number;
     consumable?: Consumable;
 }
@@ -146,6 +161,8 @@ export interface CraftingRecipe {
     equipmentId: number;
     equipment: Equipment;
     durationS: number;
+    craftingLevelRequired: number;
+    craftingExp: number;
     CraftingRecipeItems: CraftingRecipeItems[];
 }
 

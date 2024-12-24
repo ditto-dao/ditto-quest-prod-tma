@@ -15,7 +15,9 @@ function FarmingPage() {
           itemName={item.name}
           rarity={item.rarity}
           description={item.description}
+          farmingLevelRequired={item.farmingLevelRequired}
           durationS={item.farmingDurationS}
+          farmingExp={item.farmingExp}
           farmingStatus={farmingStatuses[item.itemId] || null}
           imgsrc={item.imgsrc}
         />

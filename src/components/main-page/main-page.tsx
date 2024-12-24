@@ -8,7 +8,6 @@ import SkillsPage from "../skills-page/skills-page";
 import SlimeLabPage from "../slime-lab/slime-lab";
 import FarmingPage from "../farming-page/farming-page";
 import AvatarPage from "../avatar-page/avatar-page";
-import Player from "./player/player";
 import ShopIcon from "../../assets/images/sidebar/shop.png";
 import AvatarIcon from "../../assets/images/sidebar/avatar.png";
 import InventoryIcon from "../../assets/images/sidebar/bag.png";
@@ -17,8 +16,12 @@ import FarmingIcon from "../../assets/images/sidebar/farm.png";
 import CraftingIcon from "../../assets/images/sidebar/craft.png";
 import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
+import Stats from "../stats/stats";
+import { useUserSocket } from "../../redux/socket/user/user-context";
 
 function MainPage() {
+  const { userData } = useUserSocket();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState("Avatar");
 
@@ -85,7 +88,20 @@ function MainPage() {
             />
           )}
         </div>
-        <Player />
+        {currentPage === "Farming" && (
+          <Stats
+            level={userData.farmingLevel}
+            total={userData.expToNextFarmingLevel}
+            progress={userData.farmingExp}
+          />
+        )}
+        {currentPage === "Crafting" && (
+          <Stats
+            level={userData.craftingLevel}
+            total={userData.expToNextCraftingLevel}
+            progress={userData.craftingExp}
+          />
+        )}
       </header>
       <Sidebar
         isOpen={isSidebarOpen}

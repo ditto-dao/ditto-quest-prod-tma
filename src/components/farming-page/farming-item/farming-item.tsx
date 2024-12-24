@@ -5,6 +5,7 @@ import TimerIcon from "../../../assets/images/general/timer.svg";
 import "./farming-item.css";
 import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
+import { formatDuration } from "../../../utils/helpers";
 
 interface FarmingItemProps {
   itemId: number;
@@ -12,6 +13,8 @@ interface FarmingItemProps {
   rarity: string;
   description: string;
   durationS: number;
+  farmingLevelRequired: number;
+  farmingExp: number;
   farmingStatus: {
     startTimestamp: number;
     durationS: number;
@@ -21,7 +24,7 @@ interface FarmingItemProps {
 
 function FarmingItem(props: FarmingItemProps) {
   const { socket } = useSocket();
-  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket(); 
+  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { startFarming, stopFarming } = useIdleSocket();
   const [isFarming, setIsFarming] = useState(false);
 
@@ -37,7 +40,7 @@ function FarmingItem(props: FarmingItemProps) {
         socket.emit("farm-item", props.itemId);
         setLastEventEmittedTimestamp(Date.now());
 
-        startFarming(props.itemId, Date.now() + 200, props.durationS);
+        startFarming(props.itemId, Date.now() + 300, props.durationS);
         setIsFarming(true);
       }
     }
@@ -53,12 +56,18 @@ function FarmingItem(props: FarmingItemProps) {
 
   return (
     <div className="farming-item-container">
+      <div className="farming-item-level">Lvl {props.farmingLevelRequired}</div>
       <div className="farming-item-inner-container">
         <div className="farm-item-header">
           <div className="farm-item-name">{props.itemName}</div>
-          <div className="farm-item-duration-container">
-            <img src={TimerIcon}></img>
-            <div className="farm-item-duration">{props.durationS}s</div>
+          <div className="farm-item-info-container">
+            <div className="farm-item-duration-container">
+              <img src={TimerIcon}></img>
+              <div className="farm-item-duration">
+                {formatDuration(props.durationS)}
+              </div>
+            </div>
+            <div className="farm-item-exp">{props.farmingExp} XP</div>
           </div>
         </div>
         <div className="farm-item-img-container">

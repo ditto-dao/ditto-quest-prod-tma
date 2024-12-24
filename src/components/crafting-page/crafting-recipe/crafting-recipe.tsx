@@ -1,4 +1,7 @@
-import { CraftingStatus, useIdleSocket } from "../../../redux/socket/idle/idle-context";
+import {
+  CraftingStatus,
+  useIdleSocket,
+} from "../../../redux/socket/idle/idle-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
@@ -7,11 +10,14 @@ import Expand from "../../../assets/images/general/down.svg";
 import Minimize from "../../../assets/images/general/up.svg";
 import "./crafting-recipe.css";
 import { useState, useEffect } from "react";
+import { formatDuration } from "../../../utils/helpers";
 
 interface CraftingRecipeProps {
   equipmentId: number;
   equipmentName: string;
   durationS: number;
+  craftingLevelRequired: number;
+  craftingExp: number;
   requiredItems: {
     itemId: number;
     itemName: string;
@@ -70,6 +76,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
 
   return (
     <div className="crafting-recipe-container">
+      <div className="crafting-recipe-level">Lvl {props.craftingLevelRequired}</div>
       <div className="crafting-recipe-inner-container">
         <div className="crafting-recipe-header">
           <div className="crafting-equipment-img-container">
@@ -77,9 +84,12 @@ function CraftingRecipe(props: CraftingRecipeProps) {
           </div>
           <div className="crafting-recipe-header-info">
             <div className="equipment-name">{props.equipmentName}</div>
-            <div className="equipment-craft-duration">
-              <img src={TimerIcon}></img>
-              <div>{props.durationS}s</div>
+            <div className="equipment-craft-stats">
+              <div className="equipment-craft-duration">
+                <img src={TimerIcon}></img>
+                <div>{formatDuration(props.durationS)}</div>
+              </div>
+              <div className="equipment-craft-exp">{props.craftingExp} XP</div>
             </div>
             <button
               className={`craft-button ${isCrafting ? "crafting-active" : ""}`}

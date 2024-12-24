@@ -10,6 +10,20 @@ import {
 import { useSocket } from "../socket-context";
 import { useLoginSocket } from "../login/login-context";
 
+interface FarmingExpPayload {
+  farmingLevel: number;
+  farmingLevelsGained: number;
+  farmingExp: number;
+  expToNextFarmingLevel: number;
+}
+
+interface CraftingExpPayload {
+  craftingLevel: number;
+  craftingLevelsGained: number;
+  craftingExp: number;
+  expToNextCraftingLevel: number;
+}
+
 // Context
 interface UserContext {
   userLoaded: boolean;
@@ -260,6 +274,38 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
       });
 
+      socket.on("update-farming-exp", (data: FarmingExpPayload) => {
+        console.log(`Received update-farming-exp: ${JSON.stringify(data, null, 2)}`);
+        setUserData((prevUserData) => {
+          return {
+            ...prevUserData,
+            farmingExp: data.farmingExp,
+            farmingLevel: data.farmingLevel,
+            expToNextFarmingLevel: data.expToNextFarmingLevel
+          }
+        });
+
+        if (data.farmingLevelsGained > 0) {
+          console.log(`fuck yeah`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+        }
+      });
+
+      socket.on("update-crafting-exp", (data: CraftingExpPayload) => {
+        console.log(`Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`);
+        setUserData((prevUserData) => {
+          return {
+            ...prevUserData,
+            craftingExp: data.craftingExp,
+            craftingLevel: data.craftingLevel,
+            expToNextCraftingLevel: data.expToNextCraftingLevel
+          }
+        });
+
+        if (data.craftingLevelsGained > 0) {
+          console.log(`fuck yeah`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+        }
+      });
+
       socket.on("error", (msg: string) => {
         console.error(`Socket error: ${msg}`);
       });
@@ -269,6 +315,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         socket.off("update-inventory");
         socket.off("slime-mint-update");
         socket.off("unequip-update");
+        socket.off("update-farming-exp");
+        socket.off("update-crafting-exp");
       };
     }
   }, [socket, loadingSocket, accessGranted]);

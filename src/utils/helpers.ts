@@ -153,3 +153,10 @@ export function formatDuration(seconds: number): string {
         .map(([unit, value]) => `${value}${unit}`) // Format the remaining units
         .join(" "); // Join them with a space
 }
+
+export function formatNumberWithCommas(num: number): string {
+    if (num < 1000) {
+      return num.toString(); // Return the number as-is if less than 1,000
+    }
+    return num.toLocaleString('en-US'); // Automatically formats with commas
+  }

@@ -6,7 +6,9 @@
         "description": "A piece of wood. Good for building things.",
         "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/34/Spruce_Logs_%28item%29.png/250px-Spruce_Logs_%28item%29.png",
         "consumableId": null,
-        "farmingDurationS": 5
+        "farmingDurationS": 5,
+        "farmingLevelRequired": 1,
+        "farmingExp": 5
     }
 
 ]

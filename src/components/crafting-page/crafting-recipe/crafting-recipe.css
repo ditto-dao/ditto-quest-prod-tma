@@ -9,11 +9,16 @@
   box-shadow: 0 4px 0 0 var(--dark-navy);
 }
 
+.crafting-recipe-level {
+  padding: 3px;
+  font-size: 9px;
+}
+
 .crafting-recipe-inner-container {
   display: flex;
   flex-direction: column;
   background-color: var(--midnight-teal);
-  border-radius: 6px;
+  border-radius: 0 0 6px 6px;
   padding: 12px;
   width: 100%;
   height: 100%;
@@ -51,10 +56,30 @@
   width: 100%;
 }
 
+.equipment-craft-stats {
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  gap: 14px;
+}
+
 .equipment-craft-duration {
   display: flex;
-  justify-content: flex-start;
-  width: 100%;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--light-teal);
+  padding: 3px 6px;
+  border-radius: 5px;
+}
+
+.equipment-craft-exp {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 9px;
+  background-color: var(--light-teal);
+  padding: 3px 6px;
+  border-radius: 5px;
 }
 
 .equipment-craft-duration img {
@@ -76,7 +101,7 @@
 }
 
 .craft-button {
-  padding: 8px 14px;
+  padding: 6px 14px;
   font-size: 10px;
   color: #fff;
   background-color: var(--burnt-orange);
