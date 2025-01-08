@@ -229,7 +229,7 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
           return {
             ...prevStatuses,
             [data.itemId]: {
-              startTimestamp: data.startTimestamp,
+              startTimestamp: data.startTimestamp + 200,
               durationS: data.durationS,
             },
           };
@@ -252,7 +252,7 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
         setCraftingStatuses((prevStatuses) => ({
           ...prevStatuses,
           [data.equipmentId]: {
-            startTimestamp: data.startTimestamp,
+            startTimestamp: data.startTimestamp + 200,
             durationS: data.durationS,
           },
         }));

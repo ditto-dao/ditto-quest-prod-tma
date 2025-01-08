@@ -48,7 +48,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
         setIsCrafting(false);
       } else {
         socket.emit("craft-equipment", props.equipmentId);
-        startCrafting(props.equipmentId, Date.now() + 100, props.durationS);
+        startCrafting(props.equipmentId, Date.now() + 200, props.durationS);
         setIsCrafting(false);
       }
     }
