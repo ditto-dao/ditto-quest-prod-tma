@@ -59,7 +59,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
 
   useEffect(() => {
     if (socket && !loadingSocket) {
-      socket.on("login-validated", (telegramId: number) => {
+      socket.on("login-validated", (telegramId: string) => {
         console.log(`Login validated for user: ${telegramId}`);
         setAccessGranted(true);
         dispatch(setTelegramId(telegramId));

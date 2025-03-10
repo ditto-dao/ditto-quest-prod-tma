@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface TelegramIdState {
-    id: number | null
+    id: string | null
 }
 
 const initialState: TelegramIdState = {
@@ -12,7 +12,7 @@ const telegramIdSlice = createSlice({
     name: 'telegramId',
     initialState,
     reducers: {
-        setTelegramId(state, action: PayloadAction<number>) {
+        setTelegramId(state, action: PayloadAction<string>) {
             state.id = action.payload
         },
         clearTelegramId(state) {
