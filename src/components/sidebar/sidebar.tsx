@@ -8,6 +8,7 @@ import FarmingIcon from "../../assets/images/sidebar/farm.png";
 import CraftingIcon from "../../assets/images/sidebar/craft.png";
 import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
+import GachaIcon from "../../assets/images/sidebar/gacha.png";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -87,6 +88,12 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           <a onClick={() => setPage("Combat")}>
             <img src={CombatIcon} alt="Combat Icon" className="sidebar-icon" />
             Combat
+          </a>
+        </li>
+        <li>
+          <a onClick={() => setPage("Gacha")}>
+            <img src={GachaIcon} alt="Gacha Icon" className="sidebar-icon" />
+            Gacha
           </a>
         </li>
         <div className="gap"></div>
