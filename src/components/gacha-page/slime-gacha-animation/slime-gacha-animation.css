@@ -1,0 +1,23 @@
+.slime-gacha-display {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  overflow: hidden; /* Ensure slime is hidden before animation */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slime-gacha-image {
+  position: absolute;
+  transform: translateY(100%); /* Default: move further down */
+  transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+  opacity: 0;
+  max-width: 80%;
+}
+
+/* Class added when the slime rises */
+.slime-gacha-visible {
+  transform: translateY(0); /* Move up into view */
+  opacity: 1;
+}

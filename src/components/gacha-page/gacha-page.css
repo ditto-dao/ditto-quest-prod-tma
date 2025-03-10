@@ -1,0 +1,17 @@
+.gacha-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  position: relative; /* Needed for absolute positioning inside */
+  height: 100%;
+  padding: 15px;
+}
+
+.slime-gacha-wrapper {
+  position: absolute;
+  bottom: 75%; /* Overlaps the top 50% of the chest */
+  left: 50%;
+  transform: translate(-50%, 50%); /* Center horizontally & overlap */
+  z-index: 1;
+}
