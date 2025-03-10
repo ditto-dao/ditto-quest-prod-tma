@@ -2,7 +2,6 @@ import { useState } from "react";
 import Modal from "react-modal";
 import "./slime-lab-inventory.css";
 import { SlimeWithTraits } from "../../../utils/types";
-import DQLogo from "../../../assets/images/general/dq-logo.png";
 import Separator from "../../../assets/images/general/separator.svg";
 import { getHighestDominantTraitRarity } from "../../../utils/helpers";
 import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
@@ -65,7 +64,7 @@ function SlimeLabInventory({
                     className={`slime-inventory-img rarity-${getHighestDominantTraitRarity(
                       slime
                     ).toLowerCase()}`}
-                    src={DQLogo}
+                    src={slime.imageUri}
                   ></img>
                   <div className="slime-name-container">
                     <div className="slime-name">{`Slime ${slime.id}`}</div>
@@ -101,7 +100,7 @@ function SlimeLabInventory({
             {/* Slime Image */}
             <div className="slime-image-container">
               <img
-                src={DQLogo}
+                src={selectedSlime.imageUri}
                 alt={`#${selectedSlime.id}`}
                 className={`slime-image rarity-${getHighestDominantTraitRarity(
                   selectedSlime
@@ -122,13 +121,6 @@ function SlimeLabInventory({
             <div className="slime-traits">
               {[
                 {
-                  trait: "Aura",
-                  dominant: selectedSlime.AuraDominant,
-                  h1: selectedSlime.AuraHidden1,
-                  h2: selectedSlime.AuraHidden2,
-                  h3: selectedSlime.AuraHidden3,
-                },
-                {
                   trait: "Body",
                   dominant: selectedSlime.BodyDominant,
                   h1: selectedSlime.BodyHidden1,
@@ -136,39 +128,46 @@ function SlimeLabInventory({
                   h3: selectedSlime.BodyHidden3,
                 },
                 {
-                  trait: "Core",
-                  dominant: selectedSlime.CoreDominant,
-                  h1: selectedSlime.CoreHidden1,
-                  h2: selectedSlime.CoreHidden2,
-                  h3: selectedSlime.CoreHidden3,
+                  trait: "Pattern",
+                  dominant: selectedSlime.PatternDominant,
+                  h1: selectedSlime.PatternHidden1,
+                  h2: selectedSlime.PatternHidden2,
+                  h3: selectedSlime.PatternHidden3,
                 },
                 {
-                  trait: "Headpiece",
-                  dominant: selectedSlime.HeadpieceDominant,
-                  h1: selectedSlime.HeadpieceHidden1,
-                  h2: selectedSlime.HeadpieceHidden2,
-                  h3: selectedSlime.HeadpieceHidden3,
+                  trait: "PrimaryColour",
+                  dominant: selectedSlime.PrimaryColourDominant,
+                  h1: selectedSlime.PrimaryColourHidden1,
+                  h2: selectedSlime.PrimaryColourHidden2,
+                  h3: selectedSlime.PrimaryColourHidden3,
                 },
                 {
-                  trait: "Tail",
-                  dominant: selectedSlime.TailDominant,
-                  h1: selectedSlime.TailHidden1,
-                  h2: selectedSlime.TailHidden2,
-                  h3: selectedSlime.TailHidden3,
+                  trait: "Accent",
+                  dominant: selectedSlime.AccentDominant,
+                  h1: selectedSlime.AccentHidden1,
+                  h2: selectedSlime.AccentHidden2,
+                  h3: selectedSlime.AccentHidden3,
                 },
                 {
-                  trait: "Arms",
-                  dominant: selectedSlime.ArmsDominant,
-                  h1: selectedSlime.ArmsHidden1,
-                  h2: selectedSlime.ArmsHidden2,
-                  h3: selectedSlime.ArmsHidden3,
+                  trait: "Detail",
+                  dominant: selectedSlime.DetailDominant,
+                  h1: selectedSlime.DetailHidden1,
+                  h2: selectedSlime.DetailHidden2,
+                  h3: selectedSlime.DetailHidden3,
                 },
                 {
-                  trait: "Eyes",
-                  dominant: selectedSlime.EyesDominant,
-                  h1: selectedSlime.EyesHidden1,
-                  h2: selectedSlime.EyesHidden2,
-                  h3: selectedSlime.EyesHidden3,
+                  trait: "EyeColour",
+                  dominant: selectedSlime.EyeColourDominant,
+                  h1: selectedSlime.EyeColourHidden1,
+                  h2: selectedSlime.EyeColourHidden2,
+                  h3: selectedSlime.EyeColourHidden3,
+                },
+                {
+                  trait: "EyeShape",
+                  dominant: selectedSlime.EyeShapeDominant,
+                  h1: selectedSlime.EyeShapeHidden1,
+                  h2: selectedSlime.EyeShapeHidden2,
+                  h3: selectedSlime.EyeShapeHidden3,
                 },
                 {
                   trait: "Mouth",

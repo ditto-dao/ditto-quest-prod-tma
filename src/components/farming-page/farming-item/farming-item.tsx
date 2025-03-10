@@ -6,13 +6,15 @@ import "./farming-item.css";
 import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import { formatDuration } from "../../../utils/helpers";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../redux/store";
 
 interface FarmingItemProps {
-  itemId: number;
-  itemName: string;
+  id: number;
+  name: string;
   rarity: string;
   description: string;
-  durationS: number;
+  farmingDurationS: number;
   farmingLevelRequired: number;
   farmingExp: number;
   farmingStatus: {
@@ -23,24 +25,26 @@ interface FarmingItemProps {
 }
 
 function FarmingItem(props: FarmingItemProps) {
+  const telegramId = useSelector((state: RootState) => state.telegramId.id);
   const { socket } = useSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { startFarming, stopFarming } = useIdleSocket();
   const [isFarming, setIsFarming] = useState(false);
 
   const handleFarmButton = () => {
-    if (socket && canEmitEvent()) {
+    if (socket && canEmitEvent() && telegramId) {
       if (isFarming) {
-        socket.emit("stop-farm-item", props.itemId);
+        socket.emit("stop-farm-item", props.id);
         setLastEventEmittedTimestamp(Date.now());
 
-        stopFarming(props.itemId);
+        stopFarming(props.id);
         setIsFarming(false);
       } else {
-        socket.emit("farm-item", props.itemId);
+        console.log(props.id)
+        socket.emit("farm-item", props.id);
         setLastEventEmittedTimestamp(Date.now());
 
-        startFarming(props.itemId, Date.now() + 200, props.durationS);
+        startFarming(props.id, Date.now() + 200, props.farmingDurationS);
         setIsFarming(true);
       }
     }
@@ -59,12 +63,12 @@ function FarmingItem(props: FarmingItemProps) {
       <div className="farming-item-level">Lvl {props.farmingLevelRequired}</div>
       <div className="farming-item-inner-container">
         <div className="farm-item-header">
-          <div className="farm-item-name">{props.itemName}</div>
+          <div className="farm-item-name">{props.name}</div>
           <div className="farm-item-info-container">
             <div className="farm-item-duration-container">
               <img src={TimerIcon}></img>
               <div className="farm-item-duration">
-                {formatDuration(props.durationS)}
+                {formatDuration(props.farmingDurationS)}
               </div>
             </div>
             <div className="farm-item-exp">{props.farmingExp} XP</div>
@@ -75,7 +79,7 @@ function FarmingItem(props: FarmingItemProps) {
         </div>
         {isFarming && props.farmingStatus ? (
           <LoopingTimerBar
-            durationS={props.farmingStatus.durationS || props.durationS} // Use standard duration for looping
+            durationS={props.farmingStatus.durationS || props.farmingDurationS} // Use standard duration for looping
             startTimestamp={props.farmingStatus.startTimestamp}
           />
         ) : (

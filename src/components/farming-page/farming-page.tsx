@@ -10,15 +10,15 @@ function FarmingPage() {
     <div className="farming-page-container">
       {farming.map((item) => (
         <FarmingItem
-          key={item.itemId}
-          itemId={item.itemId}
-          itemName={item.name}
+          key={item.id}
+          id={item.id}
+          name={item.name}
           rarity={item.rarity}
           description={item.description}
           farmingLevelRequired={item.farmingLevelRequired}
-          durationS={item.farmingDurationS}
+          farmingDurationS={item.farmingDurationS}
           farmingExp={item.farmingExp}
-          farmingStatus={farmingStatuses[item.itemId] || null}
+          farmingStatus={farmingStatuses[item.id] || null}
           imgsrc={item.imgsrc}
         />
       ))}

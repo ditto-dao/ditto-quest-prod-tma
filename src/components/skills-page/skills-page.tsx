@@ -11,29 +11,34 @@ function SkillsPage() {
       <div className="skills-header">Skills</div>
         <div className="skills-inner-container">
           <Skill
-            skill="hp"
-            level={userData.hpLevel}
-            combat={userData.combat!.hpLevel}
+            skill="maxhp"
+            net={userData.combat!.maxHp}
+            level={userData.hpLevel * 10}
+            buff={userData.combat!.maxHp - (userData.hpLevel * 10)}
           />
           <Skill
             skill="str"
+            net={userData.combat!.str}
             level={userData.str}
-            combat={userData.combat!.str}
+            buff={userData.combat!.str - userData.str}
           />
           <Skill
             skill="dex"
+            net={userData.combat!.dex}
             level={userData.dex}
-            combat={userData.combat!.dex}
+            buff={userData.combat!.dex - userData.dex}
           />
           <Skill
             skill="def"
+            net={userData.combat!.def}
             level={userData.def}
-            combat={userData.combat!.def}
+            buff={userData.combat!.def - userData.def}
           />
           <Skill
             skill="magic"
+            net={userData.combat!.magic}
             level={userData.magic}
-            combat={userData.combat!.magic}
+            buff={userData.combat!.magic - userData.magic}
           />
         </div>
       </div>

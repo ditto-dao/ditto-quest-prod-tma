@@ -1,5 +1,4 @@
 import "./slime-lab-breeding.css";
-import SlimePlaceholderImage from "../../../assets/images/general/dq-logo.png";
 import TimerIcon from "../../../assets/images/general/timer.svg";
 import {
   formatDuration,
@@ -51,7 +50,7 @@ function SlimeLabBreedingPage() {
           <div className="slime-preview-box">
             {slimeToBreed0 ? (
               <img
-                src={SlimePlaceholderImage}
+                src={slimeToBreed0.imageUri}
                 alt={`Slime ${slimeToBreed0.id}`}
                 className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
                   slimeToBreed0
@@ -73,7 +72,7 @@ function SlimeLabBreedingPage() {
           <div className="slime-preview-box">
             {slimeToBreed1 ? (
               <img
-                src={SlimePlaceholderImage}
+                src={slimeToBreed1.imageUri}
                 alt={`Slime ${slimeToBreed1.id}`}
                 className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
                   slimeToBreed1
