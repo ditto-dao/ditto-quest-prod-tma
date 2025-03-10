@@ -1,7 +1,6 @@
 import { useState } from "react";
 import "./main-page.css";
 import Sidebar from "../sidebar/sidebar";
-import TestPage from "../test-page/test-page";
 import InventoryPage from "../inventory-page/inventory-page";
 import CraftingPage from "../crafting-page/crafting-page";
 import SkillsPage from "../skills-page/skills-page";
@@ -16,8 +15,10 @@ import FarmingIcon from "../../assets/images/sidebar/farm.png";
 import CraftingIcon from "../../assets/images/sidebar/craft.png";
 import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
+import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import Stats from "../stats/stats";
 import { useUserSocket } from "../../redux/socket/user/user-context";
+import GachaPage from "../gacha-page/gacha-page";
 
 function MainPage() {
   const { userData } = useUserSocket();
@@ -35,7 +36,8 @@ function MainPage() {
     Crafting: CraftingIcon,
     "Slime Lab": SlimeLabIcon,
     Combat: CombatIcon,
-    Test: ShopIcon, // Placeholder for Test
+    Gacha: GachaIcon,
+    Test: ShopIcon,
   };
 
   function toggleSidebar() {
@@ -65,8 +67,8 @@ function MainPage() {
         return <SlimeLabPage />;
       case "Combat":
         return <div>Combat Page Content</div>;
-      case "Test":
-        return <TestPage />;
+      case "Gacha":
+        return <GachaPage />;
       default:
         return <div>Avatar Page Content</div>;
     }
