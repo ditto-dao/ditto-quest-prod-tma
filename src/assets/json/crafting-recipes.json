@@ -973,28 +973,6 @@
   },
   {
     "equipmentId": 40,
-    "equipmentName": "Eternal Slime Core",
-    "durationS": 367,
-    "craftingLevelRequired": 99,
-    "craftingExp": 1530,
-    "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/55/Powered_Red_Crystal_%28item%29.png/250px-Powered_Red_Crystal_%28item%29.png",
-    "requiredItems": [
-      {
-        "itemId": 27,
-        "itemName": "Slime Core Essence",
-        "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/8d/Voidheart_%28item%29.png/375px-Voidheart_%28item%29.png",
-        "quantity": 200
-      },
-      {
-        "itemId": 25,
-        "itemName": "Ooze Shards",
-        "imgsrc": "https://wiki.melvoridle.com/images/thumb/e/e7/Oricha_%28item%29.png/375px-Oricha_%28item%29.png",
-        "quantity": 100
-      }
-    ]
-  },
-  {
-    "equipmentId": 41,
     "equipmentName": "Sticky Staff",
     "durationS": 60,
     "craftingLevelRequired": 1,
@@ -1010,7 +988,7 @@
     ]
   },
   {
-    "equipmentId": 42,
+    "equipmentId": 41,
     "equipmentName": "Slime Bronze Staff",
     "durationS": 66,
     "craftingLevelRequired": 4,
@@ -1032,7 +1010,7 @@
     ]
   },
   {
-    "equipmentId": 43,
+    "equipmentId": 42,
     "equipmentName": "Hardened Staff",
     "durationS": 73,
     "craftingLevelRequired": 7,
@@ -1054,7 +1032,7 @@
     ]
   },
   {
-    "equipmentId": 44,
+    "equipmentId": 43,
     "equipmentName": "Alloy Staff",
     "durationS": 80,
     "craftingLevelRequired": 9,
@@ -1082,7 +1060,7 @@
     ]
   },
   {
-    "equipmentId": 45,
+    "equipmentId": 44,
     "equipmentName": "Veil Staff",
     "durationS": 88,
     "craftingLevelRequired": 11,
@@ -1104,7 +1082,7 @@
     ]
   },
   {
-    "equipmentId": 46,
+    "equipmentId": 45,
     "equipmentName": "Muck Staff",
     "durationS": 97,
     "craftingLevelRequired": 14,
@@ -1126,7 +1104,7 @@
     ]
   },
   {
-    "equipmentId": 47,
+    "equipmentId": 46,
     "equipmentName": "Glow Staff",
     "durationS": 106,
     "craftingLevelRequired": 17,
@@ -1148,7 +1126,7 @@
     ]
   },
   {
-    "equipmentId": 48,
+    "equipmentId": 47,
     "equipmentName": "Frost Staff",
     "durationS": 117,
     "craftingLevelRequired": 22,
@@ -1170,7 +1148,7 @@
     ]
   },
   {
-    "equipmentId": 49,
+    "equipmentId": 48,
     "equipmentName": "Ember Staff",
     "durationS": 129,
     "craftingLevelRequired": 22,
@@ -1192,7 +1170,7 @@
     ]
   },
   {
-    "equipmentId": 50,
+    "equipmentId": 49,
     "equipmentName": "Relic Staff",
     "durationS": 141,
     "craftingLevelRequired": 29,
@@ -1214,7 +1192,7 @@
     ]
   },
   {
-    "equipmentId": 51,
+    "equipmentId": 50,
     "equipmentName": "Fracture Staff",
     "durationS": 156,
     "craftingLevelRequired": 36,
@@ -1236,7 +1214,7 @@
     ]
   },
   {
-    "equipmentId": 52,
+    "equipmentId": 51,
     "equipmentName": "Gleam Staff",
     "durationS": 171,
     "craftingLevelRequired": 43,
@@ -1258,7 +1236,7 @@
     ]
   },
   {
-    "equipmentId": 53,
+    "equipmentId": 52,
     "equipmentName": "Verdant Staff",
     "durationS": 188,
     "craftingLevelRequired": 50,
@@ -1280,7 +1258,7 @@
     ]
   },
   {
-    "equipmentId": 54,
+    "equipmentId": 53,
     "equipmentName": "Sanctum Staff",
     "durationS": 207,
     "craftingLevelRequired": 57,
@@ -1302,7 +1280,7 @@
     ]
   },
   {
-    "equipmentId": 55,
+    "equipmentId": 54,
     "equipmentName": "Abyss Staff",
     "durationS": 228,
     "craftingLevelRequired": 64,
@@ -1324,7 +1302,7 @@
     ]
   },
   {
-    "equipmentId": 56,
+    "equipmentId": 55,
     "equipmentName": "Wisp Staff",
     "durationS": 251,
     "craftingLevelRequired": 71,
@@ -1346,7 +1324,7 @@
     ]
   },
   {
-    "equipmentId": 57,
+    "equipmentId": 56,
     "equipmentName": "Dusk Staff",
     "durationS": 276,
     "craftingLevelRequired": 78,
@@ -1368,7 +1346,7 @@
     ]
   },
   {
-    "equipmentId": 58,
+    "equipmentId": 57,
     "equipmentName": "Siphon Staff",
     "durationS": 303,
     "craftingLevelRequired": 85,
@@ -1390,7 +1368,7 @@
     ]
   },
   {
-    "equipmentId": 59,
+    "equipmentId": 58,
     "equipmentName": "Rift Staff",
     "durationS": 334,
     "craftingLevelRequired": 92,
@@ -1412,29 +1390,7 @@
     ]
   },
   {
-    "equipmentId": 60,
-    "equipmentName": "Eternal Slime Core",
-    "durationS": 367,
-    "craftingLevelRequired": 99,
-    "craftingExp": 1530,
-    "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/55/Powered_Red_Crystal_%28item%29.png/250px-Powered_Red_Crystal_%28item%29.png",
-    "requiredItems": [
-      {
-        "itemId": 27,
-        "itemName": "Slime Core Essence",
-        "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/8d/Voidheart_%28item%29.png/375px-Voidheart_%28item%29.png",
-        "quantity": 180
-      },
-      {
-        "itemId": 25,
-        "itemName": "Ooze Shards",
-        "imgsrc": "https://wiki.melvoridle.com/images/thumb/e/e7/Oricha_%28item%29.png/375px-Oricha_%28item%29.png",
-        "quantity": 90
-      }
-    ]
-  },
-  {
-    "equipmentId": 61,
+    "equipmentId": 59,
     "equipmentName": "Blight Helm",
     "durationS": 60,
     "craftingLevelRequired": 1,
@@ -1456,7 +1412,7 @@
     ]
   },
   {
-    "equipmentId": 62,
+    "equipmentId": 60,
     "equipmentName": "Void Helm",
     "durationS": 73,
     "craftingLevelRequired": 12,
@@ -1478,7 +1434,7 @@
     ]
   },
   {
-    "equipmentId": 63,
+    "equipmentId": 61,
     "equipmentName": "Voidheart Helm",
     "durationS": 88,
     "craftingLevelRequired": 23,
@@ -1500,7 +1456,7 @@
     ]
   },
   {
-    "equipmentId": 64,
+    "equipmentId": 62,
     "equipmentName": "Protector Helm",
     "durationS": 106,
     "craftingLevelRequired": 34,
@@ -1522,7 +1478,7 @@
     ]
   },
   {
-    "equipmentId": 65,
+    "equipmentId": 63,
     "equipmentName": "Watcher Helm",
     "durationS": 129,
     "craftingLevelRequired": 45,
@@ -1544,7 +1500,7 @@
     ]
   },
   {
-    "equipmentId": 66,
+    "equipmentId": 64,
     "equipmentName": "Eldritch Hood",
     "durationS": 156,
     "craftingLevelRequired": 56,
@@ -1566,7 +1522,7 @@
     ]
   },
   {
-    "equipmentId": 67,
+    "equipmentId": 65,
     "equipmentName": "Zephyr Crown",
     "durationS": 188,
     "craftingLevelRequired": 67,
@@ -1588,7 +1544,7 @@
     ]
   },
   {
-    "equipmentId": 68,
+    "equipmentId": 66,
     "equipmentName": "Glacier Crown",
     "durationS": 228,
     "craftingLevelRequired": 78,
@@ -1610,7 +1566,7 @@
     ]
   },
   {
-    "equipmentId": 69,
+    "equipmentId": 67,
     "equipmentName": "Terra Crown",
     "durationS": 276,
     "craftingLevelRequired": 89,
@@ -1632,7 +1588,7 @@
     ]
   },
   {
-    "equipmentId": 70,
+    "equipmentId": 68,
     "equipmentName": "Inferno Crown",
     "durationS": 334,
     "craftingLevelRequired": 99,
@@ -1654,7 +1610,7 @@
     ]
   },
   {
-    "equipmentId": 71,
+    "equipmentId": 69,
     "equipmentName": "Blight Plate",
     "durationS": 60,
     "craftingLevelRequired": 1,
@@ -1676,7 +1632,7 @@
     ]
   },
   {
-    "equipmentId": 72,
+    "equipmentId": 70,
     "equipmentName": "Void Plate",
     "durationS": 73,
     "craftingLevelRequired": 12,
@@ -1698,7 +1654,7 @@
     ]
   },
   {
-    "equipmentId": 73,
+    "equipmentId": 71,
     "equipmentName": "Voidheart Plate",
     "durationS": 88,
     "craftingLevelRequired": 23,
@@ -1720,7 +1676,7 @@
     ]
   },
   {
-    "equipmentId": 74,
+    "equipmentId": 72,
     "equipmentName": "Protector Plate",
     "durationS": 106,
     "craftingLevelRequired": 34,
@@ -1742,7 +1698,7 @@
     ]
   },
   {
-    "equipmentId": 75,
+    "equipmentId": 73,
     "equipmentName": "Watcher Plate",
     "durationS": 129,
     "craftingLevelRequired": 45,
@@ -1764,7 +1720,7 @@
     ]
   },
   {
-    "equipmentId": 76,
+    "equipmentId": 74,
     "equipmentName": "Eldritch Robes",
     "durationS": 156,
     "craftingLevelRequired": 56,
@@ -1786,7 +1742,7 @@
     ]
   },
   {
-    "equipmentId": 77,
+    "equipmentId": 75,
     "equipmentName": "Zephyr Godplate",
     "durationS": 188,
     "craftingLevelRequired": 67,
@@ -1808,7 +1764,7 @@
     ]
   },
   {
-    "equipmentId": 78,
+    "equipmentId": 76,
     "equipmentName": "Glacier Godplate",
     "durationS": 228,
     "craftingLevelRequired": 78,
@@ -1830,7 +1786,7 @@
     ]
   },
   {
-    "equipmentId": 79,
+    "equipmentId": 77,
     "equipmentName": "Terra Godplate",
     "durationS": 276,
     "craftingLevelRequired": 89,
@@ -1852,7 +1808,7 @@
     ]
   },
   {
-    "equipmentId": 80,
+    "equipmentId": 78,
     "equipmentName": "Inferno Godplate",
     "durationS": 334,
     "craftingLevelRequired": 99,
@@ -1874,7 +1830,7 @@
     ]
   },
   {
-    "equipmentId": 81,
+    "equipmentId": 79,
     "equipmentName": "Sticky Shield",
     "durationS": 60,
     "craftingLevelRequired": 1,
@@ -1890,7 +1846,7 @@
     ]
   },
   {
-    "equipmentId": 82,
+    "equipmentId": 80,
     "equipmentName": "Slime Bronze Shield",
     "durationS": 66,
     "craftingLevelRequired": 4,
@@ -1912,7 +1868,7 @@
     ]
   },
   {
-    "equipmentId": 83,
+    "equipmentId": 81,
     "equipmentName": "Hardened Shield",
     "durationS": 73,
     "craftingLevelRequired": 7,
@@ -1934,7 +1890,7 @@
     ]
   },
   {
-    "equipmentId": 84,
+    "equipmentId": 82,
     "equipmentName": "Alloy Shield",
     "durationS": 80,
     "craftingLevelRequired": 9,
@@ -1962,7 +1918,7 @@
     ]
   },
   {
-    "equipmentId": 85,
+    "equipmentId": 83,
     "equipmentName": "Veil Shield",
     "durationS": 88,
     "craftingLevelRequired": 11,
@@ -1984,7 +1940,7 @@
     ]
   },
   {
-    "equipmentId": 86,
+    "equipmentId": 84,
     "equipmentName": "Muck Shield",
     "durationS": 97,
     "craftingLevelRequired": 14,
@@ -2006,7 +1962,7 @@
     ]
   },
   {
-    "equipmentId": 87,
+    "equipmentId": 85,
     "equipmentName": "Glow Shield",
     "durationS": 106,
     "craftingLevelRequired": 17,
@@ -2028,7 +1984,7 @@
     ]
   },
   {
-    "equipmentId": 88,
+    "equipmentId": 86,
     "equipmentName": "Frost Shield",
     "durationS": 117,
     "craftingLevelRequired": 22,
@@ -2050,7 +2006,7 @@
     ]
   },
   {
-    "equipmentId": 89,
+    "equipmentId": 87,
     "equipmentName": "Ember Shield",
     "durationS": 129,
     "craftingLevelRequired": 22,
@@ -2072,7 +2028,7 @@
     ]
   },
   {
-    "equipmentId": 90,
+    "equipmentId": 88,
     "equipmentName": "Relic Shield",
     "durationS": 141,
     "craftingLevelRequired": 29,
@@ -2094,7 +2050,7 @@
     ]
   },
   {
-    "equipmentId": 91,
+    "equipmentId": 89,
     "equipmentName": "Fracture Shield",
     "durationS": 156,
     "craftingLevelRequired": 36,
@@ -2116,7 +2072,7 @@
     ]
   },
   {
-    "equipmentId": 92,
+    "equipmentId": 90,
     "equipmentName": "Gleam Shield",
     "durationS": 171,
     "craftingLevelRequired": 43,
@@ -2138,7 +2094,7 @@
     ]
   },
   {
-    "equipmentId": 93,
+    "equipmentId": 91,
     "equipmentName": "Verdant Shield",
     "durationS": 188,
     "craftingLevelRequired": 50,
@@ -2160,7 +2116,7 @@
     ]
   },
   {
-    "equipmentId": 94,
+    "equipmentId": 92,
     "equipmentName": "Sanctum Shield",
     "durationS": 207,
     "craftingLevelRequired": 57,
@@ -2182,7 +2138,7 @@
     ]
   },
   {
-    "equipmentId": 95,
+    "equipmentId": 93,
     "equipmentName": "Abyss Shield",
     "durationS": 228,
     "craftingLevelRequired": 64,
@@ -2204,7 +2160,7 @@
     ]
   },
   {
-    "equipmentId": 96,
+    "equipmentId": 94,
     "equipmentName": "Wisp Shield",
     "durationS": 251,
     "craftingLevelRequired": 71,
@@ -2226,7 +2182,7 @@
     ]
   },
   {
-    "equipmentId": 97,
+    "equipmentId": 95,
     "equipmentName": "Dusk Shield",
     "durationS": 276,
     "craftingLevelRequired": 78,
@@ -2248,7 +2204,7 @@
     ]
   },
   {
-    "equipmentId": 98,
+    "equipmentId": 96,
     "equipmentName": "Siphon Shield",
     "durationS": 303,
     "craftingLevelRequired": 85,
@@ -2270,7 +2226,7 @@
     ]
   },
   {
-    "equipmentId": 99,
+    "equipmentId": 97,
     "equipmentName": "Rift Shield",
     "durationS": 334,
     "craftingLevelRequired": 92,
@@ -2292,7 +2248,7 @@
     ]
   },
   {
-    "equipmentId": 100,
+    "equipmentId": 98,
     "equipmentName": "Eternal Barrier",
     "durationS": 367,
     "craftingLevelRequired": 99,
@@ -2314,7 +2270,7 @@
     ]
   },
   {
-    "equipmentId": 101,
+    "equipmentId": 99,
     "equipmentName": "Sticky Mantle",
     "durationS": 60,
     "craftingLevelRequired": 1,
@@ -2336,7 +2292,7 @@
     ]
   },
   {
-    "equipmentId": 102,
+    "equipmentId": 100,
     "equipmentName": "Bronze Warden Cape",
     "durationS": 73,
     "craftingLevelRequired": 12,
@@ -2364,7 +2320,7 @@
     ]
   },
   {
-    "equipmentId": 103,
+    "equipmentId": 101,
     "equipmentName": "Ironclad Wrap",
     "durationS": 88,
     "craftingLevelRequired": 23,
@@ -2392,7 +2348,7 @@
     ]
   },
   {
-    "equipmentId": 104,
+    "equipmentId": 102,
     "equipmentName": "Shroud of Shadows",
     "durationS": 106,
     "craftingLevelRequired": 34,
@@ -2420,7 +2376,7 @@
     ]
   },
   {
-    "equipmentId": 105,
+    "equipmentId": 103,
     "equipmentName": "Verdant Aegis Cloak",
     "durationS": 129,
     "craftingLevelRequired": 45,
@@ -2448,7 +2404,7 @@
     ]
   },
   {
-    "equipmentId": 106,
+    "equipmentId": 104,
     "equipmentName": "Luminous Veil",
     "durationS": 156,
     "craftingLevelRequired": 56,
@@ -2476,7 +2432,7 @@
     ]
   },
   {
-    "equipmentId": 107,
+    "equipmentId": 105,
     "equipmentName": "Cryo Cloak",
     "durationS": 188,
     "craftingLevelRequired": 67,
@@ -2504,7 +2460,7 @@
     ]
   },
   {
-    "equipmentId": 108,
+    "equipmentId": 106,
     "equipmentName": "Infernal Drape",
     "durationS": 228,
     "craftingLevelRequired": 78,
@@ -2532,7 +2488,7 @@
     ]
   },
   {
-    "equipmentId": 109,
+    "equipmentId": 107,
     "equipmentName": "Wispweave Cape",
     "durationS": 276,
     "craftingLevelRequired": 89,
@@ -2560,7 +2516,7 @@
     ]
   },
   {
-    "equipmentId": 110,
+    "equipmentId": 108,
     "equipmentName": "Mantle of Eternity",
     "durationS": 334,
     "craftingLevelRequired": 99,
