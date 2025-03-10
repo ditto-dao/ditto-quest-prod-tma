@@ -6,6 +6,7 @@ import GoldCoinLogo from "../../assets/images/general/gold-coin.png";
 import {
   formatNumberForInvQty,
   formatNumberWithSuffix,
+  getTotalFormattedBalance,
 } from "../../utils/helpers";
 import EquipmentIcon from "../../assets/images/general/equipment-icon.png";
 import ItemIcon from "../../assets/images/general/item-icon.png";
@@ -30,7 +31,7 @@ function chunkInventory(array: Inventory[], size: number) {
 }
 
 function InventoryPage() {
-  const { userData, equip } = useUserSocket();
+  const { userData, equip, dittoBalance } = useUserSocket();
   const [inventory, setInventory] = useState<Inventory[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<Inventory | null>(null);
@@ -77,7 +78,7 @@ function InventoryPage() {
           <div className="balances-container">
             <div className="coin-balance">
               <img src={DittoCoinLogo} alt="Ditto Coin" className="coin-logo" />
-              <span>{formatNumberWithSuffix(100000000000)} DITTO</span>
+              <span>{formatNumberWithSuffix(getTotalFormattedBalance(dittoBalance))} DITTO</span>
             </div>
             <div className="coin-balance">
               <img src={GoldCoinLogo} alt="Gold Coin" className="coin-logo" />

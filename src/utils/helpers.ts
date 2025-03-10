@@ -1,11 +1,13 @@
-import { Rarity, SlimeWithTraits } from "./types";
+import { formatUnits } from "ethers";
+import { DittoBalanceBN, Rarity, SlimeWithTraits, UserBalanceUpdate } from "./types";
+import { DEVELOPMENT_FUNDS_KEY, DITTO_DECIMALS } from "./config";
 
 export function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function getChildTraitProbabilities(sire: SlimeWithTraits, dame: SlimeWithTraits) {
-    const traitTypes = ["Aura", "Body", "Headpiece", "Tail", "Arms", "Eyes", "Mouth"] as const;
+    const traitTypes = ["Body", "Pattern", "PrimaryColour", "Accent", "Detail", "EyeColour", "EyeShape", "Mouth"] as const;
     const probabilities = {
         D: 37.5,
         H1: 9.4,
@@ -70,13 +72,13 @@ export function getHighestDominantTraitRarity(slime: SlimeWithTraits): Rarity {
 
     // Collect all dominant traits
     const dominantTraits = [
-        slime.AuraDominant,
         slime.BodyDominant,
-        slime.CoreDominant,
-        slime.HeadpieceDominant,
-        slime.TailDominant,
-        slime.ArmsDominant,
-        slime.EyesDominant,
+        slime.PatternDominant,
+        slime.PrimaryColourDominant,
+        slime.AccentDominant,
+        slime.DetailDominant,
+        slime.EyeColourDominant,
+        slime.EyeShapeDominant,
         slime.MouthDominant,
     ];
 
@@ -156,7 +158,50 @@ export function formatDuration(seconds: number): string {
 
 export function formatNumberWithCommas(num: number): string {
     if (num < 1000) {
-      return num.toString(); // Return the number as-is if less than 1,000
+        return num.toString(); // Return the number as-is if less than 1,000
     }
     return num.toLocaleString('en-US'); // Automatically formats with commas
-  }
+}
+
+export function getTotalBalanceBNF(balanceObj: DittoBalanceBN): bigint {
+    return BigInt(balanceObj.accumulatedBalance) + BigInt(balanceObj.liveBalance);
+}
+
+export function getTotalFormattedBalance(balanceObj: DittoBalanceBN): number {
+    const total = BigInt(balanceObj.accumulatedBalance) + BigInt(balanceObj.liveBalance);
+    console.log(formatUnits(total, DITTO_DECIMALS));
+    return parseFloat(formatUnits(total, DITTO_DECIMALS));
+}
+
+export function getDeductionPayloadToDevFunds(
+    userId: string,
+    balance: DittoBalanceBN,
+    valueToDeduct: bigint,
+    notes?: string
+): { sender: string; updates: UserBalanceUpdate[] } {
+
+    if (valueToDeduct > balance.liveBalance + balance.accumulatedBalance) {
+        throw new Error(`Insufficient funds for ${userId}.`);
+    }
+
+    const fromAccumulated = valueToDeduct <= balance.accumulatedBalance ? valueToDeduct : balance.accumulatedBalance;
+    const fromLive = valueToDeduct - fromAccumulated;
+
+    return {
+        sender: userId,
+        updates: [
+            {
+                userId,
+                liveBalanceChange: (-fromLive).toString(),
+                accumulatedBalanceChange: (-fromAccumulated).toString(),
+                notes: notes || "Deducted from user balance",
+            },
+            {
+                userId: DEVELOPMENT_FUNDS_KEY,
+                liveBalanceChange: (fromLive + fromAccumulated).toString(),
+                accumulatedBalanceChange: "0",
+                notes: notes || `Credited from ${userId}`,
+            }
+        ]
+    };
+}

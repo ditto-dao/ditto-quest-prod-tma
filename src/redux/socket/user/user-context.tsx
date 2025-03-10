@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
   defaultUser,
+  DittoBalanceBN,
   EquipmentType,
   Inventory,
   SlimeWithTraits,
@@ -24,10 +25,21 @@ interface CraftingExpPayload {
   expToNextCraftingLevel: number;
 }
 
+export interface UserBalanceUpdateRes {
+  liveBalance: string;
+  accumulatedBalance: string;
+  isBot: boolean;
+  isAdmin: boolean;
+  liveBalanceChange: string;
+  accumulatedBalanceChange: string;
+  updatedAt?: Date; // if notes, must have updatedAt
+  notes?: string;
+}
+
 // Context
 interface UserContext {
-  userLoaded: boolean;
   userData: User;
+  dittoBalance: DittoBalanceBN;
   userContextLoaded: boolean;
   equip: (inventoryId: number, equipmentType: EquipmentType) => void;
   unequip: (equipmentType: EquipmentType) => void;
@@ -36,13 +48,18 @@ interface UserContext {
 }
 
 const UserContext = createContext<UserContext>({
-  userLoaded: false,
   userData: defaultUser,
+  dittoBalance: {
+    liveBalance: 0n,
+    accumulatedBalance: 0n,
+    isBot: false,
+    isAdmin: false,
+  },
   userContextLoaded: false,
   equip: () => {},
   unequip: () => {},
   canEmitEvent: () => false,
-  setLastEventEmittedTimestamp: () => {}
+  setLastEventEmittedTimestamp: () => {},
 });
 
 export const useUserSocket = () => useContext(UserContext);
@@ -53,8 +70,17 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   // User
   const [userData, setUserData] = useState<User>(defaultUser);
-  const [userLoaded, setUserLoaded] = useState(false);
+  const [userLoaded, setUserLoaded] = useState(false); // no need export
   const [userContextLoaded, setUserContextLoaded] = useState(false);
+
+  // Ditto balance
+  const [dittoBalance, setDittoBalance] = useState<DittoBalanceBN>({
+    liveBalance: 0n,
+    accumulatedBalance: 0n,
+    isBot: false,
+    isAdmin: false,
+  });
+  const [dittoBalanceLoaded, setDittoBalanceLoaded] = useState(false); // no need export
 
   // Prevent click spam
   const [lastEventEmittedTimestamp, setLastEventEmittedTimestamp] = useState(0);
@@ -154,7 +180,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   const canEmitEvent = () => {
     return Date.now() - lastEventEmittedTimestamp >= 500;
-  }
+  };
 
   useEffect(() => {
     // Listener for login
@@ -178,9 +204,36 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setUserLoaded(true);
       });
 
+      socket.on(
+        "ditto-ledger-socket-balance-update",
+        (balance: UserBalanceUpdateRes) => {
+          console.log(`liveBalance: ${balance.liveBalance}`);
+          console.log(`accumulatedBalance: ${balance.accumulatedBalance}`);
+          console.log(`isBot: ${balance.isBot}`);
+          console.log(`isAdmin: ${balance.isAdmin}`);
+
+          setDittoBalance({
+            accumulatedBalance: BigInt(balance.accumulatedBalance),
+            liveBalance: BigInt(balance.liveBalance),
+            isBot: balance.isBot,
+            isAdmin: balance.isAdmin,
+          });
+          if (!dittoBalanceLoaded) setDittoBalanceLoaded(true);
+
+          if (
+            (BigInt(balance.liveBalanceChange) > 0n ||
+              BigInt(balance.accumulatedBalanceChange) > 0n) &&
+            balance.notes
+          ) {
+            // todo: notification balance change
+          }
+        }
+      );
+
       // Clean up on unmount
       return () => {
         socket.off("user-data-on-login");
+        socket.off("ditto-ledger-socket-balance-update");
       };
     }
   }, [socket, loadingSocket]);
@@ -219,7 +272,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
       });
 
-      socket.on("slime-mint-update", (slime: SlimeWithTraits) => {
+      socket.on("update-slime-inventory", (slime: SlimeWithTraits) => {
         setUserData((prevUserData) => {
           // Create a copy of the current itemInventory
           let updatedSlimes = prevUserData.slimes
@@ -231,7 +284,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             slimes: [...updatedSlimes, slime],
           };
         });
-        alert(`Received Slime #${slime.id}!`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
       });
 
       socket.on("unequip-update", (inventoryId: number) => {
@@ -275,14 +327,16 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       socket.on("update-farming-exp", (data: FarmingExpPayload) => {
-        console.log(`Received update-farming-exp: ${JSON.stringify(data, null, 2)}`);
+        console.log(
+          `Received update-farming-exp: ${JSON.stringify(data, null, 2)}`
+        );
         setUserData((prevUserData) => {
           return {
             ...prevUserData,
             farmingExp: data.farmingExp,
             farmingLevel: data.farmingLevel,
-            expToNextFarmingLevel: data.expToNextFarmingLevel
-          }
+            expToNextFarmingLevel: data.expToNextFarmingLevel,
+          };
         });
 
         if (data.farmingLevelsGained > 0) {
@@ -291,14 +345,16 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       socket.on("update-crafting-exp", (data: CraftingExpPayload) => {
-        console.log(`Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`);
+        console.log(
+          `Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`
+        );
         setUserData((prevUserData) => {
           return {
             ...prevUserData,
             craftingExp: data.craftingExp,
             craftingLevel: data.craftingLevel,
-            expToNextCraftingLevel: data.expToNextCraftingLevel
-          }
+            expToNextCraftingLevel: data.expToNextCraftingLevel,
+          };
         });
 
         if (data.craftingLevelsGained > 0) {
@@ -307,35 +363,36 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       socket.on("error", (msg: string) => {
-        console.error(`Socket error: ${msg}`);
+        console.error(`${msg}`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
       });
 
       // Clean up on unmount
       return () => {
         socket.off("update-inventory");
-        socket.off("slime-mint-update");
+        socket.off("update-slime-inventory");
         socket.off("unequip-update");
         socket.off("update-farming-exp");
         socket.off("update-crafting-exp");
+        socket.off("error");
       };
     }
   }, [socket, loadingSocket, accessGranted]);
 
   useEffect(() => {
-    if (userLoaded) setUserContextLoaded(true);
+    if (userLoaded && dittoBalanceLoaded) setUserContextLoaded(true);
     console.log(`user context loaded`);
   }, [userLoaded]);
 
   return (
     <UserContext.Provider
       value={{
-        userLoaded,
         userData,
+        dittoBalance,
         userContextLoaded,
         equip,
         unequip,
         canEmitEvent,
-        setLastEventEmittedTimestamp
+        setLastEventEmittedTimestamp,
       }}
     >
       {children}
