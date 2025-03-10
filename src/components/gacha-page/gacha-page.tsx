@@ -54,7 +54,7 @@ function GachaPage() {
     slimeRef.current.startSlimeAnimation();
   };
 
-  const pullGachaGold = async () => {
+/*   const pullGachaGold = async () => {
     if (!chestRef.current || !slimeRef.current) return;
 
     // Reset animations first
@@ -74,7 +74,7 @@ function GachaPage() {
 
     // Start slime animation after chest animation completes
     slimeRef.current.startSlimeAnimation();
-  };
+  }; */
 
   useEffect(() => {
     if (socket && !loadingSocket && accessGranted) {
