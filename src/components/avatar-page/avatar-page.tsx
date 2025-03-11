@@ -8,7 +8,7 @@ import DefaultShield from "../../assets/images/avatar-page/default-shield.png";
 import DefaultNecklace from "../../assets/images/avatar-page/default-necklace.png";
 import DefaultArmour from "../../assets/images/avatar-page/default-armour.png";
 import DefaultPet from "../../assets/images/avatar-page/default-pet.png";
-import DefaultSpellbook from "../../assets/images/avatar-page/default-spellbook.png";
+import DefaultSkillbook from "../../assets/images/avatar-page/default-skillbook.png";
 import EquipmentIcon from "../../assets/images/general/equipment-icon.png";
 import Modal from "react-modal";
 import { useState } from "react";
@@ -92,17 +92,7 @@ function AvatarPage() {
               )}
             </div>
             <div className="pet-slot">
-              {userData.pet ? (
-                <img
-                  className="slot-image"
-                  src={userData.pet.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.pet!.equipment!)
-                  }
-                ></img>
-              ) : (
                 <img className="slot-image-default" src={DefaultPet}></img>
-              )}
             </div>
           </div>
 
@@ -153,44 +143,27 @@ function AvatarPage() {
 
       <div id="spellbook-slot-wrapper">
         <div id="spellbook-slot-container">
-          <div className="spellbook-slot-label">Spellbooks</div>
+          <div className="spellbook-slot-label">Skillbooks</div>
 
           <div className="avatar-row">
             <div className="spellbook-slot">
-              {userData.spellbook ? (
-                <img
-                  className="slot-image"
-                  src={userData.spellbook?.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.spellbook!.equipment!)
-                  }
-                ></img>
-              ) : (
                 <img
                   className="slot-image-default"
-                  src={DefaultSpellbook}
+                  src={DefaultSkillbook}
                 ></img>
-              )}
             </div>
             <div className="spellbook-slot">
-              {userData.necklace ? (
-                <img className="slot-image"></img>
-              ) : (
+
                 <img
                   className="slot-image-default"
-                  src={DefaultSpellbook}
+                  src={DefaultSkillbook}
                 ></img>
-              )}
             </div>
             <div className="spellbook-slot">
-              {userData.pet ? (
-                <img className="slot-image"></img>
-              ) : (
                 <img
                   className="slot-image-default"
-                  src={DefaultSpellbook}
+                  src={DefaultSkillbook}
                 ></img>
-              )}
             </div>
           </div>
         </div>
