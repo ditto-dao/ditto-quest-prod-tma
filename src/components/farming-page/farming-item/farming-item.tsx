@@ -5,7 +5,6 @@ import TimerIcon from "../../../assets/images/general/timer.svg";
 import "./farming-item.css";
 import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
-import { formatDuration } from "../../../utils/helpers";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 
@@ -26,6 +25,8 @@ interface FarmingItemProps {
 
 function FarmingItem(props: FarmingItemProps) {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
+  const { userData } = useUserSocket();
+  const [isFarmable, setIsFarmable] = useState(false);
   const { socket } = useSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { startFarming, stopFarming } = useIdleSocket();
@@ -51,6 +52,10 @@ function FarmingItem(props: FarmingItemProps) {
   };
 
   useEffect(() => {
+    setIsFarmable(userData.farmingLevel >= props.farmingLevelRequired);
+  }, [userData.farmingLevel]);
+
+  useEffect(() => {
     if (props.farmingStatus !== null) {
       setIsFarming(true);
     } else {
@@ -68,10 +73,10 @@ function FarmingItem(props: FarmingItemProps) {
             <div className="farm-item-duration-container">
               <img src={TimerIcon}></img>
               <div className="farm-item-duration">
-                {formatDuration(props.farmingDurationS)}
+                {props.farmingDurationS}s
               </div>
             </div>
-            <div className="farm-item-exp">{props.farmingExp} XP</div>
+            <div className="farm-item-exp"><div>XP</div><div>{props.farmingExp}</div></div>
           </div>
         </div>
         <div className="farm-item-img-container">
@@ -88,6 +93,7 @@ function FarmingItem(props: FarmingItemProps) {
         <button
           className={`farm-button ${isFarming ? "farming-active" : ""}`}
           onClick={handleFarmButton}
+          disabled={!isFarmable}
         >
           {isFarming ? "Cancel" : "Farm"}
         </button>

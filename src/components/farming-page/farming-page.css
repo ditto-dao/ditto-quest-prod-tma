@@ -1,7 +1,102 @@
 .farming-page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  color: var(--cream-white);
+}
+
+.category-buttons-wrapper {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 10; 
+  overflow-x: auto; 
+  overflow-y: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding: 0 12px 5px 12px;
+  flex-shrink: 0; 
+}
+
+.category-buttons {
+  display: flex;
+  gap: 14px;
+  width: max-content;
+}
+
+.category-button {
+  font-size: 10px;
+  border: 1.5px solid var(--sage-green);
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+.category-button.active {
+  background-color: var(--sage-green);
+
+}
+
+.farming-items-container {
+  flex-grow: 1;
+  overflow-y: auto; 
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+}
+
+.farming-items-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Two equal columns */
-  gap: 10px; /* Space between grid items */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
   padding: 15px;
-  align-items: stretch; /* Ensures all items stretch to the same height */
+  align-items: stretch;
+}
+
+.farming-item-wrapper {
+  width: 100%;
+}
+
+.farming-item-wrapper.single-item {
+  grid-column: span 1;
+  justify-self: start;
+}
+
+.farming-item-container {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.category-buttons-wrapper::-webkit-scrollbar {
+  height: 4px;
+  background-color: transparent;
+}
+
+.farming-items-container::-webkit-scrollbar {
+  width: 4px;
+  background-color: transparent;
+}
+
+.category-buttons-wrapper::-webkit-scrollbar-thumb,
+.farming-items-container::-webkit-scrollbar-thumb {
+  background-color: rgba(136, 136, 136, 0.3);
+  border-radius: 3px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.category-buttons-wrapper::-webkit-scrollbar-thumb:hover,
+.farming-items-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(85, 85, 85, 0.8);
+}
+
+.category-buttons-wrapper,
+.farming-items-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 136, 136, 0.5) transparent;
+  scroll-behavior: smooth;
 }

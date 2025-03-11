@@ -47,12 +47,16 @@
   width: 100%;
   display: flex;
   flex-direction: row;
+  gap: 5px;
   justify-content: space-between;
   padding: 0 4px;
 }
 
 .farm-item-exp {
+  flex: 1;
   display: flex;
+  gap: 4px;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   font-size: 8px;
@@ -62,7 +66,10 @@
 }
 
 .farm-item-duration-container {
+  flex: 1;
   display: flex;
+  flex-direction: column;
+  gap: 4px;
   align-items: center; /* Vertically align content */
   justify-content: center; /* Align content to the end of the container */
   background-color: var(--sage-green);
@@ -73,12 +80,11 @@
 .farm-item-duration-container img {
   height: 12px;
   width: auto;
-  margin-right: 4px; /* Add spacing between the icon and text */
 }
 
 .farm-item-duration {
   font-size: 8px;
-  text-align: right; /* Ensure the duration text aligns to the right */
+  text-align: left; /* Ensure the duration text aligns to the right */
 }
 
 .farm-item-img-container {
@@ -119,7 +125,7 @@
 }
 
 .farm-button:disabled {
-  background-color: #95a5a6;
+  background-color: #ccc;
   cursor: not-allowed;
 }
 
