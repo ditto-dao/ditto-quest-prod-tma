@@ -8,16 +8,13 @@
 
 .category-buttons-wrapper {
   width: 100%;
-  position: sticky;
-  top: 0;
   z-index: 10; 
   overflow-x: auto; 
   overflow-y: hidden;
   white-space: nowrap;
   display: flex;
   align-items: center;
-  padding: 0 12px 5px 12px;
-  flex-shrink: 0; 
+  padding: 2px 12px 5px 12px;
 }
 
 .category-buttons {
