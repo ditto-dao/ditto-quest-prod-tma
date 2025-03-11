@@ -96,10 +96,6 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
             Gacha
           </a>
         </li>
-        <div className="gap"></div>
-        <li>
-          <a onClick={() => setPage("Test")}>Test</a>
-        </li>
       </ul>
     </div>
   );
