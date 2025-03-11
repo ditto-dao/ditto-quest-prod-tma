@@ -39,8 +39,6 @@ export interface User {
     shieldInventoryId?: number | null;
     capeInventoryId?: number | null;
     necklaceInventoryId?: number | null;
-    petInventoryId?: number | null;
-    spellbookInventoryId?: number | null;
 
     // Equipped Items (Nullable)
     hat?: Inventory | null;
@@ -49,8 +47,6 @@ export interface User {
     shield?: Inventory | null;
     cape?: Inventory | null;
     necklace?: Inventory | null;
-    pet?: Inventory | null;
-    spellbook?: Inventory | null;
 
     // Relations
     inventory: Inventory[];
@@ -90,16 +86,12 @@ export const defaultUser: User = {
     shieldInventoryId: null,
     capeInventoryId: null,
     necklaceInventoryId: null,
-    petInventoryId: null,
-    spellbookInventoryId: null,
     hat: null,
     armour: null,
     weapon: null,
     shield: null,
     cape: null,
     necklace: null,
-    pet: null,
-    spellbook: null,
     inventory: [],
     combat: null,
     equippedSlimeId: null,
@@ -254,8 +246,6 @@ export enum EquipmentType {
     shield = "shield",
     cape = "cape",
     necklace = "necklace",
-    pet = "pet",
-    spellbook = "spellbook",
 }
 
 export enum EffectType {
