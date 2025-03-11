@@ -2,6 +2,7 @@
   {
     "equipmentId": 1,
     "equipmentName": "Sticky Sword",
+    "type": "weapon",
     "durationS": 60,
     "craftingLevelRequired": 1,
     "craftingExp": 45,
@@ -18,6 +19,7 @@
   {
     "equipmentId": 2,
     "equipmentName": "Slime Bronze Sword",
+    "type": "weapon",
     "durationS": 66,
     "craftingLevelRequired": 4,
     "craftingExp": 50,
@@ -40,6 +42,7 @@
   {
     "equipmentId": 3,
     "equipmentName": "Hardened Sword",
+    "type": "weapon",
     "durationS": 73,
     "craftingLevelRequired": 7,
     "craftingExp": 60,
@@ -62,6 +65,7 @@
   {
     "equipmentId": 4,
     "equipmentName": "Alloy Sword",
+    "type": "weapon",
     "durationS": 80,
     "craftingLevelRequired": 9,
     "craftingExp": 72,
@@ -90,6 +94,7 @@
   {
     "equipmentId": 5,
     "equipmentName": "Veil Sword",
+    "type": "weapon",
     "durationS": 88,
     "craftingLevelRequired": 11,
     "craftingExp": 88,
@@ -112,6 +117,7 @@
   {
     "equipmentId": 6,
     "equipmentName": "Muck Sword",
+    "type": "weapon",
     "durationS": 97,
     "craftingLevelRequired": 14,
     "craftingExp": 106,
@@ -134,6 +140,7 @@
   {
     "equipmentId": 7,
     "equipmentName": "Glow Sword",
+    "type": "weapon",
     "durationS": 106,
     "craftingLevelRequired": 17,
     "craftingExp": 128,
@@ -156,6 +163,7 @@
   {
     "equipmentId": 8,
     "equipmentName": "Frost Sword",
+    "type": "weapon",
     "durationS": 117,
     "craftingLevelRequired": 22,
     "craftingExp": 155,
@@ -178,6 +186,7 @@
   {
     "equipmentId": 9,
     "equipmentName": "Ember Sword",
+    "type": "weapon",
     "durationS": 129,
     "craftingLevelRequired": 22,
     "craftingExp": 188,
@@ -200,6 +209,7 @@
   {
     "equipmentId": 10,
     "equipmentName": "Relic Sword",
+    "type": "weapon",
     "durationS": 141,
     "craftingLevelRequired": 29,
     "craftingExp": 227,
@@ -222,6 +232,7 @@
   {
     "equipmentId": 11,
     "equipmentName": "Fracture Sword",
+    "type": "weapon",
     "durationS": 156,
     "craftingLevelRequired": 36,
     "craftingExp": 275,
@@ -244,6 +255,7 @@
   {
     "equipmentId": 12,
     "equipmentName": "Gleam Sword",
+    "type": "weapon",
     "durationS": 171,
     "craftingLevelRequired": 43,
     "craftingExp": 333,
@@ -266,6 +278,7 @@
   {
     "equipmentId": 13,
     "equipmentName": "Verdant Sword",
+    "type": "weapon",
     "durationS": 188,
     "craftingLevelRequired": 50,
     "craftingExp": 403,
@@ -288,6 +301,7 @@
   {
     "equipmentId": 14,
     "equipmentName": "Sanctum Sword",
+    "type": "weapon",
     "durationS": 207,
     "craftingLevelRequired": 57,
     "craftingExp": 488,
@@ -310,6 +324,7 @@
   {
     "equipmentId": 15,
     "equipmentName": "Abyss Sword",
+    "type": "weapon",
     "durationS": 228,
     "craftingLevelRequired": 64,
     "craftingExp": 590,
@@ -332,6 +347,7 @@
   {
     "equipmentId": 16,
     "equipmentName": "Wisp Sword",
+    "type": "weapon",
     "durationS": 251,
     "craftingLevelRequired": 71,
     "craftingExp": 714,
@@ -354,6 +370,7 @@
   {
     "equipmentId": 17,
     "equipmentName": "Dusk Sword",
+    "type": "weapon",
     "durationS": 276,
     "craftingLevelRequired": 78,
     "craftingExp": 864,
@@ -376,6 +393,7 @@
   {
     "equipmentId": 18,
     "equipmentName": "Siphon Sword",
+    "type": "weapon",
     "durationS": 303,
     "craftingLevelRequired": 85,
     "craftingExp": 1045,
@@ -398,6 +416,7 @@
   {
     "equipmentId": 19,
     "equipmentName": "Rift Sword",
+    "type": "weapon",
     "durationS": 334,
     "craftingLevelRequired": 92,
     "craftingExp": 1265,
@@ -420,6 +439,7 @@
   {
     "equipmentId": 20,
     "equipmentName": "Eternal Slime Core",
+    "type": "weapon",
     "durationS": 367,
     "craftingLevelRequired": 99,
     "craftingExp": 1530,
@@ -442,6 +462,7 @@
   {
     "equipmentId": 21,
     "equipmentName": "Sticky Longbow",
+    "type": "weapon",
     "durationS": 60,
     "craftingLevelRequired": 1,
     "craftingExp": 45,
@@ -464,6 +485,7 @@
   {
     "equipmentId": 22,
     "equipmentName": "Slime Bronze Longbow",
+    "type": "weapon",
     "durationS": 66,
     "craftingLevelRequired": 4,
     "craftingExp": 50,
@@ -492,6 +514,7 @@
   {
     "equipmentId": 23,
     "equipmentName": "Hardened Longbow",
+    "type": "weapon",
     "durationS": 73,
     "craftingLevelRequired": 7,
     "craftingExp": 60,
@@ -520,6 +543,7 @@
   {
     "equipmentId": 24,
     "equipmentName": "Alloy Longbow",
+    "type": "weapon",
     "durationS": 80,
     "craftingLevelRequired": 9,
     "craftingExp": 72,
@@ -554,6 +578,7 @@
   {
     "equipmentId": 25,
     "equipmentName": "Veil Longbow",
+    "type": "weapon",
     "durationS": 88,
     "craftingLevelRequired": 11,
     "craftingExp": 88,
@@ -582,6 +607,7 @@
   {
     "equipmentId": 26,
     "equipmentName": "Muck Longbow",
+    "type": "weapon",
     "durationS": 97,
     "craftingLevelRequired": 14,
     "craftingExp": 106,
@@ -610,6 +636,7 @@
   {
     "equipmentId": 27,
     "equipmentName": "Glow Longbow",
+    "type": "weapon",
     "durationS": 106,
     "craftingLevelRequired": 17,
     "craftingExp": 128,
@@ -638,6 +665,7 @@
   {
     "equipmentId": 28,
     "equipmentName": "Frost Longbow",
+    "type": "weapon",
     "durationS": 117,
     "craftingLevelRequired": 22,
     "craftingExp": 155,
@@ -666,6 +694,7 @@
   {
     "equipmentId": 29,
     "equipmentName": "Ember Longbow",
+    "type": "weapon",
     "durationS": 129,
     "craftingLevelRequired": 22,
     "craftingExp": 188,
@@ -694,6 +723,7 @@
   {
     "equipmentId": 30,
     "equipmentName": "Relic Longbow",
+    "type": "weapon",
     "durationS": 141,
     "craftingLevelRequired": 29,
     "craftingExp": 227,
@@ -722,6 +752,7 @@
   {
     "equipmentId": 31,
     "equipmentName": "Fracture Longbow",
+    "type": "weapon",
     "durationS": 156,
     "craftingLevelRequired": 36,
     "craftingExp": 275,
@@ -750,6 +781,7 @@
   {
     "equipmentId": 32,
     "equipmentName": "Gleam Longbow",
+    "type": "weapon",
     "durationS": 171,
     "craftingLevelRequired": 43,
     "craftingExp": 333,
@@ -778,6 +810,7 @@
   {
     "equipmentId": 33,
     "equipmentName": "Verdant Longbow",
+    "type": "weapon",
     "durationS": 188,
     "craftingLevelRequired": 50,
     "craftingExp": 403,
@@ -806,6 +839,7 @@
   {
     "equipmentId": 34,
     "equipmentName": "Sanctum Longbow",
+    "type": "weapon",
     "durationS": 207,
     "craftingLevelRequired": 57,
     "craftingExp": 488,
@@ -834,6 +868,7 @@
   {
     "equipmentId": 35,
     "equipmentName": "Abyss Longbow",
+    "type": "weapon",
     "durationS": 228,
     "craftingLevelRequired": 64,
     "craftingExp": 590,
@@ -862,6 +897,7 @@
   {
     "equipmentId": 36,
     "equipmentName": "Wisp Longbow",
+    "type": "weapon",
     "durationS": 251,
     "craftingLevelRequired": 71,
     "craftingExp": 714,
@@ -890,6 +926,7 @@
   {
     "equipmentId": 37,
     "equipmentName": "Dusk Longbow",
+    "type": "weapon",
     "durationS": 276,
     "craftingLevelRequired": 78,
     "craftingExp": 864,
@@ -918,6 +955,7 @@
   {
     "equipmentId": 38,
     "equipmentName": "Siphon Longbow",
+    "type": "weapon",
     "durationS": 303,
     "craftingLevelRequired": 85,
     "craftingExp": 1045,
@@ -946,6 +984,7 @@
   {
     "equipmentId": 39,
     "equipmentName": "Rift Longbow",
+    "type": "weapon",
     "durationS": 334,
     "craftingLevelRequired": 92,
     "craftingExp": 1265,
@@ -974,6 +1013,7 @@
   {
     "equipmentId": 40,
     "equipmentName": "Sticky Staff",
+    "type": "weapon",
     "durationS": 60,
     "craftingLevelRequired": 1,
     "craftingExp": 45,
@@ -990,6 +1030,7 @@
   {
     "equipmentId": 41,
     "equipmentName": "Slime Bronze Staff",
+    "type": "weapon",
     "durationS": 66,
     "craftingLevelRequired": 4,
     "craftingExp": 50,
@@ -1012,6 +1053,7 @@
   {
     "equipmentId": 42,
     "equipmentName": "Hardened Staff",
+    "type": "weapon",
     "durationS": 73,
     "craftingLevelRequired": 7,
     "craftingExp": 60,
@@ -1034,6 +1076,7 @@
   {
     "equipmentId": 43,
     "equipmentName": "Alloy Staff",
+    "type": "weapon",
     "durationS": 80,
     "craftingLevelRequired": 9,
     "craftingExp": 72,
@@ -1062,6 +1105,7 @@
   {
     "equipmentId": 44,
     "equipmentName": "Veil Staff",
+    "type": "weapon",
     "durationS": 88,
     "craftingLevelRequired": 11,
     "craftingExp": 88,
@@ -1084,6 +1128,7 @@
   {
     "equipmentId": 45,
     "equipmentName": "Muck Staff",
+    "type": "weapon",
     "durationS": 97,
     "craftingLevelRequired": 14,
     "craftingExp": 106,
@@ -1106,6 +1151,7 @@
   {
     "equipmentId": 46,
     "equipmentName": "Glow Staff",
+    "type": "weapon",
     "durationS": 106,
     "craftingLevelRequired": 17,
     "craftingExp": 128,
@@ -1128,6 +1174,7 @@
   {
     "equipmentId": 47,
     "equipmentName": "Frost Staff",
+    "type": "weapon",
     "durationS": 117,
     "craftingLevelRequired": 22,
     "craftingExp": 155,
@@ -1150,6 +1197,7 @@
   {
     "equipmentId": 48,
     "equipmentName": "Ember Staff",
+    "type": "weapon",
     "durationS": 129,
     "craftingLevelRequired": 22,
     "craftingExp": 188,
@@ -1172,6 +1220,7 @@
   {
     "equipmentId": 49,
     "equipmentName": "Relic Staff",
+    "type": "weapon",
     "durationS": 141,
     "craftingLevelRequired": 29,
     "craftingExp": 227,
@@ -1194,6 +1243,7 @@
   {
     "equipmentId": 50,
     "equipmentName": "Fracture Staff",
+    "type": "weapon",
     "durationS": 156,
     "craftingLevelRequired": 36,
     "craftingExp": 275,
@@ -1216,6 +1266,7 @@
   {
     "equipmentId": 51,
     "equipmentName": "Gleam Staff",
+    "type": "weapon",
     "durationS": 171,
     "craftingLevelRequired": 43,
     "craftingExp": 333,
@@ -1238,6 +1289,7 @@
   {
     "equipmentId": 52,
     "equipmentName": "Verdant Staff",
+    "type": "weapon",
     "durationS": 188,
     "craftingLevelRequired": 50,
     "craftingExp": 403,
@@ -1260,6 +1312,7 @@
   {
     "equipmentId": 53,
     "equipmentName": "Sanctum Staff",
+    "type": "weapon",
     "durationS": 207,
     "craftingLevelRequired": 57,
     "craftingExp": 488,
@@ -1282,6 +1335,7 @@
   {
     "equipmentId": 54,
     "equipmentName": "Abyss Staff",
+    "type": "weapon",
     "durationS": 228,
     "craftingLevelRequired": 64,
     "craftingExp": 590,
@@ -1304,6 +1358,7 @@
   {
     "equipmentId": 55,
     "equipmentName": "Wisp Staff",
+    "type": "weapon",
     "durationS": 251,
     "craftingLevelRequired": 71,
     "craftingExp": 714,
@@ -1326,6 +1381,7 @@
   {
     "equipmentId": 56,
     "equipmentName": "Dusk Staff",
+    "type": "weapon",
     "durationS": 276,
     "craftingLevelRequired": 78,
     "craftingExp": 864,
@@ -1348,6 +1404,7 @@
   {
     "equipmentId": 57,
     "equipmentName": "Siphon Staff",
+    "type": "weapon",
     "durationS": 303,
     "craftingLevelRequired": 85,
     "craftingExp": 1045,
@@ -1370,6 +1427,7 @@
   {
     "equipmentId": 58,
     "equipmentName": "Rift Staff",
+    "type": "weapon",
     "durationS": 334,
     "craftingLevelRequired": 92,
     "craftingExp": 1265,
@@ -1392,6 +1450,7 @@
   {
     "equipmentId": 59,
     "equipmentName": "Blight Helm",
+    "type": "hat",
     "durationS": 60,
     "craftingLevelRequired": 1,
     "craftingExp": 45,
@@ -1414,6 +1473,7 @@
   {
     "equipmentId": 60,
     "equipmentName": "Void Helm",
+    "type": "hat",
     "durationS": 73,
     "craftingLevelRequired": 12,
     "craftingExp": 65,
@@ -1436,6 +1496,7 @@
   {
     "equipmentId": 61,
     "equipmentName": "Voidheart Helm",
+    "type": "hat",
     "durationS": 88,
     "craftingLevelRequired": 23,
     "craftingExp": 105,
@@ -1458,6 +1519,7 @@
   {
     "equipmentId": 62,
     "equipmentName": "Protector Helm",
+    "type": "hat",
     "durationS": 106,
     "craftingLevelRequired": 34,
     "craftingExp": 168,
@@ -1480,6 +1542,7 @@
   {
     "equipmentId": 63,
     "equipmentName": "Watcher Helm",
+    "type": "hat",
     "durationS": 129,
     "craftingLevelRequired": 45,
     "craftingExp": 268,
@@ -1502,6 +1565,7 @@
   {
     "equipmentId": 64,
     "equipmentName": "Eldritch Hood",
+    "type": "hat",
     "durationS": 156,
     "craftingLevelRequired": 56,
     "craftingExp": 429,
@@ -1524,6 +1588,7 @@
   {
     "equipmentId": 65,
     "equipmentName": "Zephyr Crown",
+    "type": "hat",
     "durationS": 188,
     "craftingLevelRequired": 67,
     "craftingExp": 687,
@@ -1546,6 +1611,7 @@
   {
     "equipmentId": 66,
     "equipmentName": "Glacier Crown",
+    "type": "hat",
     "durationS": 228,
     "craftingLevelRequired": 78,
     "craftingExp": 1099,
@@ -1568,6 +1634,7 @@
   {
     "equipmentId": 67,
     "equipmentName": "Terra Crown",
+    "type": "hat",
     "durationS": 276,
     "craftingLevelRequired": 89,
     "craftingExp": 1759,
@@ -1590,6 +1657,7 @@
   {
     "equipmentId": 68,
     "equipmentName": "Inferno Crown",
+    "type": "hat",
     "durationS": 334,
     "craftingLevelRequired": 99,
     "craftingExp": 2815,
@@ -1612,6 +1680,7 @@
   {
     "equipmentId": 69,
     "equipmentName": "Blight Plate",
+    "type": "armour",
     "durationS": 60,
     "craftingLevelRequired": 1,
     "craftingExp": 45,
@@ -1634,6 +1703,7 @@
   {
     "equipmentId": 70,
     "equipmentName": "Void Plate",
+    "type": "armour",
     "durationS": 73,
     "craftingLevelRequired": 12,
     "craftingExp": 65,
@@ -1656,6 +1726,7 @@
   {
     "equipmentId": 71,
     "equipmentName": "Voidheart Plate",
+    "type": "armour",
     "durationS": 88,
     "craftingLevelRequired": 23,
     "craftingExp": 105,
@@ -1678,6 +1749,7 @@
   {
     "equipmentId": 72,
     "equipmentName": "Protector Plate",
+    "type": "armour",
     "durationS": 106,
     "craftingLevelRequired": 34,
     "craftingExp": 168,
@@ -1700,6 +1772,7 @@
   {
     "equipmentId": 73,
     "equipmentName": "Watcher Plate",
+    "type": "armour",
     "durationS": 129,
     "craftingLevelRequired": 45,
     "craftingExp": 268,
@@ -1722,6 +1795,7 @@
   {
     "equipmentId": 74,
     "equipmentName": "Eldritch Robes",
+    "type": "armour",
     "durationS": 156,
     "craftingLevelRequired": 56,
     "craftingExp": 429,
@@ -1744,6 +1818,7 @@
   {
     "equipmentId": 75,
     "equipmentName": "Zephyr Godplate",
+    "type": "armour",
     "durationS": 188,
     "craftingLevelRequired": 67,
     "craftingExp": 687,
@@ -1766,6 +1841,7 @@
   {
     "equipmentId": 76,
     "equipmentName": "Glacier Godplate",
+    "type": "armour",
     "durationS": 228,
     "craftingLevelRequired": 78,
     "craftingExp": 1099,
@@ -1788,6 +1864,7 @@
   {
     "equipmentId": 77,
     "equipmentName": "Terra Godplate",
+    "type": "armour",
     "durationS": 276,
     "craftingLevelRequired": 89,
     "craftingExp": 1759,
@@ -1810,6 +1887,7 @@
   {
     "equipmentId": 78,
     "equipmentName": "Inferno Godplate",
+    "type": "armour",
     "durationS": 334,
     "craftingLevelRequired": 99,
     "craftingExp": 2815,
@@ -1832,6 +1910,7 @@
   {
     "equipmentId": 79,
     "equipmentName": "Sticky Shield",
+    "type": "shield",
     "durationS": 60,
     "craftingLevelRequired": 1,
     "craftingExp": 45,
@@ -1848,6 +1927,7 @@
   {
     "equipmentId": 80,
     "equipmentName": "Slime Bronze Shield",
+    "type": "shield",
     "durationS": 66,
     "craftingLevelRequired": 4,
     "craftingExp": 50,
@@ -1870,6 +1950,7 @@
   {
     "equipmentId": 81,
     "equipmentName": "Hardened Shield",
+    "type": "shield",
     "durationS": 73,
     "craftingLevelRequired": 7,
     "craftingExp": 60,
@@ -1892,6 +1973,7 @@
   {
     "equipmentId": 82,
     "equipmentName": "Alloy Shield",
+    "type": "shield",
     "durationS": 80,
     "craftingLevelRequired": 9,
     "craftingExp": 72,
@@ -1920,6 +2002,7 @@
   {
     "equipmentId": 83,
     "equipmentName": "Veil Shield",
+    "type": "shield",
     "durationS": 88,
     "craftingLevelRequired": 11,
     "craftingExp": 88,
@@ -1942,6 +2025,7 @@
   {
     "equipmentId": 84,
     "equipmentName": "Muck Shield",
+    "type": "shield",
     "durationS": 97,
     "craftingLevelRequired": 14,
     "craftingExp": 106,
@@ -1964,6 +2048,7 @@
   {
     "equipmentId": 85,
     "equipmentName": "Glow Shield",
+    "type": "shield",
     "durationS": 106,
     "craftingLevelRequired": 17,
     "craftingExp": 128,
@@ -1986,6 +2071,7 @@
   {
     "equipmentId": 86,
     "equipmentName": "Frost Shield",
+    "type": "shield",
     "durationS": 117,
     "craftingLevelRequired": 22,
     "craftingExp": 155,
@@ -2008,6 +2094,7 @@
   {
     "equipmentId": 87,
     "equipmentName": "Ember Shield",
+    "type": "shield",
     "durationS": 129,
     "craftingLevelRequired": 22,
     "craftingExp": 188,
@@ -2030,6 +2117,7 @@
   {
     "equipmentId": 88,
     "equipmentName": "Relic Shield",
+    "type": "shield",
     "durationS": 141,
     "craftingLevelRequired": 29,
     "craftingExp": 227,
@@ -2052,6 +2140,7 @@
   {
     "equipmentId": 89,
     "equipmentName": "Fracture Shield",
+    "type": "shield",
     "durationS": 156,
     "craftingLevelRequired": 36,
     "craftingExp": 275,
@@ -2074,6 +2163,7 @@
   {
     "equipmentId": 90,
     "equipmentName": "Gleam Shield",
+    "type": "shield",
     "durationS": 171,
     "craftingLevelRequired": 43,
     "craftingExp": 333,
@@ -2096,6 +2186,7 @@
   {
     "equipmentId": 91,
     "equipmentName": "Verdant Shield",
+    "type": "shield",
     "durationS": 188,
     "craftingLevelRequired": 50,
     "craftingExp": 403,
@@ -2118,6 +2209,7 @@
   {
     "equipmentId": 92,
     "equipmentName": "Sanctum Shield",
+    "type": "shield",
     "durationS": 207,
     "craftingLevelRequired": 57,
     "craftingExp": 488,
@@ -2140,6 +2232,7 @@
   {
     "equipmentId": 93,
     "equipmentName": "Abyss Shield",
+    "type": "shield",
     "durationS": 228,
     "craftingLevelRequired": 64,
     "craftingExp": 590,
@@ -2162,6 +2255,7 @@
   {
     "equipmentId": 94,
     "equipmentName": "Wisp Shield",
+    "type": "shield",
     "durationS": 251,
     "craftingLevelRequired": 71,
     "craftingExp": 714,
@@ -2184,6 +2278,7 @@
   {
     "equipmentId": 95,
     "equipmentName": "Dusk Shield",
+    "type": "shield",
     "durationS": 276,
     "craftingLevelRequired": 78,
     "craftingExp": 864,
@@ -2206,6 +2301,7 @@
   {
     "equipmentId": 96,
     "equipmentName": "Siphon Shield",
+    "type": "shield",
     "durationS": 303,
     "craftingLevelRequired": 85,
     "craftingExp": 1045,
@@ -2228,6 +2324,7 @@
   {
     "equipmentId": 97,
     "equipmentName": "Rift Shield",
+    "type": "shield",
     "durationS": 334,
     "craftingLevelRequired": 92,
     "craftingExp": 1265,
@@ -2250,6 +2347,7 @@
   {
     "equipmentId": 98,
     "equipmentName": "Eternal Barrier",
+    "type": "shield",
     "durationS": 367,
     "craftingLevelRequired": 99,
     "craftingExp": 1530,
@@ -2272,6 +2370,7 @@
   {
     "equipmentId": 99,
     "equipmentName": "Sticky Mantle",
+    "type": "cape",
     "durationS": 60,
     "craftingLevelRequired": 1,
     "craftingExp": 45,
@@ -2294,6 +2393,7 @@
   {
     "equipmentId": 100,
     "equipmentName": "Bronze Warden Cape",
+    "type": "cape",
     "durationS": 73,
     "craftingLevelRequired": 12,
     "craftingExp": 65,
@@ -2322,6 +2422,7 @@
   {
     "equipmentId": 101,
     "equipmentName": "Ironclad Wrap",
+    "type": "cape",
     "durationS": 88,
     "craftingLevelRequired": 23,
     "craftingExp": 105,
@@ -2350,6 +2451,7 @@
   {
     "equipmentId": 102,
     "equipmentName": "Shroud of Shadows",
+    "type": "cape",
     "durationS": 106,
     "craftingLevelRequired": 34,
     "craftingExp": 168,
@@ -2378,6 +2480,7 @@
   {
     "equipmentId": 103,
     "equipmentName": "Verdant Aegis Cloak",
+    "type": "cape",
     "durationS": 129,
     "craftingLevelRequired": 45,
     "craftingExp": 268,
@@ -2406,6 +2509,7 @@
   {
     "equipmentId": 104,
     "equipmentName": "Luminous Veil",
+    "type": "cape",
     "durationS": 156,
     "craftingLevelRequired": 56,
     "craftingExp": 429,
@@ -2434,6 +2538,7 @@
   {
     "equipmentId": 105,
     "equipmentName": "Cryo Cloak",
+    "type": "cape",
     "durationS": 188,
     "craftingLevelRequired": 67,
     "craftingExp": 687,
@@ -2462,6 +2567,7 @@
   {
     "equipmentId": 106,
     "equipmentName": "Infernal Drape",
+    "type": "cape",
     "durationS": 228,
     "craftingLevelRequired": 78,
     "craftingExp": 1099,
@@ -2490,6 +2596,7 @@
   {
     "equipmentId": 107,
     "equipmentName": "Wispweave Cape",
+    "type": "cape",
     "durationS": 276,
     "craftingLevelRequired": 89,
     "craftingExp": 1759,
@@ -2518,6 +2625,7 @@
   {
     "equipmentId": 108,
     "equipmentName": "Mantle of Eternity",
+    "type": "cape",
     "durationS": 334,
     "craftingLevelRequired": 99,
     "craftingExp": 2815,

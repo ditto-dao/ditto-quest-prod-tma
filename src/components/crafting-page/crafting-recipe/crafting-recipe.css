@@ -7,6 +7,7 @@
   background-color: var(--seafoam-green);
   border: 2px solid var(--dark-navy);
   box-shadow: 0 4px 0 0 var(--dark-navy);
+  height: auto; /* Grows naturally with content */
 }
 
 .crafting-recipe-level {
@@ -32,8 +33,9 @@
 
 .crafting-equipment-img-container {
   padding: 15px;
-  height: 90px;
-  background-color: #ddd;
+  height: 100px;
+  min-width: 100px;
+  background-color: var(--cream-white);
   border-radius: 8px;
 }
 
@@ -68,17 +70,19 @@
   justify-content: center;
   align-items: center;
   background-color: var(--light-teal);
-  padding: 3px 6px;
+  padding: 0 8px;
   border-radius: 5px;
 }
 
 .equipment-craft-exp {
   display: flex;
+  flex-direction: column;
+  gap: 5px;
   justify-content: center;
   align-items: center;
-  font-size: 9px;
+  font-size: 8px;
   background-color: var(--light-teal);
-  padding: 3px 6px;
+  padding: 3px 8px;
   border-radius: 5px;
 }
 
@@ -88,7 +92,7 @@
 }
 
 .equipment-craft-duration div {
-  font-size: 9px;
+  font-size: 8px;
 }
 
 .craft-expand-img-container {
@@ -194,4 +198,12 @@
 
 .quantity.not-enough {
   color: #E74C3C; /* Red for insufficient quantity */
+}
+
+
+@media (max-width: 400px) {
+  .crafting-equipment-img-container {
+    height: 110px;
+    min-width: 110px;
+  }
 }

@@ -11,10 +11,12 @@ import Minimize from "../../../assets/images/general/up.svg";
 import "./crafting-recipe.css";
 import { useState, useEffect } from "react";
 import { formatDuration } from "../../../utils/helpers";
+import { EquipmentType } from "../../../utils/types";
 
 interface CraftingRecipeProps {
   equipmentId: number;
   equipmentName: string;
+  type: EquipmentType;
   durationS: number;
   craftingLevelRequired: number;
   craftingExp: number;
@@ -89,7 +91,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
                 <img src={TimerIcon}></img>
                 <div>{formatDuration(props.durationS)}</div>
               </div>
-              <div className="equipment-craft-exp">{props.craftingExp} XP</div>
+              <div className="equipment-craft-exp"><div>XP</div><div>{props.craftingExp}</div></div>
             </div>
             <button
               className={`craft-button ${isCrafting ? "crafting-active" : ""}`}
