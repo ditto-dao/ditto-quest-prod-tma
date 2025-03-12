@@ -302,6 +302,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
         console.log(
           `Received idle-progress-update: ${JSON.stringify(data, null, 2)}`
         );
+
         let alertMessage = `Offline Progress: ${formatDuration(data.offlineProgressMs / 1000)}\n\n`;
 
         data.updates.forEach((update) => {
