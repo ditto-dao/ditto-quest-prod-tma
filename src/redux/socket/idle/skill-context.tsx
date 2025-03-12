@@ -3,6 +3,7 @@ import { useSocket } from "../socket-context";
 import { SlimeWithTraits, SocketProviderProps } from "../../../utils/types";
 import { useLoginSocket } from "../login/login-context";
 import { useUserSocket } from "../user/user-context";
+import { formatDuration } from "../../../utils/helpers";
 
 export interface FarmingStatus {
   startTimestamp: number;
@@ -58,6 +59,10 @@ export interface ProgressUpdate {
     slime?: {
       slimeId: number;
     };
+    farmingExpGained?: number;
+    farmingLevelsGained?: number;
+    craftingExpGained?: number;
+    craftingLevelsGained?: number;
   };
 }
 
@@ -293,18 +298,22 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
       });
 
       // Idle progress
-      socket.on("idle-progress-update", (data: ProgressUpdate[]) => {
+      socket.on("idle-progress-update", (data: { updates: ProgressUpdate[], offlineProgressMs: number }) => {
         console.log(
           `Received idle-progress-update: ${JSON.stringify(data, null, 2)}`
         );
-        let alertMessage = "";
+        let alertMessage = `Offline Progress: ${formatDuration(data.offlineProgressMs / 1000)}\n\n`;
 
-        data.forEach((update) => {
+        data.updates.forEach((update) => {
           if (update.update.equipment) {
             update.update.equipment.forEach((equipment) => {
               if (equipment.quantity !== 0) {
                 const sign = equipment.quantity > 0 ? "+" : "";
                 alertMessage += `${equipment.equipmentName} ${sign}${equipment.quantity}\n`;
+                if (update.update.craftingLevelsGained && update.update.craftingLevelsGained > 0) {
+                  alertMessage += `Crafting Lvl Gained +${update.update.craftingLevelsGained}\n`;
+                }
+                alertMessage += `Crafting XP +${update.update.craftingExpGained}\n`;
               }
             });
           }
@@ -314,6 +323,10 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
               if (item.quantity !== 0) {
                 const sign = item.quantity > 0 ? "+" : "";
                 alertMessage += `${item.itemName} ${sign}${item.quantity}\n`;
+                if (update.update.farmingLevelsGained && update.update.farmingLevelsGained > 0) {
+                  alertMessage += `Farming Lvl Gained +${update.update.farmingLevelsGained}\n`;
+                }
+                alertMessage += `Farming XP +${update.update.farmingExpGained}\n`;
               }
             });
           }

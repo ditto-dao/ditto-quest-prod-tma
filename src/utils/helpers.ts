@@ -147,7 +147,7 @@ export function formatDuration(seconds: number): string {
         d: Math.floor((seconds % (7 * 24 * 60 * 60)) / (24 * 60 * 60)), // Days
         h: Math.floor((seconds % (24 * 60 * 60)) / (60 * 60)), // Hours
         m: Math.floor((seconds % (60 * 60)) / 60), // Minutes
-        s: seconds % 60, // Seconds
+        s: Math.floor(seconds % 60), // Seconds
     };
 
     return Object.entries(timeUnits)
