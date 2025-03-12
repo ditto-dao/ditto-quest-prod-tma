@@ -314,7 +314,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
                 if (update.update.craftingLevelsGained && update.update.craftingLevelsGained > 0) {
                   alertMessage += `Crafting Lvl Gained +${update.update.craftingLevelsGained}\n`;
                 }
-                alertMessage += `Crafting XP +${update.update.craftingExpGained}\n`;
+                if (sign.length > 0) alertMessage += `Crafting XP +${update.update.craftingExpGained}\n`;
               }
             });
           }
@@ -327,7 +327,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
                 if (update.update.farmingLevelsGained && update.update.farmingLevelsGained > 0) {
                   alertMessage += `Farming Lvl Gained +${update.update.farmingLevelsGained}\n`;
                 }
-                alertMessage += `Farming XP +${update.update.farmingExpGained}\n`;
+                if (sign.length > 0) alertMessage += `Farming XP +${update.update.farmingExpGained}\n`;
               }
             });
           }
