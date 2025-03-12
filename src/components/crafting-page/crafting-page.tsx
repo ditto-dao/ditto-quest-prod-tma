@@ -7,7 +7,7 @@ import DefaultWeapon from "../../assets/images/avatar-page/default-sword.png";
 import DefaultShield from "../../assets/images/avatar-page/default-shield.png";
 //import DefaultNecklace from "../../assets/images/avatar-page/default-necklace.png";
 import DefaultArmour from "../../assets/images/avatar-page/default-armour.png";
-import { useIdleSocket } from "../../redux/socket/idle/idle-context";
+import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
 import { useState } from "react";
 import { EquipmentType } from "../../utils/types";
 
@@ -23,7 +23,7 @@ const categoryImages: { [key: string]: string } = {
 const categories = Object.keys(categoryImages); // Use keys from the mapping
 
 function CraftingPage() {
-  const { craftingStatuses } = useIdleSocket();
+  const { craftingStatuses } = useIdleSkillSocket();
   const [selectedCategory, setSelectedCategory] = useState<string>("Hat");
 
   const filteredRecipes = craftingRecipes

@@ -9,7 +9,7 @@ import { UserProvider } from "./redux/socket/user/user-context";
 //import { initEruda } from "./utils/eruda";
 import MainPage from "./components/main-page/main-page";
 import { LoginSocketProvider } from "./redux/socket/login/login-context";
-import { IdleSocketProvider } from "./redux/socket/idle/idle-context";
+import { IdleSkillSocketProvider } from "./redux/socket/idle/skill-context";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -82,9 +82,9 @@ function App() {
       <SocketProvider>
         <LoginSocketProvider>
           <UserProvider>
-            <IdleSocketProvider>
+            <IdleSkillSocketProvider>
               <MainPage />
-            </IdleSocketProvider>
+            </IdleSkillSocketProvider>
           </UserProvider>
         </LoginSocketProvider>
       </SocketProvider>

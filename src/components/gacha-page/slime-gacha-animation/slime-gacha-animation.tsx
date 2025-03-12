@@ -98,11 +98,12 @@ const SlimeGachaAnimation = forwardRef((_, ref) => {
               ""
             );
             const base64Image = `data:image/png;base64,${btoa(binary)}`;
-
-            setTimeout(() => {
+            setCurrentSlimeShown(base64Image);
+            stopSlimeAnimation();
+/*             setTimeout(() => {
               setCurrentSlimeShown(base64Image);
               stopSlimeAnimation();
-            }, 5000); // Stop 5s after receiving event
+            }, 5000); // Stop 5s after receiving event */
           } else {
             console.error("Invalid ArrayBuffer received:", res.slimeNoBg);
           }

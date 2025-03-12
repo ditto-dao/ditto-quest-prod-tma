@@ -1,7 +1,7 @@
 import {
   CraftingStatus,
-  useIdleSocket,
-} from "../../../redux/socket/idle/idle-context";
+  useIdleSkillSocket,
+} from "../../../redux/socket/idle/skill-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
@@ -32,7 +32,7 @@ interface CraftingRecipeProps {
 
 function CraftingRecipe(props: CraftingRecipeProps) {
   const { userData } = useUserSocket();
-  const { startCrafting, stopCrafting } = useIdleSocket();
+  const { startCrafting, stopCrafting } = useIdleSkillSocket();
   const { socket } = useSocket();
   const [isCraftable, setIsCraftable] = useState(false);
   const [isCrafting, setIsCrafting] = useState(false);

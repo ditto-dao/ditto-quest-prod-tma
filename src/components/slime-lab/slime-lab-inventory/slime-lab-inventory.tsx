@@ -4,7 +4,7 @@ import "./slime-lab-inventory.css";
 import { SlimeWithTraits } from "../../../utils/types";
 import Separator from "../../../assets/images/general/separator.svg";
 import { getHighestDominantTraitRarity } from "../../../utils/helpers";
-import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
+import { useIdleSkillSocket } from "../../../redux/socket/idle/skill-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 
 interface SlimeLabInventoryProps {
@@ -17,7 +17,7 @@ function SlimeLabInventory({
   equippedSlimeId,
 }: SlimeLabInventoryProps) {
   const { setSlimeToBreed, breedingStatus, slimeToBreed0, slimeToBreed1 } =
-    useIdleSocket();
+  useIdleSkillSocket();
   const { userData } = useUserSocket();
 
   const [isModalOpen, setIsModalOpen] = useState(false);

@@ -3,7 +3,7 @@ import { useSocket } from "../../../redux/socket/socket-context";
 import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
 import TimerIcon from "../../../assets/images/general/timer.svg";
 import "./farming-item.css";
-import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
+import { useIdleSkillSocket } from "../../../redux/socket/idle/skill-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
@@ -29,7 +29,7 @@ function FarmingItem(props: FarmingItemProps) {
   const [isFarmable, setIsFarmable] = useState(false);
   const { socket } = useSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
-  const { startFarming, stopFarming } = useIdleSocket();
+  const { startFarming, stopFarming } = useIdleSkillSocket();
   const [isFarming, setIsFarming] = useState(false);
 
   const handleFarmButton = () => {

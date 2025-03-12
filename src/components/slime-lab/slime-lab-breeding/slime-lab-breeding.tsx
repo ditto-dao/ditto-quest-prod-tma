@@ -6,7 +6,7 @@ import {
   getChildTraitProbabilities,
   getHighestDominantTraitRarity,
 } from "../../../utils/helpers";
-import { useIdleSocket } from "../../../redux/socket/idle/idle-context";
+import { useIdleSkillSocket } from "../../../redux/socket/idle/skill-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
@@ -14,7 +14,7 @@ import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
 function SlimeLabBreedingPage() {
   const { socket } = useSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket(); 
-  const { slimeToBreed0, slimeToBreed1, breedingStatus, startBreeding, stopBreeding } = useIdleSocket();
+  const { slimeToBreed0, slimeToBreed1, breedingStatus, startBreeding, stopBreeding } = useIdleSkillSocket();
 
   // Generate trait probabilities when both slimes are selected
   const traitProbabilities =

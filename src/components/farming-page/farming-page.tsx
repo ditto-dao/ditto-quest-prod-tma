@@ -1,13 +1,13 @@
 import "./farming-page.css";
 import farming from "../../assets/json/farming.json";
-import { useIdleSocket } from "../../redux/socket/idle/idle-context";
+import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
 import FarmingItem from "./farming-item/farming-item";
 import { useState } from "react";
 
 const categories = ["Ore", "Crystal", "Essence", "Fiber", "Shards"];
 
 function FarmingPage() {
-  const { farmingStatuses } = useIdleSocket();
+  const { farmingStatuses } = useIdleSkillSocket();
   const [selectedCategory, setSelectedCategory] = useState<string>("Ore"); // Default category
 
   // Filter and sort farming items based on selected category

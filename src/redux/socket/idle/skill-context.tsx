@@ -62,7 +62,7 @@ export interface ProgressUpdate {
 }
 
 // Context
-interface IdleContext {
+interface SkillContext {
   farmingStatuses: Record<number, FarmingStatus | null>;
   startFarming: (
     itemId: number,
@@ -85,7 +85,7 @@ interface IdleContext {
   stopBreeding: () => void;
 }
 
-const IdleContext = createContext<IdleContext>({
+const SkillContext = createContext<SkillContext>({
   farmingStatuses: {},
   craftingStatuses: {},
   slimeToBreed0: undefined,
@@ -100,9 +100,9 @@ const IdleContext = createContext<IdleContext>({
   stopBreeding: () => {},
 });
 
-export const useIdleSocket = () => useContext(IdleContext);
+export const useIdleSkillSocket = () => useContext(SkillContext);
 
-export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
+export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
   children,
 }) => {
   const { socket, loadingSocket } = useSocket();
@@ -365,7 +365,7 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
   }, [unresolvedSireId, unresolvedDameId, userData.slimes]);
 
   return (
-    <IdleContext.Provider
+    <SkillContext.Provider
       value={{
         farmingStatuses,
         startFarming,
@@ -382,6 +382,6 @@ export const IdleSocketProvider: React.FC<SocketProviderProps> = ({
       }}
     >
       {children}
-    </IdleContext.Provider>
+    </SkillContext.Provider>
   );
 };
