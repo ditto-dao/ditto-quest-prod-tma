@@ -10,6 +10,7 @@ import { UserProvider } from "./redux/socket/user/user-context";
 import MainPage from "./components/main-page/main-page";
 import { LoginSocketProvider } from "./redux/socket/login/login-context";
 import { IdleSkillSocketProvider } from "./redux/socket/idle/skill-context";
+import { GachaSocketProvider } from "./redux/socket/gacha/gacha-context";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -83,7 +84,9 @@ function App() {
         <LoginSocketProvider>
           <UserProvider>
             <IdleSkillSocketProvider>
-              <MainPage />
+              <GachaSocketProvider>
+                <MainPage />
+              </GachaSocketProvider>
             </IdleSkillSocketProvider>
           </UserProvider>
         </LoginSocketProvider>

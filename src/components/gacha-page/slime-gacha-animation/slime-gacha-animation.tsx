@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import { useState, useEffect, useRef } from "react";
 import "./slime-gacha-animation.css";
 import Slime1 from "../../../assets/images/gacha/slime-rotate/1.png";
 import Slime2 from "../../../assets/images/gacha/slime-rotate/2.png";
@@ -18,15 +12,7 @@ import Slime9 from "../../../assets/images/gacha/slime-rotate/9.png";
 import Slime10 from "../../../assets/images/gacha/slime-rotate/10.png";
 import Slime11 from "../../../assets/images/gacha/slime-rotate/11.png";
 import Slime12 from "../../../assets/images/gacha/slime-rotate/12.png";
-import { SlimeWithTraits } from "../../../utils/types";
-import { useSocket } from "../../../redux/socket/socket-context";
-import { useLoginSocket } from "../../../redux/socket/login/login-context";
-
-interface GachaPullRes {
-  slime: SlimeWithTraits;
-  rankPull: string;
-  slimeNoBg: ArrayBuffer;
-}
+import { useGachaSocket } from "../../../redux/socket/gacha/gacha-context";
 
 const slimes = [
   Slime1,
@@ -43,19 +29,20 @@ const slimes = [
   Slime12,
 ];
 
-const SlimeGachaAnimation = forwardRef((_, ref) => {
-  const { socket, loadingSocket } = useSocket();
-  const { accessGranted } = useLoginSocket();
+const SlimeGachaAnimation = () => {
+  const { rollingSlime, slimeDrawn } = useGachaSocket();
+
   const [currentSlimeShown, setCurrentSlimeShown] = useState<string>(slimes[0]);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const [isVisible, setIsVisible] = useState(false); // Controls rise animation
+  const [isVisible, setIsVisible] = useState(false);
   const slimeRotationInterval = useRef<NodeJS.Timeout | null>(null);
+
+  // Track if animation should play initially
+  const [shouldAnimate, setShouldAnimate] = useState(!rollingSlime);
 
   // Start Slime Emerge Animation + Rotation
   const startSlimeAnimation = (): void => {
-    if (isAnimating) return;
-    setIsAnimating(true);
-    setIsVisible(true); // Make slime visible
+    if (!rollingSlime || !shouldAnimate) return;
+    setIsVisible(true);
 
     // Start rotation after rise animation completes
     setTimeout(() => {
@@ -66,8 +53,8 @@ const SlimeGachaAnimation = forwardRef((_, ref) => {
       slimeRotationInterval.current = setInterval(() => {
         setCurrentSlimeShown(slimes[frameIndex]);
         frameIndex = (frameIndex + 1) % slimes.length;
-      }, 150);
-    }, 800); // Wait for slime to fully rise before rotating
+      }, 100);
+    }, 800);
   };
 
   // Stop Slime Rotation
@@ -76,55 +63,38 @@ const SlimeGachaAnimation = forwardRef((_, ref) => {
       clearInterval(slimeRotationInterval.current);
       slimeRotationInterval.current = null;
     }
-    setIsAnimating(false);
   };
 
-  // Reset Slime Animation
-  const resetSlimeAnimation = () => {
-    stopSlimeAnimation();
-    setIsVisible(false); // Move slime back down
-  };
-
-  // Listen for Gacha Result
-  useEffect(() => { // TODO: MOVE THIS TO PARENT
-    if (socket && !loadingSocket && accessGranted) {
-      const handleSlimeGachaUpdate = (res: GachaPullRes) => {
-        console.log("Gacha response:", res);
-
-        try {
-          if (res.slimeNoBg instanceof ArrayBuffer) {
-            const binary = new Uint8Array(res.slimeNoBg).reduce(
-              (acc, byte) => acc + String.fromCharCode(byte),
-              ""
-            );
-            const base64Image = `data:image/png;base64,${btoa(binary)}`;
-            setCurrentSlimeShown(base64Image);
-            stopSlimeAnimation();
-/*             setTimeout(() => {
-              setCurrentSlimeShown(base64Image);
-              stopSlimeAnimation();
-            }, 5000); // Stop 5s after receiving event */
-          } else {
-            console.error("Invalid ArrayBuffer received:", res.slimeNoBg);
-          }
-        } catch (error) {
-          console.error("Error converting ArrayBuffer to Base64:", error);
-        }
-      };
-
-      socket.on("slime-gacha-update", handleSlimeGachaUpdate);
-
-      return () => {
-        socket.off("slime-gacha-update", handleSlimeGachaUpdate);
-      };
+  useEffect(() => {
+    if (!shouldAnimate) {
+      setIsVisible(true)
+      return; // Skip animation if rollingSlime was already true when mounted
     }
-  }, [socket, loadingSocket, accessGranted]);
 
-  // Expose functions to parent
-  useImperativeHandle(ref, () => ({
-    startSlimeAnimation,
-    resetSlimeAnimation,
-  }));
+    if (rollingSlime) {
+      setTimeout(() => {
+        startSlimeAnimation();
+      }, 1500);
+    } else {
+      setIsVisible(false);
+      stopSlimeAnimation();
+    }
+  }, [rollingSlime]);
+
+  useEffect(() => {
+    if (!shouldAnimate) {
+      setShouldAnimate(true);
+      setIsVisible(true)
+      if (slimeDrawn) setCurrentSlimeShown(slimeDrawn);
+      return; // Skip animation if rollingSlime was already true when mounted
+    }
+    if (slimeDrawn) {
+      setTimeout(() => {
+        stopSlimeAnimation();
+        setCurrentSlimeShown(slimeDrawn);
+      }, 4000);
+    }
+  }, [slimeDrawn]);
 
   return (
     <div className="slime-gacha-display">
@@ -137,6 +107,6 @@ const SlimeGachaAnimation = forwardRef((_, ref) => {
       />
     </div>
   );
-});
+};
 
 export default SlimeGachaAnimation;

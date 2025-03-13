@@ -1,6 +1,7 @@
 .chest-display {
-  width: 250px;
-  height: 250px;
+  margin-top: 20px;
+  width: 220px;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -11,26 +12,4 @@
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-}
-
-.bubble-firework {
-  position: absolute;
-  bottom: 50%; /* Start from the center of the chest */
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  opacity: 1;
-  animation: bubble-float 0.6s linear forwards; /* NO SLOWDOWN */
-}
-
-/* Animation for bubbles exploding outward and disappearing */
-@keyframes bubble-float {
-  0% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: translate(var(--random-x), var(--random-y)) scale(1.5);
-    opacity: 0;
-  }
 }

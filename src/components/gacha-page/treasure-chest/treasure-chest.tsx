@@ -1,5 +1,5 @@
 import "./treasure-chest.css";
-import { useRef, useState, forwardRef, useImperativeHandle } from "react";
+import { useEffect, useRef, useState } from "react";
 import ChestOpen1 from "../../../assets/images/gacha/chest/chest-open-1.png";
 import ChestOpen2 from "../../../assets/images/gacha/chest/chest-open-2.png";
 import ChestOpen3 from "../../../assets/images/gacha/chest/chest-open-3.png";
@@ -8,6 +8,7 @@ import ChestOpen5 from "../../../assets/images/gacha/chest/chest-open-5.png";
 import ChestOpen6 from "../../../assets/images/gacha/chest/chest-open-6.png";
 import ChestOpen7 from "../../../assets/images/gacha/chest/chest-open-7.png";
 import ChestOpen8 from "../../../assets/images/gacha/chest/chest-open-8.png";
+import { useGachaSocket } from "../../../redux/socket/gacha/gacha-context";
 
 const chestFrames = [
   ChestOpen1,
@@ -20,16 +21,20 @@ const chestFrames = [
   ChestOpen8,
 ];
 
-const TreasureChest = forwardRef((_, ref) => {
+const TreasureChest = () => {
+  const { rollingSlime } = useGachaSocket();
+
   const [currentChestShown, setCurrentChestShown] = useState<string>(
     chestFrames[0]
   );
   const chestAnimationInterval = useRef<NodeJS.Timeout | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null); // Reference for fireworks
+
+  // Track if animation should play initially
+  const [shouldAnimate, setShouldAnimate] = useState(!rollingSlime);
 
   // Play chest animation
   const playChestAnimation = async (): Promise<void> => {
-    return new Promise((resolve) => {
+    return new Promise(() => {
       let frameIndex = 0;
 
       chestAnimationInterval.current = setInterval(() => {
@@ -38,11 +43,6 @@ const TreasureChest = forwardRef((_, ref) => {
 
         if (frameIndex === chestFrames.length) {
           clearInterval(chestAnimationInterval.current as NodeJS.Timeout); // Animation complete
-
-          // Trigger fireworks AFTER chest animation completes
-          fireworks();
-
-          resolve(); // Notify that chest animation is done
         }
       }, 150); // Chest frame delay
     });
@@ -56,47 +56,22 @@ const TreasureChest = forwardRef((_, ref) => {
     setCurrentChestShown(chestFrames[0]); // Reset to first frame
   };
 
-  const fireworks = () => {
-    let numBubbles = 200; // Number of bubbles
-
-    for (let i = 0; i < numBubbles; i++) {
-      const bubble = document.createElement("div");
-      bubble.classList.add("bubble-firework");
-
-      // Random position offset
-      let targetX = Math.random() * 300 - 150; // -150px to 150px
-      let targetY = Math.random() * 200 - 100; // -100px to 100px
-
-      // Randomize color and size
-      const colors = ["#b0b0b0", "#8fbf71", "#5b9eea", "#ba78f9", "#f6b74c"];
-      const size = 5;
-      const color = colors[Math.floor(Math.random() * colors.length)];
-
-      bubble.style.setProperty("--random-x", `${targetX}px`);
-      bubble.style.setProperty("--random-y", `${targetY}px`);
-      bubble.style.width = `${size}px`;
-      bubble.style.height = `${size}px`;
-      bubble.style.backgroundColor = color;
-
-      if (containerRef.current) {
-        containerRef.current.appendChild(bubble);
-
-        // Ensure bubbles disappear after animation
-        setTimeout(() => {
-          bubble.remove();
-        }, 1000); // Same as animation duration
-      }
+  useEffect(() => {
+    if (!shouldAnimate) {
+      setCurrentChestShown(chestFrames[6]);
+      setShouldAnimate(true);
+      return; // Skip animation if rollingSlime was already true when mounted
     }
-  };
 
-  // Expose functions to parent via ref
-  useImperativeHandle(ref, () => ({
-    playChestAnimation,
-    resetChestAnimation,
-  }));
+    if (rollingSlime) {
+      playChestAnimation();
+    } else {
+      resetChestAnimation();
+    }
+  }, [rollingSlime]);
 
   return (
-    <div className="chest-display" ref={containerRef}>
+    <div className="chest-display">
       <img
         src={currentChestShown}
         alt="Chest Animation"
@@ -104,6 +79,6 @@ const TreasureChest = forwardRef((_, ref) => {
       />
     </div>
   );
-});
+};
 
 export default TreasureChest;
