@@ -27,12 +27,6 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
       </div>
       <ul>
         <li>
-          <a onClick={() => setPage("Shop")}>
-            <img src={ShopIcon} alt="Shop Icon" className="sidebar-icon" />
-            Shop
-          </a>
-        </li>
-        <li>
           <a onClick={() => setPage("Avatar")}>
             <img src={AvatarIcon} alt="Avatar Icon" className="sidebar-icon" />
             Avatar
@@ -94,6 +88,12 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           <a onClick={() => setPage("Gacha")}>
             <img src={GachaIcon} alt="Gacha Icon" className="sidebar-icon" />
             Gacha
+          </a>
+        </li>
+        <li>
+          <a onClick={() => setPage("Shop")}>
+            <img src={ShopIcon} alt="Shop Icon" className="sidebar-icon" />
+            Shop
           </a>
         </li>
       </ul>
