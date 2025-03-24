@@ -8,17 +8,22 @@ export interface User {
     telegramId: string;
     username?: string | null;
     goldBalance: number;
+
+    // Base ability stats
     level: number;
     expToNextLevel: number;
     exp: number;
     str: number;
     def: number;
     dex: number;
+    luk: number;
     magic: number;
     hpLevel: number;
     expHp: number;
     expToNextHpLevel: number;
     outstandingSkillPoints: number;
+
+    lastBattleEndTimestamp?: string | null;
 
     // Farming & Crafting
     farmingLevel: number;
@@ -62,24 +67,26 @@ export const defaultUser: User = {
     username: null,
     goldBalance: 0,
     level: 1,
-    expToNextLevel: 83,
+    expToNextLevel: 570,
     exp: 0,
     str: 1,
     def: 1,
     dex: 1,
+    luk: 1,
     magic: 1,
     hpLevel: 1,
     expHp: 0,
     expToNextHpLevel: 83,
     outstandingSkillPoints: 0,
+    lastBattleEndTimestamp: null,
     farmingLevel: 1,
     farmingExp: 0,
-    expToNextFarmingLevel: 83,
+    expToNextFarmingLevel: 570,
     craftingLevel: 1,
     craftingExp: 0,
-    expToNextCraftingLevel: 83,
+    expToNextCraftingLevel: 570,
     doubleResourceOdds: 0.01,
-    skillIntervalReductionMultiplier: 0,
+    skillIntervalReductionMultiplier: 1,
     hatInventoryId: null,
     armourInventoryId: null,
     weaponInventoryId: null,
@@ -99,20 +106,36 @@ export const defaultUser: User = {
 };
 
 export interface Combat {
-    userId: string;
-    str: number;
-    def: number;
-    dex: number;
-    magic: number;
-    maxHp: number;
+    id: number;
+    attackType: 'Melee' | 'Ranged' | 'Magic';
     hp: number;
+    maxHp: number;
+    atkSpd: number;
+    acc: number;
+    eva: number;
+    maxMeleeDmg: number;
+    maxRangedDmg: number;
+    maxMagicDmg: number;
+    critChance: number;
+    critMultiplier: number;
+    dmgReduction: number;
+    magicDmgReduction: number;
+    hpRegenRate: number;
+    hpRegenAmount: number;
+    meleeFactor: number;
+    rangeFactor: number;
+    magicFactor: number;
+    reinforceAir: number;
+    reinforceWater: number;
+    reinforceEarth: number;
+    reinforceFire: number;
 }
 
 export interface Inventory {
     id: number;
     userId: string;
-    itemId: number | null;
-    equipmentId: number | null;
+    itemId?: number | null;
+    equipmentId?: number | null;
     quantity: number;
     order: number;
     createdAt: string; // Date as string for JSON compatibility
@@ -152,20 +175,36 @@ export interface Item {
 
 export interface StatEffect {
     id: number;
-    str?: number | null;
-    strEffect?: EffectType | null;
-    def?: number | null;
-    defEffect?: EffectType | null;
-    dex?: number | null;
-    dexEffect?: EffectType | null;
-    magic?: number | null;
-    magicEffect?: EffectType | null;
-    hp?: number | null;
-    hpEffect?: EffectType | null;
-    maxHp?: number | null;
+    maxHpMod?: number | null;
     maxHpEffect?: EffectType | null;
-    doubleResourceOdds?: number | null;
-    skillIntervalReductionMultiplier?: number | null;
+    atkSpdMod?: number | null;
+    atkSpdEffect?: EffectType | null;
+    accMod?: number | null;
+    accEffect?: EffectType | null;
+    evaMod?: number | null;
+    evaEffect?: EffectType | null;
+    maxMeleeDmgMod?: number | null;
+    maxMeleeDmgEffect?: EffectType | null;
+    maxRangedDmgMod?: number | null;
+    maxRangedDmgEffect?: EffectType | null;
+    maxMagicDmgMod?: number | null;
+    maxMagicDmgEffect?: EffectType | null;
+    critChanceMod?: number | null;
+    critChanceEffect?: EffectType | null;
+    critMultiplierMod?: number | null;
+    critMultiplierEffect?: EffectType | null;
+    dmgReductionMod?: number | null;
+    dmgReductionEffect?: EffectType | null;
+    magicDmgReductionMod?: number | null;
+    magicDmgReductionEffect?: EffectType | null;
+    hpRegenRateMod?: number | null;
+    hpRegenRateEffect?: EffectType | null;
+    hpRegenAmountMod?: number | null;
+    hpRegenAmountEffect?: EffectType | null;
+    doubleResourceOddsMod?: number | null;
+    doubleResourceOddsEffect?: EffectType | null;
+    skillIntervalReductionMultiplierMod?: number | null;
+    skillIntervalReductionMultiplierEffect?: EffectType | null;
     durationS?: number | null;
 }
 
