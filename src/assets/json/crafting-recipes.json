@@ -5,7 +5,7 @@
     "type": "weapon",
     "durationS": 60,
     "craftingLevelRequired": 1,
-    "craftingExp": 45,
+    "craftingExp": 100,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/05/Aranite_2H_Blade_%28item%29.png/250px-Aranite_2H_Blade_%28item%29.png",
     "requiredItems": [
       {
@@ -20,9 +20,9 @@
     "equipmentId": 2,
     "equipmentName": "Slime Bronze Sword",
     "type": "weapon",
-    "durationS": 66,
-    "craftingLevelRequired": 4,
-    "craftingExp": 50,
+    "durationS": 65,
+    "craftingLevelRequired": 10,
+    "craftingExp": 125,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/0b/Bronze_Sword_%28item%29.png/375px-Bronze_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -43,9 +43,9 @@
     "equipmentId": 3,
     "equipmentName": "Hardened Sword",
     "type": "weapon",
-    "durationS": 73,
-    "craftingLevelRequired": 7,
-    "craftingExp": 60,
+    "durationS": 70,
+    "craftingLevelRequired": 20,
+    "craftingExp": 150,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/e/ed/Iron_Sword_%28item%29.png/375px-Iron_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -66,9 +66,9 @@
     "equipmentId": 4,
     "equipmentName": "Alloy Sword",
     "type": "weapon",
-    "durationS": 80,
-    "craftingLevelRequired": 9,
-    "craftingExp": 72,
+    "durationS": 75,
+    "craftingLevelRequired": 30,
+    "craftingExp": 180,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/0b/Steel_Sword_%28item%29.png/375px-Steel_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -95,9 +95,9 @@
     "equipmentId": 5,
     "equipmentName": "Veil Sword",
     "type": "weapon",
-    "durationS": 88,
-    "craftingLevelRequired": 11,
-    "craftingExp": 88,
+    "durationS": 80,
+    "craftingLevelRequired": 40,
+    "craftingExp": 225,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/8f/Black_Sword_%28item%29.png/375px-Black_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -118,9 +118,9 @@
     "equipmentId": 6,
     "equipmentName": "Muck Sword",
     "type": "weapon",
-    "durationS": 97,
-    "craftingLevelRequired": 14,
-    "craftingExp": 106,
+    "durationS": 90,
+    "craftingLevelRequired": 50,
+    "craftingExp": 280,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/4/4e/Mithril_Sword_%28item%29.png/250px-Mithril_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -141,9 +141,9 @@
     "equipmentId": 7,
     "equipmentName": "Glow Sword",
     "type": "weapon",
-    "durationS": 106,
-    "craftingLevelRequired": 17,
-    "craftingExp": 128,
+    "durationS": 100,
+    "craftingLevelRequired": 60,
+    "craftingExp": 333,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/e/e5/Adamant_Sword_%28item%29.png/250px-Adamant_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -164,9 +164,9 @@
     "equipmentId": 8,
     "equipmentName": "Frost Sword",
     "type": "weapon",
-    "durationS": 117,
-    "craftingLevelRequired": 22,
-    "craftingExp": 155,
+    "durationS": 110,
+    "craftingLevelRequired": 70,
+    "craftingExp": 380,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/6/63/Ice_Sword_%28item%29.png/375px-Ice_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -187,9 +187,9 @@
     "equipmentId": 9,
     "equipmentName": "Ember Sword",
     "type": "weapon",
-    "durationS": 129,
-    "craftingLevelRequired": 22,
-    "craftingExp": 188,
+    "durationS": 120,
+    "craftingLevelRequired": 80,
+    "craftingExp": 450,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/bd/Netherite_Sword_%28item%29.png/250px-Netherite_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -210,9 +210,9 @@
     "equipmentId": 10,
     "equipmentName": "Relic Sword",
     "type": "weapon",
-    "durationS": 141,
-    "craftingLevelRequired": 29,
-    "craftingExp": 227,
+    "durationS": 130,
+    "craftingLevelRequired": 90,
+    "craftingExp": 520,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/a/a2/Ancient_Sword_%28item%29.png/375px-Ancient_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -233,9 +233,9 @@
     "equipmentId": 11,
     "equipmentName": "Fracture Sword",
     "type": "weapon",
-    "durationS": 156,
-    "craftingLevelRequired": 36,
-    "craftingExp": 275,
+    "durationS": 150,
+    "craftingLevelRequired": 100,
+    "craftingExp": 666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/7/7b/Strange_Sword_%28item%29.png/375px-Strange_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -256,9 +256,9 @@
     "equipmentId": 12,
     "equipmentName": "Gleam Sword",
     "type": "weapon",
-    "durationS": 171,
-    "craftingLevelRequired": 43,
-    "craftingExp": 333,
+    "durationS": 170,
+    "craftingLevelRequired": 110,
+    "craftingExp": 720,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/d/d9/Corundum_Sword_%28item%29.png/375px-Corundum_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -279,9 +279,9 @@
     "equipmentId": 13,
     "equipmentName": "Verdant Sword",
     "type": "weapon",
-    "durationS": 188,
-    "craftingLevelRequired": 50,
-    "craftingExp": 403,
+    "durationS": 190,
+    "craftingLevelRequired": 120,
+    "craftingExp": 840,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/8c/Augite_Sword_%28item%29.png/375px-Augite_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -302,9 +302,9 @@
     "equipmentId": 14,
     "equipmentName": "Sanctum Sword",
     "type": "weapon",
-    "durationS": 207,
-    "craftingLevelRequired": 57,
-    "craftingExp": 488,
+    "durationS": 210,
+    "craftingLevelRequired": 130,
+    "craftingExp": 1050,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/6/66/Divine_Sword_%28item%29.png/375px-Divine_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -325,9 +325,9 @@
     "equipmentId": 15,
     "equipmentName": "Abyss Sword",
     "type": "weapon",
-    "durationS": 228,
-    "craftingLevelRequired": 64,
-    "craftingExp": 590,
+    "durationS": 240,
+    "craftingLevelRequired": 140,
+    "craftingExp": 1666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/5b/Abyssium_Sword_%28item%29.png/375px-Abyssium_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -348,9 +348,9 @@
     "equipmentId": 16,
     "equipmentName": "Wisp Sword",
     "type": "weapon",
-    "durationS": 251,
-    "craftingLevelRequired": 71,
-    "craftingExp": 714,
+    "durationS": 260,
+    "craftingLevelRequired": 150,
+    "craftingExp": 1600,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/f/fa/Brumite_Sword_%28item%29.png/375px-Brumite_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -371,9 +371,9 @@
     "equipmentId": 17,
     "equipmentName": "Dusk Sword",
     "type": "weapon",
-    "durationS": 276,
-    "craftingLevelRequired": 78,
-    "craftingExp": 864,
+    "durationS": 290,
+    "craftingLevelRequired": 160,
+    "craftingExp": 1900,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/31/Fear_Hunter_Whip_%28item%29.png/250px-Fear_Hunter_Whip_%28item%29.png",
     "requiredItems": [
       {
@@ -394,9 +394,9 @@
     "equipmentId": 18,
     "equipmentName": "Siphon Sword",
     "type": "weapon",
-    "durationS": 303,
-    "craftingLevelRequired": 85,
-    "craftingExp": 1045,
+    "durationS": 320,
+    "craftingLevelRequired": 170,
+    "craftingExp": 2200,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/f/f1/Witherite_Sword_%28item%29.png/375px-Witherite_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -417,9 +417,9 @@
     "equipmentId": 19,
     "equipmentName": "Rift Sword",
     "type": "weapon",
-    "durationS": 334,
-    "craftingLevelRequired": 92,
-    "craftingExp": 1265,
+    "durationS": 350,
+    "craftingLevelRequired": 185,
+    "craftingExp": 2500,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/7/75/Eternity_Sword_%28item%29.png/250px-Eternity_Sword_%28item%29.png",
     "requiredItems": [
       {
@@ -440,9 +440,9 @@
     "equipmentId": 20,
     "equipmentName": "Eternal Slime Core",
     "type": "weapon",
-    "durationS": 367,
-    "craftingLevelRequired": 99,
-    "craftingExp": 1530,
+    "durationS": 400,
+    "craftingLevelRequired": 200,
+    "craftingExp": 3200,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/55/Powered_Red_Crystal_%28item%29.png/250px-Powered_Red_Crystal_%28item%29.png",
     "requiredItems": [
       {
@@ -465,7 +465,7 @@
     "type": "weapon",
     "durationS": 60,
     "craftingLevelRequired": 1,
-    "craftingExp": 45,
+    "craftingExp": 100,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/4/43/Basic_Shortbow_%28item%29.png/250px-Basic_Shortbow_%28item%29.png",
     "requiredItems": [
       {
@@ -486,9 +486,9 @@
     "equipmentId": 22,
     "equipmentName": "Slime Bronze Longbow",
     "type": "weapon",
-    "durationS": 66,
-    "craftingLevelRequired": 4,
-    "craftingExp": 50,
+    "durationS": 65,
+    "craftingLevelRequired": 10,
+    "craftingExp": 125,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/0e/Normal_Longbow_%28item%29.png/250px-Normal_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -515,9 +515,9 @@
     "equipmentId": 23,
     "equipmentName": "Hardened Longbow",
     "type": "weapon",
-    "durationS": 73,
-    "craftingLevelRequired": 7,
-    "craftingExp": 60,
+    "durationS": 70,
+    "craftingLevelRequired": 20,
+    "craftingExp": 150,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/d/db/Oak_Longbow_%28item%29.png/250px-Oak_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -544,9 +544,9 @@
     "equipmentId": 24,
     "equipmentName": "Alloy Longbow",
     "type": "weapon",
-    "durationS": 80,
-    "craftingLevelRequired": 9,
-    "craftingExp": 72,
+    "durationS": 75,
+    "craftingLevelRequired": 30,
+    "craftingExp": 180,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/bb/Crystal_Longbow_%28item%29.png/250px-Crystal_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -579,9 +579,9 @@
     "equipmentId": 25,
     "equipmentName": "Veil Longbow",
     "type": "weapon",
-    "durationS": 88,
-    "craftingLevelRequired": 11,
-    "craftingExp": 88,
+    "durationS": 80,
+    "craftingLevelRequired": 40,
+    "craftingExp": 225,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/4/46/Old_Hunting_Bow_%28item%29.png/250px-Old_Hunting_Bow_%28item%29.png",
     "requiredItems": [
       {
@@ -608,9 +608,9 @@
     "equipmentId": 26,
     "equipmentName": "Muck Longbow",
     "type": "weapon",
-    "durationS": 97,
-    "craftingLevelRequired": 14,
-    "craftingExp": 106,
+    "durationS": 90,
+    "craftingLevelRequired": 50,
+    "craftingExp": 280,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/1/1e/Willow_Longbow_%28item%29.png/250px-Willow_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -637,9 +637,9 @@
     "equipmentId": 27,
     "equipmentName": "Glow Longbow",
     "type": "weapon",
-    "durationS": 106,
-    "craftingLevelRequired": 17,
-    "craftingExp": 128,
+    "durationS": 100,
+    "craftingLevelRequired": 60,
+    "craftingExp": 333,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/1/17/Maple_Longbow_%28item%29.png/250px-Maple_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -666,9 +666,9 @@
     "equipmentId": 28,
     "equipmentName": "Frost Longbow",
     "type": "weapon",
-    "durationS": 117,
-    "craftingLevelRequired": 22,
-    "craftingExp": 155,
+    "durationS": 110,
+    "craftingLevelRequired": 70,
+    "craftingExp": 380,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/34/Ice_Longbow_%28item%29.png/250px-Ice_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -695,9 +695,9 @@
     "equipmentId": 29,
     "equipmentName": "Ember Longbow",
     "type": "weapon",
-    "durationS": 129,
-    "craftingLevelRequired": 22,
-    "craftingExp": 188,
+    "durationS": 120,
+    "craftingLevelRequired": 80,
+    "craftingExp": 450,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/c2/Engulfing_Vortex_Longbow_%28item%29.png/250px-Engulfing_Vortex_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -724,9 +724,9 @@
     "equipmentId": 30,
     "equipmentName": "Relic Longbow",
     "type": "weapon",
-    "durationS": 141,
-    "craftingLevelRequired": 29,
-    "craftingExp": 227,
+    "durationS": 130,
+    "craftingLevelRequired": 90,
+    "craftingExp": 520,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/a/a8/Stormsnap_%28item%29.png/250px-Stormsnap_%28item%29.png",
     "requiredItems": [
       {
@@ -753,9 +753,9 @@
     "equipmentId": 31,
     "equipmentName": "Fracture Longbow",
     "type": "weapon",
-    "durationS": 156,
-    "craftingLevelRequired": 36,
-    "craftingExp": 275,
+    "durationS": 150,
+    "craftingLevelRequired": 100,
+    "craftingExp": 666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/5a/Poisoned_Shortbow_%28item%29.png/250px-Poisoned_Shortbow_%28item%29.png",
     "requiredItems": [
       {
@@ -782,9 +782,9 @@
     "equipmentId": 32,
     "equipmentName": "Gleam Longbow",
     "type": "weapon",
-    "durationS": 171,
-    "craftingLevelRequired": 43,
-    "craftingExp": 333,
+    "durationS": 170,
+    "craftingLevelRequired": 110,
+    "craftingExp": 720,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/bb/Eternity_Bow_%28item%29.png/250px-Eternity_Bow_%28item%29.png",
     "requiredItems": [
       {
@@ -811,9 +811,9 @@
     "equipmentId": 33,
     "equipmentName": "Verdant Longbow",
     "type": "weapon",
-    "durationS": 188,
-    "craftingLevelRequired": 50,
-    "craftingExp": 403,
+    "durationS": 190,
+    "craftingLevelRequired": 120,
+    "craftingExp": 840,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/c1/Pure_Crystal_Longbow_%28item%29.png/250px-Pure_Crystal_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -840,9 +840,9 @@
     "equipmentId": 34,
     "equipmentName": "Sanctum Longbow",
     "type": "weapon",
-    "durationS": 207,
-    "craftingLevelRequired": 57,
-    "craftingExp": 488,
+    "durationS": 210,
+    "craftingLevelRequired": 130,
+    "craftingExp": 1050,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/88/Malevolent_Blight_Longbow_%28item%29.png/250px-Malevolent_Blight_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -869,9 +869,9 @@
     "equipmentId": 35,
     "equipmentName": "Abyss Longbow",
     "type": "weapon",
-    "durationS": 228,
-    "craftingLevelRequired": 64,
-    "craftingExp": 590,
+    "durationS": 240,
+    "craftingLevelRequired": 140,
+    "craftingExp": 1666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/be/Hollow_Nightmare_Longbow_%28item%29.png/250px-Hollow_Nightmare_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -898,9 +898,9 @@
     "equipmentId": 36,
     "equipmentName": "Wisp Longbow",
     "type": "weapon",
-    "durationS": 251,
-    "craftingLevelRequired": 71,
-    "craftingExp": 714,
+    "durationS": 260,
+    "craftingLevelRequired": 150,
+    "craftingExp": 1600,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/2/2a/Unholy_Longbow_%28m%29_%28item%29.png/250px-Unholy_Longbow_%28m%29_%28item%29.png",
     "requiredItems": [
       {
@@ -927,9 +927,9 @@
     "equipmentId": 37,
     "equipmentName": "Dusk Longbow",
     "type": "weapon",
-    "durationS": 276,
-    "craftingLevelRequired": 78,
-    "craftingExp": 864,
+    "durationS": 290,
+    "craftingLevelRequired": 160,
+    "craftingExp": 1900,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/85/Ethereal_Longbow_%28item%29.png/250px-Ethereal_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -956,9 +956,9 @@
     "equipmentId": 38,
     "equipmentName": "Siphon Longbow",
     "type": "weapon",
-    "durationS": 303,
-    "craftingLevelRequired": 85,
-    "craftingExp": 1045,
+    "durationS": 320,
+    "craftingLevelRequired": 170,
+    "craftingExp": 2200,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/5e/Elerine_Longbow_%28item%29.png/250px-Elerine_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -985,9 +985,9 @@
     "equipmentId": 39,
     "equipmentName": "Rift Longbow",
     "type": "weapon",
-    "durationS": 334,
-    "craftingLevelRequired": 92,
-    "craftingExp": 1265,
+    "durationS": 350,
+    "craftingLevelRequired": 185,
+    "craftingExp": 2500,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/c2/Familiar_Longbow_%28item%29.png/250px-Familiar_Longbow_%28item%29.png",
     "requiredItems": [
       {
@@ -1016,7 +1016,7 @@
     "type": "weapon",
     "durationS": 60,
     "craftingLevelRequired": 1,
-    "craftingExp": 45,
+    "craftingExp": 100,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/e/ea/Mudball_Staff_%28item%29.png/250px-Mudball_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1031,9 +1031,9 @@
     "equipmentId": 41,
     "equipmentName": "Slime Bronze Staff",
     "type": "weapon",
-    "durationS": 66,
-    "craftingLevelRequired": 4,
-    "craftingExp": 50,
+    "durationS": 65,
+    "craftingLevelRequired": 10,
+    "craftingExp": 125,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/3e/Blight_Burst_Staff_%28item%29.png/250px-Blight_Burst_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1054,9 +1054,9 @@
     "equipmentId": 42,
     "equipmentName": "Hardened Staff",
     "type": "weapon",
-    "durationS": 73,
-    "craftingLevelRequired": 7,
-    "craftingExp": 60,
+    "durationS": 70,
+    "craftingLevelRequired": 20,
+    "craftingExp": 150,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/1/1f/Blighted_Staff_%28item%29.png/250px-Blighted_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1077,9 +1077,9 @@
     "equipmentId": 43,
     "equipmentName": "Alloy Staff",
     "type": "weapon",
-    "durationS": 80,
-    "craftingLevelRequired": 9,
-    "craftingExp": 72,
+    "durationS": 75,
+    "craftingLevelRequired": 30,
+    "craftingExp": 180,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/57/Nature%27s_Call_Staff_%28item%29.png/250px-Nature%27s_Call_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1106,10 +1106,10 @@
     "equipmentId": 44,
     "equipmentName": "Veil Staff",
     "type": "weapon",
-    "durationS": 88,
-    "craftingLevelRequired": 11,
-    "craftingExp": 88,
-    "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b4/Blazing_Shadow_Staff_%28item%29.png/250px-Blazing_Shadow_Staff_%28item%29.png",
+    "durationS": 80,
+    "craftingLevelRequired": 40,
+    "craftingExp": 225,
+    "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b5/Shadow_Wand_%28item%29.png/375px-Shadow_Wand_%28item%29.png",
     "requiredItems": [
       {
         "itemId": 3,
@@ -1129,9 +1129,9 @@
     "equipmentId": 45,
     "equipmentName": "Muck Staff",
     "type": "weapon",
-    "durationS": 97,
-    "craftingLevelRequired": 14,
-    "craftingExp": 106,
+    "durationS": 90,
+    "craftingLevelRequired": 50,
+    "craftingExp": 280,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/c8/Rotten_Staff_%28item%29.png/250px-Rotten_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1152,9 +1152,9 @@
     "equipmentId": 46,
     "equipmentName": "Glow Staff",
     "type": "weapon",
-    "durationS": 106,
-    "craftingLevelRequired": 17,
-    "craftingExp": 128,
+    "durationS": 100,
+    "craftingLevelRequired": 60,
+    "craftingExp": 333,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/5c/Archaic_Wand_%28item%29.png/250px-Archaic_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1175,9 +1175,9 @@
     "equipmentId": 47,
     "equipmentName": "Frost Staff",
     "type": "weapon",
-    "durationS": 117,
-    "craftingLevelRequired": 22,
-    "craftingExp": 155,
+    "durationS": 110,
+    "craftingLevelRequired": 70,
+    "craftingExp": 380,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/c6/Water_Imbued_Wand_%28item%29.png/250px-Water_Imbued_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1198,9 +1198,9 @@
     "equipmentId": 48,
     "equipmentName": "Ember Staff",
     "type": "weapon",
-    "durationS": 129,
-    "craftingLevelRequired": 22,
-    "craftingExp": 188,
+    "durationS": 120,
+    "craftingLevelRequired": 80,
+    "craftingExp": 450,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/7/7d/Fire_Imbued_Wand_%28item%29.png/250px-Fire_Imbued_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1221,9 +1221,9 @@
     "equipmentId": 49,
     "equipmentName": "Relic Staff",
     "type": "weapon",
-    "durationS": 141,
-    "craftingLevelRequired": 29,
-    "craftingExp": 227,
+    "durationS": 130,
+    "craftingLevelRequired": 90,
+    "craftingExp": 520,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/7/76/Witherbind_Wand_%28item%29.png/250px-Witherbind_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1244,9 +1244,9 @@
     "equipmentId": 50,
     "equipmentName": "Fracture Staff",
     "type": "weapon",
-    "durationS": 156,
-    "craftingLevelRequired": 36,
-    "craftingExp": 275,
+    "durationS": 150,
+    "craftingLevelRequired": 100,
+    "craftingExp": 666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/1/18/Desolation_Wand_%28item%29.png/250px-Desolation_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1267,9 +1267,9 @@
     "equipmentId": 51,
     "equipmentName": "Gleam Staff",
     "type": "weapon",
-    "durationS": 171,
-    "craftingLevelRequired": 43,
-    "craftingExp": 333,
+    "durationS": 170,
+    "craftingLevelRequired": 110,
+    "craftingExp": 720,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/4/4e/Eternity_Staff_%28item%29.png/250px-Eternity_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1290,9 +1290,9 @@
     "equipmentId": 52,
     "equipmentName": "Verdant Staff",
     "type": "weapon",
-    "durationS": 188,
-    "craftingLevelRequired": 50,
-    "craftingExp": 403,
+    "durationS": 190,
+    "craftingLevelRequired": 120,
+    "craftingExp": 840,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/82/Cloudburst_Staff_%28item%29.gif/232px-Cloudburst_Staff_%28item%29.gif",
     "requiredItems": [
       {
@@ -1313,9 +1313,9 @@
     "equipmentId": 53,
     "equipmentName": "Sanctum Staff",
     "type": "weapon",
-    "durationS": 207,
-    "craftingLevelRequired": 57,
-    "craftingExp": 488,
+    "durationS": 210,
+    "craftingLevelRequired": 130,
+    "craftingExp": 1050,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/e/e7/Silent_Tangle_Wand_%28item%29.png/250px-Silent_Tangle_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1336,9 +1336,9 @@
     "equipmentId": 54,
     "equipmentName": "Abyss Staff",
     "type": "weapon",
-    "durationS": 228,
-    "craftingLevelRequired": 64,
-    "craftingExp": 590,
+    "durationS": 240,
+    "craftingLevelRequired": 140,
+    "craftingExp": 1666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b4/Blazing_Shadow_Staff_%28item%29.png/250px-Blazing_Shadow_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1359,9 +1359,9 @@
     "equipmentId": 55,
     "equipmentName": "Wisp Staff",
     "type": "weapon",
-    "durationS": 251,
-    "craftingLevelRequired": 71,
-    "craftingExp": 714,
+    "durationS": 260,
+    "craftingLevelRequired": 150,
+    "craftingExp": 1600,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/4/49/Ocean_Song_%28item%29.png/250px-Ocean_Song_%28item%29.png",
     "requiredItems": [
       {
@@ -1382,9 +1382,9 @@
     "equipmentId": 56,
     "equipmentName": "Dusk Staff",
     "type": "weapon",
-    "durationS": 276,
-    "craftingLevelRequired": 78,
-    "craftingExp": 864,
+    "durationS": 290,
+    "craftingLevelRequired": 160,
+    "craftingExp": 1900,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b7/Ethereal_Staff_%28item%29.png/250px-Ethereal_Staff_%28item%29.png",
     "requiredItems": [
       {
@@ -1405,9 +1405,9 @@
     "equipmentId": 57,
     "equipmentName": "Siphon Staff",
     "type": "weapon",
-    "durationS": 303,
-    "craftingLevelRequired": 85,
-    "craftingExp": 1045,
+    "durationS": 320,
+    "craftingLevelRequired": 170,
+    "craftingExp": 2200,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/9/91/Soul_Taker_Wand_%28item%29.png/250px-Soul_Taker_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1428,9 +1428,9 @@
     "equipmentId": 58,
     "equipmentName": "Rift Staff",
     "type": "weapon",
-    "durationS": 334,
-    "craftingLevelRequired": 92,
-    "craftingExp": 1265,
+    "durationS": 350,
+    "craftingLevelRequired": 185,
+    "craftingExp": 2500,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/cc/Voidfire_Cascade_Wand_%28item%29.png/250px-Voidfire_Cascade_Wand_%28item%29.png",
     "requiredItems": [
       {
@@ -1453,7 +1453,7 @@
     "type": "hat",
     "durationS": 60,
     "craftingLevelRequired": 1,
-    "craftingExp": 45,
+    "craftingExp": 100,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/87/Netherite_Helmet_%28U%29_%28item%29.png/250px-Netherite_Helmet_%28U%29_%28item%29.png",
     "requiredItems": [
       {
@@ -1474,9 +1474,9 @@
     "equipmentId": 60,
     "equipmentName": "Void Helm",
     "type": "hat",
-    "durationS": 73,
-    "craftingLevelRequired": 12,
-    "craftingExp": 65,
+    "durationS": 65,
+    "craftingLevelRequired": 10,
+    "craftingExp": 125,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/8a/Voidium_Entity_Helmet_%28item%29.png/250px-Voidium_Entity_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1497,9 +1497,9 @@
     "equipmentId": 61,
     "equipmentName": "Voidheart Helm",
     "type": "hat",
-    "durationS": 88,
-    "craftingLevelRequired": 23,
-    "craftingExp": 105,
+    "durationS": 70,
+    "craftingLevelRequired": 20,
+    "craftingExp": 150,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/07/Voidium_Artificer_Helmet_%28item%29.png/250px-Voidium_Artificer_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1520,9 +1520,9 @@
     "equipmentId": 62,
     "equipmentName": "Protector Helm",
     "type": "hat",
-    "durationS": 106,
-    "craftingLevelRequired": 34,
-    "craftingExp": 168,
+    "durationS": 75,
+    "craftingLevelRequired": 30,
+    "craftingExp": 180,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/bd/Vorloran_Protector_Helmet_%28item%29.png/250px-Vorloran_Protector_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1543,9 +1543,9 @@
     "equipmentId": 63,
     "equipmentName": "Watcher Helm",
     "type": "hat",
-    "durationS": 129,
-    "craftingLevelRequired": 45,
-    "craftingExp": 268,
+    "durationS": 80,
+    "craftingLevelRequired": 40,
+    "craftingExp": 225,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/1/1e/Vorloran_Watcher_Helmet_%28item%29.png/250px-Vorloran_Watcher_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1566,9 +1566,9 @@
     "equipmentId": 64,
     "equipmentName": "Eldritch Hood",
     "type": "hat",
-    "durationS": 156,
-    "craftingLevelRequired": 56,
-    "craftingExp": 429,
+    "durationS": 90,
+    "craftingLevelRequired": 50,
+    "craftingExp": 280,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/8d/Eldritch_Harbinger_Helmet_%28item%29.png/250px-Eldritch_Harbinger_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1589,9 +1589,9 @@
     "equipmentId": 65,
     "equipmentName": "Zephyr Crown",
     "type": "hat",
-    "durationS": 188,
-    "craftingLevelRequired": 67,
-    "craftingExp": 687,
+    "durationS": 100,
+    "craftingLevelRequired": 60,
+    "craftingExp": 333,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/a/a7/Aeris_God_Helmet_%28item%29.png/250px-Aeris_God_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1612,9 +1612,9 @@
     "equipmentId": 66,
     "equipmentName": "Glacier Crown",
     "type": "hat",
-    "durationS": 228,
-    "craftingLevelRequired": 78,
-    "craftingExp": 1099,
+    "durationS": 110,
+    "craftingLevelRequired": 70,
+    "craftingExp": 380,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/08/Glacia_God_Helmet_%28item%29.png/250px-Glacia_God_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1635,9 +1635,9 @@
     "equipmentId": 67,
     "equipmentName": "Terra Crown",
     "type": "hat",
-    "durationS": 276,
-    "craftingLevelRequired": 89,
-    "craftingExp": 1759,
+    "durationS": 120,
+    "craftingLevelRequired": 80,
+    "craftingExp": 450,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/01/Terran_God_Helmet_%28item%29.png/250px-Terran_God_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1658,9 +1658,9 @@
     "equipmentId": 68,
     "equipmentName": "Inferno Crown",
     "type": "hat",
-    "durationS": 334,
-    "craftingLevelRequired": 99,
-    "craftingExp": 2815,
+    "durationS": 130,
+    "craftingLevelRequired": 90,
+    "craftingExp": 520,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/06/Ragnar_God_Helmet_%28item%29.png/250px-Ragnar_God_Helmet_%28item%29.png",
     "requiredItems": [
       {
@@ -1683,7 +1683,7 @@
     "type": "armour",
     "durationS": 60,
     "craftingLevelRequired": 1,
-    "craftingExp": 45,
+    "craftingExp": 100,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/51/Blight_Warder_Body_%28item%29.png/250px-Blight_Warder_Body_%28item%29.png",
     "requiredItems": [
       {
@@ -1704,9 +1704,9 @@
     "equipmentId": 70,
     "equipmentName": "Void Plate",
     "type": "armour",
-    "durationS": 73,
-    "craftingLevelRequired": 12,
-    "craftingExp": 65,
+    "durationS": 65,
+    "craftingLevelRequired": 10,
+    "craftingExp": 125,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/81/Voidium_Artificer_Body_%28item%29.png/250px-Voidium_Artificer_Body_%28item%29.png",
     "requiredItems": [
       {
@@ -1727,9 +1727,9 @@
     "equipmentId": 71,
     "equipmentName": "Voidheart Plate",
     "type": "armour",
-    "durationS": 88,
-    "craftingLevelRequired": 23,
-    "craftingExp": 105,
+    "durationS": 70,
+    "craftingLevelRequired": 20,
+    "craftingExp": 150,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/9/9b/Voidium_Entity_Platebody_%28item%29.png/250px-Voidium_Entity_Platebody_%28item%29.png",
     "requiredItems": [
       {
@@ -1750,9 +1750,9 @@
     "equipmentId": 72,
     "equipmentName": "Protector Plate",
     "type": "armour",
-    "durationS": 106,
-    "craftingLevelRequired": 34,
-    "craftingExp": 168,
+    "durationS": 75,
+    "craftingLevelRequired": 30,
+    "craftingExp": 180,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/d/d0/Vorloran_Protector_Platebody_%28item%29.png/250px-Vorloran_Protector_Platebody_%28item%29.png",
     "requiredItems": [
       {
@@ -1773,9 +1773,9 @@
     "equipmentId": 73,
     "equipmentName": "Watcher Plate",
     "type": "armour",
-    "durationS": 129,
-    "craftingLevelRequired": 45,
-    "craftingExp": 268,
+    "durationS": 80,
+    "craftingLevelRequired": 40,
+    "craftingExp": 225,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/c6/Vorloran_Watcher_Platebody_%28item%29.png/250px-Vorloran_Watcher_Platebody_%28item%29.png",
     "requiredItems": [
       {
@@ -1796,9 +1796,9 @@
     "equipmentId": 74,
     "equipmentName": "Eldritch Robes",
     "type": "armour",
-    "durationS": 156,
-    "craftingLevelRequired": 56,
-    "craftingExp": 429,
+    "durationS": 90,
+    "craftingLevelRequired": 50,
+    "craftingExp": 280,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/54/Eldritch_Harbinger_Robes_%28item%29.png/250px-Eldritch_Harbinger_Robes_%28item%29.png",
     "requiredItems": [
       {
@@ -1819,9 +1819,9 @@
     "equipmentId": 75,
     "equipmentName": "Zephyr Godplate",
     "type": "armour",
-    "durationS": 188,
-    "craftingLevelRequired": 67,
-    "craftingExp": 687,
+    "durationS": 100,
+    "craftingLevelRequired": 60,
+    "craftingExp": 333,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b7/Aeris_God_Platebody_%28item%29.png/250px-Aeris_God_Platebody_%28item%29.png",
     "requiredItems": [
       {
@@ -1842,9 +1842,9 @@
     "equipmentId": 76,
     "equipmentName": "Glacier Godplate",
     "type": "armour",
-    "durationS": 228,
-    "craftingLevelRequired": 78,
-    "craftingExp": 1099,
+    "durationS": 110,
+    "craftingLevelRequired": 70,
+    "craftingExp": 380,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/06/Glacia_God_Platebody_%28item%29.png/250px-Glacia_God_Platebody_%28item%29.png",
     "requiredItems": [
       {
@@ -1865,9 +1865,9 @@
     "equipmentId": 77,
     "equipmentName": "Terra Godplate",
     "type": "armour",
-    "durationS": 276,
-    "craftingLevelRequired": 89,
-    "craftingExp": 1759,
+    "durationS": 120,
+    "craftingLevelRequired": 80,
+    "craftingExp": 450,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/c/c7/Terran_God_Platebody_%28item%29.png/250px-Terran_God_Platebody_%28item%29.png",
     "requiredItems": [
       {
@@ -1888,9 +1888,9 @@
     "equipmentId": 78,
     "equipmentName": "Inferno Godplate",
     "type": "armour",
-    "durationS": 334,
-    "craftingLevelRequired": 99,
-    "craftingExp": 2815,
+    "durationS": 130,
+    "craftingLevelRequired": 90,
+    "craftingExp": 520,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/03/Ragnar_God_Platebody_%28item%29.png/250px-Ragnar_God_Platebody_%28item%29.png",
     "requiredItems": [
       {
@@ -1913,7 +1913,7 @@
     "type": "shield",
     "durationS": 60,
     "craftingLevelRequired": 1,
-    "craftingExp": 45,
+    "craftingExp": 100,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/a/a2/Aranite_Shield_%28item%29.png/250px-Aranite_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -1928,9 +1928,9 @@
     "equipmentId": 80,
     "equipmentName": "Slime Bronze Shield",
     "type": "shield",
-    "durationS": 66,
-    "craftingLevelRequired": 4,
-    "craftingExp": 50,
+    "durationS": 65,
+    "craftingLevelRequired": 10,
+    "craftingExp": 125,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/8/80/Bronze_Shield_%28item%29.png/250px-Bronze_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -1951,9 +1951,9 @@
     "equipmentId": 81,
     "equipmentName": "Hardened Shield",
     "type": "shield",
-    "durationS": 73,
-    "craftingLevelRequired": 7,
-    "craftingExp": 60,
+    "durationS": 70,
+    "craftingLevelRequired": 20,
+    "craftingExp": 150,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/04/Iron_Shield_%28item%29.png/250px-Iron_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -1974,9 +1974,9 @@
     "equipmentId": 82,
     "equipmentName": "Alloy Shield",
     "type": "shield",
-    "durationS": 80,
-    "craftingLevelRequired": 9,
-    "craftingExp": 72,
+    "durationS": 75,
+    "craftingLevelRequired": 30,
+    "craftingExp": 180,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/e/e0/Steel_Shield_%28item%29.png/250px-Steel_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2003,9 +2003,9 @@
     "equipmentId": 83,
     "equipmentName": "Veil Shield",
     "type": "shield",
-    "durationS": 88,
-    "craftingLevelRequired": 11,
-    "craftingExp": 88,
+    "durationS": 80,
+    "craftingLevelRequired": 40,
+    "craftingExp": 225,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/f/fc/Black_Shield_%28item%29.png/250px-Black_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2026,9 +2026,9 @@
     "equipmentId": 84,
     "equipmentName": "Muck Shield",
     "type": "shield",
-    "durationS": 97,
-    "craftingLevelRequired": 14,
-    "craftingExp": 106,
+    "durationS": 90,
+    "craftingLevelRequired": 50,
+    "craftingExp": 280,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/2/24/Mithril_Shield_%28item%29.png/250px-Mithril_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2049,9 +2049,9 @@
     "equipmentId": 85,
     "equipmentName": "Glow Shield",
     "type": "shield",
-    "durationS": 106,
-    "craftingLevelRequired": 17,
-    "craftingExp": 128,
+    "durationS": 100,
+    "craftingLevelRequired": 60,
+    "craftingExp": 333,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/d/d7/Adamant_Shield_%28item%29.png/250px-Adamant_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2072,9 +2072,9 @@
     "equipmentId": 86,
     "equipmentName": "Frost Shield",
     "type": "shield",
-    "durationS": 117,
-    "craftingLevelRequired": 22,
-    "craftingExp": 155,
+    "durationS": 110,
+    "craftingLevelRequired": 70,
+    "craftingExp": 380,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/d/db/Ice_Shield_%28item%29.png/250px-Ice_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2095,9 +2095,9 @@
     "equipmentId": 87,
     "equipmentName": "Ember Shield",
     "type": "shield",
-    "durationS": 129,
-    "craftingLevelRequired": 22,
-    "craftingExp": 188,
+    "durationS": 120,
+    "craftingLevelRequired": 80,
+    "craftingExp": 450,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b5/Crystal_Shield_%28item%29.png/250px-Crystal_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2118,9 +2118,9 @@
     "equipmentId": 88,
     "equipmentName": "Relic Shield",
     "type": "shield",
-    "durationS": 141,
-    "craftingLevelRequired": 29,
-    "craftingExp": 227,
+    "durationS": 130,
+    "craftingLevelRequired": 90,
+    "craftingExp": 520,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/3a/Ancient_Shield_%28item%29.png/250px-Ancient_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2141,9 +2141,9 @@
     "equipmentId": 89,
     "equipmentName": "Fracture Shield",
     "type": "shield",
-    "durationS": 156,
-    "craftingLevelRequired": 36,
-    "craftingExp": 275,
+    "durationS": 150,
+    "craftingLevelRequired": 100,
+    "craftingExp": 666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/33/Dragonfire_Shield_%28item%29.png/250px-Dragonfire_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2164,9 +2164,9 @@
     "equipmentId": 90,
     "equipmentName": "Gleam Shield",
     "type": "shield",
-    "durationS": 171,
-    "craftingLevelRequired": 43,
-    "craftingExp": 333,
+    "durationS": 170,
+    "craftingLevelRequired": 110,
+    "craftingExp": 720,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/58/Corundum_Shield_%28item%29.png/250px-Corundum_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2187,9 +2187,9 @@
     "equipmentId": 91,
     "equipmentName": "Verdant Shield",
     "type": "shield",
-    "durationS": 188,
-    "craftingLevelRequired": 50,
-    "craftingExp": 403,
+    "durationS": 190,
+    "craftingLevelRequired": 120,
+    "craftingExp": 840,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/d/d2/Augite_Shield_%28item%29.png/250px-Augite_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2210,9 +2210,9 @@
     "equipmentId": 92,
     "equipmentName": "Sanctum Shield",
     "type": "shield",
-    "durationS": 207,
-    "craftingLevelRequired": 57,
-    "craftingExp": 488,
+    "durationS": 210,
+    "craftingLevelRequired": 130,
+    "craftingExp": 1050,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/d/d7/%28P%29_Divine_Shield_%28item%29.png/250px-%28P%29_Divine_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2233,9 +2233,9 @@
     "equipmentId": 93,
     "equipmentName": "Abyss Shield",
     "type": "shield",
-    "durationS": 228,
-    "craftingLevelRequired": 64,
-    "craftingExp": 590,
+    "durationS": 240,
+    "craftingLevelRequired": 140,
+    "craftingExp": 1666,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/1/1f/Abyssal_Shield_%28item%29.png/250px-Abyssal_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2256,9 +2256,9 @@
     "equipmentId": 94,
     "equipmentName": "Wisp Shield",
     "type": "shield",
-    "durationS": 251,
-    "craftingLevelRequired": 71,
-    "craftingExp": 714,
+    "durationS": 260,
+    "craftingLevelRequired": 150,
+    "craftingExp": 1600,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/5b/%28G%29_Pure_Crystal_Shield_%28item%29.png/250px-%28G%29_Pure_Crystal_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2279,9 +2279,9 @@
     "equipmentId": 95,
     "equipmentName": "Dusk Shield",
     "type": "shield",
-    "durationS": 276,
-    "craftingLevelRequired": 78,
-    "craftingExp": 864,
+    "durationS": 290,
+    "craftingLevelRequired": 160,
+    "craftingExp": 1900,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/1/18/Recoil_Shield_%28item%29.png/250px-Recoil_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2302,9 +2302,9 @@
     "equipmentId": 96,
     "equipmentName": "Siphon Shield",
     "type": "shield",
-    "durationS": 303,
-    "craftingLevelRequired": 85,
-    "craftingExp": 1045,
+    "durationS": 320,
+    "craftingLevelRequired": 170,
+    "craftingExp": 2200,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/0/08/Wither_Guard_Shield_%28item%29.png/250px-Wither_Guard_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2325,9 +2325,9 @@
     "equipmentId": 97,
     "equipmentName": "Rift Shield",
     "type": "shield",
-    "durationS": 334,
-    "craftingLevelRequired": 92,
-    "craftingExp": 1265,
+    "durationS": 350,
+    "craftingLevelRequired": 185,
+    "craftingExp": 2500,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/a/a7/Fractured_Beast_Shield_%28item%29.png/250px-Fractured_Beast_Shield_%28item%29.png",
     "requiredItems": [
       {
@@ -2348,9 +2348,9 @@
     "equipmentId": 98,
     "equipmentName": "Eternal Barrier",
     "type": "shield",
-    "durationS": 367,
-    "craftingLevelRequired": 99,
-    "craftingExp": 1530,
+    "durationS": 400,
+    "craftingLevelRequired": 200,
+    "craftingExp": 3200,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b4/Book_of_Occults_%28item%29.png/250px-Book_of_Occults_%28item%29.png",
     "requiredItems": [
       {
@@ -2373,7 +2373,7 @@
     "type": "cape",
     "durationS": 60,
     "craftingLevelRequired": 1,
-    "craftingExp": 45,
+    "craftingExp": 100,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/6/63/Cape_of_Prat_%28item%29.png/250px-Cape_of_Prat_%28item%29.png",
     "requiredItems": [
       {
@@ -2394,9 +2394,9 @@
     "equipmentId": 100,
     "equipmentName": "Bronze Warden Cape",
     "type": "cape",
-    "durationS": 73,
-    "craftingLevelRequired": 12,
-    "craftingExp": 65,
+    "durationS": 65,
+    "craftingLevelRequired": 10,
+    "craftingExp": 125,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/3/3a/Golden_Fire_Cape_%28item%29.png/374px-Golden_Fire_Cape_%28item%29.png",
     "requiredItems": [
       {
@@ -2423,9 +2423,9 @@
     "equipmentId": 101,
     "equipmentName": "Ironclad Wrap",
     "type": "cape",
-    "durationS": 88,
-    "craftingLevelRequired": 23,
-    "craftingExp": 105,
+    "durationS": 70,
+    "craftingLevelRequired": 20,
+    "craftingExp": 150,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/f/f5/Weakness_Exploiter_Cape_%28item%29.png/375px-Weakness_Exploiter_Cape_%28item%29.png",
     "requiredItems": [
       {
@@ -2452,9 +2452,9 @@
     "equipmentId": 102,
     "equipmentName": "Shroud of Shadows",
     "type": "cape",
-    "durationS": 106,
-    "craftingLevelRequired": 34,
-    "craftingExp": 168,
+    "durationS": 75,
+    "craftingLevelRequired": 30,
+    "craftingExp": 180,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/a/a9/Void_Shambler_Cape_%28item%29.png/375px-Void_Shambler_Cape_%28item%29.png",
     "requiredItems": [
       {
@@ -2481,9 +2481,9 @@
     "equipmentId": 103,
     "equipmentName": "Verdant Aegis Cloak",
     "type": "cape",
-    "durationS": 129,
-    "craftingLevelRequired": 45,
-    "craftingExp": 268,
+    "durationS": 80,
+    "craftingLevelRequired": 40,
+    "craftingExp": 225,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/9/93/Superior_Herblore_Skillcape_%28item%29.png/361px-Superior_Herblore_Skillcape_%28item%29.png",
     "requiredItems": [
       {
@@ -2510,9 +2510,9 @@
     "equipmentId": 104,
     "equipmentName": "Luminous Veil",
     "type": "cape",
-    "durationS": 156,
-    "craftingLevelRequired": 56,
-    "craftingExp": 429,
+    "durationS": 90,
+    "craftingLevelRequired": 50,
+    "craftingExp": 280,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/5/58/Superior_Prayer_Skillcape_%28item%29.png/361px-Superior_Prayer_Skillcape_%28item%29.png",
     "requiredItems": [
       {
@@ -2539,9 +2539,9 @@
     "equipmentId": 105,
     "equipmentName": "Cryo Cloak",
     "type": "cape",
-    "durationS": 188,
-    "craftingLevelRequired": 67,
-    "craftingExp": 687,
+    "durationS": 100,
+    "craftingLevelRequired": 60,
+    "craftingExp": 333,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/f/f8/Shadow_Cloak_%28item%29.png/375px-Shadow_Cloak_%28item%29.png",
     "requiredItems": [
       {
@@ -2568,9 +2568,9 @@
     "equipmentId": 106,
     "equipmentName": "Infernal Drape",
     "type": "cape",
-    "durationS": 228,
-    "craftingLevelRequired": 78,
-    "craftingExp": 1099,
+    "durationS": 110,
+    "craftingLevelRequired": 70,
+    "craftingExp": 380,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/f/fa/Voidborne_Cape_%28item%29.png/375px-Voidborne_Cape_%28item%29.png",
     "requiredItems": [
       {
@@ -2597,9 +2597,9 @@
     "equipmentId": 107,
     "equipmentName": "Wispweave Cape",
     "type": "cape",
-    "durationS": 276,
-    "craftingLevelRequired": 89,
-    "craftingExp": 1759,
+    "durationS": 120,
+    "craftingLevelRequired": 80,
+    "craftingExp": 450,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/b/b6/Wither_Cape_%28item%29.png/375px-Wither_Cape_%28item%29.png",
     "requiredItems": [
       {
@@ -2626,9 +2626,9 @@
     "equipmentId": 108,
     "equipmentName": "Mantle of Eternity",
     "type": "cape",
-    "durationS": 334,
-    "craftingLevelRequired": 99,
-    "craftingExp": 2815,
+    "durationS": 130,
+    "craftingLevelRequired": 90,
+    "craftingExp": 520,
     "imgsrc": "https://wiki.melvoridle.com/images/thumb/f/f8/Cape_of_Completion_%28Into_the_Abyss%29_%28item%29.png/278px-Cape_of_Completion_%28Into_the_Abyss%29_%28item%29.png",
     "requiredItems": [
       {
