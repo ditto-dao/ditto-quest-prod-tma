@@ -50,7 +50,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
         setIsCrafting(false);
       } else {
         socket.emit("craft-equipment", props.equipmentId);
-        startCrafting(props.equipmentId, Date.now() + 200, props.durationS);
+        startCrafting(props.equipmentId, Date.now(), props.durationS);
         setIsCrafting(false);
       }
     }
@@ -73,7 +73,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
       return userItem && userItem.quantity >= requiredItem.quantity;
     });
 
-    setIsCraftable(canCraft);
+    setIsCraftable(canCraft && userData.craftingLevel >= props.craftingLevelRequired);
   }, [props.requiredItems, userData.inventory]);
 
   return (

@@ -30,7 +30,7 @@ function SlimeLabBreedingPage() {
           dameId: slimeToBreed1.id,
         });
         setLastEventEmittedTimestamp(Date.now());
-        startBreeding(Date.now() + 200, getBreedingTimesByGeneration(slimeToBreed0.generation)  + getBreedingTimesByGeneration(slimeToBreed1.generation))
+        startBreeding(Date.now(), getBreedingTimesByGeneration(slimeToBreed0.generation)  + getBreedingTimesByGeneration(slimeToBreed1.generation))
 
       } else {
         socket.emit("stop-breed-slimes", {

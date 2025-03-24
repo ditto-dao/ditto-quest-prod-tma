@@ -45,7 +45,7 @@ function FarmingItem(props: FarmingItemProps) {
         socket.emit("farm-item", props.id);
         setLastEventEmittedTimestamp(Date.now());
 
-        startFarming(props.id, Date.now() + 200, props.farmingDurationS);
+        startFarming(props.id, Date.now(), props.farmingDurationS);
         setIsFarming(true);
       }
     }
