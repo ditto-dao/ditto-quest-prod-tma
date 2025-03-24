@@ -5,26 +5,28 @@
   padding: 10px;
   border: 1px solid var(--sage-green);
   border-radius: 8px;
+  gap: 10px;
 }
 
 .skill-name {
   background-color: var(--sage-green); 
   padding: 6px 5px;
   border-radius: 4px;
+  width: 25%;
   text-align: center;
   font-size: 10px;
-  width: 25%;
+  white-space: nowrap;
 }
 
 .skill-level {
   text-align: center;
   font-size: 12px;
+  flex-grow: 1;
 }
 
-.skill-breakdown {
-  padding: 8px;
-  text-align: center;
-  font-size: 10px;
+.skill-buttons {
+  display: flex;
+  gap: 12px;
 }
 
 .skill-plus-button {
