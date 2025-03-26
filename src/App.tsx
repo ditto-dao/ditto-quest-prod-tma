@@ -11,6 +11,7 @@ import MainPage from "./components/main-page/main-page";
 import { LoginSocketProvider } from "./redux/socket/login/login-context";
 import { IdleSkillSocketProvider } from "./redux/socket/idle/skill-context";
 import { GachaSocketProvider } from "./redux/socket/gacha/gacha-context";
+import { CombatSocketProvider } from "./redux/socket/idle/combat-context";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -39,6 +40,7 @@ function App() {
         root.style.setProperty("--deep-warm-red", "#C23B3B");
         root.style.setProperty("--light-teal", "#2E7C78");
         root.style.setProperty("--medium-teal", "#1F5B58");
+        root.style.setProperty("--misty-teal", "#4FA99A");
 
         // Rank Background Colors with Muted Tones
         root.style.setProperty(
@@ -85,7 +87,9 @@ function App() {
           <UserProvider>
             <IdleSkillSocketProvider>
               <GachaSocketProvider>
-                <MainPage />
+                <CombatSocketProvider>
+                  <MainPage />
+                </CombatSocketProvider>
               </GachaSocketProvider>
             </IdleSkillSocketProvider>
           </UserProvider>

@@ -1,0 +1,47 @@
+.combat-menu-category-buttons-wrapper {
+  width: 100%;
+  z-index: 10;
+  overflow: hidden;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  padding: 0 10px 10px 10px;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.combat-menu-category-buttons {
+  overflow-x: auto;
+  display: flex;
+  width: max-content;
+  border-radius: 2px;
+  border: 1.5px solid var(--misty-teal);
+}
+
+.combat-menu-category-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 10px;
+  padding: 3px 15px;
+  cursor: pointer;
+  background-color: var(--misty-teal);
+  color: var(--cream-white);
+}
+.combat-menu-category-button.active {
+  color: var(--misty-teal);
+  background-color: transparent;
+}
+
+.domain-list {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 20px;
+    padding-top: 0;
+    overflow-y: auto;
+}

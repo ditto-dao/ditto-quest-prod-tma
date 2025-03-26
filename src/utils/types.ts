@@ -23,6 +23,21 @@ export interface User {
     expToNextHpLevel: number;
     outstandingSkillPoints: number;
 
+    // Base combat stats (directly on User)
+    maxHp: number;
+    atkSpd: number;
+    acc: number;
+    eva: number;
+    maxMeleeDmg: number;
+    maxRangedDmg: number;
+    maxMagicDmg: number;
+    critChance: number;
+    critMultiplier: number;
+    dmgReduction: number;
+    magicDmgReduction: number;
+    hpRegenRate: number;
+    hpRegenAmount: number;
+
     lastBattleEndTimestamp?: string | null;
 
     // Farming & Crafting
@@ -78,6 +93,19 @@ export const defaultUser: User = {
     expHp: 0,
     expToNextHpLevel: 83,
     outstandingSkillPoints: 0,
+    maxHp: 100,
+    atkSpd: 10,
+    acc: 100,
+    eva: 100,
+    maxMeleeDmg: 20,
+    maxRangedDmg: 20,
+    maxMagicDmg: 20,
+    critChance: 0.006623,
+    critMultiplier: 1.29,
+    dmgReduction: 10,
+    magicDmgReduction: 10,
+    hpRegenRate: 20,
+    hpRegenAmount: 5.7,
     lastBattleEndTimestamp: null,
     farmingLevel: 1,
     farmingExp: 0,
@@ -131,6 +159,32 @@ export interface Combat {
     reinforceFire: number;
 }
 
+export const defaultCombat: Combat = {
+    id: 0,
+    attackType: 'Melee',
+    hp: 100,
+    maxHp: 100,
+    atkSpd: 10,
+    acc: 100,
+    eva: 100,
+    maxMeleeDmg: 20,
+    maxRangedDmg: 20,
+    maxMagicDmg: 20,
+    critChance: 0.006623,
+    critMultiplier: 1.290,
+    dmgReduction: 10,
+    magicDmgReduction: 10,
+    hpRegenRate: 20,
+    hpRegenAmount: 5.7,
+    meleeFactor: 0,
+    rangeFactor: 0,
+    magicFactor: 0,
+    reinforceAir: 0,
+    reinforceWater: 0,
+    reinforceEarth: 0,
+    reinforceFire: 0
+}
+
 export interface Inventory {
     id: number;
     userId: string;
@@ -165,6 +219,7 @@ export interface Item {
     rarity: Rarity;
     farmingDurationS?: number | null;
     farmingLevelRequired?: number | null;
+    requiredLvl: number;
     farmingExp?: number | null;
     buyPriceGP?: number | null;
     sellPriceGP: number;
@@ -292,6 +347,122 @@ export enum EffectType {
     mul = "*",
 }
 
+export type FullMonster = {
+    id: number;
+    name: string;
+    description: string;
+    imgsrc: string;
+    level: number;
+
+    str: number;
+    def: number;
+    dex: number;
+    luk: number;
+    magic: number;
+    hpLevel: number;
+
+    maxHp: number;
+    atkSpd: number;
+    acc: number;
+    eva: number;
+    maxMeleeDmg: number;
+    maxRangedDmg: number;
+    maxMagicDmg: number;
+    critChance: number;
+    critMultiplier: number;
+    dmgReduction: number;
+    magicDmgReduction: number;
+    hpRegenRate: number;
+    hpRegenAmount: number;
+
+    exp: number;
+    minGoldDrop: number;
+    maxGoldDrop: number;
+
+    combat: Combat;
+
+    statEffects?: StatEffect[];
+
+    drops: {
+        id: number;
+        dropRate: number;
+        quantity: number;
+        item: {
+            id: number;
+            name: string;
+            description: string;
+            imgsrc: string;
+            rarity: string;
+        } | null;
+        equipment: {
+            id: number;
+            name: string;
+            slot: string;
+            imgsrc: string;
+            rarity: string;
+        } | null;
+    }[];
+};
+
+export const defaultMonster: FullMonster = {
+    id: 0,
+    name: "Skeleton",
+    description: "An angry skeleton.",
+    imgsrc: "https://wiki.melvoridle.com/images/thumb/c/ca/Skeleton_%28monster%29.png/500px-Skeleton_%28monster%29.png",
+    level: 1,
+    str: 1,
+    def: 1,
+    dex: 1,
+    luk: 1,
+    magic: 1,
+    hpLevel: 1,
+    maxHp: 100,
+    atkSpd: 10,
+    acc: 100,
+    eva: 100,
+    maxMeleeDmg: 20,
+    maxRangedDmg: 20,
+    maxMagicDmg: 20,
+    critChance: 0.006623,
+    critMultiplier: 1.29,
+    dmgReduction: 10,
+    magicDmgReduction: 10,
+    hpRegenRate: 20,
+    hpRegenAmount: 5.7,
+    exp: 0,
+    minGoldDrop: 0,
+    maxGoldDrop: 0,
+    combat: defaultCombat,
+    statEffects: [],
+    drops: []
+}
+
+export interface Domain {
+    id: number;
+    name: string;
+    description: string;
+    imgsrc: string;
+    entryPriceGP: number;
+    entryPriceDittoWei: string;
+    monsters: DomainMonsterEntry[];
+}
+
+export interface DomainMonsterEntry {
+    monster: FullMonster;
+    spawnRate: number;
+}
+
+export interface MonsterDrop {
+    id: number;
+    monsterId: number;
+    itemId: number | null;
+    equipmentId: number | null;
+    dropRate: number;
+    quantity: number;
+    item: Item | null;
+    equipment: Equipment | null;
+}
+
 export interface DittoBalanceBN {
     liveBalance: bigint;
     accumulatedBalance: bigint;
@@ -305,3 +476,4 @@ export interface UserBalanceUpdate {
     accumulatedBalanceChange: string;
     notes?: string;
 }
+

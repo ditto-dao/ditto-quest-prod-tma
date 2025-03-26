@@ -1,0 +1,17 @@
+.combat-stat-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px;
+  gap: 10px;
+}
+
+.combat-stat-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.combat-stat-icon {
+  object-fit: contain;
+}

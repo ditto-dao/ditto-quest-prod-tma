@@ -19,6 +19,7 @@ import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import Stats from "../stats/stats";
 import { useUserSocket } from "../../redux/socket/user/user-context";
 import GachaPage from "../gacha-page/gacha-page";
+import CombatPage from "../combat-page/combat-page";
 
 function MainPage() {
   const { userData } = useUserSocket();
@@ -66,7 +67,7 @@ function MainPage() {
       case "Slime Lab":
         return <SlimeLabPage />;
       case "Combat":
-        return <div>Combat Page Content</div>;
+        return <CombatPage />;
       case "Gacha":
         return <GachaPage />;
       default:

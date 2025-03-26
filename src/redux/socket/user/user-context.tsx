@@ -43,6 +43,7 @@ interface UserContext {
   userContextLoaded: boolean;
   equip: (inventoryId: number, equipmentType: EquipmentType) => void;
   unequip: (equipmentType: EquipmentType) => void;
+  incrementUserHp: (amount: number) => void;
   canEmitEvent: () => boolean;
   setLastEventEmittedTimestamp: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -58,6 +59,7 @@ const UserContext = createContext<UserContext>({
   userContextLoaded: false,
   equip: () => {},
   unequip: () => {},
+  incrementUserHp: () => {},
   canEmitEvent: () => false,
   setLastEventEmittedTimestamp: () => {},
 });
@@ -176,6 +178,25 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       socket.emit("unequip-equipment", equipmentType);
       setLastEventEmittedTimestamp(Date.now());
     }
+  };
+
+  const incrementUserHp = (amount: number) => {
+    setUserData((prevUserData) => {
+      if (!prevUserData.combat) {
+        throw new Error("No combat object found for user");
+      }
+
+      const { hp, maxHp } = prevUserData.combat;
+      const newHp = Math.max(0, Math.min(maxHp, hp + amount));
+
+      return {
+        ...prevUserData,
+        combat: {
+          ...prevUserData.combat,
+          hp: newHp,
+        },
+      };
+    });
   };
 
   const canEmitEvent = () => {
@@ -391,6 +412,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         userContextLoaded,
         equip,
         unequip,
+        incrementUserHp,
         canEmitEvent,
         setLastEventEmittedTimestamp,
       }}

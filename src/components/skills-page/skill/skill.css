@@ -14,13 +14,13 @@
   border-radius: 4px;
   width: 25%;
   text-align: center;
-  font-size: 10px;
+  font-size: 9px;
   white-space: nowrap;
 }
 
 .skill-level {
   text-align: center;
-  font-size: 12px;
+  font-size: 10px;
   flex-grow: 1;
 }
 

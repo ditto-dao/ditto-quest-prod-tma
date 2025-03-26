@@ -1,8 +1,11 @@
 .skill-page-container {
+  display: flex;
+  flex-direction: column;
   padding: 12px;
+  gap: 30px;
 }
 
-.skills-container {
+.skills-container, .combat-stats-container {
   background-color: var(--sage-green);
   border-radius: 8px;
   border: 2px solid var(--dark-navy);
@@ -10,18 +13,29 @@
   padding: 1px;
 }
 
-.skills-header {
+.skills-header, .combat-stats-header {
   font-size: 10px;
   border-radius: 6px 6px 0 0;
   padding: 3px;
   background-color: var(--sage-green);
 }
 
-.skills-inner-container {
+.skills-inner-container, .combat-stats-inner-container {
   padding: 12px;
   display: flex;
   flex-direction: column;
   gap: 10px;
   background-color: var(--forest-green);
   border-radius: 0 0 6px 6px;
+}
+
+.combat-calc-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.combat-calc-header {
+  font-size: 11px;
+  text-align: left;
+  padding: 10px 0;
 }

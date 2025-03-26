@@ -45,7 +45,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
         <li>
           <a onClick={() => setPage("Skills")}>
             <img src={SkillsIcon} alt="Skills Icon" className="sidebar-icon" />
-            Skills
+            Stats
           </a>
         </li>
         <li>

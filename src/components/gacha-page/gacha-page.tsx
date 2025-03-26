@@ -26,6 +26,7 @@ import { DITTO_DECIMALS } from "../../utils/config";
 
 function GachaPage() {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
+  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
   const { userData, dittoBalance } = useUserSocket();
@@ -69,6 +70,7 @@ function GachaPage() {
     // Pull gacha
     if (
       socket &&
+      canEmitEvent() &&
       !loadingSocket &&
       accessGranted &&
       telegramId &&
@@ -84,6 +86,7 @@ function GachaPage() {
           SLIME_GACHA_PULL_TRX_NOTE
         )
       );
+      setLastEventEmittedTimestamp(Date.now());
     }
   };
 

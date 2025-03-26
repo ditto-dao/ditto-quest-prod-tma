@@ -31,6 +31,7 @@ interface CraftingRecipeProps {
 }
 
 function CraftingRecipe(props: CraftingRecipeProps) {
+  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket(); 
   const { userData } = useUserSocket();
   const { startCrafting, stopCrafting } = useIdleSkillSocket();
   const { socket } = useSocket();
@@ -43,7 +44,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
   };
 
   const handleCraftButton = () => {
-    if (socket) {
+    if (socket && canEmitEvent()) {
       if (isCrafting) {
         socket.emit("stop-craft-equipment", props.equipmentId);
         stopCrafting(props.equipmentId);
@@ -54,6 +55,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
         setIsCrafting(false);
       }
     }
+    setLastEventEmittedTimestamp(Date.now());
   };
 
   useEffect(() => {
