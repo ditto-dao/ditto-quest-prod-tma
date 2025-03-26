@@ -62,12 +62,22 @@ function CombatConsole() {
 
   useEffect(() => {
     if (monsterHpChange) {
+      if (
+        monsterHpChange.hpChange > 0 &&
+        monster &&
+        monster.combat &&
+        monster.combat.hp >= monster.combat.maxHp
+      )
+        return;
       spawnFloatingText(monsterHpChangeRef, monsterHpChange.hpChange);
     }
   }, [monsterHpChange]);
 
   useEffect(() => {
     if (userHpChange) {
+      if (userHpChange.hpChange > 0 && userCombat.hp >= userCombat.maxHp)
+        return;
+
       spawnFloatingText(userHpChangeRef, userHpChange.hpChange);
     }
   }, [userHpChange]);
