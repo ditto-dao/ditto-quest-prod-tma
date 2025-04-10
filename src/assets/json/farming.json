@@ -321,7 +321,7 @@
     "farmingLevelRequired": 1,
     "farmingExp": 50,
     "sellPriceGP": 30,
-    "category": "Fiber"
+    "category": "Lumber"
   },
   {
     "id": 31,
@@ -333,7 +333,7 @@
     "farmingLevelRequired": 11,
     "farmingExp": 100,
     "sellPriceGP": 50,
-    "category": "Fiber"
+    "category": "Lumber"
   },
   {
     "id": 32,
@@ -345,7 +345,7 @@
     "farmingLevelRequired": 21,
     "farmingExp": 175,
     "sellPriceGP": 90,
-    "category": "Fiber"
+    "category": "Lumber"
   },
   {
     "id": 33,
@@ -357,6 +357,6 @@
     "farmingLevelRequired": 31,
     "farmingExp": 270,
     "sellPriceGP": 140,
-    "category": "Fiber"
+    "category": "Lumber"
   }
 ]
