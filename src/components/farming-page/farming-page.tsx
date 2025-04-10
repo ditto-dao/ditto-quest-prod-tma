@@ -8,7 +8,7 @@ const categories = ["Lumber", "Fiber", "Ore", "Crystal", "Shards"];
 
 function FarmingPage() {
   const { farmingStatuses } = useIdleSkillSocket();
-  const [selectedCategory, setSelectedCategory] = useState<string>("Ore"); // Default category
+  const [selectedCategory, setSelectedCategory] = useState<string>("Lumber"); // Default category
 
   // Filter and sort farming items based on selected category
   const filteredFarmingItems = farming
