@@ -7929,7 +7929,7 @@
     "description": "Savage lands stalked by cursed raiders and tribal warlords.",
     "imgsrc": "https://kibble.s3.ap-southeast-2.amazonaws.com/ditto-quest/domain-bg/domains-1-to-6/Domain_5_Humanoid_Beasts.png",
     "entryPriceGP": 125000,
-    "entryPriceDittoWei": "1.25E+15",
+    "entryPriceDittoWei": "1250000000000000",
     "monsters": [
       {
         "monster": {
@@ -9565,7 +9565,7 @@
     "description": "Charred remnants of a lost empire guarded by flame and fury.",
     "imgsrc": "https://kibble.s3.ap-southeast-2.amazonaws.com/ditto-quest/domain-bg/domains-1-to-6/Domain_6_Ashen_Waste.png",
     "entryPriceGP": 300000,
-    "entryPriceDittoWei": "3E+15",
+    "entryPriceDittoWei": "3000000000000000",
     "monsters": [
       {
         "monster": {
