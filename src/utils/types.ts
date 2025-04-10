@@ -486,31 +486,6 @@ export interface MonsterDrop {
     equipment: Equipment | null;
 }
 
-export interface NetStatDelta {
-    maxHp: number;
-    atkSpd: number;
-    acc: number;
-    eva: number;
-    maxMeleeDmg: number;
-    maxRangedDmg: number;
-    maxMagicDmg: number;
-    critChance: number;
-    critMultiplier: number;
-    dmgReduction: number;
-    magicDmgReduction: number;
-    hpRegenRate: number;
-    hpRegenAmount: number;
-    meleeFactor: number;
-    rangeFactor: number;
-    magicFactor: number;
-    reinforceAir: number;
-    reinforceWater: number;
-    reinforceEarth: number;
-    reinforceFire: number;
-    doubleResourceOdds: number;
-    skillIntervalReductionMultiplier: number;
-}
-
 export interface DittoBalanceBN {
     liveBalance: bigint;
     accumulatedBalance: bigint;
