@@ -38,7 +38,7 @@ export interface User {
     hpRegenRate: number;
     hpRegenAmount: number;
 
-    lastBattleEndTimestamp?: string | null;
+    lastBattleEndTimestamp?: Date | null; // only fetched on login, not updated
 
     // Farming & Crafting
     farmingLevel: number;
@@ -97,9 +97,9 @@ export const defaultUser: User = {
     atkSpd: 10,
     acc: 100,
     eva: 100,
-    maxMeleeDmg: 20,
-    maxRangedDmg: 20,
-    maxMagicDmg: 20,
+    maxMeleeDmg: 30,
+    maxRangedDmg: 30,
+    maxMagicDmg: 30,
     critChance: 0.006623,
     critMultiplier: 1.29,
     dmgReduction: 10,
@@ -136,6 +136,7 @@ export const defaultUser: User = {
 export interface Combat {
     id: number;
     attackType: 'Melee' | 'Ranged' | 'Magic';
+    cp: number;
     hp: number;
     maxHp: number;
     atkSpd: number;
@@ -162,14 +163,15 @@ export interface Combat {
 export const defaultCombat: Combat = {
     id: 0,
     attackType: 'Melee',
+    cp: 699,
     hp: 100,
     maxHp: 100,
     atkSpd: 10,
     acc: 100,
     eva: 100,
-    maxMeleeDmg: 20,
-    maxRangedDmg: 20,
-    maxMagicDmg: 20,
+    maxMeleeDmg: 30,
+    maxRangedDmg: 30,
+    maxMagicDmg: 30,
     critChance: 0.006623,
     critMultiplier: 1.290,
     dmgReduction: 10,
@@ -201,10 +203,12 @@ export interface Equipment {
     id: number;
     name: string;
     description: string;
+    attackType?: 'Melee' | 'Ranged' | 'Magic';
     imgsrc: string;
     buyPriceGP?: number | null;
     sellPriceGP: number;
     buyPriceDittoWei?: number | null;
+    requiredLvl: number;
     statEffectId?: number | null;
     statEffect?: StatEffect | null;
     rarity: Rarity;
@@ -230,36 +234,58 @@ export interface Item {
 
 export interface StatEffect {
     id: number;
+
     maxHpMod?: number | null;
     maxHpEffect?: EffectType | null;
+
     atkSpdMod?: number | null;
     atkSpdEffect?: EffectType | null;
+
     accMod?: number | null;
     accEffect?: EffectType | null;
+
     evaMod?: number | null;
     evaEffect?: EffectType | null;
+
     maxMeleeDmgMod?: number | null;
     maxMeleeDmgEffect?: EffectType | null;
+
     maxRangedDmgMod?: number | null;
     maxRangedDmgEffect?: EffectType | null;
+
     maxMagicDmgMod?: number | null;
     maxMagicDmgEffect?: EffectType | null;
+
     critChanceMod?: number | null;
     critChanceEffect?: EffectType | null;
+
     critMultiplierMod?: number | null;
     critMultiplierEffect?: EffectType | null;
+
     dmgReductionMod?: number | null;
     dmgReductionEffect?: EffectType | null;
+
     magicDmgReductionMod?: number | null;
     magicDmgReductionEffect?: EffectType | null;
+
     hpRegenRateMod?: number | null;
     hpRegenRateEffect?: EffectType | null;
+
     hpRegenAmountMod?: number | null;
     hpRegenAmountEffect?: EffectType | null;
+
+    meleeFactor?: number | null;
+    rangeFactor?: number | null;
+    magicFactor?: number | null;
+
+    reinforceAir?: number | null;
+    reinforceWater?: number | null;
+    reinforceEarth?: number | null;
+    reinforceFire?: number | null;
+
     doubleResourceOddsMod?: number | null;
-    doubleResourceOddsEffect?: EffectType | null;
     skillIntervalReductionMultiplierMod?: number | null;
-    skillIntervalReductionMultiplierEffect?: EffectType | null;
+
     durationS?: number | null;
 }
 
@@ -342,10 +368,7 @@ export enum EquipmentType {
     necklace = "necklace",
 }
 
-export enum EffectType {
-    add = "+",
-    mul = "*",
-}
+export type EffectType = 'add' | 'mul';
 
 export type FullMonster = {
     id: number;
@@ -406,9 +429,9 @@ export type FullMonster = {
 
 export const defaultMonster: FullMonster = {
     id: 0,
-    name: "Skeleton",
-    description: "An angry skeleton.",
-    imgsrc: "https://wiki.melvoridle.com/images/thumb/c/ca/Skeleton_%28monster%29.png/500px-Skeleton_%28monster%29.png",
+    name: "",
+    description: "",
+    imgsrc: "",
     level: 1,
     str: 1,
     def: 1,
@@ -461,6 +484,31 @@ export interface MonsterDrop {
     quantity: number;
     item: Item | null;
     equipment: Equipment | null;
+}
+
+export interface NetStatDelta {
+    maxHp: number;
+    atkSpd: number;
+    acc: number;
+    eva: number;
+    maxMeleeDmg: number;
+    maxRangedDmg: number;
+    maxMagicDmg: number;
+    critChance: number;
+    critMultiplier: number;
+    dmgReduction: number;
+    magicDmgReduction: number;
+    hpRegenRate: number;
+    hpRegenAmount: number;
+    meleeFactor: number;
+    rangeFactor: number;
+    magicFactor: number;
+    reinforceAir: number;
+    reinforceWater: number;
+    reinforceEarth: number;
+    reinforceFire: number;
+    doubleResourceOdds: number;
+    skillIntervalReductionMultiplier: number;
 }
 
 export interface DittoBalanceBN {

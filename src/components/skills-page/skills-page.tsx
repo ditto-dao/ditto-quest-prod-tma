@@ -22,9 +22,59 @@ import ReinforceAirIcon from "../../assets/images/combat/reinforce-air.png";
 import ReinforceWaterIcon from "../../assets/images/combat/reinforce-water.png";
 import ReinforceEarthIcon from "../../assets/images/combat/reinforce-earth.png";
 import ReinforceFireIcon from "../../assets/images/combat/reinforce-fire.png";
+import { useEffect, useState } from "react";
 
 function SkillsPage() {
-  const { userData } = useUserSocket();
+  const { userData, pumpStats, isUpgradingStats } = useUserSocket();
+
+  const [numStrToPump, setNumStrToPump] = useState(0);
+  const [numDefToPump, setNumDefToPump] = useState(0);
+  const [numDexToPump, setNumDexToPump] = useState(0);
+  const [numLukToPump, setNumLukToPump] = useState(0);
+  const [numMagicToPump, setNumMagicToPump] = useState(0);
+  const [numHpLevelToPump, setNumhpLevelToPump] = useState(0);
+
+  const [remainingPoints, setRemainingPoints] = useState(userData.outstandingSkillPoints);
+
+  const handlePumpStats = () => {
+    if (isUpgradingStats) return;
+
+    pumpStats({
+      str: numStrToPump,
+      def: numDefToPump,
+      dex: numDexToPump,
+      luk: numLukToPump,
+      magic: numMagicToPump,
+      hpLevel: numHpLevelToPump,
+    });
+
+    setNumStrToPump(0);
+    setNumDefToPump(0);
+    setNumDexToPump(0);
+    setNumLukToPump(0);
+    setNumMagicToPump(0);
+    setNumhpLevelToPump(0);
+  };
+
+  useEffect(() => {
+    setRemainingPoints(
+      userData.outstandingSkillPoints -
+        numStrToPump -
+        numDefToPump -
+        numDexToPump -
+        numLukToPump -
+        numMagicToPump -
+        numHpLevelToPump
+    );
+  }, [
+    userData.outstandingSkillPoints,
+    numStrToPump,
+    numDefToPump,
+    numDexToPump,
+    numLukToPump,
+    numMagicToPump,
+    numHpLevelToPump,
+  ]);
 
   function toPercentage(value: number): string {
     return (value * 100).toFixed(2) + "%";
@@ -35,12 +85,67 @@ function SkillsPage() {
       <div className="skills-container">
         <div className="skills-header">Character Stats</div>
         <div className="skills-inner-container">
-          <Skill skill="str" level={userData.str} />
-          <Skill skill="def" level={userData.def} />
-          <Skill skill="dex" level={userData.dex} />
-          <Skill skill="luk" level={userData.luk} />
-          <Skill skill="magic" level={userData.magic} />
-          <Skill skill="maxhp" level={userData.hpLevel} />
+          <Skill
+            skill="str"
+            level={userData.str}
+            pointsToPump={numStrToPump}
+            setPointsToPump={setNumStrToPump}
+            canIncrement={remainingPoints > 0}
+          />
+          <Skill
+            skill="def"
+            level={userData.def}
+            pointsToPump={numDefToPump}
+            setPointsToPump={setNumDefToPump}
+            canIncrement={remainingPoints > 0}
+          />
+          <Skill
+            skill="dex"
+            level={userData.dex}
+            pointsToPump={numDexToPump}
+            setPointsToPump={setNumDexToPump}
+            canIncrement={remainingPoints > 0}
+          />
+          <Skill
+            skill="luk"
+            level={userData.luk}
+            pointsToPump={numLukToPump}
+            setPointsToPump={setNumLukToPump}
+            canIncrement={remainingPoints > 0}
+          />
+          <Skill
+            skill="magic"
+            level={userData.magic}
+            pointsToPump={numMagicToPump}
+            setPointsToPump={setNumMagicToPump}
+            canIncrement={remainingPoints > 0}
+          />
+          <Skill
+            skill="HP LVL"
+            level={userData.hpLevel}
+            pointsToPump={numHpLevelToPump}
+            setPointsToPump={setNumhpLevelToPump}
+            canIncrement={remainingPoints > 0}
+          />
+          <div className="outstanding-stat-points">
+            <div className="stat-points-label">STAT POINTS</div>
+            <div className="user-stat-points">{remainingPoints}</div>
+          </div>
+          {userData.outstandingSkillPoints > 0 && (
+            <div
+              className={
+                isUpgradingStats ||
+                remainingPoints === userData.outstandingSkillPoints
+                  ? "assign-stats-button disabled"
+                  : "assign-stats-button active"
+              }
+              onClick={() => {
+                handlePumpStats()
+              }}
+            >
+              {isUpgradingStats ? "Upgrading..." : "Assign"}
+            </div>
+          )}
         </div>
       </div>
       <div className="combat-stats-container">
@@ -50,43 +155,43 @@ function SkillsPage() {
             <div className="combat-calc-header">Stats</div>
             <CombatStat
               statName="MAX HP"
-              level={userData.combat?.maxHp || 100}
+              level={Math.floor(userData.combat?.maxHp || 100)}
               imgsrc={MaxHpIcon}
               fontSize={8}
             />
             <CombatStat
               statName="ATK SPD"
-              level={userData.combat?.atkSpd || 10}
+              level={Math.floor(userData.combat?.atkSpd || 10)}
               imgsrc={AtkSpdIcon}
               fontSize={8}
             />
             <CombatStat
               statName="ACC"
-              level={userData.combat?.acc || 100}
+              level={Math.floor(userData.combat?.acc || 100)}
               imgsrc={AccIcon}
               fontSize={8}
             />
             <CombatStat
               statName="EVA"
-              level={userData.combat?.eva || 100}
+              level={Math.floor(userData.combat?.eva || 100)}
               imgsrc={EvaIcon}
               fontSize={8}
             />
             <CombatStat
               statName="MAX MELEE DMG"
-              level={userData.combat?.maxMeleeDmg || 20}
+              level={Math.floor(userData.combat?.maxMeleeDmg || 20)}
               imgsrc={MaxMeleeDmgIcon}
               fontSize={8}
             />
             <CombatStat
               statName="MAX RANGED DMG"
-              level={userData.combat?.maxRangedDmg || 20}
+              level={Math.floor(userData.combat?.maxRangedDmg || 20)}
               imgsrc={MaxRangedDmgIcon}
               fontSize={8}
             />
             <CombatStat
               statName="MAX MAGIC DMG"
-              level={userData.combat?.maxMagicDmg || 20}
+              level={Math.floor(userData.combat?.maxMagicDmg || 20)}
               imgsrc={MaxMagicDmgIcon}
               fontSize={8}
             />
@@ -99,26 +204,26 @@ function SkillsPage() {
 
             <CombatStat
               statName="CRIT % DMG"
-              level={toPercentage(userData.combat?.critMultiplier || 1.290)}
+              level={toPercentage(userData.combat?.critMultiplier || 1.29)}
               imgsrc={CritMulIcon}
               fontSize={8}
             />
 
             <CombatStat
               statName="DMG REDUCTION"
-              level={userData.combat?.dmgReduction || 10}
+              level={Math.floor(userData.combat?.dmgReduction || 10)}
               imgsrc={DmgReducIcon}
               fontSize={8}
             />
             <CombatStat
               statName="MAGIC DMG REDUCTION"
-              level={userData.combat?.magicDmgReduction || 10}
+              level={Math.floor(userData.combat?.magicDmgReduction || 10)}
               imgsrc={MagicDmgReducIcon}
               fontSize={8}
             />
             <CombatStat
               statName="HP REGEN RATE"
-              level={(userData.combat?.hpRegenRate || 20).toString() + "s"}
+              level={(userData.combat?.hpRegenRate || 20).toFixed(1) + "s"}
               imgsrc={HPRegenRateIcon}
               fontSize={8}
             />
@@ -133,47 +238,47 @@ function SkillsPage() {
             <div className="combat-calc-header">Combat Triangle</div>
             <CombatStat
               statName="MELEE FACTOR"
-              level={userData.combat?.meleeFactor || 0}
+              level={Math.floor(userData.combat?.meleeFactor || 0)}
               imgsrc={MeleeFactorIcon}
               fontSize={8}
             />
             <CombatStat
               statName="RANGED FACTOR"
-              level={userData.combat?.rangeFactor || 0}
+              level={Math.floor(userData.combat?.rangeFactor || 0)}
               imgsrc={RangedFactorIcon}
               fontSize={8}
             />
             <CombatStat
               statName="MAGIC FACTOR"
-              level={userData.combat?.magicFactor || 0}
+              level={Math.floor(userData.combat?.magicFactor || 0)}
               imgsrc={MagicFactorIcon}
               fontSize={8}
             />
           </div>
           <div className="reinforce-container">
-          <div className="combat-calc-header">Elemental</div>
+            <div className="combat-calc-header">Elemental</div>
 
             <CombatStat
               statName="AIR"
-              level={userData.combat?.reinforceAir || 0}
+              level={Math.floor(userData.combat?.reinforceAir || 0)}
               imgsrc={ReinforceAirIcon}
               fontSize={8}
             />
             <CombatStat
               statName="WATER"
-              level={userData.combat?.reinforceWater || 0}
+              level={Math.floor(userData.combat?.reinforceWater || 0)}
               imgsrc={ReinforceWaterIcon}
               fontSize={8}
             />
             <CombatStat
               statName="EARTH"
-              level={userData.combat?.reinforceEarth || 0}
+              level={Math.floor(userData.combat?.reinforceEarth || 0)}
               imgsrc={ReinforceEarthIcon}
               fontSize={8}
             />
             <CombatStat
               statName="FIRE"
-              level={userData.combat?.reinforceFire || 0}
+              level={Math.floor(userData.combat?.reinforceFire || 0)}
               imgsrc={ReinforceFireIcon}
               fontSize={8}
             />

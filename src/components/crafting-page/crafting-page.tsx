@@ -12,10 +12,10 @@ import { useState } from "react";
 import { EquipmentType } from "../../utils/types";
 
 const categoryImages: { [key: string]: string } = {
-  Hat: DefaultHat,
-  Armour: DefaultArmour,
   Weapon: DefaultWeapon,
   Shield: DefaultShield,
+  Hat: DefaultHat,
+  Armour: DefaultArmour,
   Cape: DefaultCape,
   //Necklace: DefaultNecklace,
 };
@@ -24,7 +24,7 @@ const categories = Object.keys(categoryImages); // Use keys from the mapping
 
 function CraftingPage() {
   const { craftingStatuses } = useIdleSkillSocket();
-  const [selectedCategory, setSelectedCategory] = useState<string>("Hat");
+  const [selectedCategory, setSelectedCategory] = useState<string>("Weapon");
 
   const filteredRecipes = craftingRecipes
     .filter((recipe) => recipe.type === selectedCategory.toLowerCase())

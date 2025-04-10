@@ -59,6 +59,10 @@ function InventoryPage() {
     setIsModalOpen(false);
   };
 
+  const meetsLvlReq = (reqLvl: number) => {
+    return reqLvl <= userData.level;
+  };
+
   const isEquipped = () => {
     return !!(
       userData &&
@@ -78,7 +82,10 @@ function InventoryPage() {
           <div className="balances-container">
             <div className="coin-balance">
               <img src={DittoCoinLogo} alt="Ditto Coin" className="coin-logo" />
-              <span>{formatNumberWithSuffix(getTotalFormattedBalance(dittoBalance))} DITTO</span>
+              <span>
+                {formatNumberWithSuffix(getTotalFormattedBalance(dittoBalance))}{" "}
+                DITTO
+              </span>
             </div>
             <div className="coin-balance">
               <img src={GoldCoinLogo} alt="Gold Coin" className="coin-logo" />
@@ -198,8 +205,46 @@ function InventoryPage() {
                       />
                     </div>
                     <div className="inv-modal-item-description-container">
-                      {selectedItem.item?.description ||
-                        selectedItem.equipment?.description}
+                      {selectedItem.equipmentId && (
+                        <div className="inv-eq-tab-info">
+                          {selectedItem.equipment?.attackType && (
+                            <div
+                              className={`attack-type ${
+                                selectedItem.equipment.requiredLvl >
+                                userData.level
+                                  ? "red"
+                                  : ""
+                              } ${
+                                selectedItem.equipment.attackType === "Melee"
+                                  ? "melee"
+                                  : selectedItem.equipment.attackType ===
+                                    "Ranged"
+                                  ? "ranged"
+                                  : selectedItem.equipment.attackType ===
+                                    "Magic"
+                                  ? "magic"
+                                  : ""
+                              }`}
+                            >
+                              {selectedItem.equipment.attackType}
+                            </div>
+                          )}
+                          <div
+                            className={`required-lvl ${
+                              selectedItem.equipment!.requiredLvl >
+                              userData.level
+                                ? "red"
+                                : ""
+                            }`}
+                          >
+                            Req. Lvl. {selectedItem.equipment!.requiredLvl}
+                          </div>
+                        </div>
+                      )}{" "}
+                      <div>
+                        {selectedItem.item?.description ||
+                          selectedItem.equipment?.description}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -212,9 +257,16 @@ function InventoryPage() {
                       onClick={() =>
                         equip(selectedItem.id, selectedItem.equipment!.type)
                       }
-                      disabled={isEquipped()}
+                      disabled={
+                        isEquipped() ||
+                        !meetsLvlReq(selectedItem.equipment.requiredLvl)
+                      }
                     >
-                      {isEquipped() ? "Equipped" : "Equip"}
+                      {!meetsLvlReq(selectedItem.equipment.requiredLvl)
+                        ? `Requires Lvl ${selectedItem.equipment.requiredLvl}`
+                        : isEquipped()
+                        ? "Equipped"
+                        : "Equip"}
                     </button>
                   )}
                 </div>

@@ -41,6 +41,10 @@ function App() {
         root.style.setProperty("--light-teal", "#2E7C78");
         root.style.setProperty("--medium-teal", "#1F5B58");
         root.style.setProperty("--misty-teal", "#4FA99A");
+        root.style.setProperty("--steel-blue", "#4682B4");
+        root.style.setProperty("--melee", "#B5533A");
+        root.style.setProperty("--ranged", "#4B6A47");
+        root.style.setProperty("--magic", "#6D5ED2");
 
         // Rank Background Colors with Muted Tones
         root.style.setProperty(

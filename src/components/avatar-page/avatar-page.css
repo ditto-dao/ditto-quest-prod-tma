@@ -2,12 +2,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: 100vh;
+  min-height: 100%;
   background-color: var(--deep-teal);
-  padding: 20px;
-  gap: 30px;
+  padding: 0 20px 20px 20px;
+  gap: 20px;
 }
 
+#slime-slot-wrapper,
 #equipment-slot-wrapper,
 #spellbook-slot-wrapper {
   background-color: var(--bright-teal);
@@ -19,22 +20,32 @@
   padding: 1px;
 }
 
+#slime-slot-container {
+  background-color: var(--forest-green);
+  border-radius: 11px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 #equipment-slot-container,
 #spellbook-slot-container {
   background-color: var(--forest-green);
   border-radius: 11px;
   width: 100%;
   height: 100%;
-  padding-bottom: 10px;
   display: flex;
-  flex-direction: column;
   gap: 20px;
+  flex-direction: column;
+  padding-bottom: 20px;
 }
 
+.slime-slot-label,
 .equipment-slot-label,
 .spellbook-slot-label {
   padding: 4px;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: bold;
   text-align: center;
   color: var(--cream-white);
@@ -42,10 +53,95 @@
   border-radius: 9px 9px 0 0;
 }
 
+.equipped-slime-content {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding: 15px;
+}
+
+.equipped-slime-image-container {
+  width: 51%;
+}
+
+.equipped-slime-image-container .equipped-slime-avatar {
+  border: 1.5px solid var(--bright-teal);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.equipped-slime-image-container .equipped-slime-avatar.empty {
+  padding: 15px;
+}
+
+.equipped-slime-image-container .equipped-slime-avatar img {
+  max-width: 100%;
+}
+
+.equipped-slime-image-container .equipped-slime-avatar.empty img {
+  opacity: 0.25;
+}
+
+.equipped-slime-stats-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 49%;
+}
+
+.stats-summary-field {
+  font-size: 8px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.stats-summary-field div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stats-summary-field .stats-summary-label {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 4px;
+}
+
+.stats-summary-field .stats-summary-label img {
+  max-height: 16px;
+}
+
+.stats-summary-field-with-progress,
+.stats-summary-field-no-progress {
+  background-color: var(--light-teal);
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.stats-summary-progress-bar {
+  height: 3px;
+  background-color: var(--cream-white);
+  border-radius: 4px;
+  overflow: hidden;
+  width: 100%;
+}
+
+.stats-summary-progress-fill {
+  height: 100%;
+  background-color: var(--burnt-orange);
+  transition: width 0.3s ease;
+}
+
 .avatar-row {
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
   gap: 10%;
 }
 

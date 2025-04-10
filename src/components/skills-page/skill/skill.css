@@ -32,9 +32,27 @@
 .skill-plus-button {
   padding: 4px 8px;
   border: 1px solid var(--sage-green);
-  background-color: transparent;
   border-radius: 4px;
-  cursor: not-allowed;
-  color: var(--sage-green);
   font-size: 12px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Enabled button */
+.skill-plus-button:enabled {
+  background-color: var(--sage-green);
+  border: 1px solid var(--sage-green);
+  color: var(--cream-white);
+  cursor: pointer;
+}
+
+.skill-plus-button:enabled:active {
+  transform: translateY(1px);
+}
+
+/* Disabled button */
+.skill-plus-button:disabled {
+  background-color: transparent;
+  color: var(--sage-green);
+  cursor: not-allowed;
+  opacity: 0.5;
 }

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import {
+  Combat,
   defaultUser,
   DittoBalanceBN,
   EquipmentType,
@@ -10,6 +11,11 @@ import {
 } from "../../../utils/types";
 import { useSocket } from "../socket-context";
 import { useLoginSocket } from "../login/login-context";
+import {
+  removeUndefined,
+  updateUserStatsFromEquipmentAndSlime,
+} from "../../../utils/helpers";
+import { COMBAT_EXP_UPDATE_EVENT } from "../../../utils/events";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -36,6 +42,28 @@ export interface UserBalanceUpdateRes {
   notes?: string;
 }
 
+interface IncrementExpAndHpExpResponse {
+  levelUp: boolean;
+  level: number;
+  exp: number;
+  expToNextLevel: number;
+  outstandingSkillPoints: number;
+
+  hpLevelUp: boolean;
+  hpLevel: number;
+  hpExp: number;
+  expToNextHpLevel: number;
+}
+
+interface StatsToPumpPayload {
+  str?: number;
+  def?: number;
+  dex?: number;
+  luk?: number;
+  magic?: number;
+  hpLevel?: number;
+}
+
 // Context
 interface UserContext {
   userData: User;
@@ -43,7 +71,11 @@ interface UserContext {
   userContextLoaded: boolean;
   equip: (inventoryId: number, equipmentType: EquipmentType) => void;
   unequip: (equipmentType: EquipmentType) => void;
+  equipSlime: (slime: SlimeWithTraits) => void;
+  unequipSlime: () => void;
   incrementUserHp: (amount: number) => void;
+  isUpgradingStats: boolean;
+  pumpStats: (stats: StatsToPumpPayload) => void;
   canEmitEvent: () => boolean;
   setLastEventEmittedTimestamp: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -59,7 +91,11 @@ const UserContext = createContext<UserContext>({
   userContextLoaded: false,
   equip: () => {},
   unequip: () => {},
+  equipSlime: () => {},
+  unequipSlime: () => {},
   incrementUserHp: () => {},
+  isUpgradingStats: false,
+  pumpStats: () => {},
   canEmitEvent: () => false,
   setLastEventEmittedTimestamp: () => {},
 });
@@ -83,6 +119,9 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
     isAdmin: false,
   });
   const [dittoBalanceLoaded, setDittoBalanceLoaded] = useState(false); // no need export
+
+  // upgrade stats
+  const [isUpgradingStats, setIsUpgradingStats] = useState(false);
 
   // Prevent click spam
   const [lastEventEmittedTimestamp, setLastEventEmittedTimestamp] = useState(0);
@@ -119,65 +158,154 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }
 
   const equip = (inventoryId: number, equipmentType: EquipmentType) => {
-    if (socket) {
-      if (!canEmitEvent()) return;
+    if (!socket || !canEmitEvent()) return;
 
-      setUserData((prevUserData) => {
-        console.log(`Inventory ID: ${inventoryId}`);
-        console.log(`Current Inventory:`, prevUserData.inventory);
+    let didEquip = false;
 
-        // Find the inventory entry with the matching inventoryId
-        const inventoryEntry = prevUserData.inventory.find(
-          (entry) => entry.id === inventoryId
-        );
+    setUserData((prevUserData) => {
+      console.log(`Inventory ID: ${inventoryId}`);
+      console.log(`Current Inventory:`, prevUserData.inventory);
 
-        if (!inventoryEntry) {
-          console.error(`Inventory entry with ID ${inventoryId} not found.`);
-          return prevUserData; // Return unchanged user data if entry not found
+      const inventoryEntry = prevUserData.inventory.find(
+        (entry) => entry.id === inventoryId
+      );
+
+      if (!inventoryEntry) {
+        console.error(`Inventory entry with ID ${inventoryId} not found.`);
+        return prevUserData;
+      }
+
+      console.log(`Found Inventory Entry:`, inventoryEntry);
+
+      const isEquipment =
+        inventoryEntry.equipment &&
+        !inventoryEntry.item &&
+        !inventoryEntry.itemId;
+
+      if (isEquipment) {
+        if (inventoryEntry.equipment!.requiredLvl > userData.level) {
+          console.error(
+            `User does not meet level requirements to equip ${
+              inventoryEntry.equipment!.name
+            }`
+          );
+          return prevUserData;
         }
 
-        console.log(`Found Inventory Entry:`, inventoryEntry);
+        console.log(`Equipping item of type ${equipmentType}`);
 
-        // Check if the inventory entry is equipment (no item and no itemId)
-        if (!inventoryEntry.item && !inventoryEntry.itemId) {
-          console.log(`Equipping item of type ${equipmentType}`);
-          return {
-            ...prevUserData,
-            [equipmentType]: inventoryEntry, // Set the equipment type to the found entry
-          };
+        didEquip = true;
+
+        const updatedUser = {
+          ...prevUserData,
+          [equipmentType]: inventoryEntry,
+        };
+
+        if (updatedUser.combat) {
+          updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
         } else {
-          console.log(`Cannot equip: Inventory entry is not equipment.`);
-          return prevUserData; // Return unchanged user data if not equippable
+          console.warn("Combat data missing — cannot update stats.");
         }
-      });
+
+        return updatedUser;
+      } else {
+        console.warn(`Cannot equip: Entry is not a valid equipment.`);
+        return prevUserData;
+      }
+    });
+
+    if (didEquip) {
       socket.emit("equip-equipment", inventoryId);
       setLastEventEmittedTimestamp(Date.now());
     }
   };
 
   const unequip = (equipmentType: EquipmentType) => {
-    if (socket) {
-      if (!canEmitEvent()) return;
+    if (!socket || !canEmitEvent()) return;
 
-      setUserData((prevUserData) => {
-        const equippedEntry = prevUserData[equipmentType];
+    setUserData((prevUserData) => {
+      const equippedEntry = prevUserData[equipmentType];
 
-        if (!equippedEntry) {
-          console.error(`Equipped slot for ${equipmentType} empy.`);
-          return prevUserData;
-        }
+      if (!equippedEntry) {
+        console.error(`Equipped slot for ${equipmentType} is empty.`);
+        return prevUserData;
+      }
 
-        console.log(`Found Equipped slot for ${equipmentType}`);
-        console.log(`Unequipping ${equipmentType}`);
+      console.log(`Unequipping ${equipmentType}`, equippedEntry);
 
-        return {
-          ...prevUserData,
-          [equipmentType]: null,
-        };
-      });
+      const updatedUser = {
+        ...prevUserData,
+        [equipmentType]: null,
+      };
+
+      // Recalculate stats only if combat exists
+      if (updatedUser.combat) {
+        updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
+      }
+
+      // Emit only on successful unequip
       socket.emit("unequip-equipment", equipmentType);
       setLastEventEmittedTimestamp(Date.now());
+
+      return updatedUser;
+    });
+  };
+
+  const equipSlime = (slime: SlimeWithTraits) => {
+    if (!socket || !canEmitEvent()) return;
+
+    if (slime.ownerId !== userData.telegramId) {
+      console.error(`User does not own this slime!`);
+      return;
     }
+
+    console.log(`Equipping slime: ${slime.id}`);
+
+    setUserData((prevUserData) => {
+      const updatedUser = {
+        ...prevUserData,
+        equippedSlimeId: slime.id,
+        equippedSlime: slime,
+      };
+
+      if (updatedUser.combat) {
+        updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
+      }
+
+      return updatedUser;
+    });
+
+    socket.emit("equip-slime", slime.id);
+    setLastEventEmittedTimestamp(Date.now());
+    setIsUpgradingStats(true);
+  };
+
+  const unequipSlime = () => {
+    if (!socket || !canEmitEvent()) return;
+
+    if (!userData.equippedSlimeId || !userData.equippedSlime) {
+      console.warn(`No slime is currently equipped.`);
+      return;
+    }
+
+    console.log(`Unequipping slime ID: ${userData.equippedSlimeId}`);
+
+    setUserData((prevUserData) => {
+      const updatedUser = {
+        ...prevUserData,
+        equippedSlimeId: null,
+        equippedSlime: null,
+      };
+
+      if (updatedUser.combat) {
+        updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
+      }
+
+      return updatedUser;
+    });
+
+    socket.emit("unequip-slime");
+    setLastEventEmittedTimestamp(Date.now());
   };
 
   const incrementUserHp = (amount: number) => {
@@ -197,6 +325,46 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         },
       };
     });
+  };
+
+  const pumpStats = (statsToPump: StatsToPumpPayload) => {
+    if (!socket || !canEmitEvent()) return;
+
+    // Remove keys with value 0 or undefined
+    const filteredStats = Object.fromEntries(
+      Object.entries(statsToPump).filter(([_, v]) => v && v > 0)
+    ) as StatsToPumpPayload;
+
+    if (Object.keys(filteredStats).length === 0) return;
+
+    console.log(`pumping stats: ${JSON.stringify(filteredStats, null, 2)}`);
+
+    setUserData((prev) => {
+      if (!prev) return prev;
+
+      const updated = {
+        ...prev,
+        outstandingSkillPoints:
+          prev.outstandingSkillPoints -
+          (statsToPump.str || 0) -
+          (statsToPump.def || 0) -
+          (statsToPump.dex || 0) -
+          (statsToPump.luk || 0) -
+          (statsToPump.magic || 0) -
+          (statsToPump.hpLevel || 0),
+        str: prev.str + (statsToPump.str || 0),
+        def: prev.def + (statsToPump.def || 0),
+        dex: prev.dex + (statsToPump.dex || 0),
+        luk: prev.luk + (statsToPump.luk || 0),
+        magic: prev.magic + (statsToPump.magic || 0),
+        hpLevel: prev.hpLevel + (statsToPump.hpLevel || 0),
+      };
+
+      return updated;
+    });
+
+    socket.emit("pump-stats", filteredStats);
+    setLastEventEmittedTimestamp(Date.now());
   };
 
   const canEmitEvent = () => {
@@ -223,6 +391,28 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
         setUserData(sortedUserData);
         setUserLoaded(true);
+      });
+
+      socket.on("user-update", (partialUpdate: Partial<User>) => {
+        const cleanPartialupdate = removeUndefined(partialUpdate);
+        console.log("Received user-update:", cleanPartialupdate);
+
+        setUserData((prev) => {
+          if (!prev) return prev;
+
+          const updated = {
+            ...prev,
+            ...cleanPartialupdate,
+            // If inventory is updated, sort it
+            inventory: cleanPartialupdate.inventory
+              ? [...cleanPartialupdate.inventory].sort(
+                  (a, b) => a.order - b.order
+                )
+              : prev.inventory,
+          };
+
+          return updated;
+        });
       });
 
       socket.on(
@@ -254,6 +444,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       // Clean up on unmount
       return () => {
         socket.off("user-data-on-login");
+        socket.off("user-update");
         socket.off("ditto-ledger-socket-balance-update");
       };
     }
@@ -383,6 +574,70 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
       });
 
+      socket.on("equip-slime-update", (slime: SlimeWithTraits | null) => {
+        console.log(`Received equip-slime-update: ${slime}`);
+
+        setUserData((prev) => {
+          return {
+            ...prev,
+            equippedSlimeId: slime?.id,
+            equippedSlime: slime,
+          };
+        });
+      });
+
+      socket.on("combat-update", (partialUpdate: Partial<Combat>) => {
+        const cleanPartialupdate = removeUndefined(partialUpdate);
+        console.log("Received combat-update:", cleanPartialupdate);
+
+        setUserData((prev) => {
+          if (!prev || !prev.combat) return prev;
+
+          const updatedCombat = {
+            ...prev.combat,
+            ...cleanPartialupdate,
+          };
+
+          return {
+            ...prev,
+            combat: updatedCombat,
+          };
+        });
+      });
+
+      socket.on(
+        COMBAT_EXP_UPDATE_EVENT,
+        (data: IncrementExpAndHpExpResponse) => {
+          console.log(
+            `Received COMBAT_EXP_UPDATE_EVENT: ${JSON.stringify(data, null, 2)}`
+          );
+          setUserData((prev) => {
+            return {
+              ...prev,
+              level: data.level,
+              exp: data.exp,
+              expToNextLevel: data.expToNextLevel,
+              outstandingSkillPoints: data.outstandingSkillPoints,
+              hpLevel: data.hpLevel,
+              expHp: data.hpExp,
+              expToNextHpLevel: data.expToNextHpLevel,
+            };
+          });
+
+          if (data.levelUp) {
+            alert(`LEVEL UP! You are now level ${data.level}.`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+          }
+
+          if (data.hpLevelUp) {
+            alert(`HP LEVEL UP! Your HP level is now ${data.hpLevel}.`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+          }
+        }
+      );
+
+      socket.on("pump-stats-complete", () => {
+        setIsUpgradingStats(false);
+      });
+
       socket.on("error", (msg: string) => {
         console.error(`${msg}`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
       });
@@ -394,6 +649,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         socket.off("unequip-update");
         socket.off("update-farming-exp");
         socket.off("update-crafting-exp");
+        socket.off("combat-update");
+        socket.off(COMBAT_EXP_UPDATE_EVENT);
         socket.off("error");
       };
     }
@@ -412,7 +669,11 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         userContextLoaded,
         equip,
         unequip,
+        equipSlime,
+        unequipSlime,
         incrementUserHp,
+        isUpgradingStats,
+        pumpStats,
         canEmitEvent,
         setLastEventEmittedTimestamp,
       }}

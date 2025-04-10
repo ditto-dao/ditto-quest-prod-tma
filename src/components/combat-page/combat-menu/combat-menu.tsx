@@ -8,7 +8,7 @@ import { Domain } from "../../../utils/types";
 function DomainComponent() {
   return (
     <div className="combat-tab-panel domain-list">
-      {(Domains as Domain[]).map((domain) => (
+      {(Domains as unknown as Domain[]).map((domain) => (
         <DomainMenuItem
           key={domain.id}
           id={domain.id}

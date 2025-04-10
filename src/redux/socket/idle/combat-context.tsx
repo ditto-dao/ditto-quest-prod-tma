@@ -69,6 +69,10 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   const [monsterHpChange, setMonsterHpChange] = useState<{ timestamp: number, hpChange: number }>();
 
   const enterDomain = (domain: Domain) => {
+    if (isBattling) {
+      console.warn(`Already in battle, ignoring duplicate enterDomain`);
+      return;
+    }
     setIsBattling(true);
     setCombatArea(domain);
     if (socket && canEmitEvent() && telegramId) {
@@ -94,13 +98,17 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   }, [userData.combat]);
 
   useEffect(() => {
-    if (socket && !loadingSocket) {
+    if (socket && !loadingSocket && accessGranted) {
       socket.on(COMBAT_STARTED_EVENT, (payload: { monster: FullMonster }) => {
         console.log(
           `Received COMBAT_STARTED_EVENT: ${JSON.stringify(payload, null, 2)}`
         );
-        setIsBattling(true);
-        setMonster(payload.monster);
+        if (payload.monster) {
+          setIsBattling(true);
+          setMonster(payload.monster);
+        } else {
+          setMonster(null);
+        }
       });
 
       socket.on(COMBAT_STOPPED_EVENT, () => {
@@ -108,6 +116,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         setIsBattling(false);
         setMonster(null);
         setCombatArea(null);
+        setUserHpChange(undefined);
       });
 
       socket.on(COMBAT_HP_CHANGE_EVENT, (data: CombatHpChangeEventPayload) => {
@@ -149,6 +158,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         setMonster(null);
         setCombatArea(null);
         incrementUserHp(Infinity);
+        setUserHpChange(undefined);
         alert(`You have died.`); // change to notification
       });
 

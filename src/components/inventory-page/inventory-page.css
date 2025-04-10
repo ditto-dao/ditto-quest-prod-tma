@@ -247,12 +247,49 @@
 
 .inv-modal-item-description-container {
   border: 1.5px solid var(--bright-teal); /* Outer border color */
-  padding: 5px;
   border-radius: 8px;
   background-color: var(--deep-teal);
   padding: 10px;
-  font-size: 9px;
+  font-size: 8px;
   text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inv-eq-tab-info {
+  display: flex;
+  gap: 8px;
+}
+
+.inv-eq-tab-info .attack-type.melee {
+  background-color: var(--melee);
+}
+
+.inv-eq-tab-info .attack-type.ranged {
+  background-color: var(--ranged);
+}
+
+.inv-eq-tab-info .attack-type.magic {
+  background-color: var(--magic);
+}
+
+.inv-eq-tab-info .required-lvl,
+.inv-eq-tab-info .attack-type {
+  font-size: 7px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-align: center;
+  align-self: start;
+  width: fit-content;
+}
+
+.inv-eq-tab-info .required-lvl {
+  background-color: var(--steel-blue);
+}
+
+.inv-eq-tab-info .required-lvl.red {
+  background-color: var(--deep-warm-red);
 }
 
 .inv-modal-item-description {

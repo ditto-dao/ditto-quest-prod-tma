@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   padding: 12px;
-  gap: 30px;
+  gap: 20px;
 }
 
 .skills-container, .combat-stats-container {
@@ -38,4 +38,50 @@
   font-size: 11px;
   text-align: left;
   padding: 10px 0;
+}
+
+.outstanding-stat-points {
+  background-color: var(--sage-green);
+  font-size: 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.outstanding-stat-points > .user-stat-points {
+  background-color: var(--forest-green);
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.skills-inner-container > .assign-stats-button {
+  padding: 10px 20px;
+  font-weight: bold;
+  font-size: 12px;
+  border-radius: 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  user-select: none;
+  border: none;
+}
+
+.skills-inner-container > .assign-stats-button.active {
+  background-color: var(--burnt-orange);
+  color: var(--cream-white);
+  box-shadow: 0 4px 0 var(--dark-navy);
+}
+
+.skills-inner-container > .assign-stats-button.active:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 var(--sage-green);
+}
+
+.skills-inner-container > .assign-stats-button.disabled {
+  background-color: #ccc;
+  color: #777;
+  cursor: not-allowed;
+  box-shadow: none;
 }

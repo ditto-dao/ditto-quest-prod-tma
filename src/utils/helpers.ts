@@ -1,5 +1,5 @@
 import { formatUnits } from "ethers";
-import { DittoBalanceBN, Rarity, SlimeWithTraits, UserBalanceUpdate } from "./types";
+import { Combat, DittoBalanceBN, EquipmentType, Inventory, NetStatDelta, Rarity, SlimeTrait, SlimeWithTraits, StatEffect, User, UserBalanceUpdate } from "./types";
 import { DEVELOPMENT_FUNDS_KEY, DITTO_DECIMALS } from "./config";
 
 export function delay(ms: number): Promise<void> {
@@ -204,4 +204,265 @@ export function getDeductionPayloadToDevFunds(
             }
         ]
     };
+}
+
+export function calculateNetStatDelta(user: User, effects: StatEffect[]): NetStatDelta {
+    const result: NetStatDelta = {
+        maxHp: 0,
+        atkSpd: 0,
+        acc: 0,
+        eva: 0,
+        maxMeleeDmg: 0,
+        maxRangedDmg: 0,
+        maxMagicDmg: 0,
+        critChance: 0,
+        critMultiplier: 0,
+        dmgReduction: 0,
+        magicDmgReduction: 0,
+        hpRegenRate: 0,
+        hpRegenAmount: 0,
+        meleeFactor: 0,
+        rangeFactor: 0,
+        magicFactor: 0,
+        reinforceAir: 0,
+        reinforceWater: 0,
+        reinforceEarth: 0,
+        reinforceFire: 0,
+        doubleResourceOdds: 0,
+        skillIntervalReductionMultiplier: 0
+    };
+
+    const baseStats = {
+        maxHp: user.maxHp,
+        atkSpd: user.atkSpd,
+        acc: user.acc,
+        eva: user.eva,
+        maxMeleeDmg: user.maxMeleeDmg,
+        maxRangedDmg: user.maxRangedDmg,
+        maxMagicDmg: user.maxMagicDmg,
+        critChance: user.critChance,
+        critMultiplier: user.critMultiplier,
+        dmgReduction: user.dmgReduction,
+        magicDmgReduction: user.magicDmgReduction,
+        hpRegenRate: user.hpRegenRate,
+        hpRegenAmount: user.hpRegenAmount,
+    };
+
+    for (const effect of effects) {
+        result.maxHp += effect.maxHpMod && effect.maxHpEffect
+            ? effect.maxHpEffect === 'add'
+                ? effect.maxHpMod
+                : (effect.maxHpMod - 1) * baseStats.maxHp
+            : 0;
+
+        result.atkSpd += effect.atkSpdMod && effect.atkSpdEffect
+            ? effect.atkSpdEffect === 'add'
+                ? effect.atkSpdMod
+                : (effect.atkSpdMod - 1) * baseStats.atkSpd
+            : 0;
+
+        result.acc += effect.accMod && effect.accEffect
+            ? effect.accEffect === 'add'
+                ? effect.accMod
+                : (effect.accMod - 1) * baseStats.acc
+            : 0;
+
+        result.eva += effect.evaMod && effect.evaEffect
+            ? effect.evaEffect === 'add'
+                ? effect.evaMod
+                : (effect.evaMod - 1) * baseStats.eva
+            : 0;
+
+        result.maxMeleeDmg += effect.maxMeleeDmgMod && effect.maxMeleeDmgEffect
+            ? effect.maxMeleeDmgEffect === 'add'
+                ? effect.maxMeleeDmgMod
+                : (effect.maxMeleeDmgMod - 1) * baseStats.maxMeleeDmg
+            : 0;
+
+        result.maxRangedDmg += effect.maxRangedDmgMod && effect.maxRangedDmgEffect
+            ? effect.maxRangedDmgEffect === 'add'
+                ? effect.maxRangedDmgMod
+                : (effect.maxRangedDmgMod - 1) * baseStats.maxRangedDmg
+            : 0;
+
+        result.maxMagicDmg += effect.maxMagicDmgMod && effect.maxMagicDmgEffect
+            ? effect.maxMagicDmgEffect === 'add'
+                ? effect.maxMagicDmgMod
+                : (effect.maxMagicDmgMod - 1) * baseStats.maxMagicDmg
+            : 0;
+
+        result.critChance += effect.critChanceMod && effect.critChanceEffect
+            ? effect.critChanceEffect === 'add'
+                ? effect.critChanceMod
+                : (effect.critChanceMod - 1) * baseStats.critChance
+            : 0;
+
+        result.critMultiplier += effect.critMultiplierMod && effect.critMultiplierEffect
+            ? effect.critMultiplierEffect === 'add'
+                ? effect.critMultiplierMod
+                : (effect.critMultiplierMod - 1) * baseStats.critMultiplier
+            : 0;
+
+        result.dmgReduction += effect.dmgReductionMod && effect.dmgReductionEffect
+            ? effect.dmgReductionEffect === 'add'
+                ? effect.dmgReductionMod
+                : (effect.dmgReductionMod - 1) * baseStats.dmgReduction
+            : 0;
+
+        result.magicDmgReduction += effect.magicDmgReductionMod && effect.magicDmgReductionEffect
+            ? effect.magicDmgReductionEffect === 'add'
+                ? effect.magicDmgReductionMod
+                : (effect.magicDmgReductionMod - 1) * baseStats.magicDmgReduction
+            : 0;
+
+        result.hpRegenRate += effect.hpRegenRateMod && effect.hpRegenRateEffect
+            ? effect.hpRegenRateEffect === 'add'
+                ? effect.hpRegenRateMod
+                : (effect.hpRegenRateMod - 1) * baseStats.hpRegenRate
+            : 0;
+
+        result.hpRegenAmount += effect.hpRegenAmountMod && effect.hpRegenAmountEffect
+            ? effect.hpRegenAmountEffect === 'add'
+                ? effect.hpRegenAmountMod
+                : (effect.hpRegenAmountMod - 1) * baseStats.hpRegenAmount
+            : 0;
+
+        result.meleeFactor += effect.meleeFactor ? effect.meleeFactor : 0;
+        result.rangeFactor += effect.rangeFactor ? effect.rangeFactor : 0;
+        result.magicFactor += effect.magicFactor ? effect.magicFactor : 0;
+
+        result.reinforceAir += effect.reinforceAir ? effect.reinforceAir : 0;
+        result.reinforceWater += effect.reinforceWater ? effect.reinforceWater : 0;
+        result.reinforceEarth += effect.reinforceEarth ? effect.reinforceEarth : 0;
+        result.reinforceFire += effect.reinforceFire ? effect.reinforceFire : 0;
+
+        result.doubleResourceOdds += effect.doubleResourceOddsMod ? effect.doubleResourceOddsMod : 0;
+        result.skillIntervalReductionMultiplier += effect.skillIntervalReductionMultiplierMod ? effect.skillIntervalReductionMultiplierMod : 0;
+    }
+    return result;
+}
+
+export function applyNetStatDelta(user: User, userCombat: Combat, deltas: NetStatDelta): void {
+    user.doubleResourceOdds += deltas.doubleResourceOdds;
+    user.skillIntervalReductionMultiplier += deltas.skillIntervalReductionMultiplier;
+
+    userCombat.maxHp += deltas.maxHp;
+    userCombat.atkSpd += deltas.atkSpd;
+    userCombat.acc += deltas.acc;
+    userCombat.eva += deltas.eva;
+    userCombat.maxMeleeDmg += deltas.maxMeleeDmg;
+    userCombat.maxRangedDmg += deltas.maxRangedDmg;
+    userCombat.maxMagicDmg += deltas.maxMagicDmg;
+    userCombat.critChance += deltas.critChance;
+    userCombat.critMultiplier += deltas.critMultiplier;
+    userCombat.dmgReduction += deltas.dmgReduction;
+    userCombat.magicDmgReduction += deltas.magicDmgReduction;
+    userCombat.hpRegenRate += deltas.hpRegenRate
+    userCombat.hpRegenAmount += deltas.hpRegenAmount;
+    userCombat.meleeFactor += deltas.meleeFactor;
+    userCombat.rangeFactor += deltas.rangeFactor;
+    userCombat.magicFactor += deltas.magicFactor;
+    userCombat.reinforceAir += deltas.reinforceAir;
+    userCombat.reinforceWater += deltas.reinforceWater;
+    userCombat.reinforceEarth += deltas.reinforceEarth;
+    userCombat.reinforceFire += deltas.reinforceFire;
+
+    userCombat.cp = calculateCombatPower(userCombat);
+}
+
+export function updateUserStatsFromEquipmentAndSlime(user: User, userCombat: Combat): void {
+    const statEffects: StatEffect[] = [];
+
+    // Get all equipped equipment
+    const equippedItems: (Inventory | null | undefined)[] = [
+        user.hat,
+        user.armour,
+        user.weapon,
+        user.shield,
+        user.cape,
+        user.necklace,
+    ];
+
+    let updatedAttackType = false;
+
+    for (const item of equippedItems) {
+        if (item?.equipment) {
+            const effect = item.equipment.statEffect;
+            if (effect) {
+                statEffects.push(effect);
+            } else {
+                console.error(`Equipment "${item.equipment.name}" (ID: ${item.equipment.id}) has no statEffect linked.`);
+                alert(`Equipment "${item.equipment.name}" (ID: ${item.equipment.id}) has no statEffect linked.`);
+            }
+
+            // set combat attack type based on equipped weapon
+            if (item.equipment.type === EquipmentType.weapon && item.equipment.attackType) {
+                userCombat.attackType = item.equipment.attackType;
+                updatedAttackType = true;
+            }
+        }
+    }
+
+    if (!updatedAttackType) userCombat.attackType = 'Melee';
+
+    // Get all traits of the equipped slime
+    if (user.equippedSlime) {
+        const slimeTraits: SlimeTrait[] = Object.values(user.equippedSlime);
+        for (const trait of slimeTraits) {
+            const effect = trait?.statEffect;
+            if (effect) {
+                statEffects.push(effect);
+            }
+        }
+    }
+
+    const delta = calculateNetStatDelta(user, statEffects);
+    applyNetStatDelta(user, userCombat, delta);
+}
+
+export function calculateCombatPower(c: Combat): number {
+    // Pick only the relevant max damage based on attack type
+    const relevantMaxDmg =
+        c.attackType === 'Melee' ? c.maxMeleeDmg :
+            c.attackType === 'Ranged' ? c.maxRangedDmg :
+                c.attackType === 'Magic' ? c.maxMagicDmg :
+                    0;
+
+    // Offensive power with crit and attack speed
+    const critBonus = c.critChance * (c.critMultiplier - 1);
+    const offenseScore = relevantMaxDmg * (1 + critBonus) * (1 + c.atkSpd / 10);
+
+    // Accuracy & evasion contribute to reliability/survivability
+    const accuracyScore = Math.sqrt(c.acc);
+    const evasionScore = Math.sqrt(c.eva);
+
+    // Defense and sustain
+    const defenseScore = c.dmgReduction + c.magicDmgReduction;
+    const sustainScore = c.hpRegenRate * c.hpRegenAmount * 0.1;
+
+    // Diminishing returns on raw HP
+    const hpScore = Math.sqrt(c.maxHp);
+
+    // Weighted and scaled total score
+    const totalScore =
+        (offenseScore * 12 +
+            accuracyScore * 5 +
+            evasionScore * 5 +
+            defenseScore * 4 +
+            sustainScore * 2 +
+            hpScore * 1.5);
+
+    return Math.round(totalScore);
+}
+
+export function removeUndefined<T extends object>(obj: Partial<T>): Partial<T> {
+    const result: Partial<T> = {};
+
+    for (const key in obj) {
+        if (obj[key] !== undefined) {
+            result[key] = obj[key];
+        }
+    }
+
+    return result;
 }

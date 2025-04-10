@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
 import "./combat-console.css";
 import BattleIcon from "../../../assets/images/combat/battle-icon.png";
 import { formatNumberWithCommas } from "../../../utils/helpers";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
+import GoldMedalIcon from "../../../assets/images/combat/gold-medal.png";
+import HPLevelIcon from "../../../assets/images/combat/hp-lvl.png";
 
 function BattleBoxLoader() {
   return (
@@ -28,9 +30,6 @@ function CombatConsole() {
     userHpChange,
     monsterHpChange,
   } = useCombatSocket();
-  const [monsterHpProgress, setMonsterHpProgress] = useState(100);
-  const [userHpProgress, setUserHpProgress] = useState(100);
-
   const userHpChangeRef = useRef<HTMLDivElement>(null);
   const monsterHpChangeRef = useRef<HTMLDivElement>(null);
 
@@ -86,20 +85,6 @@ function CombatConsole() {
     runAway();
   };
 
-  useEffect(() => {
-    if (monster && monster.combat.maxHp > 0) {
-      console.log(`monster hp: ${monster.combat.hp} / ${monster.combat.maxHp}`);
-      setMonsterHpProgress((monster.combat.hp / monster.combat.maxHp) * 100);
-    }
-  }, [monster?.combat.hp]);
-
-  useEffect(() => {
-    if (userData && userData.combat && userData.maxHp > 0) {
-      console.log(`user hp: ${userData.combat.hp} / ${userData.combat.maxHp}`);
-      setUserHpProgress((userData.combat.hp / userData.combat.maxHp) * 100);
-    }
-  }, [userData.combat?.hp]);
-
   const getHpBarColor = (hpPercent: number) => {
     if (hpPercent <= 35) return "var(--deep-warm-red)"; // Red
     if (hpPercent <= 60) return "var(--burnt-orange)"; // Orange
@@ -129,8 +114,14 @@ function CombatConsole() {
                   <div
                     className="hp-progress-bar"
                     style={{
-                      width: `${monsterHpProgress}%`,
-                      backgroundColor: getHpBarColor(monsterHpProgress),
+                      width: `${Math.ceil(
+                        (monster.combat.hp / monster.combat.maxHp) * 100
+                      )}%`,
+                      backgroundColor: getHpBarColor(
+                        Math.ceil(
+                          (monster.combat.hp / monster.combat.maxHp) * 100
+                        )
+                      ),
                     }}
                   />
                 </div>
@@ -163,8 +154,14 @@ function CombatConsole() {
                   <div
                     className="hp-progress-bar"
                     style={{
-                      width: `${userHpProgress}%`,
-                      backgroundColor: getHpBarColor(userHpProgress),
+                      width: `${Math.ceil(
+                        (userData.combat!.hp / userData.combat!.maxHp) * 100
+                      )}%`,
+                      backgroundColor: getHpBarColor(
+                        Math.ceil(
+                          (userData.combat!.hp / userData.combat!.maxHp) * 100
+                        )
+                      ),
                     }}
                   />
                 </div>
@@ -175,6 +172,36 @@ function CombatConsole() {
               </div>
             </div>
           )}
+          <div className="combat-console-exp-progress">
+            <div className="combat-console-exp">
+              <img src={GoldMedalIcon} alt="exp icon" className="exp-icon" />
+              <div className="exp-label">EXP</div>
+              <div className="exp-bar">
+                <div
+                  className="exp-progress-bar"
+                  style={{
+                    width: `${(userData.exp / userData.expToNextLevel) * 100}%`,
+                    backgroundColor: `var(--rarity-s)`,
+                  }}
+                />
+              </div>
+            </div>
+            <div className="combat-console-exp">
+              <img src={HPLevelIcon} alt="hp lvl icon" className="exp-icon" />
+              <div className="exp-label">EXP</div>
+              <div className="exp-bar">
+                <div
+                  className="exp-progress-bar"
+                  style={{
+                    width: `${
+                      (userData.expHp / userData.expToNextHpLevel) * 100
+                    }%`,
+                    backgroundColor: `var(--rarity-s)`,
+                  }}
+                />
+              </div>
+            </div>
+          </div>
           <button className="run-button" onClick={handleRun}>
             Run Away
           </button>
