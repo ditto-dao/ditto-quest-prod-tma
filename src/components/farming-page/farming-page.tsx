@@ -4,7 +4,7 @@ import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
 import FarmingItem from "./farming-item/farming-item";
 import { useState } from "react";
 
-const categories = ["Ore", "Crystal", "Essence", "Fiber", "Shards"];
+const categories = ["Lumber", "Fiber", "Ore", "Crystal", "Shards"];
 
 function FarmingPage() {
   const { farmingStatuses } = useIdleSkillSocket();
