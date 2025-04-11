@@ -23,7 +23,9 @@ import { RootState } from "../../store";
 
 interface CombatHpChangeEventPayload {
   target: "user" | "monster";
-  hpAmount: number;
+  hp: number;
+  maxHp: number;
+  dmg: number;
 }
 
 // Context
@@ -54,7 +56,7 @@ export const useCombatSocket = () => useContext(CombatContext);
 export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   children,
 }) => {
-  const { userData, incrementUserHp } = useUserSocket();
+  const { userData, incrementUserHp, setUserHp } = useUserSocket();
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
@@ -124,10 +126,10 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
           `Received COMBAT_HP_CHANGE_EVENT: ${JSON.stringify(data, null, 2)}`
         );
         if (data.target === "user") {
-          setUserHpChange({ timestamp: Date.now(), hpChange: data.hpAmount });
-          incrementUserHp(data.hpAmount);
+          setUserHpChange({ timestamp: Date.now(), hpChange: data.dmg });
+          setUserHp(data.hp, data.maxHp);
         } else {
-          setMonsterHpChange({ timestamp: Date.now(), hpChange: data.hpAmount });
+          setMonsterHpChange({ timestamp: Date.now(), hpChange: data.dmg });
 
           setMonster((prevMonsterData) => {
             if (!prevMonsterData) {
@@ -138,14 +140,12 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
             if (!prevMonsterData.combat) {
               throw new Error("No combat object found for monster");
             }
-            const { hp, maxHp } = prevMonsterData.combat;
-            const newHp = Math.max(0, Math.min(maxHp, hp + data.hpAmount));
-
             return {
               ...prevMonsterData,
               combat: {
                 ...prevMonsterData.combat,
-                hp: newHp,
+                hp: data.hp,
+                maxHp: data.maxHp
               },
             };
           });

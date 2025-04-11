@@ -74,6 +74,7 @@ interface UserContext {
   equipSlime: (slime: SlimeWithTraits) => void;
   unequipSlime: () => void;
   incrementUserHp: (amount: number) => void;
+  setUserHp: (hp: number, maxHp: number) => void;
   isUpgradingStats: boolean;
   pumpStats: (stats: StatsToPumpPayload) => void;
   canEmitEvent: () => boolean;
@@ -94,6 +95,7 @@ const UserContext = createContext<UserContext>({
   equipSlime: () => {},
   unequipSlime: () => {},
   incrementUserHp: () => {},
+  setUserHp: () => {},
   isUpgradingStats: false,
   pumpStats: () => {},
   canEmitEvent: () => false,
@@ -322,6 +324,23 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         combat: {
           ...prevUserData.combat,
           hp: newHp,
+        },
+      };
+    });
+  };
+
+  const setUserHp = (hp: number, maxHp: number) => {
+    setUserData((prevUserData) => {
+      if (!prevUserData.combat) {
+        throw new Error("No combat object found for user");
+      }
+
+      return {
+        ...prevUserData,
+        combat: {
+          ...prevUserData.combat,
+          hp: hp,
+          maxHp: maxHp
         },
       };
     });
@@ -672,6 +691,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         equipSlime,
         unequipSlime,
         incrementUserHp,
+        setUserHp,
         isUpgradingStats,
         pumpStats,
         canEmitEvent,
