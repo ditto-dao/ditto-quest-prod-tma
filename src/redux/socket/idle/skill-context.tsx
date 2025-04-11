@@ -406,7 +406,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
               });
             }
 
-            if (update.type === "crafting" && update.update.items) {
+            if (update.type === "farming" && update.update.items) {
               update.update.items.forEach((item) => {
                 if (item.quantity !== 0) {
                   const sign = item.quantity > 0 ? "+" : "";
