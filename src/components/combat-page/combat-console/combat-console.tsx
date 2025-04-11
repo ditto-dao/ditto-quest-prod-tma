@@ -40,7 +40,7 @@ function CombatConsole() {
   ) {
     const isMiss = hpChange === 0;
     const sign = hpChange > 0 ? "+" : "";
-    const text = isMiss ? "Miss!" : `${sign}${hpChange}`;
+    const text = isMiss ? "Miss!" : `${sign}${hpChange}${crit ? "!" : ""}`;
     const color = isMiss
       ? "var(--rarity-d)"
       : hpChange > 0
@@ -113,7 +113,14 @@ function CombatConsole() {
           ) : (
             <div className="battle-box-inner">
               <div className="battle-box-left">
-                <img className="monster-img" src={monster.imgsrc} />
+                <div
+                  className="monster-img-wrapper"
+                  style={{
+                    backgroundImage: `url(${combatArea?.imgsrc})`,
+                  }}
+                >
+                  <img className="monster-img" src={monster.imgsrc} />
+                </div>{" "}
               </div>
               <div className="battle-box-right">
                 <div className="monster-header">
@@ -121,7 +128,9 @@ function CombatConsole() {
                 </div>
                 <div className="monster-stats">
                   <div className="monster-level">LVL {monster.level}</div>
-                  <div className="monster-cp">CP {formatNumberWithCommas(monster.combat.cp)}</div>
+                  <div className="monster-cp">
+                    CP {formatNumberWithCommas(monster.combat.cp)}
+                  </div>
                 </div>
                 <div className="hp-bar-monster" ref={monsterHpChangeRef}>
                   <div
@@ -164,7 +173,9 @@ function CombatConsole() {
                 </div>
                 <div className="monster-stats">
                   <div className="monster-level">LVL {userData.level}</div>
-                  <div className="monster-cp">CP {formatNumberWithCommas(userCombat.cp)}</div>
+                  <div className="monster-cp">
+                    CP {formatNumberWithCommas(userCombat.cp)}
+                  </div>
                 </div>
                 <div className="hp-bar-user" ref={userHpChangeRef}>
                   <div
