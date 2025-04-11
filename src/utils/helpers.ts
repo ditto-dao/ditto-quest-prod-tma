@@ -208,64 +208,52 @@ export function getDeductionPayloadToDevFunds(
 
 function calculateNetStatDelta(user: User, effects: StatEffect[]) {
     const base = {
-        maxHp: user.maxHp,
-        atkSpd: user.atkSpd,
-        acc: user.acc,
-        eva: user.eva,
-        maxMeleeDmg: user.maxMeleeDmg,
-        maxRangedDmg: user.maxRangedDmg,
-        maxMagicDmg: user.maxMagicDmg,
-        critChance: user.critChance,
-        critMultiplier: user.critMultiplier,
-        dmgReduction: user.dmgReduction,
-        magicDmgReduction: user.magicDmgReduction,
-        hpRegenRate: user.hpRegenRate,
-        hpRegenAmount: user.hpRegenAmount,
+        maxHp: user.maxHp, atkSpd: user.atkSpd, acc: user.acc, eva: user.eva,
+        maxMeleeDmg: user.maxMeleeDmg, maxRangedDmg: user.maxRangedDmg, maxMagicDmg: user.maxMagicDmg,
+        critChance: user.critChance, critMultiplier: user.critMultiplier,
+        dmgReduction: user.dmgReduction, magicDmgReduction: user.magicDmgReduction,
+        hpRegenRate: user.hpRegenRate, hpRegenAmount: user.hpRegenAmount,
     };
 
     const result = {
-        maxHp: 0,
-        atkSpd: 0,
-        acc: 0,
-        eva: 0,
-        maxMeleeDmg: 0,
-        maxRangedDmg: 0,
-        maxMagicDmg: 0,
-        critChance: 0,
-        critMultiplier: 0,
-        dmgReduction: 0,
-        magicDmgReduction: 0,
-        hpRegenRate: 0,
-        hpRegenAmount: 0,
-        meleeFactor: 0,
-        rangeFactor: 0,
-        magicFactor: 0,
-        reinforceAir: 0,
-        reinforceWater: 0,
-        reinforceEarth: 0,
-        reinforceFire: 0,
-        doubleResourceOdds: 0,
-        skillIntervalReductionMultiplier: 0,
+        maxHp: 0, atkSpd: 0, acc: 0, eva: 0, maxMeleeDmg: 0, maxRangedDmg: 0, maxMagicDmg: 0,
+        critChance: 0, critMultiplier: 0, dmgReduction: 0, magicDmgReduction: 0,
+        hpRegenRate: 0, hpRegenAmount: 0, meleeFactor: 0, rangeFactor: 0, magicFactor: 0,
+        reinforceAir: 0, reinforceWater: 0, reinforceEarth: 0, reinforceFire: 0,
+        doubleResourceOdds: 0, skillIntervalReductionMultiplier: 0,
     };
 
-    const applyMod = (mod: number | null | undefined, effect: "add" | "mul" | null | undefined, baseVal: number) =>
-        mod && effect ? (effect === "add" ? mod : (mod - 1) * baseVal) : 0;
+    const additive = {} as Record<keyof typeof base, number>;
+    const multiplicative = {} as Record<keyof typeof base, number[]>;
+
+    // Init base keys
+    for (const key of Object.keys(base) as (keyof typeof base)[]) {
+        additive[key] = 0;
+        multiplicative[key] = [];
+    }
+
+    const apply = (mod: number | null | undefined, effect: 'add' | 'mul' | null | undefined, key: keyof typeof base) => {
+        if (mod == null || effect == null) return;
+        if (effect === 'add') additive[key] += mod;
+        else multiplicative[key].push(mod); // expects full multiplier value like 0.9 or 1.1
+    };
 
     for (const e of effects) {
-        result.maxHp += applyMod(e.maxHpMod, e.maxHpEffect, base.maxHp);
-        result.atkSpd += applyMod(e.atkSpdMod, e.atkSpdEffect, base.atkSpd);
-        result.acc += applyMod(e.accMod, e.accEffect, base.acc);
-        result.eva += applyMod(e.evaMod, e.evaEffect, base.eva);
-        result.maxMeleeDmg += applyMod(e.maxMeleeDmgMod, e.maxMeleeDmgEffect, base.maxMeleeDmg);
-        result.maxRangedDmg += applyMod(e.maxRangedDmgMod, e.maxRangedDmgEffect, base.maxRangedDmg);
-        result.maxMagicDmg += applyMod(e.maxMagicDmgMod, e.maxMagicDmgEffect, base.maxMagicDmg);
-        result.critChance += applyMod(e.critChanceMod, e.critChanceEffect, base.critChance);
-        result.critMultiplier += applyMod(e.critMultiplierMod, e.critMultiplierEffect, base.critMultiplier);
-        result.dmgReduction += applyMod(e.dmgReductionMod, e.dmgReductionEffect, base.dmgReduction);
-        result.magicDmgReduction += applyMod(e.magicDmgReductionMod, e.magicDmgReductionEffect, base.magicDmgReduction);
-        result.hpRegenRate *= e.hpRegenRateMod ? e.hpRegenRateMod : 1; // always multiplicative by <1 value
-        result.hpRegenAmount += applyMod(e.hpRegenAmountMod, e.hpRegenAmountEffect, base.hpRegenAmount);
+        apply(e.maxHpMod, e.maxHpEffect, 'maxHp');
+        apply(e.atkSpdMod, e.atkSpdEffect, 'atkSpd');
+        apply(e.accMod, e.accEffect, 'acc');
+        apply(e.evaMod, e.evaEffect, 'eva');
+        apply(e.maxMeleeDmgMod, e.maxMeleeDmgEffect, 'maxMeleeDmg');
+        apply(e.maxRangedDmgMod, e.maxRangedDmgEffect, 'maxRangedDmg');
+        apply(e.maxMagicDmgMod, e.maxMagicDmgEffect, 'maxMagicDmg');
+        apply(e.critChanceMod, e.critChanceEffect, 'critChance');
+        apply(e.critMultiplierMod, e.critMultiplierEffect, 'critMultiplier');
+        apply(e.dmgReductionMod, e.dmgReductionEffect, 'dmgReduction');
+        apply(e.magicDmgReductionMod, e.magicDmgReductionEffect, 'magicDmgReduction');
+        apply(e.hpRegenRateMod, e.hpRegenRateEffect, 'hpRegenRate');
+        apply(e.hpRegenAmountMod, e.hpRegenAmountEffect, 'hpRegenAmount');
 
+        // Simple additive values
         result.meleeFactor += e.meleeFactor ?? 0;
         result.rangeFactor += e.rangeFactor ?? 0;
         result.magicFactor += e.magicFactor ?? 0;
@@ -273,13 +261,21 @@ function calculateNetStatDelta(user: User, effects: StatEffect[]) {
         result.reinforceWater += e.reinforceWater ?? 0;
         result.reinforceEarth += e.reinforceEarth ?? 0;
         result.reinforceFire += e.reinforceFire ?? 0;
+
         result.doubleResourceOdds += e.doubleResourceOddsMod ?? 0;
         result.skillIntervalReductionMultiplier += e.skillIntervalReductionMultiplierMod ?? 0;
     }
 
+    // Apply all stats with additive then multiplicative chaining
+    for (const key of Object.keys(base) as (keyof typeof base)[]) {
+        const baseVal = base[key];
+        const add = additive[key];
+        const mulChain = multiplicative[key].reduce((acc, val) => acc * val, 1);
+        result[key] = (baseVal + add) * mulChain - baseVal;
+    }
+
     return result;
 }
-
 function applyDelta(user: User, combat: Combat, delta: ReturnType<typeof calculateNetStatDelta>) {
     user.doubleResourceOdds += delta.doubleResourceOdds;
     user.skillIntervalReductionMultiplier += delta.skillIntervalReductionMultiplier;
