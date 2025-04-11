@@ -2,7 +2,10 @@ import { useEffect, useRef } from "react";
 import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
 import "./combat-console.css";
 import BattleIcon from "../../../assets/images/combat/battle-icon.png";
-import { formatNumberWithCommas } from "../../../utils/helpers";
+import {
+  formatNumberWithCommas,
+  formatNumberWithSuffix,
+} from "../../../utils/helpers";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import GoldMedalIcon from "../../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../../assets/images/combat/hp-lvl.png";
@@ -145,7 +148,10 @@ function CombatConsole() {
                 <div className="monster-stats">
                   <div className="monster-level">LVL {monster.level}</div>
                   <div className="monster-cp">
-                    CP {formatNumberWithCommas(monster.combat.cp)}
+                    CP{" "}
+                    {monster.combat.cp < 1000000
+                      ? formatNumberWithCommas(monster.combat.cp)
+                      : formatNumberWithSuffix(monster.combat.cp)}
                   </div>
                 </div>
                 <div className="hp-bar-monster" ref={monsterHpChangeRef}>
@@ -203,7 +209,9 @@ function CombatConsole() {
                 <div className="monster-stats">
                   <div className="monster-level">LVL {userData.level}</div>
                   <div className="monster-cp">
-                    CP {formatNumberWithCommas(userCombat.cp)}
+                    CP {userCombat.cp < 1000000
+                      ? formatNumberWithCommas(userCombat.cp)
+                      : formatNumberWithSuffix(userCombat.cp)}
                   </div>
                 </div>
                 <div className="hp-bar-user" ref={userHpChangeRef}>

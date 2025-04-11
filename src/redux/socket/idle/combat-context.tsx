@@ -20,6 +20,7 @@ import {
 } from "../../../utils/events";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
+import Domains from "../../../assets/json/domains.json";
 
 interface CombatHpChangeEventPayload {
   target: "user" | "monster";
@@ -37,8 +38,12 @@ interface CombatContext {
   combatArea: Domain | null;
   enterDomain: (domain: Domain) => void;
   runAway: () => void;
-  userHpChange: { timestamp: number, hpChange: number, crit: boolean } | undefined;
-  monsterHpChange: { timestamp: number, hpChange: number, crit: boolean } | undefined;
+  userHpChange:
+    | { timestamp: number; hpChange: number; crit: boolean }
+    | undefined;
+  monsterHpChange:
+    | { timestamp: number; hpChange: number; crit: boolean }
+    | undefined;
 }
 
 const CombatContext = createContext<CombatContext>({
@@ -49,7 +54,7 @@ const CombatContext = createContext<CombatContext>({
   enterDomain: () => {},
   runAway: () => {},
   userHpChange: undefined,
-  monsterHpChange: undefined
+  monsterHpChange: undefined,
 });
 
 export const useCombatSocket = () => useContext(CombatContext);
@@ -68,8 +73,16 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   const [monster, setMonster] = useState<FullMonster | null>(null);
   const [combatArea, setCombatArea] = useState<Domain | null>(null);
 
-  const [userHpChange, setUserHpChange] = useState<{ timestamp: number, hpChange: number, crit: boolean }>();
-  const [monsterHpChange, setMonsterHpChange] = useState<{ timestamp: number, hpChange: number, crit: boolean }>();
+  const [userHpChange, setUserHpChange] = useState<{
+    timestamp: number;
+    hpChange: number;
+    crit: boolean;
+  }>();
+  const [monsterHpChange, setMonsterHpChange] = useState<{
+    timestamp: number;
+    hpChange: number;
+    crit: boolean;
+  }>();
 
   const enterDomain = (domain: Domain) => {
     if (isBattling) {
@@ -102,17 +115,43 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
 
   useEffect(() => {
     if (socket && !loadingSocket && accessGranted) {
-      socket.on(COMBAT_STARTED_EVENT, (payload: { monster: FullMonster }) => {
-        console.log(
-          `Received COMBAT_STARTED_EVENT: ${JSON.stringify(payload, null, 2)}`
-        );
-        if (payload.monster) {
-          setIsBattling(true);
-          setMonster(payload.monster);
-        } else {
-          setMonster(null);
+      socket.on(
+        COMBAT_STARTED_EVENT,
+        (payload: {
+          monster: FullMonster;
+          combatAreaType: "Dungeon" | "Domain";
+          combatAreaId: number;
+        }) => {
+          console.log(
+            `Received COMBAT_STARTED_EVENT monster: ${JSON.stringify(
+              payload.monster,
+              null,
+              2
+            )}`
+          );
+          if (payload.monster) {
+            setIsBattling(true);
+            setMonster(payload.monster);
+          } else {
+            setMonster(null);
+          }
+          if (payload.combatAreaType === "Domain") {
+            const domain = (Domains as Domain[]).find(
+              (d) => d.id === payload.combatAreaId
+            );
+            if (domain) {
+              setCombatArea(domain);
+            } else {
+              console.warn(
+                `Domain with ID ${payload.combatAreaId} not found in Domains JSON`
+              );
+            }
+          }
+          if (payload.combatAreaType === "Dungeon") {
+            // TODO
+          }
         }
-      });
+      );
 
       socket.on(COMBAT_STOPPED_EVENT, () => {
         console.log(`Received COMBAT_STOPPED_EVENT`);
@@ -127,10 +166,18 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
           `Received COMBAT_HP_CHANGE_EVENT: ${JSON.stringify(data, null, 2)}`
         );
         if (data.target === "user") {
-          setUserHpChange({ timestamp: Date.now(), hpChange: data.dmg, crit: data.crit });
+          setUserHpChange({
+            timestamp: Date.now(),
+            hpChange: data.dmg,
+            crit: data.crit,
+          });
           setUserHp(data.hp, data.maxHp);
         } else {
-          setMonsterHpChange({ timestamp: Date.now(), hpChange: data.dmg, crit: data.crit });
+          setMonsterHpChange({
+            timestamp: Date.now(),
+            hpChange: data.dmg,
+            crit: data.crit,
+          });
 
           setMonster((prevMonsterData) => {
             if (!prevMonsterData) {
@@ -146,7 +193,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
               combat: {
                 ...prevMonsterData.combat,
                 hp: data.hp,
-                maxHp: data.maxHp
+                maxHp: data.maxHp,
               },
             };
           });
@@ -182,7 +229,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         enterDomain,
         runAway,
         userHpChange,
-        monsterHpChange
+        monsterHpChange,
       }}
     >
       {children}

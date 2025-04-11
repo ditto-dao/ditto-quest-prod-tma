@@ -25,6 +25,7 @@ import {
 import {
   calculateCombatPower,
   formatNumberWithCommas,
+  formatNumberWithSuffix,
 } from "../../utils/helpers";
 import SlimeModal from "../slime-lab/slime-lab-inventory/slime-modal/slime-modal";
 import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
@@ -51,7 +52,7 @@ function AvatarPage() {
   const unequipSlimeFromAvatarPage = () => {
     closeSlimeModal();
     unequipSlime();
-  }
+  };
 
   const canSetSlimeToBreed = (slime: SlimeWithTraits) => {
     return (
@@ -157,9 +158,14 @@ function AvatarPage() {
                     <div>CP</div>
                   </div>
                   <div>
-                    {formatNumberWithCommas(
-                      calculateCombatPower(userData.combat || defaultCombat)
-                    )}
+                    {calculateCombatPower(userData.combat || defaultCombat) <
+                    1000000
+                      ? formatNumberWithCommas(
+                          calculateCombatPower(userData.combat || defaultCombat)
+                        )
+                      : formatNumberWithSuffix(
+                          calculateCombatPower(userData.combat || defaultCombat)
+                        )}
                   </div>
                 </div>
               </div>
