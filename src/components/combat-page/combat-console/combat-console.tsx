@@ -6,6 +6,9 @@ import { formatNumberWithCommas } from "../../../utils/helpers";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import GoldMedalIcon from "../../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../../assets/images/combat/hp-lvl.png";
+import MeleeCombatLabel from "../../../assets/images/combat/melee-combat-label.png";
+import RangedCombatLabel from "../../../assets/images/combat/ranged-combat-label.png";
+import MagicombatLabel from "../../../assets/images/combat/magic-combat-label.png";
 
 function BattleBoxLoader() {
   return (
@@ -112,6 +115,19 @@ function CombatConsole() {
             <BattleBoxLoader />
           ) : (
             <div className="battle-box-inner">
+              <div className="combat-type-icon">
+                <img
+                  className="combat-type-img"
+                  src={
+                    monster.combat.attackType === "Melee"
+                      ? MeleeCombatLabel
+                      : monster.combat.attackType === "Ranged"
+                      ? RangedCombatLabel
+                      : MagicombatLabel
+                  }
+                  alt={`${monster.combat.attackType} icon`}
+                />
+              </div>
               <div className="battle-box-left">
                 <div
                   className="monster-img-wrapper"
@@ -161,6 +177,19 @@ function CombatConsole() {
             <BattleBoxLoader />
           ) : (
             <div className="battle-box-inner">
+              <div className="combat-type-icon">
+                <img
+                  className="combat-type-img"
+                  src={
+                    userCombat.attackType === "Melee"
+                      ? MeleeCombatLabel
+                      : userCombat.attackType === "Ranged"
+                      ? RangedCombatLabel
+                      : MagicombatLabel
+                  }
+                  alt={`${userCombat.attackType} icon`}
+                />
+              </div>
               <div className="battle-box-left">
                 <img
                   className="monster-img"
