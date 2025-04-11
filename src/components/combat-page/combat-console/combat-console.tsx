@@ -35,7 +35,8 @@ function CombatConsole() {
 
   function spawnFloatingText(
     ref: React.RefObject<HTMLElement>,
-    hpChange: number
+    hpChange: number,
+    crit: boolean
   ) {
     const isMiss = hpChange === 0;
     const sign = hpChange > 0 ? "+" : "";
@@ -49,6 +50,7 @@ function CombatConsole() {
     const textElement = document.createElement("div");
     textElement.textContent = text;
     textElement.classList.add("floating-text");
+    if (crit) textElement.classList.add("crit"); // ✨ Add crit styles
     textElement.style.color = color;
     textElement.style.setProperty("--target-x", "10px");
     textElement.style.setProperty("--target-y", "-45px");
@@ -68,7 +70,11 @@ function CombatConsole() {
         monster.combat.hp >= monster.combat.maxHp
       )
         return;
-      spawnFloatingText(monsterHpChangeRef, monsterHpChange.hpChange);
+      spawnFloatingText(
+        monsterHpChangeRef,
+        monsterHpChange.hpChange,
+        monsterHpChange.crit
+      );
     }
   }, [monsterHpChange]);
 
@@ -77,7 +83,11 @@ function CombatConsole() {
       if (userHpChange.hpChange > 0 && userCombat.hp >= userCombat.maxHp)
         return;
 
-      spawnFloatingText(userHpChangeRef, userHpChange.hpChange);
+      spawnFloatingText(
+        userHpChangeRef,
+        userHpChange.hpChange,
+        userHpChange.crit
+      );
     }
   }, [userHpChange]);
 
@@ -108,7 +118,10 @@ function CombatConsole() {
               <div className="battle-box-right">
                 <div className="monster-header">
                   <div className="monster-name">{monster.name}</div>
+                </div>
+                <div className="monster-stats">
                   <div className="monster-level">LVL {monster.level}</div>
+                  <div className="monster-cp">CP {formatNumberWithCommas(monster.combat.cp)}</div>
                 </div>
                 <div className="hp-bar-monster" ref={monsterHpChangeRef}>
                   <div
@@ -148,8 +161,11 @@ function CombatConsole() {
               <div className="battle-box-right">
                 <div className="monster-header">
                   <div className="monster-name">{userData.username}</div>
+                </div>
+                <div className="monster-stats">
                   <div className="monster-level">LVL {userData.level}</div>
-                </div>{" "}
+                  <div className="monster-cp">CP {formatNumberWithCommas(userCombat.cp)}</div>
+                </div>
                 <div className="hp-bar-user" ref={userHpChangeRef}>
                   <div
                     className="hp-progress-bar"

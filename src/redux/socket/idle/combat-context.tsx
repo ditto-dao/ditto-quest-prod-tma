@@ -26,6 +26,7 @@ interface CombatHpChangeEventPayload {
   hp: number;
   maxHp: number;
   dmg: number;
+  crit: boolean;
 }
 
 // Context
@@ -36,8 +37,8 @@ interface CombatContext {
   combatArea: Domain | null;
   enterDomain: (domain: Domain) => void;
   runAway: () => void;
-  userHpChange: { timestamp: number, hpChange: number } | undefined;
-  monsterHpChange: { timestamp: number, hpChange: number } | undefined;
+  userHpChange: { timestamp: number, hpChange: number, crit: boolean } | undefined;
+  monsterHpChange: { timestamp: number, hpChange: number, crit: boolean } | undefined;
 }
 
 const CombatContext = createContext<CombatContext>({
@@ -67,8 +68,8 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   const [monster, setMonster] = useState<FullMonster | null>(null);
   const [combatArea, setCombatArea] = useState<Domain | null>(null);
 
-  const [userHpChange, setUserHpChange] = useState<{ timestamp: number, hpChange: number }>();
-  const [monsterHpChange, setMonsterHpChange] = useState<{ timestamp: number, hpChange: number }>();
+  const [userHpChange, setUserHpChange] = useState<{ timestamp: number, hpChange: number, crit: boolean }>();
+  const [monsterHpChange, setMonsterHpChange] = useState<{ timestamp: number, hpChange: number, crit: boolean }>();
 
   const enterDomain = (domain: Domain) => {
     if (isBattling) {
@@ -126,10 +127,10 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
           `Received COMBAT_HP_CHANGE_EVENT: ${JSON.stringify(data, null, 2)}`
         );
         if (data.target === "user") {
-          setUserHpChange({ timestamp: Date.now(), hpChange: data.dmg });
+          setUserHpChange({ timestamp: Date.now(), hpChange: data.dmg, crit: data.crit });
           setUserHp(data.hp, data.maxHp);
         } else {
-          setMonsterHpChange({ timestamp: Date.now(), hpChange: data.dmg });
+          setMonsterHpChange({ timestamp: Date.now(), hpChange: data.dmg, crit: data.crit });
 
           setMonster((prevMonsterData) => {
             if (!prevMonsterData) {
