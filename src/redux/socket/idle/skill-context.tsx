@@ -3,9 +3,6 @@ import { useSocket } from "../socket-context";
 import { SlimeWithTraits, SocketProviderProps } from "../../../utils/types";
 import { useLoginSocket } from "../login/login-context";
 import { useUserSocket } from "../user/user-context";
-import { formatDuration } from "../../../utils/helpers";
-import { formatUnits } from "ethers";
-import { DITTO_DECIMALS } from "../../../utils/config";
 import { useNotification } from "../../../components/notifications/notification-context";
 import OfflineProgressNotification from "../../../components/notifications/notification-content/offline-progress/offline-progress-notification";
 
@@ -61,9 +58,7 @@ export interface ProgressUpdate {
       quantity: number;
       uri: string;
     }[];
-    slime?: {
-      slimeId: number;
-    };
+    slimes?: SlimeWithTraits[];
     farmingExpGained?: number;
     farmingLevelsGained?: number;
     craftingExpGained?: number;
@@ -318,126 +313,12 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
             `Received idle-progress-update: ${JSON.stringify(data, null, 2)}`
           );
           if (!data.updates || data.updates.length <= 0) return;
-          addNotification(<OfflineProgressNotification updates={data.updates} offlineProgressMs={data.offlineProgressMs} />);
-          return;
-
-          let alertMessage = `Offline Progress: ${formatDuration(
-            data.offlineProgressMs / 1000
-          )}\n\n`;
-
-          data.updates.forEach((update) => {
-            data.updates.forEach((update) => {
-              if (update.type === "combat") {
-                const {
-                  monstersKilled,
-                  items,
-                  equipment,
-                  expGained,
-                  levelsGained,
-                  hpExpGained,
-                  hpLevelsGained,
-                  dittoGained,
-                  userDied,
-                } = update.update;
-
-                if (userDied === false && !monstersKilled) return
-
-                if (userDied) {
-                  alertMessage += `⚰️ You died during offline combat.\n`;
-                }
-
-                if (monstersKilled && monstersKilled.length > 0) {
-                  const totalKills = monstersKilled.reduce(
-                    (sum, m) => sum + m.quantity,
-                    0
-                  );
-                  alertMessage += `Monsters Killed: ${totalKills}\n`;
-
-                  monstersKilled.forEach((monster) => {
-                    alertMessage += `- ${monster.name} ×${monster.quantity}\n`;
-                  });
-                }
-
-                if (items && items.length > 0) {
-                  items.forEach((item) => {
-                    alertMessage += `Item: ${item.itemName} +${item.quantity}\n`;
-                  });
-                }
-
-                if (equipment && equipment.length > 0) {
-                  equipment.forEach((eq) => {
-                    alertMessage += `Equipment: ${eq.equipmentName} +${eq.quantity}\n`;
-                  });
-                }
-
-                if (typeof expGained === "number" && expGained > 0) {
-                  alertMessage += `+${expGained} EXP\n`;
-                }
-
-                if (typeof levelsGained === "number" && levelsGained > 0) {
-                  alertMessage += `+${levelsGained} LEVELS\n`;
-                }
-
-                if (typeof hpExpGained === "number" && hpExpGained > 0) {
-                  alertMessage += `+${hpExpGained} HP EXP\n`;
-                }
-
-                if (typeof hpLevelsGained === "number" && hpLevelsGained > 0) {
-                  alertMessage += `+${hpLevelsGained} HP LEVELS\n`;
-                }
-
-                if (dittoGained && dittoGained !== "0") {
-                  alertMessage += `+${formatUnits(
-                    dittoGained,
-                    DITTO_DECIMALS
-                  )} DITTO\n`;
-                }
-              }
-            });
-
-            if (update.type === "crafting" && update.update.equipment) {
-              update.update.equipment.forEach((equipment) => {
-                if (equipment.quantity !== 0) {
-                  const sign = equipment.quantity > 0 ? "+" : "";
-                  alertMessage += `${equipment.equipmentName} ${sign}${equipment.quantity}\n`;
-                  if (
-                    update.update.craftingLevelsGained &&
-                    update.update.craftingLevelsGained > 0
-                  ) {
-                    alertMessage += `Crafting Lvl Gained +${update.update.craftingLevelsGained}\n`;
-                  }
-                  if (sign.length > 0)
-                    alertMessage += `Crafting XP +${update.update.craftingExpGained}\n`;
-                }
-              });
-            }
-
-            if (update.type === "farming" && update.update.items) {
-              update.update.items.forEach((item) => {
-                if (item.quantity !== 0) {
-                  const sign = item.quantity > 0 ? "+" : "";
-                  alertMessage += `${item.itemName} ${sign}${item.quantity}\n`;
-                  if (
-                    update.update.farmingLevelsGained &&
-                    update.update.farmingLevelsGained > 0
-                  ) {
-                    alertMessage += `Farming Lvl Gained +${update.update.farmingLevelsGained}\n`;
-                  }
-                  if (sign.length > 0)
-                    alertMessage += `Farming XP +${update.update.farmingExpGained}\n`;
-                }
-              });
-            }
-
-            if (update.type === "breeding" && update.update.slime) {
-              alertMessage += `Slime #${update.update.slime.slimeId} +1\n`;
-            }
-          });
-
-          // Alert the final message
-          if (alertMessage.trim() !== "") {
-            alert(alertMessage.trim());
-          }
+          addNotification(
+            <OfflineProgressNotification
+              updates={data.updates}
+              offlineProgressMs={data.offlineProgressMs}
+            />
+          );
         }
       );
 

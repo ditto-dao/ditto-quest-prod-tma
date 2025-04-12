@@ -20,7 +20,6 @@ const NotificationManager: FC = () => {
             content: {
               width: notification.big ? "95%" : "80%",
               maxHeight: notification.big ? "95vh" : "80vh",
-              height: "100%",
               overflow: "hidden",
             },
           }}

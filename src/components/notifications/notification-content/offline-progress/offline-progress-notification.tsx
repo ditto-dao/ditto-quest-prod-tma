@@ -8,6 +8,8 @@ import HPLevelIcon from "../../../../assets/images/combat/hp-lvl.png";
 import DittoCoinIcon from "../../../../assets/images/general/ditto-coin.png";
 import DeathIcon from "../../../../assets/images/combat/death.png";
 import SleepySlime from "../../../../assets/images/general/sleepy-slime.png";
+import CraftingIcon from "../../../../assets/images/sidebar/craft.png";
+import FarmingIcon from "../../../../assets/images/sidebar/farm.png";
 
 interface OfflineProgressProps {
   updates: ProgressUpdate[];
@@ -106,14 +108,14 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
       if (update.update.farmingLevelsGained)
         farmingLines.push(
           renderLine(
-            "/icons/lvl.png",
+            FarmingIcon,
             `Farming Level +${update.update.farmingLevelsGained}`
           )
         );
       if (update.update.farmingExpGained)
         farmingLines.push(
           renderLine(
-            "/icons/exp.png",
+            FarmingIcon,
             `Farming EXP +${update.update.farmingExpGained}`
           )
         );
@@ -130,26 +132,28 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
       if (update.update.craftingLevelsGained)
         craftingLines.push(
           renderLine(
-            "/icons/lvl.png",
+            CraftingIcon,
             `Crafting Level +${update.update.craftingLevelsGained}`
           )
         );
       if (update.update.craftingExpGained)
         craftingLines.push(
           renderLine(
-            "/icons/exp.png",
+            CraftingIcon,
             `Crafting EXP +${update.update.craftingExpGained}`
           )
         );
     }
 
-    if (update.type === "breeding" && update.update.slime) {
-      breedingLines.push(
-        renderLine(
-          "/icons/slime.png",
-          `Slime #${update.update.slime.slimeId} +1`
-        )
-      );
+    if (update.type === "breeding" && update.update.slimes) {
+      for (const slime of update.update.slimes) {
+        breedingLines.push(
+          renderLine(
+            slime.imageUri,
+            `Slime #${slime.id} +1`
+          )
+        );
+      }
     }
   });
 
