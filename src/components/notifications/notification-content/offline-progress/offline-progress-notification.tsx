@@ -4,6 +4,7 @@ import {
   formatDuration,
   formatNumberWithCommas,
   formatNumberWithSuffix,
+  preloadImage,
 } from "../../../../utils/helpers";
 import { formatUnits } from "ethers/utils";
 import { DITTO_DECIMALS } from "../../../../utils/config";
@@ -16,6 +17,7 @@ import SleepySlime from "../../../../assets/images/general/sleepy-slime.png";
 import CraftingIcon from "../../../../assets/images/sidebar/craft.png";
 import FarmingIcon from "../../../../assets/images/sidebar/farm.png";
 import Timer from "../../../../assets/images/general/timer.png";
+import { useState, useEffect } from "react";
 
 interface OfflineProgressProps {
   updates: ProgressUpdate[];
@@ -46,6 +48,56 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
   const craftingLines: JSX.Element[] = [];
   const breedingLines: JSX.Element[] = [];
 
+  const [imagesPreloaded, setImagesPreloaded] = useState(false);
+
+  useEffect(() => {
+    const preloadAll = async () => {
+      const staticImages = [
+        GoldMedalIcon,
+        HPLevelIcon,
+        DittoCoinIcon,
+        GP,
+        DeathIcon,
+        SleepySlime,
+        CraftingIcon,
+        FarmingIcon,
+        Timer,
+      ];
+
+      const dynamicImages = updates.flatMap((update) => {
+        if (update.type === "combat") {
+          const { monstersKilled, items, equipment } = update.update;
+          return [
+            ...(monstersKilled?.map((m) => m.uri) || []),
+            ...(items?.map((i) => i.uri) || []),
+            ...(equipment?.map((e) => e.uri) || []),
+          ];
+        }
+        if (update.type === "farming") {
+          return update.update.items?.map((i) => i.uri) || [];
+        }
+        if (update.type === "crafting") {
+          return [
+            ...(update.update.equipment?.map((e) => e.uri) || []),
+            ...(update.update.items?.map((i) => i.uri) || []),
+          ];
+        }
+        if (update.type === "breeding") {
+          return update.update.slimes?.map((s) => s.imageUri) || [];
+        }
+        return [];
+      });
+
+      const uniqueImages = Array.from(
+        new Set([...staticImages, ...dynamicImages])
+      );
+      await Promise.all(uniqueImages.map(preloadImage));
+      setImagesPreloaded(true);
+    };
+
+    preloadAll();
+  }, [updates]);
+
   updates.forEach((update) => {
     if (update.type === "combat") {
       const {
@@ -58,7 +110,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         hpLevelsGained,
         dittoGained,
         userDied,
-        goldGained
+        goldGained,
       } = update.update;
 
       if (userDied) {
@@ -120,13 +172,10 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
             )}`
           )
         );
-        if (goldGained && goldGained >= 0)
-          combatLines.push(
-            renderLine(
-              GP,
-              `GOLD +${formatNumberWithSuffix(goldGained)}`
-            )
-          );
+      if (goldGained && goldGained >= 0)
+        combatLines.push(
+          renderLine(GP, `GOLD +${formatNumberWithSuffix(goldGained)}`)
+        );
     }
 
     if (update.type === "farming") {
@@ -161,6 +210,13 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
           );
         }
       });
+      update.update.items?.forEach((item) => {
+        if (item.quantity !== 0) {
+          farmingLines.push(
+            renderLine(item.uri, `${item.itemName} ${item.quantity}`)
+          );
+        }
+      });
       if (update.update.craftingLevelsGained)
         craftingLines.push(
           renderLine(
@@ -183,6 +239,8 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
       }
     }
   });
+
+  if (!imagesPreloaded) return null;
 
   return (
     <div className="offline-progress-notification">
