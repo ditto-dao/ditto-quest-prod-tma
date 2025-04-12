@@ -435,3 +435,17 @@ export function removeUndefined<T extends object>(obj: Partial<T>): Partial<T> {
 
     return result;
 }
+
+export function preloadImage(src: string): Promise<void> {
+    return new Promise((resolve, _) => {
+        if (!src) return resolve(); // resolve instantly if no src
+
+        const img = new Image();
+        img.onload = () => resolve(); // only mark as loaded when fully decoded
+        img.onerror = () => {
+            console.error(`Failed to preload image: ${src}`);
+            resolve(); // still resolve to not block
+        };
+        img.src = src;
+    });
+}
