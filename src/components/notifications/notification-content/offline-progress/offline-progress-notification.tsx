@@ -1,15 +1,21 @@
 import "./offline-progress-notification.css";
 import { ProgressUpdate } from "../../../../redux/socket/idle/skill-context";
-import { formatDuration } from "../../../../utils/helpers";
+import {
+  formatDuration,
+  formatNumberWithCommas,
+  formatNumberWithSuffix,
+} from "../../../../utils/helpers";
 import { formatUnits } from "ethers/utils";
 import { DITTO_DECIMALS } from "../../../../utils/config";
 import GoldMedalIcon from "../../../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../../../assets/images/combat/hp-lvl.png";
 import DittoCoinIcon from "../../../../assets/images/general/ditto-coin.png";
+import GP from "../../../../assets/images/general/gold-coin.png";
 import DeathIcon from "../../../../assets/images/combat/death.png";
 import SleepySlime from "../../../../assets/images/general/sleepy-slime.png";
 import CraftingIcon from "../../../../assets/images/sidebar/craft.png";
 import FarmingIcon from "../../../../assets/images/sidebar/farm.png";
+import Timer from "../../../../assets/images/general/timer.png";
 
 interface OfflineProgressProps {
   updates: ProgressUpdate[];
@@ -52,6 +58,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         hpLevelsGained,
         dittoGained,
         userDied,
+        goldGained
       } = update.update;
 
       if (userDied) {
@@ -62,28 +69,44 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
 
       monstersKilled?.forEach((monster) => {
         combatLines.push(
-          renderLine(monster.uri, `${monster.name} ×${monster.quantity}`)
+          renderLine(
+            monster.uri,
+            `${monster.name} ×${formatNumberWithCommas(monster.quantity)}`
+          )
         );
       });
 
       items?.forEach((item) => {
         combatLines.push(
-          renderLine(item.uri, `${item.itemName} +${item.quantity}`)
+          renderLine(
+            item.uri,
+            `${item.itemName} +${formatNumberWithCommas(item.quantity)}`
+          )
         );
       });
 
       equipment?.forEach((eq) => {
         combatLines.push(
-          renderLine(eq.uri, `${eq.equipmentName} +${eq.quantity}`)
+          renderLine(
+            eq.uri,
+            `${eq.equipmentName} +${formatNumberWithCommas(eq.quantity)}`
+          )
         );
       });
 
       if (expGained)
-        combatLines.push(renderLine(GoldMedalIcon, `EXP +${expGained}`));
+        combatLines.push(
+          renderLine(GoldMedalIcon, `EXP +${formatNumberWithCommas(expGained)}`)
+        );
       if (levelsGained)
         combatLines.push(renderLine(GoldMedalIcon, `LEVELS +${levelsGained}`));
       if (hpExpGained)
-        combatLines.push(renderLine(HPLevelIcon, `HP EXP +${hpExpGained}`));
+        combatLines.push(
+          renderLine(
+            HPLevelIcon,
+            `HP EXP +${formatNumberWithCommas(hpExpGained)}`
+          )
+        );
       if (hpLevelsGained)
         combatLines.push(
           renderLine(HPLevelIcon, `+${hpLevelsGained} HP LEVELS`)
@@ -92,9 +115,18 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         combatLines.push(
           renderLine(
             DittoCoinIcon,
-            `DITTO +${formatUnits(dittoGained, DITTO_DECIMALS)}`
+            `DITTO +${formatNumberWithSuffix(
+              parseInt(formatUnits(dittoGained, DITTO_DECIMALS))
+            )}`
           )
         );
+        if (goldGained && goldGained >= 0)
+          combatLines.push(
+            renderLine(
+              GP,
+              `GOLD +${formatNumberWithSuffix(goldGained)}`
+            )
+          );
     }
 
     if (update.type === "farming") {
@@ -147,12 +179,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
 
     if (update.type === "breeding" && update.update.slimes) {
       for (const slime of update.update.slimes) {
-        breedingLines.push(
-          renderLine(
-            slime.imageUri,
-            `Slime #${slime.id} +1`
-          )
-        );
+        breedingLines.push(renderLine(slime.imageUri, `Slime #${slime.id}`));
       }
     }
   });
@@ -164,7 +191,11 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         <div>Welcome back!</div>
       </div>
       <div className="offline-progress-duration">
-        Offline Progress — {formatDuration(offlineProgressMs / 1000)}
+        <div className="offline-progress-duration-label">
+          <img src={Timer}></img>
+          <div>Offline Progress</div>
+        </div>
+        <div>{formatDuration(offlineProgressMs / 1000)}</div>
       </div>
       <div className="offline-progress-notification-content">
         {combatLines.length > 0 && (

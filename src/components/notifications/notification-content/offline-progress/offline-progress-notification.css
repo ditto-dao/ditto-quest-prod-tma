@@ -27,9 +27,25 @@
 
 .offline-progress-duration {
   font-size: 9px;
-  font-weight: 600;
   margin-bottom: 6px;
-  letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--muted-teal-green);
+  padding: 5px 10px;
+  border-radius: 5px;
+  gap: 4px;
+}
+
+.offline-progress-duration > .offline-progress-duration-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+}
+
+.offline-progress-duration > .offline-progress-duration-label > img {
+  max-height: 20px;
 }
 
 .offline-progress-notification-content {

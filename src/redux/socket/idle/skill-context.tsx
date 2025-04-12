@@ -70,6 +70,7 @@ export interface ProgressUpdate {
     hpLevelsGained?: number;
     dittoGained?: string;
     userDied?: boolean;
+    goldGained?: number;
   };
 }
 
