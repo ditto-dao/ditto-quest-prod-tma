@@ -313,7 +313,28 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
           console.log(
             `Received idle-progress-update: ${JSON.stringify(data, null, 2)}`
           );
+
           if (!data.updates || data.updates.length <= 0) return;
+
+          const hasMeaningfulProgress = data.updates.some((update) => {
+            if (update.type !== "combat") return true; // farming/crafting/breeding always allowed
+
+            const combat = update.update;
+            return (
+              combat.userDied ||
+              (combat.monstersKilled?.length ?? 0) > 0 ||
+              (combat.items?.length ?? 0) > 0 ||
+              (combat.equipment?.length ?? 0) > 0 ||
+              (combat.expGained ?? 0) > 0 ||
+              (combat.hpExpGained ?? 0) > 0 ||
+              (combat.levelsGained ?? 0) > 0 ||
+              (combat.hpLevelsGained ?? 0) > 0 ||
+              combat.dittoGained !== "0" ||
+              (combat.goldGained ?? 0) > 0
+            );
+          });
+
+          if (!hasMeaningfulProgress) return;
           addNotification(
             <OfflineProgressNotification
               updates={data.updates}
