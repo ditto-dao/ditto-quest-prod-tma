@@ -20,7 +20,9 @@ const NotificationManager: FC = () => {
             content: {
               width: notification.big ? "95%" : "80%",
               maxHeight: notification.big ? "95vh" : "80vh",
-              overflow: "hidden",
+              overflow: "visible",
+              display: "flex",
+              flexDirection: "column",
             },
           }}
         >

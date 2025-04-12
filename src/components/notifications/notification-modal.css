@@ -20,7 +20,9 @@
   background-color: var(--forest-green);
   border-radius: 5px;
   padding: 3%;
-  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
 }
 
 .notification-content {
