@@ -93,7 +93,7 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  filter: brightness(1.5); /* optional dimming */
+  filter: brightness(1.05); 
   opacity: 0.5;
 }
 
