@@ -21,6 +21,8 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Domains from "../../../assets/json/domains.json";
+import { useNotification } from "../../../components/notifications/notification-context";
+import DeathNotification from "../../../components/notifications/notification-content/user-death/death-notification";
 
 interface CombatHpChangeEventPayload {
   target: "user" | "monster";
@@ -65,6 +67,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   const { userData, incrementUserHp, setUserHp } = useUserSocket();
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
+  const { addNotification } = useNotification();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
 
@@ -207,7 +210,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         setCombatArea(null);
         incrementUserHp(Infinity);
         setUserHpChange(undefined);
-        alert(`You have died.`); // change to notification
+        addNotification(<DeathNotification />)
       });
 
       return () => {
