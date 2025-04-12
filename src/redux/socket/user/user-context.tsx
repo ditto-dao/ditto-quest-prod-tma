@@ -18,6 +18,7 @@ import {
 import { COMBAT_EXP_UPDATE_EVENT } from "../../../utils/events";
 import { useNotification } from "../../../components/notifications/notification-context";
 import LevelUpNotification from "../../../components/notifications/notification-content/level-up/level-up-notification";
+import ErrorNotification from "../../../components/notifications/notification-content/error/error-notification";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -661,7 +662,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       socket.on("error", (msg: string) => {
-        console.error(`${msg}`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+        addNotification(<ErrorNotification msg={msg} />)
       });
 
       // Clean up on unmount

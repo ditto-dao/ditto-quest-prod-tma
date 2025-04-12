@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useSocket } from "../socket-context";
 import { SlimeWithTraits, SocketProviderProps } from "../../../utils/types";
 import { useLoginSocket } from "../login/login-context";
+import { useNotification } from "../../../components/notifications/notification-context";
+import ErrorNotification from "../../../components/notifications/notification-content/error/error-notification";
 
 interface SlimeGachaPullRes {
   slime: SlimeWithTraits;
@@ -33,6 +35,7 @@ export const GachaSocketProvider: React.FC<SocketProviderProps> = ({
 }) => {
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
+  const { addNotification } = useNotification();
   
   const [rollingSlime, setRollingSlime] = useState<boolean>(false);
   const [slimeDrawn, setSlimeDrawn] = useState<string | null>(null);
@@ -65,7 +68,7 @@ export const GachaSocketProvider: React.FC<SocketProviderProps> = ({
       socket.on("slime-gacha-update", handleSlimeGachaUpdate);
 
       socket.on("mint-slime-error", (msg: string) => {
-        console.error(`${msg}`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+        addNotification(<ErrorNotification msg={msg} />)
         setRollingSlime(false);
       });
 
