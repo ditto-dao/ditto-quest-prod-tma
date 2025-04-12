@@ -16,6 +16,8 @@ import {
   updateUserStatsFromEquipmentAndSlime,
 } from "../../../utils/helpers";
 import { COMBAT_EXP_UPDATE_EVENT } from "../../../utils/events";
+import { useNotification } from "../../../components/notifications/notification-context";
+import LevelUpNotification from "../../../components/notifications/notification-content/level-up/level-up-notification";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -107,6 +109,7 @@ export const useUserSocket = () => useContext(UserContext);
 export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
+  const { addNotification } = useNotification();
 
   // User
   const [userData, setUserData] = useState<User>(defaultUser);
@@ -571,7 +574,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.farmingLevelsGained > 0) {
-          console.log(`fuck yeah`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+          addNotification(<LevelUpNotification newLevel={userData.farmingLevel} lvlLabel="Farming Lvl" />);
         }
       });
 
@@ -589,7 +592,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.craftingLevelsGained > 0) {
-          console.log(`fuck yeah`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+          addNotification(<LevelUpNotification newLevel={userData.craftingLevel} lvlLabel="Crafting Lvl" />);
         }
       });
 
@@ -644,11 +647,11 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           });
 
           if (data.levelUp) {
-            alert(`LEVEL UP! You are now level ${data.level}.`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+            addNotification(<LevelUpNotification newLevel={data.level} lvlLabel="Lvl" />);
           }
 
           if (data.hpLevelUp) {
-            alert(`HP LEVEL UP! Your HP level is now ${data.hpLevel}.`); //!!!!!!!!!!!!!!!!!!!!!!! change alerts to a separate event !!!!!!!!!!!!!!!!!!!!!!!
+            addNotification(<LevelUpNotification newLevel={data.hpLevel} lvlLabel="HP Lvl" />);
           }
         }
       );
