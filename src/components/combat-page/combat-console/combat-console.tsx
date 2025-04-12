@@ -7,6 +7,7 @@ import {
   formatDecimalWithCommas,
   formatDecimalWithSuffix,
   formatNumberWithCommas,
+  preloadImage,
 } from "../../../utils/helpers";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import GoldMedalIcon from "../../../assets/images/combat/gold-medal.png";
@@ -49,20 +50,6 @@ function CombatConsole() {
 
   const cp = calculateCombatPower(userData.combat || defaultCombat);
   const monsterCp = new Decimal(monster?.combat.cp || 0);
-
-  function preloadImage(src: string): Promise<void> {
-    return new Promise((resolve, _) => {
-      if (!src) return resolve(); // resolve instantly if no src
-
-      const img = new Image();
-      img.onload = () => resolve(); // only mark as loaded when fully decoded
-      img.onerror = () => {
-        console.error(`Failed to preload image: ${src}`);
-        resolve(); // still resolve to not block
-      };
-      img.src = src;
-    });
-  }
 
   function spawnFloatingText(
     ref: React.RefObject<HTMLElement>,
