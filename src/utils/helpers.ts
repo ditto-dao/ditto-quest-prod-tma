@@ -1,6 +1,7 @@
 import { formatUnits } from "ethers";
 import { Combat, DittoBalanceBN, EquipmentType, Inventory, Rarity, SlimeTrait, SlimeWithTraits, StatEffect, User, UserBalanceUpdate } from "./types";
 import { DEVELOPMENT_FUNDS_KEY, DITTO_DECIMALS } from "./config";
+import Decimal from "decimal.js";
 
 export function delay(ms: number): Promise<void> {
     return new Promise((resolve) => setTimeout(resolve, ms));
@@ -109,6 +110,34 @@ export function formatNumberWithSuffix(value: number): string {
     const formattedValue = value.toFixed(value < 10 ? 3 : value < 100 ? 2 : 1);
 
     return `${formattedValue}${suffixes[suffixIndex]}`;
+}
+
+export function formatDecimalWithCommas(num: Decimal): string {
+    const n = num.toNumber();
+    if (n < 1000) return num.toFixed(0); // e.g. 973
+    return n.toLocaleString("en-US");
+}
+
+// Format with suffix, like "1.23m", "5.6k"
+export function formatDecimalWithSuffix(value: Decimal): string {
+    const thousand = new Decimal(1000);
+    const suffixes = ["", "k", "m", "b", "t"];
+    let suffixIndex = 0;
+
+    while (value.gte(thousand) && suffixIndex < suffixes.length - 1) {
+        value = value.div(thousand);
+        suffixIndex++;
+    }
+
+    const v = value.toNumber();
+    const formatted =
+        v < 10
+            ? value.toFixed(3)
+            : v < 100
+                ? value.toFixed(2)
+                : value.toFixed(1);
+
+    return `${formatted}${suffixes[suffixIndex]}`;
 }
 
 export function formatNumberForInvQty(num: number): string {
@@ -352,39 +381,47 @@ export function updateUserStatsFromEquipmentAndSlime(user: User, userCombat: Com
     applyDelta(user, userCombat, delta);
 }
 
-export function calculateCombatPower(c: Combat): number {
-    // Pick only the relevant max damage based on attack type
+export function calculateCombatPower(c: Combat): Decimal {
+    const maxMeleeDmg = new Decimal(c.maxMeleeDmg);
+    const maxRangedDmg = new Decimal(c.maxRangedDmg);
+    const maxMagicDmg = new Decimal(c.maxMagicDmg);
+
+    const atkSpd = new Decimal(c.atkSpd);
+    const critChance = new Decimal(c.critChance);
+    const critMultiplier = new Decimal(c.critMultiplier);
+    const acc = new Decimal(c.acc);
+    const eva = new Decimal(c.eva);
+    const dmgReduction = new Decimal(c.dmgReduction);
+    const magicDmgReduction = new Decimal(c.magicDmgReduction);
+    const hpRegenRate = new Decimal(c.hpRegenRate);
+    const hpRegenAmount = new Decimal(c.hpRegenAmount);
+    const maxHp = new Decimal(c.maxHp);
+
     const relevantMaxDmg =
-        c.attackType === 'Melee' ? c.maxMeleeDmg :
-            c.attackType === 'Ranged' ? c.maxRangedDmg :
-                c.attackType === 'Magic' ? c.maxMagicDmg :
-                    0;
+        c.attackType === "Melee" ? maxMeleeDmg :
+            c.attackType === "Ranged" ? maxRangedDmg :
+                c.attackType === "Magic" ? maxMagicDmg :
+                    new Decimal(0);
 
-    // Offensive power with crit and attack speed
-    const critBonus = c.critChance * (c.critMultiplier - 1);
-    const offenseScore = relevantMaxDmg * (1 + critBonus) * (1 + c.atkSpd / 10);
+    const critBonus = critChance.mul(critMultiplier.minus(1));
+    const offenseScore = relevantMaxDmg
+        .mul(new Decimal(1).plus(critBonus))
+        .mul(new Decimal(1).plus(atkSpd.div(10)));
 
-    // Accuracy & evasion contribute to reliability/survivability
-    const accuracyScore = Math.sqrt(c.acc);
-    const evasionScore = Math.sqrt(c.eva);
+    const accuracyScore = acc.sqrt();
+    const evasionScore = eva.sqrt();
+    const defenseScore = dmgReduction.plus(magicDmgReduction);
+    const sustainScore = hpRegenRate.mul(hpRegenAmount).mul(0.1);
+    const hpScore = maxHp.sqrt();
 
-    // Defense and sustain
-    const defenseScore = c.dmgReduction + c.magicDmgReduction;
-    const sustainScore = c.hpRegenRate * c.hpRegenAmount * 0.1;
+    const totalScore = offenseScore.mul(12)
+        .plus(accuracyScore.mul(5))
+        .plus(evasionScore.mul(5))
+        .plus(defenseScore.mul(4))
+        .plus(sustainScore.mul(2))
+        .plus(hpScore.mul(1.5));
 
-    // Diminishing returns on raw HP
-    const hpScore = Math.sqrt(c.maxHp);
-
-    // Weighted and scaled total score
-    const totalScore =
-        (offenseScore * 12 +
-            accuracyScore * 5 +
-            evasionScore * 5 +
-            defenseScore * 4 +
-            sustainScore * 2 +
-            hpScore * 1.5);
-
-    return Math.round(totalScore);
+    return totalScore.round(); // return as Decimal
 }
 
 export function removeUndefined<T extends object>(obj: Partial<T>): Partial<T> {

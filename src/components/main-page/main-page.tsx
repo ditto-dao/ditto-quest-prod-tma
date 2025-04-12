@@ -20,6 +20,7 @@ import Stats from "../stats/stats";
 import { useUserSocket } from "../../redux/socket/user/user-context";
 import GachaPage from "../gacha-page/gacha-page";
 import CombatPage from "../combat-page/combat-page";
+import NotificationManager from "../notifications/notification-manager";
 
 function MainPage() {
   const { userData } = useUserSocket();
@@ -112,6 +113,7 @@ function MainPage() {
         setPage={setPage}
       />
       <div className="content">{renderPage()}</div>
+      <NotificationManager />
     </div>
   );
 }

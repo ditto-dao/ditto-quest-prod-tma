@@ -1,10 +1,12 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
 import "./combat-console.css";
 import BattleIcon from "../../../assets/images/combat/battle-icon.png";
 import {
+  calculateCombatPower,
+  formatDecimalWithCommas,
+  formatDecimalWithSuffix,
   formatNumberWithCommas,
-  formatNumberWithSuffix,
 } from "../../../utils/helpers";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import GoldMedalIcon from "../../../assets/images/combat/gold-medal.png";
@@ -12,6 +14,8 @@ import HPLevelIcon from "../../../assets/images/combat/hp-lvl.png";
 import MeleeCombatLabel from "../../../assets/images/combat/melee-combat-label.png";
 import RangedCombatLabel from "../../../assets/images/combat/ranged-combat-label.png";
 import MagicombatLabel from "../../../assets/images/combat/magic-combat-label.png";
+import { defaultCombat } from "../../../utils/types";
+import Decimal from "decimal.js";
 
 function BattleBoxLoader() {
   return (
@@ -38,6 +42,27 @@ function CombatConsole() {
   } = useCombatSocket();
   const userHpChangeRef = useRef<HTMLDivElement>(null);
   const monsterHpChangeRef = useRef<HTMLDivElement>(null);
+
+  const [iconImagesLoaded, setIconImagesLoaded] = useState(false);
+  const [userSlimeImageLoaded, setUserSlimeImageLoaded] = useState(false);
+  const [monsterImagesLoaded, setMonsterImagesLoaded] = useState(false);
+
+  const cp = calculateCombatPower(userData.combat || defaultCombat);
+  const monsterCp = new Decimal(monster?.combat.cp || 0);
+
+  function preloadImage(src: string): Promise<void> {
+    return new Promise((resolve, _) => {
+      if (!src) return resolve(); // resolve instantly if no src
+
+      const img = new Image();
+      img.onload = () => resolve(); // only mark as loaded when fully decoded
+      img.onerror = () => {
+        console.error(`Failed to preload image: ${src}`);
+        resolve(); // still resolve to not block
+      };
+      img.src = src;
+    });
+  }
 
   function spawnFloatingText(
     ref: React.RefObject<HTMLElement>,
@@ -66,6 +91,49 @@ function CombatConsole() {
       setTimeout(() => textElement.remove(), 1500);
     }
   }
+
+  useEffect(() => {
+    const iconsToPreload = [
+      BattleIcon,
+      GoldMedalIcon,
+      HPLevelIcon,
+      MeleeCombatLabel,
+      RangedCombatLabel,
+      MagicombatLabel,
+    ];
+
+    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
+      setIconImagesLoaded(true)
+    );
+  }, []);
+
+  useEffect(() => {
+    if (userData?.equippedSlime?.imageUri) {
+      preloadImage(userData.equippedSlime.imageUri).then(() =>
+        setUserSlimeImageLoaded(true)
+      );
+    } else {
+      setUserSlimeImageLoaded(false);
+    }
+  }, [userData?.equippedSlime?.imageUri]);
+
+  useEffect(() => {
+    const promises: Promise<void>[] = [];
+
+    if (monster?.imgsrc) {
+      promises.push(preloadImage(monster.imgsrc));
+    }
+
+    if (combatArea?.imgsrc) {
+      promises.push(preloadImage(combatArea.imgsrc));
+    }
+
+    if (promises.length > 0) {
+      Promise.all(promises).then(() => setMonsterImagesLoaded(true));
+    } else {
+      setMonsterImagesLoaded(false);
+    }
+  }, [monster?.imgsrc, combatArea?.imgsrc]);
 
   useEffect(() => {
     if (monsterHpChange) {
@@ -114,7 +182,7 @@ function CombatConsole() {
           {combatArea?.name || monster?.name || "Battle"}
         </div>
         <div className="battle-box">
-          {!monster ? (
+          {!monster || !iconImagesLoaded || !monsterImagesLoaded ? (
             <BattleBoxLoader />
           ) : (
             <div className="battle-box-inner">
@@ -132,14 +200,18 @@ function CombatConsole() {
                 />
               </div>
               <div className="battle-box-left">
-                <div
-                  className="monster-img-wrapper"
-                  style={{
-                    backgroundImage: `url(${combatArea?.imgsrc})`,
-                  }}
-                >
-                  <img className="monster-img" src={monster.imgsrc} />
-                </div>{" "}
+                <div className="monster-img-wrapper">
+                  <img
+                    className="monster-bg-img"
+                    src={combatArea?.imgsrc}
+                    alt="Area BG"
+                  />
+                  <img
+                    className="monster-img"
+                    src={monster.imgsrc}
+                    alt={monster.name}
+                  />
+                </div>
               </div>
               <div className="battle-box-right">
                 <div className="monster-header">
@@ -149,9 +221,9 @@ function CombatConsole() {
                   <div className="monster-level">LVL {monster.level}</div>
                   <div className="monster-cp">
                     CP{" "}
-                    {monster.combat.cp < 1000000
-                      ? formatNumberWithCommas(monster.combat.cp)
-                      : formatNumberWithSuffix(monster.combat.cp)}
+                    {monsterCp.lt(1_000_000)
+                      ? formatDecimalWithCommas(monsterCp)
+                      : formatDecimalWithSuffix(monsterCp)}
                   </div>
                 </div>
                 <div className="hp-bar-monster" ref={monsterHpChangeRef}>
@@ -179,7 +251,7 @@ function CombatConsole() {
           <div className="battle-icon-container">
             <img className="battle-icon-img" src={BattleIcon} />
           </div>
-          {!userData ? (
+          {!userData || !iconImagesLoaded || !userSlimeImageLoaded ? (
             <BattleBoxLoader />
           ) : (
             <div className="battle-box-inner">
@@ -209,9 +281,10 @@ function CombatConsole() {
                 <div className="monster-stats">
                   <div className="monster-level">LVL {userData.level}</div>
                   <div className="monster-cp">
-                    CP {userCombat.cp < 1000000
-                      ? formatNumberWithCommas(userCombat.cp)
-                      : formatNumberWithSuffix(userCombat.cp)}
+                    CP{" "}
+                    {cp.lt(1_000_000)
+                      ? formatDecimalWithCommas(cp)
+                      : formatDecimalWithSuffix(cp)}
                   </div>
                 </div>
                 <div className="hp-bar-user" ref={userHpChangeRef}>

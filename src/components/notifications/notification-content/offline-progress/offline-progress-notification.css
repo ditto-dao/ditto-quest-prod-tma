@@ -1,0 +1,83 @@
+.offline-progress-notification {
+  color: var(--cream-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+}
+
+.offline-progress-notification-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.offline-progress-notification-header > img {
+  max-width: 80px;
+}
+
+.offline-progress-notification-header > div {
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.offline-progress-duration {
+  font-size: 9px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.offline-progress-notification-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 12px;
+}
+
+.offline-progress-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.offline-progress-line {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 10px;
+  gap: 8px;
+}
+
+.offline-progress-img {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.offline-progress-text {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-width: 0; /* critical for wrapping */
+}
+
+.offline-progress-text .label {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+.offline-progress-text .value {
+  flex-shrink: 0;
+  margin-left: 6px;
+  white-space: nowrap;
+}

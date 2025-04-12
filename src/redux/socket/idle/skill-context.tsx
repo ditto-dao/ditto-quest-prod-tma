@@ -6,6 +6,8 @@ import { useUserSocket } from "../user/user-context";
 import { formatDuration } from "../../../utils/helpers";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../utils/config";
+import { useNotification } from "../../../components/notifications/notification-context";
+import OfflineProgressNotification from "../../../components/notifications/notification-content/offline-progress/offline-progress-notification";
 
 export interface FarmingStatus {
   startTimestamp: number;
@@ -121,6 +123,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
   children,
 }) => {
   const { socket, loadingSocket } = useSocket();
+  const { addNotification } = useNotification();
   const { accessGranted } = useLoginSocket();
   const { userData } = useUserSocket();
 
@@ -314,6 +317,8 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
           console.log(
             `Received idle-progress-update: ${JSON.stringify(data, null, 2)}`
           );
+          addNotification(<OfflineProgressNotification updates={data.updates} offlineProgressMs={data.offlineProgressMs} />);
+          return;
 
           let alertMessage = `Offline Progress: ${formatDuration(
             data.offlineProgressMs / 1000

@@ -12,6 +12,7 @@ import { LoginSocketProvider } from "./redux/socket/login/login-context";
 import { IdleSkillSocketProvider } from "./redux/socket/idle/skill-context";
 import { GachaSocketProvider } from "./redux/socket/gacha/gacha-context";
 import { CombatSocketProvider } from "./redux/socket/idle/combat-context";
+import { NotificationProvider } from "./components/notifications/notification-context";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -86,19 +87,21 @@ function App() {
 
   return (
     <Provider store={store}>
-      <SocketProvider>
-        <LoginSocketProvider>
-          <UserProvider>
-            <IdleSkillSocketProvider>
-              <GachaSocketProvider>
-                <CombatSocketProvider>
-                  <MainPage />
-                </CombatSocketProvider>
-              </GachaSocketProvider>
-            </IdleSkillSocketProvider>
-          </UserProvider>
-        </LoginSocketProvider>
-      </SocketProvider>
+      <NotificationProvider>
+        <SocketProvider>
+          <LoginSocketProvider>
+            <UserProvider>
+              <IdleSkillSocketProvider>
+                <GachaSocketProvider>
+                  <CombatSocketProvider>
+                    <MainPage />
+                  </CombatSocketProvider>
+                </GachaSocketProvider>
+              </IdleSkillSocketProvider>
+            </UserProvider>
+          </LoginSocketProvider>
+        </SocketProvider>
+      </NotificationProvider>
     </Provider>
   );
 }

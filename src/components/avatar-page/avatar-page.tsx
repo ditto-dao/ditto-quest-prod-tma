@@ -24,8 +24,9 @@ import {
 } from "../../utils/types";
 import {
   calculateCombatPower,
+  formatDecimalWithCommas,
+  formatDecimalWithSuffix,
   formatNumberWithCommas,
-  formatNumberWithSuffix,
 } from "../../utils/helpers";
 import SlimeModal from "../slime-lab/slime-lab-inventory/slime-modal/slime-modal";
 import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
@@ -39,6 +40,8 @@ function AvatarPage() {
     null
   );
   const [isEquipmentModalOpen, setIsEquipmentModalOpen] = useState(false);
+
+  const cp = calculateCombatPower(userData.combat || defaultCombat);
 
   // Slime Modal
   const openSlimeModal = () => {
@@ -158,14 +161,9 @@ function AvatarPage() {
                     <div>CP</div>
                   </div>
                   <div>
-                    {calculateCombatPower(userData.combat || defaultCombat) <
-                    1000000
-                      ? formatNumberWithCommas(
-                          calculateCombatPower(userData.combat || defaultCombat)
-                        )
-                      : formatNumberWithSuffix(
-                          calculateCombatPower(userData.combat || defaultCombat)
-                        )}
+                    {cp.lt(1_000_000)
+                      ? formatDecimalWithCommas(cp)
+                      : formatDecimalWithSuffix(cp)}
                   </div>
                 </div>
               </div>
