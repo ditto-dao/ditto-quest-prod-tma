@@ -15,7 +15,7 @@ const NotificationManager: FC = () => {
           isOpen={notification.isOpen}
           onRequestClose={() => removeNotification(notification.id)}
           key={notification.id}
-          shouldCloseOnOverlayClick={false}
+          shouldCloseOnOverlayClick={true}
           style={{
             content: {
               width: notification.big ? "95%" : "80%",
