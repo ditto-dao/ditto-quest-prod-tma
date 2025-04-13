@@ -161,7 +161,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         );
       if (hpLevelsGained)
         combatLines.push(
-          renderLine(HPLevelIcon, `+${hpLevelsGained} HP LEVELS`)
+          renderLine(HPLevelIcon, `HP LEVELS +${hpLevelsGained}`)
         );
       if (dittoGained && dittoGained !== "0")
         combatLines.push(

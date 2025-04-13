@@ -254,6 +254,12 @@
   transform: translateY(0.5px);
 }
 
+.run-button:disabled {
+  background-color: #aaa; 
+  cursor: not-allowed;
+  opacity: 0.6; 
+}
+
 /* SMOOTH SHIMMER ANIMATION USING YOUR THEME COLORS */
 .shimmer {
   position: relative;

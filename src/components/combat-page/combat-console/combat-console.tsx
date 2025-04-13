@@ -326,7 +326,7 @@ function CombatConsole() {
               </div>
             </div>
           </div>
-          <button className="run-button" onClick={handleRun}>
+          <button className="run-button" disabled={!monster} onClick={handleRun}>
             Run Away
           </button>
         </div>
