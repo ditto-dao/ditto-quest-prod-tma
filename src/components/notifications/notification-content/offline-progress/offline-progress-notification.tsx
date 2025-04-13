@@ -50,6 +50,52 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
 
   const [imagesPreloaded, setImagesPreloaded] = useState(false);
 
+  const shimmerCount = updates.reduce((count, update) => {
+    if (update.type === "combat") {
+      const u = update.update;
+      return (
+        count +
+        (u.userDied ? 1 : 0) +
+        (u.monstersKilled?.length || 0) +
+        (u.items?.length || 0) +
+        (u.equipment?.length || 0) +
+        (u.expGained ? 1 : 0) +
+        (u.levelsGained ? 1 : 0) +
+        (u.hpExpGained ? 1 : 0) +
+        (u.hpLevelsGained ? 1 : 0) +
+        (u.dittoGained && u.dittoGained !== "0" ? 1 : 0) +
+        (u.goldGained && u.goldGained > 0 ? 1 : 0)
+      );
+    }
+
+    if (update.type === "farming") {
+      const u = update.update;
+      return (
+        count +
+        (u.items?.filter((i) => i.quantity !== 0).length || 0) +
+        (u.farmingLevelsGained ? 1 : 0) +
+        (u.farmingExpGained ? 1 : 0)
+      );
+    }
+
+    if (update.type === "crafting") {
+      const u = update.update;
+      return (
+        count +
+        (u.equipment?.filter((e) => e.quantity !== 0).length || 0) +
+        (u.items?.filter((i) => i.quantity !== 0).length || 0) +
+        (u.craftingLevelsGained ? 1 : 0) +
+        (u.craftingExpGained ? 1 : 0)
+      );
+    }
+
+    if (update.type === "breeding") {
+      return count + (update.update.slimes?.length || 0);
+    }
+
+    return count;
+  }, 0);
+
   useEffect(() => {
     const preloadAll = async () => {
       const staticImages = [
@@ -240,7 +286,33 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
     }
   });
 
-  if (!imagesPreloaded) return null;
+  if (!imagesPreloaded) {
+    return (
+      <div className="offline-progress-notification">
+        <div className="offline-progress-notification-header">
+          <img src={SleepySlime} alt="Sleepy Slime" />
+          <div>Welcome back!</div>
+        </div>
+        <div className="offline-progress-duration shimmer-duration">
+          <div className="offline-progress-duration-label">
+            <div className="invisible-img-placeholder" />
+            <div className="invisible-text">Offline Progress</div>
+          </div>
+          <div className="invisible-text">
+            {formatDuration(offlineProgressMs / 1000)}
+          </div>
+        </div>
+        <div className="offline-progress-notification-content">
+          {Array.from({ length: shimmerCount }).map((_, i) => (
+            <div className="offline-progress-line" key={`shimmer-${i}`}>
+              <div className="offline-progress-img shimmer-img" />
+              <div className="offline-progress-text shimmer-text" />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="offline-progress-notification">

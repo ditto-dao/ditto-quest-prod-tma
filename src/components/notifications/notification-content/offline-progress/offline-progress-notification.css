@@ -97,3 +97,112 @@
   margin-left: 6px;
   white-space: nowrap;
 }
+
+/* === SHIMMER STYLES === */
+
+.shimmer-img {
+  width: 25px;
+  height: 25px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  background-color: var(--forest-green);
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-text {
+  flex: 1;
+  height: 12px;
+  border-radius: 4px;
+  background-color: var(--forest-green);
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-img::after,
+.shimmer-text::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  height: 100%;
+  width: 150%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--misty-teal),
+    transparent
+  );
+  animation: shimmer-move 1.2s linear infinite;
+  opacity: 0.3;
+  filter: blur(4px);
+}
+
+/* shimmer entire block */
+.shimmer-duration {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--muted-teal-green);
+  border-radius: 5px;
+  padding: 5px 10px;
+  gap: 4px;
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 9px;
+}
+
+/* shimmer effect across entire block */
+.shimmer-duration::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--misty-teal),
+    transparent
+  );
+  animation: shimmer-move 1.2s linear infinite;
+  opacity: 0.3;
+  filter: blur(4px);
+  z-index: 1;
+}
+
+/* match layout with invisible structure */
+.invisible-img-placeholder {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  background-color: transparent;
+  flex-shrink: 0;
+}
+
+.invisible-text {
+  color: transparent;
+  background-color: transparent;
+  user-select: none;
+  text-align: center;
+}
+
+/* required layout styling from original */
+.shimmer-duration > .offline-progress-duration-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  width: 100%;
+}
+
+@keyframes shimmer-move {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 100%;
+  }
+}

@@ -1,23 +1,18 @@
 import "./death-notification.css";
 import Death from "../../../../assets/images/combat/death.png";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { preloadImage } from "../../../../utils/helpers";
 
 function DeathNotification() {
-  const [imagesPreloaded, setImagesPreloaded] = useState(false);
-
   useEffect(() => {
     const preloadAll = async () => {
       const staticImages = [Death];
 
       await Promise.all(staticImages.map(preloadImage));
-      setImagesPreloaded(true);
     };
 
     preloadAll();
   }, []);
-
-  if (!imagesPreloaded) return null;
 
   return (
     <div className="death-notification">
