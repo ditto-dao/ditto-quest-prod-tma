@@ -305,30 +305,32 @@ function calculateNetStatDelta(user: User, effects: StatEffect[]) {
 
     return result;
 }
+
 function applyDelta(user: User, combat: Combat, delta: ReturnType<typeof calculateNetStatDelta>) {
     user.doubleResourceOdds += delta.doubleResourceOdds;
     user.skillIntervalReductionMultiplier += delta.skillIntervalReductionMultiplier;
 
-    combat.maxHp += delta.maxHp;
-    combat.atkSpd += delta.atkSpd;
-    combat.acc += delta.acc;
-    combat.eva += delta.eva;
-    combat.maxMeleeDmg += delta.maxMeleeDmg;
-    combat.maxRangedDmg += delta.maxRangedDmg;
-    combat.maxMagicDmg += delta.maxMagicDmg;
+    combat.maxHp = Math.round(combat.maxHp + delta.maxHp);
+    combat.atkSpd = Math.round(combat.atkSpd + delta.atkSpd);
+    combat.acc = Math.round(combat.acc + delta.acc);
+    combat.eva = Math.round(combat.eva + delta.eva);
+    combat.maxMeleeDmg = Math.round(combat.maxMeleeDmg + delta.maxMeleeDmg);
+    combat.maxRangedDmg = Math.round(combat.maxRangedDmg + delta.maxRangedDmg);
+    combat.maxMagicDmg = Math.round(combat.maxMagicDmg + delta.maxMagicDmg);
     combat.critChance += delta.critChance;
-    combat.critMultiplier += delta.critMultiplier;
-    combat.dmgReduction += delta.dmgReduction;
-    combat.magicDmgReduction += delta.magicDmgReduction;
+    const bonusCrit = Math.max(combat.critMultiplier - 1, 0.29);
+    combat.critMultiplier = 1 + bonusCrit * (1 + delta.critMultiplier);
+    combat.dmgReduction = Math.round(combat.dmgReduction + delta.dmgReduction);
+    combat.magicDmgReduction = Math.round(combat.magicDmgReduction + delta.magicDmgReduction);
     combat.hpRegenRate += delta.hpRegenRate;
-    combat.hpRegenAmount += delta.hpRegenAmount;
-    combat.meleeFactor += delta.meleeFactor;
-    combat.rangeFactor += delta.rangeFactor;
-    combat.magicFactor += delta.magicFactor;
-    combat.reinforceAir += delta.reinforceAir;
-    combat.reinforceWater += delta.reinforceWater;
-    combat.reinforceEarth += delta.reinforceEarth;
-    combat.reinforceFire += delta.reinforceFire;
+    combat.hpRegenAmount = Math.round(combat.hpRegenAmount + delta.hpRegenAmount);
+    combat.meleeFactor = Math.round(combat.meleeFactor + delta.meleeFactor);
+    combat.rangeFactor = Math.round(combat.rangeFactor + delta.rangeFactor);
+    combat.magicFactor = Math.round(combat.magicFactor + delta.magicFactor);
+    combat.reinforceAir = Math.round(combat.reinforceAir + delta.reinforceAir);
+    combat.reinforceWater = Math.round(combat.reinforceWater + delta.reinforceWater);
+    combat.reinforceEarth = Math.round(combat.reinforceEarth + delta.reinforceEarth);
+    combat.reinforceFire = Math.round(combat.reinforceFire + delta.reinforceFire);
 }
 
 export function updateUserStatsFromEquipmentAndSlime(user: User, userCombat: Combat): void {

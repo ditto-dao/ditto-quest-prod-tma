@@ -136,7 +136,7 @@ export const defaultUser: User = {
 export interface Combat {
     id: number;
     attackType: 'Melee' | 'Ranged' | 'Magic';
-    cp: number;
+    cp: string;
     hp: number;
     maxHp: number;
     atkSpd: number;
@@ -163,7 +163,7 @@ export interface Combat {
 export const defaultCombat: Combat = {
     id: 0,
     attackType: 'Melee',
-    cp: 699,
+    cp: "699",
     hp: 100,
     maxHp: 100,
     atkSpd: 10,
