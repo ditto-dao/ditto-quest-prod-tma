@@ -575,7 +575,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.farmingLevelsGained > 0) {
-          addNotification(<LevelUpNotification newLevel={userData.farmingLevel} lvlLabel="Farming Lvl" />);
+          addNotification(<LevelUpNotification newLevel={data.farmingLevel} lvlLabel="Farming Lvl" />);
         }
       });
 
@@ -593,7 +593,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.craftingLevelsGained > 0) {
-          addNotification(<LevelUpNotification newLevel={userData.craftingLevel} lvlLabel="Crafting Lvl" />);
+          addNotification(<LevelUpNotification newLevel={data.craftingLevel} lvlLabel="Crafting Lvl" />);
         }
       });
 
