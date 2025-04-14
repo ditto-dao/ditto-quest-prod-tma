@@ -58,7 +58,6 @@
 .offline-progress-section {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   padding: 10px;
   border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
@@ -68,18 +67,17 @@
   align-items: center;
   width: 100%;
   font-size: 9px;
-  gap: 8px;
 }
 
 .offline-progress-img {
-  width: 25px;
-  height: 25px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
   object-fit: contain;
 }
 
 .offline-progress-img.small {
-  padding: 4px;
+  padding: 7px;
 }
 
 .offline-progress-text {
