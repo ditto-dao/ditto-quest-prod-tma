@@ -29,9 +29,9 @@
 
 .level-up-message {
     font-size: 10px;
+    line-height: 12px;
 }
 
 .level-up-message > span {
     color: var(--rarity-s);
-    line-height: 20px;
 }
