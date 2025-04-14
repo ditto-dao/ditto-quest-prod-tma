@@ -214,7 +214,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
           renderLine(
             DittoCoinIcon,
             `DITTO +${formatNumberWithSuffix(
-              parseInt(formatUnits(dittoGained, DITTO_DECIMALS))
+              parseFloat(formatUnits(dittoGained, DITTO_DECIMALS))
             )}`
           )
         );
