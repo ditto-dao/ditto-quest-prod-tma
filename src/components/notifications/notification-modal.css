@@ -36,7 +36,7 @@
   color: var(--cream-white);
   padding: 1px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
-  animation: fadeIn 0.15s ease-out, scaleIn 0.15s ease-out;
+  animation: scaleIn 0.25s ease-out forwards;
   border-radius: 8px;
   background-color: var(--emerald-green);
   box-shadow: 0 4px 0 0 var(--dark-navy);
@@ -76,11 +76,13 @@
 }
 
 @keyframes scaleIn {
-  from {
-    transform: scale(0.5);
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
   }
-  to {
+  100% {
     transform: scale(1);
+    opacity: 1;
   }
 }
 
