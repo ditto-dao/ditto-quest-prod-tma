@@ -153,6 +153,7 @@ function CombatConsole() {
   }, [userHpChange]);
 
   const handleRun = () => {
+    if (userData.combat &&userData.combat?.hp <= 0) return;
     runAway();
   };
 

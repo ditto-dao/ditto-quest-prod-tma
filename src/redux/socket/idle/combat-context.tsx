@@ -23,6 +23,7 @@ import { RootState } from "../../store";
 import Domains from "../../../assets/json/domains.json";
 import { useNotification } from "../../../components/notifications/notification-context";
 import DeathNotification from "../../../components/notifications/notification-content/user-death/death-notification";
+import { delay } from "../../../utils/helpers";
 
 interface CombatHpChangeEventPayload {
   target: "user" | "monster";
@@ -203,14 +204,17 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         }
       });
 
-      socket.on(COMBAT_USER_DIED_EVENT, () => {
+      socket.on(COMBAT_USER_DIED_EVENT, async () => {
         console.log(`Received COMBAT_USER_DIED_EVENT`);
+        await delay(800);
+
+        addNotification(<DeathNotification />)
+
         setIsBattling(false);
         setMonster(null);
         setCombatArea(null);
         incrementUserHp(Infinity);
         setUserHpChange(undefined);
-        addNotification(<DeathNotification />)
       });
 
       return () => {
