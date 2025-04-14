@@ -27,14 +27,17 @@ interface OfflineProgressProps {
 function OfflineProgressNotification(props: OfflineProgressProps) {
   const { updates, offlineProgressMs } = props;
 
-  const renderLine = (imgSrc: string, label: string) => {
+  const renderLine = (imgSrc: string, label: string, iconSmall?: boolean) => {
     const match = label.match(/(.+?)\s([+×]\d.*)$/); // match label + value
     const itemLabel = match ? match[1] : label;
     const value = match ? match[2] : "";
-
+  
     return (
       <div className="offline-progress-line" key={`${imgSrc}-${label}`}>
-        <img src={imgSrc} className="offline-progress-img" />
+        <img
+          src={imgSrc}
+          className={`offline-progress-img${iconSmall ? " small" : ""}`}
+        />
         <span className="offline-progress-text">
           <span className="label">{itemLabel}</span>
           {value && <span className="value">{value}</span>}
@@ -161,7 +164,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
 
       if (userDied) {
         combatLines.push(
-          renderLine(DeathIcon, `You died`)
+          renderLine(DeathIcon, `You died`, true)
         );
       }
 
@@ -178,7 +181,8 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         combatLines.push(
           renderLine(
             item.uri,
-            `${item.itemName} +${formatNumberWithCommas(item.quantity)}`
+            `${item.itemName} +${formatNumberWithCommas(item.quantity)}`,
+            true
           )
         );
       });
@@ -187,27 +191,29 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         combatLines.push(
           renderLine(
             eq.uri,
-            `${eq.equipmentName} +${formatNumberWithCommas(eq.quantity)}`
+            `${eq.equipmentName} +${formatNumberWithCommas(eq.quantity)}`,
+            true
           )
         );
       });
 
       if (expGained)
         combatLines.push(
-          renderLine(GoldMedalIcon, `EXP +${formatNumberWithCommas(expGained)}`)
+          renderLine(GoldMedalIcon, `EXP +${formatNumberWithCommas(expGained)}`, true)
         );
       if (levelsGained)
-        combatLines.push(renderLine(GoldMedalIcon, `LEVELS +${levelsGained}`));
+        combatLines.push(renderLine(GoldMedalIcon, `LEVELS +${levelsGained}`, true));
       if (hpExpGained)
         combatLines.push(
           renderLine(
             HPLevelIcon,
-            `HP EXP +${formatNumberWithCommas(hpExpGained)}`
+            `HP EXP +${formatNumberWithCommas(hpExpGained)}`,
+            true
           )
         );
       if (hpLevelsGained)
         combatLines.push(
-          renderLine(HPLevelIcon, `HP LEVELS +${hpLevelsGained}`)
+          renderLine(HPLevelIcon, `HP LEVELS +${hpLevelsGained}`, true)
         );
       if (dittoGained && dittoGained !== "0")
         combatLines.push(
@@ -215,12 +221,13 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
             DittoCoinIcon,
             `DITTO +${formatNumberWithSuffix(
               parseFloat(formatUnits(dittoGained, DITTO_DECIMALS))
-            )}`
+            )}`,
+            true
           )
         );
       if (goldGained && goldGained >= 0)
         combatLines.push(
-          renderLine(GP, `GOLD +${formatNumberWithSuffix(goldGained)}`)
+          renderLine(GP, `GOLD +${formatNumberWithSuffix(goldGained)}`, true)
         );
     }
 
@@ -228,7 +235,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
       update.update.items?.forEach((item) => {
         if (item.quantity !== 0) {
           farmingLines.push(
-            renderLine(item.uri, `${item.itemName} +${item.quantity}`)
+            renderLine(item.uri, `${item.itemName} +${item.quantity}`, true)
           );
         }
       });
@@ -236,14 +243,16 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         farmingLines.push(
           renderLine(
             FarmingIcon,
-            `Farming Level +${update.update.farmingLevelsGained}`
+            `Farming Level +${update.update.farmingLevelsGained}`,
+            true
           )
         );
       if (update.update.farmingExpGained)
         farmingLines.push(
           renderLine(
             FarmingIcon,
-            `Farming EXP +${update.update.farmingExpGained}`
+            `Farming EXP +${update.update.farmingExpGained}`,
+            true
           )
         );
     }
@@ -252,14 +261,14 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
       update.update.equipment?.forEach((eq) => {
         if (eq.quantity !== 0) {
           craftingLines.push(
-            renderLine(eq.uri, `${eq.equipmentName} +${eq.quantity}`)
+            renderLine(eq.uri, `${eq.equipmentName} +${eq.quantity}`, true)
           );
         }
       });
       update.update.items?.forEach((item) => {
         if (item.quantity !== 0) {
           farmingLines.push(
-            renderLine(item.uri, `${item.itemName} ${item.quantity}`)
+            renderLine(item.uri, `${item.itemName} ${item.quantity}`, true)
           );
         }
       });
@@ -267,14 +276,16 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         craftingLines.push(
           renderLine(
             CraftingIcon,
-            `Crafting Level +${update.update.craftingLevelsGained}`
+            `Crafting Level +${update.update.craftingLevelsGained}`,
+            true
           )
         );
       if (update.update.craftingExpGained)
         craftingLines.push(
           renderLine(
             CraftingIcon,
-            `Crafting EXP +${update.update.craftingExpGained}`
+            `Crafting EXP +${update.update.craftingExpGained}`,
+            true
           )
         );
     }
