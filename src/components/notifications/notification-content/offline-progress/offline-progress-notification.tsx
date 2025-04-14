@@ -161,7 +161,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
 
       if (userDied) {
         combatLines.push(
-          renderLine(DeathIcon, `You died during offline combat`)
+          renderLine(DeathIcon, `You died`)
         );
       }
 
