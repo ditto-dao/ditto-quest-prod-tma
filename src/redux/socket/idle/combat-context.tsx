@@ -40,7 +40,7 @@ interface CombatContext {
   monster: FullMonster | null;
   combatArea: Domain | null;
   enterDomain: (domain: Domain) => void;
-  runAway: () => void;
+  runAway: () => Promise<void>;
   userHpChange:
     | { timestamp: number; hpChange: number; crit: boolean }
     | undefined;
@@ -55,7 +55,7 @@ const CombatContext = createContext<CombatContext>({
   monster: defaultMonster,
   combatArea: null,
   enterDomain: () => {},
-  runAway: () => {},
+  runAway: async () => {},
   userHpChange: undefined,
   monsterHpChange: undefined,
 });
@@ -102,11 +102,12 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
     console.log(`Entering domain ${domain.id}, ${domain.name}`);
   };
 
-  const runAway = () => {
+  const runAway = async () => {
     if (socket && canEmitEvent() && telegramId) {
       socket.emit(STOP_COMBAT_EVENT, telegramId);
       setLastEventEmittedTimestamp(Date.now());
       setIsBattling(false);
+      await delay(300)
       setMonster(null);
       setCombatArea(null);
     }

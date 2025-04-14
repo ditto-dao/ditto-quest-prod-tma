@@ -160,9 +160,9 @@ function CombatConsole() {
     }
   }, [userHpChange]);
 
-  const handleRun = () => {
+  const handleRun = async () => {
     if (userData.combat && userData.combat?.hp <= 0) return;
-    runAway();
+    await runAway();
   };
 
   const getHpBarColor = (hpPercent: number) => {
@@ -370,7 +370,9 @@ function CombatConsole() {
           <button
             className="run-button"
             disabled={!monster}
-            onClick={handleRun}
+            onClick={async () => {
+              await handleRun();
+            }}
           >
             Run Away
           </button>
