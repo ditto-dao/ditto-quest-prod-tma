@@ -45,6 +45,7 @@ export interface BreedingStatus {
 
 export interface ProgressUpdate {
   type: "crafting" | "breeding" | "farming" | "combat";
+  offlineProgressUpdatesReceived: boolean;
   update: {
     equipment?: {
       equipmentId: number;
@@ -77,6 +78,7 @@ export interface ProgressUpdate {
 // Context
 interface SkillContext {
   farmingStatuses: Record<number, FarmingStatus | null>;
+  offlineProgressUpdatesReceived: boolean;
   startFarming: (
     itemId: number,
     startTimestamp: number,
@@ -99,6 +101,7 @@ interface SkillContext {
 }
 
 const SkillContext = createContext<SkillContext>({
+  offlineProgressUpdatesReceived: false,
   farmingStatuses: {},
   craftingStatuses: {},
   slimeToBreed0: undefined,
@@ -225,6 +228,8 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
   const [unresolvedSireId, setUnresolvedSireId] = useState<number | null>(null);
   const [unresolvedDameId, setUnresolvedDameId] = useState<number | null>(null);
 
+  const [offlineProgressUpdatesReceived, setOfflineProgressUpdatesReceived] = useState(false);
+
   useEffect(() => {
     if (socket && !loadingSocket) {
       // Farming
@@ -314,6 +319,8 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
             `Received idle-progress-update: ${JSON.stringify(data, null, 2)}`
           );
 
+          setOfflineProgressUpdatesReceived(true);
+
           if (!data.updates || data.updates.length <= 0) return;
 
           const hasMeaningfulProgress = data.updates.some((update) => {
@@ -382,6 +389,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
   return (
     <SkillContext.Provider
       value={{
+        offlineProgressUpdatesReceived,
         farmingStatuses,
         startFarming,
         stopFarming,
