@@ -184,7 +184,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
 
           setMonster((prevMonsterData) => {
             if (!prevMonsterData) {
-              console.error(`Unable to change monster hp. Monster is null`);
+              console.trace(`Unable to change monster hp. Monster is null`);
               return null;
             }
 
