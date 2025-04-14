@@ -52,6 +52,13 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(136, 136, 136, 0.5) transparent;
   scroll-behavior: smooth;
+
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
 }
 
 .slime-modal-content::-webkit-scrollbar {
@@ -177,7 +184,6 @@
   text-align: center;
   font-size: 9px;
   padding: 3px;
-  cursor: pointer;
 }
 
 .trait-table {
