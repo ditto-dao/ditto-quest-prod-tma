@@ -10,6 +10,8 @@ import DefaultArmour from "../../assets/images/avatar-page/default-armour.png";
 import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
 import { useState } from "react";
 import { EquipmentType } from "../../utils/types";
+import Stats from "../stats/stats";
+import { useUserSocket } from "../../redux/socket/user/user-context";
 
 const categoryImages: { [key: string]: string } = {
   Weapon: DefaultWeapon,
@@ -24,6 +26,7 @@ const categories = Object.keys(categoryImages); // Use keys from the mapping
 
 function CraftingPage() {
   const { craftingStatuses } = useIdleSkillSocket();
+  const { userData } = useUserSocket();
   const [selectedCategory, setSelectedCategory] = useState<string>("Weapon");
 
   const filteredRecipes = craftingRecipes
@@ -32,6 +35,16 @@ function CraftingPage() {
 
   return (
     <div className="crafting-page-container">
+      <div className="stats-sticky">
+        <Stats
+          label="Crafting"
+          level={userData.craftingLevel}
+          total={userData.expToNextCraftingLevel}
+          progress={userData.craftingExp}
+          secondaryColour="var(--seafoam-green)"
+          bgColour="var(--midnight-teal)"
+        />
+      </div>
       <div className="equipment-category-buttons-wrapper">
         <div className="equipment-category-buttons">
           {categories.map((category) => (

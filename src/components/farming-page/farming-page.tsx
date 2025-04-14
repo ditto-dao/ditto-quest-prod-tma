@@ -3,10 +3,13 @@ import farming from "../../assets/json/farming.json";
 import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
 import FarmingItem from "./farming-item/farming-item";
 import { useState } from "react";
+import Stats from "../stats/stats";
+import { useUserSocket } from "../../redux/socket/user/user-context";
 
 const categories = ["Lumber", "Fiber", "Ore", "Crystal", "Shards"];
 
 function FarmingPage() {
+  const { userData } = useUserSocket();
   const { farmingStatuses } = useIdleSkillSocket();
   const [selectedCategory, setSelectedCategory] = useState<string>("Lumber"); // Default category
 
@@ -17,6 +20,16 @@ function FarmingPage() {
 
   return (
     <div className="farming-page-container">
+      <div className="stats-sticky">
+        <Stats
+          label="Farming"
+          level={userData.farmingLevel}
+          total={userData.expToNextFarmingLevel}
+          progress={userData.farmingExp}
+          secondaryColour="var(--sage-green)"
+          bgColour="var(--pine-green)"
+        />
+      </div>
       {/* Scrollable Category Buttons (Fixed at the Top) */}
       <div className="category-buttons-wrapper">
         <div className="category-buttons">

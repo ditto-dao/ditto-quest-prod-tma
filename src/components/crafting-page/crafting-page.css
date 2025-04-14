@@ -4,6 +4,20 @@
   align-items: center;
   height: 100%;
   color: var(--cream-white);
+  gap: 5px;
+}
+
+.stats-sticky {
+  flex-shrink: 0;
+  position: sticky; /* optional if you want it sticky */
+  top: 0; /* adjust if needed */
+  background-color: var(--deep-teal); /* to match background */
+  z-index: 5;
+  width: 100%;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .equipment-category-buttons-wrapper {

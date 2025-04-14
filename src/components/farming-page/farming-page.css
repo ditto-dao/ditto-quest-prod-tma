@@ -1,14 +1,16 @@
 .farming-page-container {
+  align-items: center;
+  color: var(--cream-white);
+  gap: 5px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   height: 100%;
-  color: var(--cream-white);
+  overflow: hidden;
 }
 
 .category-buttons-wrapper {
   width: 100%;
-  z-index: 4; 
+  z-index: 4;
   overflow: hidden;
   white-space: nowrap;
   display: flex;
@@ -17,8 +19,21 @@
   min-height: 50px;
 }
 
+.stats-sticky {
+  flex-shrink: 0;
+  position: sticky; /* optional if you want it sticky */
+  top: 0; /* adjust if needed */
+  background-color: var(--deep-teal); /* to match background */
+  z-index: 5;
+  width: 100%;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .category-buttons {
-  overflow-x: auto; 
+  overflow-x: auto;
   display: flex;
   gap: 14px;
   padding: 4px;
@@ -39,12 +54,13 @@
 
 .farming-items-container {
   flex-grow: 1;
-  overflow-y: auto; 
+  overflow-y: auto;
+  min-height: 0;
   width: 100%;
   padding: 0 18px 18px 18px;
   display: flex;
   flex-direction: column;
-  height: 100%; 
+  height: 100%;
 }
 
 .farming-items-grid {

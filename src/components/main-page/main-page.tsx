@@ -10,7 +10,6 @@ import AvatarPage from "../avatar-page/avatar-page";
 import GachaPage from "../gacha-page/gacha-page";
 import CombatPage from "../combat-page/combat-page";
 import NotificationManager from "../notifications/notification-manager";
-import Stats from "../stats/stats";
 import { useLoginSocket } from "../../redux/socket/login/login-context";
 import { useUserSocket } from "../../redux/socket/user/user-context";
 import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
@@ -29,7 +28,7 @@ import AccessDeniedPage from "../access-denied-page/access-denied-page";
 function MainPage() {
   const { accessGranted, accessDeniedMessage, socketDataLoadComplete } =
     useLoginSocket();
-  const { userContextLoaded, userData } = useUserSocket();
+  const { userContextLoaded } = useUserSocket();
   const { offlineProgressUpdatesReceived } = useIdleSkillSocket();
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -115,20 +114,6 @@ function MainPage() {
               />
             )}
           </div>
-          {currentPage === "Farming" && (
-            <Stats
-              level={userData.farmingLevel}
-              total={userData.expToNextFarmingLevel}
-              progress={userData.farmingExp}
-            />
-          )}
-          {currentPage === "Crafting" && (
-            <Stats
-              level={userData.craftingLevel}
-              total={userData.expToNextCraftingLevel}
-              progress={userData.craftingExp}
-            />
-          )}
         </header>
         <Sidebar
           isOpen={isSidebarOpen}
