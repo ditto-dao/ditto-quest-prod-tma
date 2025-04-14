@@ -13,6 +13,7 @@ import Slime10 from "../../../assets/images/gacha/slime-rotate/10.png";
 import Slime11 from "../../../assets/images/gacha/slime-rotate/11.png";
 import Slime12 from "../../../assets/images/gacha/slime-rotate/12.png";
 import { useGachaSocket } from "../../../redux/socket/gacha/gacha-context";
+import { preloadImage } from "../../../utils/helpers";
 
 const slimes = [
   Slime1,
@@ -38,6 +39,12 @@ const SlimeGachaAnimation = () => {
 
   // Track if animation should play initially
   const [shouldAnimate, setShouldAnimate] = useState(!rollingSlime);
+
+  useEffect(() => {
+    Promise.all(slimes.map(preloadImage)).then(() =>
+      console.log('loaded slime gacha animation images')
+    );
+  }, []);
 
   // Start Slime Emerge Animation + Rotation
   const startSlimeAnimation = (): void => {

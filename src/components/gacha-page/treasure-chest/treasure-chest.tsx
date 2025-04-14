@@ -9,6 +9,7 @@ import ChestOpen6 from "../../../assets/images/gacha/chest/chest-open-6.png";
 import ChestOpen7 from "../../../assets/images/gacha/chest/chest-open-7.png";
 import ChestOpen8 from "../../../assets/images/gacha/chest/chest-open-8.png";
 import { useGachaSocket } from "../../../redux/socket/gacha/gacha-context";
+import { preloadImage } from "../../../utils/helpers";
 
 const chestFrames = [
   ChestOpen1,
@@ -55,6 +56,12 @@ const TreasureChest = () => {
     }
     setCurrentChestShown(chestFrames[0]); // Reset to first frame
   };
+
+  useEffect(() => {
+    Promise.all(chestFrames.map(preloadImage)).then(() =>
+      console.log('loaded chest frame images for gacha animation')
+    );
+  }, []);
 
   useEffect(() => {
     if (!shouldAnimate) {
