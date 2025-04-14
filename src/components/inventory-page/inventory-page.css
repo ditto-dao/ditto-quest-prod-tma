@@ -17,6 +17,28 @@
   border-radius: 9px 9px 0 0;
 }
 
+.balances-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 10px;
+  font-size: 11px;
+  color: var(--cream-white);
+}
+
+.coin-balance {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.coin-logo {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 .inventory-page-content-wrapper {
   width: 100%;
   background-color: var(--bright-teal);
@@ -59,7 +81,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: var(--medium-teal);
+  background-color: var(--dark-teal-green);
   border: 1px solid var(--bright-teal);
   border-radius: 4px;
   font-size: 12px;
@@ -292,10 +314,6 @@
   transform: scale(1.05);
 }
 
-.inv-buttons-div {
-  margin-bottom: 20px;
-}
-
 .equip-button {
   padding: 8px 12px;
   font-size: 10px;
@@ -305,6 +323,7 @@
   border-radius: 4px;
   cursor: pointer;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 .equip-button.equip-active {
