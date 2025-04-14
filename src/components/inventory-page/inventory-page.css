@@ -17,28 +17,6 @@
   border-radius: 9px 9px 0 0;
 }
 
-.balances-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 10px;
-  font-size: 11px;
-  color: var(--cream-white);
-}
-
-.coin-balance {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.coin-logo {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-}
-
 .inventory-page-content-wrapper {
   width: 100%;
   background-color: var(--bright-teal);
@@ -81,7 +59,7 @@
   justify-content: center;
   align-items: center;
   position: relative;
-  background-color: var(--dark-teal-green);
+  background-color: var(--medium-teal);
   border: 1px solid var(--bright-teal);
   border-radius: 4px;
   font-size: 12px;

@@ -1,17 +1,14 @@
 import { useState, useEffect } from "react";
 import "./inventory-page.css";
 import { useUserSocket } from "../../redux/socket/user/user-context";
-import DittoCoinLogo from "../../assets/images/general/ditto-coin.png";
-import GoldCoinLogo from "../../assets/images/general/gold-coin.png";
 import {
   formatNumberForInvQty,
-  formatNumberWithSuffix,
-  getTotalFormattedBalance,
 } from "../../utils/helpers";
 import EquipmentIcon from "../../assets/images/general/equipment-icon.png";
 import ItemIcon from "../../assets/images/general/item-icon.png";
 import { Inventory } from "../../utils/types";
 import Modal from "react-modal";
+import BalancesDisplay from "../balances/balances";
 
 // Helper function to chunk inventory into rows
 function chunkInventory(array: Inventory[], size: number) {
@@ -31,7 +28,7 @@ function chunkInventory(array: Inventory[], size: number) {
 }
 
 function InventoryPage() {
-  const { userData, equip, dittoBalance } = useUserSocket();
+  const { userData, equip } = useUserSocket();
   const [inventory, setInventory] = useState<Inventory[]>([]);
 
   const [selectedItem, setSelectedItem] = useState<Inventory | null>(null);
@@ -76,24 +73,7 @@ function InventoryPage() {
 
   return (
     <div id="inventory-page-container">
-      <div className="inventory-page-content-wrapper">
-        <div className="inventory-page-content-container">
-          <div className="inv-container-label">Bank</div>
-          <div className="balances-container">
-            <div className="coin-balance">
-              <img src={DittoCoinLogo} alt="Ditto Coin" className="coin-logo" />
-              <span>
-                {formatNumberWithSuffix(getTotalFormattedBalance(dittoBalance))}{" "}
-                DITTO
-              </span>
-            </div>
-            <div className="coin-balance">
-              <img src={GoldCoinLogo} alt="Gold Coin" className="coin-logo" />
-              <span>{formatNumberWithSuffix(userData.goldBalance)} GP</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BalancesDisplay />
       <div className="inventory-page-content-wrapper">
         <div className="inventory-page-content-container">
           <div className="inv-container-label">Inventory</div>

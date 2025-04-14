@@ -4,12 +4,10 @@ import SlimeGachaAnimation from "./slime-gacha-animation/slime-gacha-animation";
 import { useSocket } from "../../redux/socket/socket-context";
 import { useLoginSocket } from "../../redux/socket/login/login-context";
 import DittoCoinLogo from "../../assets/images/general/ditto-coin.png";
-import GoldCoinLogo from "../../assets/images/general/gold-coin.png";
 import {
   formatNumberWithSuffix,
   getDeductionPayloadToDevFunds,
   getTotalBalanceBNF,
-  getTotalFormattedBalance,
 } from "../../utils/helpers";
 import { useUserSocket } from "../../redux/socket/user/user-context";
 import { LEDGER_UPDATE_BALANCE_EVENT } from "../../utils/events";
@@ -23,13 +21,14 @@ import { useGachaSocket } from "../../redux/socket/gacha/gacha-context";
 import { useEffect, useRef, useState } from "react";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../utils/config";
+import BalancesDisplay from "../balances/balances";
 
 function GachaPage() {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
-  const { userData, dittoBalance } = useUserSocket();
+  const { dittoBalance } = useUserSocket();
   const {
     rollingSlime,
     setRollingSlime,
@@ -91,8 +90,11 @@ function GachaPage() {
   };
 
   const isButtonActive = () => {
-    return getTotalBalanceBNF(dittoBalance) > SLIME_GACHA_PRICE_DITTO_WEI && !rollingSlime;
-  }
+    return (
+      getTotalBalanceBNF(dittoBalance) > SLIME_GACHA_PRICE_DITTO_WEI &&
+      !rollingSlime
+    );
+  };
 
   const fireworks = () => {
     if (!slimeObjDrawn?.rankPull) return; // Ensure rankPull exists
@@ -193,24 +195,7 @@ function GachaPage() {
 
   return (
     <div className="gacha-page-container" ref={stampTextRef}>
-      <div className="inventory-page-content-wrapper">
-        <div className="inventory-page-content-container">
-          <div className="inv-container-label">Bank</div>
-          <div className="balances-container">
-            <div className="coin-balance">
-              <img src={DittoCoinLogo} alt="Ditto Coin" className="coin-logo" />
-              <span>
-                {formatNumberWithSuffix(getTotalFormattedBalance(dittoBalance))}{" "}
-                DITTO
-              </span>
-            </div>
-            <div className="coin-balance">
-              <img src={GoldCoinLogo} alt="Gold Coin" className="coin-logo" />
-              <span>{formatNumberWithSuffix(userData.goldBalance)} GP</span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BalancesDisplay />
 
       {/* Slime should be positioned above the chest */}
       <div className="slime-gacha-wrapper" ref={containerRef}>
@@ -232,7 +217,17 @@ function GachaPage() {
             alt="Ditto Coin"
             className="button-coin-logo"
           />
-          <span className="button-price-span">{formatNumberWithSuffix(parseFloat(formatUnits(SLIME_GACHA_PRICE_DITTO_WEI.toString(), DITTO_DECIMALS)))} DITTO</span>
+          <span className="button-price-span">
+            {formatNumberWithSuffix(
+              parseFloat(
+                formatUnits(
+                  SLIME_GACHA_PRICE_DITTO_WEI.toString(),
+                  DITTO_DECIMALS
+                )
+              )
+            )}{" "}
+            DITTO
+          </span>
         </div>
       </button>
     </div>
