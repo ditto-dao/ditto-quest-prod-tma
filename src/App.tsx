@@ -6,7 +6,7 @@ import WebApp from "@twa-dev/sdk";
 import Modal from "react-modal";
 import { SocketProvider } from "./redux/socket/socket-context";
 import { UserProvider } from "./redux/socket/user/user-context";
-//import { initEruda } from "./utils/eruda";
+import { initEruda } from "./utils/eruda";
 import MainPage from "./components/main-page/main-page";
 import { LoginSocketProvider } from "./redux/socket/login/login-context";
 import { IdleSkillSocketProvider } from "./redux/socket/idle/skill-context";
@@ -14,7 +14,7 @@ import { GachaSocketProvider } from "./redux/socket/gacha/gacha-context";
 import { CombatSocketProvider } from "./redux/socket/idle/combat-context";
 import { NotificationProvider } from "./components/notifications/notification-context";
 
-//initEruda();
+initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
 
 function App() {

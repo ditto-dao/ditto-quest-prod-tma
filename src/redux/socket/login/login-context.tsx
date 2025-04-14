@@ -38,6 +38,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   );
 
   const [socketDataLoadComplete, setSocketDataLoadComplete] = useState(false);
+  const [connectionEstablished, setConnectionEstablished] = useState(false);
 
   useEffect(() => {
     if (!WebApp.initDataUnsafe.user) {
@@ -60,8 +61,10 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   useEffect(() => {
     if (socket && !loadingSocket) {
       socket.on("login-validated", (telegramId: string) => {
+        setConnectionEstablished(true);
         console.log(`Login validated for user: ${telegramId}`);
         setAccessGranted(true);
+        setSocketDataLoadComplete(true);
         dispatch(setTelegramId(telegramId));
         dispatch(
           setTelegramUsername(
@@ -91,22 +94,27 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   }, [socket, loadingSocket]);
 
   useEffect(() => {
+    if (!loginAttempted) return;
+
     if (!socket && !loadingSocket) {
       setAccessGranted(false);
       setAccessDeniedMessage("Unable to connect to server");
+      setSocketDataLoadComplete(true);
       return;
     }
 
-    if (!isSocketConnected && !loadingSocket) {
+    if (connectionEstablished && !isSocketConnected && !loadingSocket) {
       setAccessGranted(false);
       setAccessDeniedMessage("Disconnected from server");
-      return;
+      setSocketDataLoadComplete(true);
     }
-  }, [socket, loadingSocket, isSocketConnected]);
-
-  useEffect(() => {
-    setSocketDataLoadComplete(true);
-  }, []);
+  }, [
+    socket,
+    loadingSocket,
+    isSocketConnected,
+    loginAttempted,
+    connectionEstablished,
+  ]);
 
   return (
     <LoginContext.Provider

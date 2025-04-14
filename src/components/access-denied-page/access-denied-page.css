@@ -1,0 +1,18 @@
+.access-denied-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--deep-teal);
+  align-items: center;
+  justify-content: center;
+}
+
+.access-denied-page > .access-denied-sprite {
+  width: 100px;
+}
+
+.access-denied-page > .access-denied-text {
+  padding: 20px;
+  font-size: 12px;
+}

@@ -1,0 +1,29 @@
+.loading-page {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--deep-teal);
+  align-items: center;
+  justify-content: center;
+}
+
+.loading-page > .loading-sprite {
+  width: 120px;
+}
+
+.loading-page > .loading-progress-container {
+  height: 7px;
+  width: 70%;
+  background-color: var(--deep-navy-blue);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.loading-page > .loading-progress-container > .loading-progress-bar {
+  background-color: var(--sage-green);
+  height: 100%;
+  transition: width 0.3s ease-in-out;
+}

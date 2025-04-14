@@ -42,3 +42,12 @@
 .rarity-d {
   background-color: var(--rarity-d);
 }
+
+/* Ensure modals always appear above fade-view overlays */
+.ReactModal__Overlay {
+  z-index: 9999 !important;
+}
+
+.ReactModal__Content {
+  z-index: 10000 !important;
+}
