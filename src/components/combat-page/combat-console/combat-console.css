@@ -93,8 +93,6 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
-  filter: brightness(1.1); 
-  opacity: 0.8;
 }
 
 /* Foreground monster image */
