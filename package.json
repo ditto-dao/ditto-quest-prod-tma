@@ -19,6 +19,7 @@
     "engine.io-client": "6.5.4",
     "eruda": "^3.0.1",
     "ethers": "^6.13.5",
+    "framer-motion": "^12.6.5",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.2.0",

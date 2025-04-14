@@ -17,10 +17,11 @@ import RangedCombatLabel from "../../../assets/images/combat/ranged-combat-label
 import MagicombatLabel from "../../../assets/images/combat/magic-combat-label.png";
 import { defaultCombat } from "../../../utils/types";
 import Decimal from "decimal.js";
+import { AnimatePresence, motion } from "framer-motion";
 
 function BattleBoxLoader() {
   return (
-    <div className="battle-box-inner loader">
+    <div className="loader">
       <div className="loader-left shimmer" />
       <div className="loader-right">
         <div className="loader-bar shimmer" />
@@ -78,6 +79,13 @@ function CombatConsole() {
       setTimeout(() => textElement.remove(), 1500);
     }
   }
+
+  const fadeVariant = {
+    initial: { opacity: 0 },
+    animate: { opacity: 1 },
+    exit: { opacity: 0 },
+    transition: { duration: 0.25 },
+  };
 
   useEffect(() => {
     const iconsToPreload = [
@@ -153,7 +161,7 @@ function CombatConsole() {
   }, [userHpChange]);
 
   const handleRun = () => {
-    if (userData.combat &&userData.combat?.hp <= 0) return;
+    if (userData.combat && userData.combat?.hp <= 0) return;
     runAway();
   };
 
@@ -170,133 +178,165 @@ function CombatConsole() {
           {combatArea?.name || monster?.name || "Battle"}
         </div>
         <div className="battle-box">
-          {!monster || !iconImagesLoaded || !monsterImagesLoaded ? (
-            <BattleBoxLoader />
-          ) : (
-            <div className="battle-box-inner">
-              <div className="combat-type-icon">
-                <img
-                  className="combat-type-img"
-                  src={
-                    monster.combat.attackType === "Melee"
-                      ? MeleeCombatLabel
-                      : monster.combat.attackType === "Ranged"
-                      ? RangedCombatLabel
-                      : MagicombatLabel
-                  }
-                  alt={`${monster.combat.attackType} icon`}
-                />
-              </div>
-              <div className="battle-box-left">
-                <div className="monster-img-wrapper">
-                  <img
-                    className="monster-bg-img"
-                    src={combatArea?.imgsrc}
-                    alt="Area BG"
-                  />
-                  <img
-                    className="monster-img"
-                    src={monster.imgsrc}
-                    alt={monster.name}
-                  />
-                </div>
-              </div>
-              <div className="battle-box-right">
-                <div className="monster-header">
-                  <div className="monster-name">{monster.name}</div>
-                </div>
-                <div className="monster-stats">
-                  <div className="monster-level">LVL {monster.level}</div>
-                  <div className="monster-cp">
-                    CP{" "}
-                    {monsterCp.lt(1_000_000)
-                      ? formatDecimalWithCommas(monsterCp)
-                      : formatDecimalWithSuffix(monsterCp)}
+          <div className="battle-box-inner">
+            <AnimatePresence mode="wait">
+              {!monster || !iconImagesLoaded || !monsterImagesLoaded ? (
+                <motion.div
+                  key="monster-loader"
+                  {...fadeVariant}
+                  className="fade-content"
+                >
+                  <BattleBoxLoader />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="monster-ui"
+                  {...fadeVariant}
+                  className="fade-content"
+                >
+                  <div className="combat-type-icon">
+                    <img
+                      className="combat-type-img"
+                      src={
+                        monster.combat.attackType === "Melee"
+                          ? MeleeCombatLabel
+                          : monster.combat.attackType === "Ranged"
+                          ? RangedCombatLabel
+                          : MagicombatLabel
+                      }
+                      alt={`${monster.combat.attackType} icon`}
+                    />
                   </div>
-                </div>
-                <div className="hp-bar-monster" ref={monsterHpChangeRef}>
-                  <div
-                    className="hp-progress-bar"
-                    style={{
-                      width: `${Math.ceil(
-                        (monster.combat.hp / monster.combat.maxHp) * 100
-                      )}%`,
-                      backgroundColor: getHpBarColor(
-                        Math.ceil(
-                          (monster.combat.hp / monster.combat.maxHp) * 100
-                        )
-                      ),
-                    }}
-                  />
-                </div>
-                <div className="hp-text">
-                  {formatNumberWithCommas(monster.combat.hp)} /{" "}
-                  {formatNumberWithCommas(monster.combat.maxHp)} HP
-                </div>
-              </div>
-            </div>
-          )}
+                  <div className="battle-box-left">
+                    <div className="monster-img-wrapper">
+                      <img
+                        className="monster-bg-img"
+                        src={combatArea?.imgsrc}
+                        alt="Area BG"
+                      />
+                      <img
+                        className="monster-img"
+                        src={monster.imgsrc}
+                        alt={monster.name}
+                      />
+                    </div>
+                  </div>
+                  <div className="battle-box-right">
+                    <div className="monster-header">
+                      <div className="monster-name">{monster.name}</div>
+                    </div>
+                    <div className="monster-stats">
+                      <div className="monster-level">LVL {monster.level}</div>
+                      <div className="monster-cp">
+                        CP{" "}
+                        {monsterCp.lt(1_000_000)
+                          ? formatDecimalWithCommas(monsterCp)
+                          : formatDecimalWithSuffix(monsterCp)}
+                      </div>
+                    </div>
+                    <div className="hp-bar-monster" ref={monsterHpChangeRef}>
+                      <div
+                        className="hp-progress-bar"
+                        style={{
+                          width: `${Math.ceil(
+                            (monster.combat.hp / monster.combat.maxHp) * 100
+                          )}%`,
+                          backgroundColor: getHpBarColor(
+                            Math.ceil(
+                              (monster.combat.hp / monster.combat.maxHp) * 100
+                            )
+                          ),
+                        }}
+                      />
+                    </div>
+                    <div className="hp-text">
+                      {formatNumberWithCommas(monster.combat.hp)} /{" "}
+                      {formatNumberWithCommas(monster.combat.maxHp)} HP
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <div className="battle-icon-container">
             <img className="battle-icon-img" src={BattleIcon} />
           </div>
-          {!userData || !iconImagesLoaded || !userSlimeImageLoaded ? (
-            <BattleBoxLoader />
-          ) : (
-            <div className="battle-box-inner">
-              <div className="combat-type-icon">
-                <img
-                  className="combat-type-img"
-                  src={
-                    userCombat.attackType === "Melee"
-                      ? MeleeCombatLabel
-                      : userCombat.attackType === "Ranged"
-                      ? RangedCombatLabel
-                      : MagicombatLabel
-                  }
-                  alt={`${userCombat.attackType} icon`}
-                />
-              </div>
-              <div className="battle-box-left">
-                <img
-                  className="monster-img"
-                  src={userData.equippedSlime?.imageUri}
-                />
-              </div>
-              <div className="battle-box-right">
-                <div className="monster-header">
-                  <div className="monster-name">{userData.username}</div>
-                </div>
-                <div className="monster-stats">
-                  <div className="monster-level">LVL {userData.level}</div>
-                  <div className="monster-cp">
-                    CP{" "}
-                    {cp.lt(1_000_000)
-                      ? formatDecimalWithCommas(cp)
-                      : formatDecimalWithSuffix(cp)}
+
+          <div className="battle-box-inner">
+            <AnimatePresence mode="wait">
+              {!userData || !iconImagesLoaded || !userSlimeImageLoaded ? (
+                <motion.div
+                  key="user-loader"
+                  {...fadeVariant}
+                  className="fade-content"
+                >
+                  <BattleBoxLoader />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="user-ui"
+                  {...fadeVariant}
+                  className="fade-content"
+                >
+                  <div className="combat-type-icon">
+                    <img
+                      className="combat-type-img"
+                      src={
+                        userCombat.attackType === "Melee"
+                          ? MeleeCombatLabel
+                          : userCombat.attackType === "Ranged"
+                          ? RangedCombatLabel
+                          : MagicombatLabel
+                      }
+                      alt={`${userCombat.attackType} icon`}
+                    />
                   </div>
-                </div>
-                <div className="hp-bar-user" ref={userHpChangeRef}>
-                  <div
-                    className="hp-progress-bar"
-                    style={{
-                      width: `${Math.ceil(
-                        (userData.combat!.hp / userData.combat!.maxHp) * 100
-                      )}%`,
-                      backgroundColor: getHpBarColor(
-                        Math.ceil(
-                          (userData.combat!.hp / userData.combat!.maxHp) * 100
-                        )
-                      ),
-                    }}
-                  />
-                </div>
-                <div className="hp-text">
-                  {formatNumberWithCommas(userCombat.hp)} /{" "}
-                  {formatNumberWithCommas(userCombat.maxHp)} HP
-                </div>
-              </div>
-            </div>
-          )}
+                  <div className="battle-box-left">
+                    <img
+                      className="monster-img"
+                      src={userData.equippedSlime?.imageUri}
+                    />
+                  </div>
+                  <div className="battle-box-right">
+                    <div className="monster-header">
+                      <div className="monster-name">{userData.username}</div>
+                    </div>
+                    <div className="monster-stats">
+                      <div className="monster-level">LVL {userData.level}</div>
+                      <div className="monster-cp">
+                        CP{" "}
+                        {cp.lt(1_000_000)
+                          ? formatDecimalWithCommas(cp)
+                          : formatDecimalWithSuffix(cp)}
+                      </div>
+                    </div>
+                    <div className="hp-bar-user" ref={userHpChangeRef}>
+                      <div
+                        className="hp-progress-bar"
+                        style={{
+                          width: `${Math.ceil(
+                            (userData.combat!.hp / userData.combat!.maxHp) * 100
+                          )}%`,
+                          backgroundColor: getHpBarColor(
+                            Math.ceil(
+                              (userData.combat!.hp / userData.combat!.maxHp) *
+                                100
+                            )
+                          ),
+                        }}
+                      />
+                    </div>
+                    <div className="hp-text">
+                      {formatNumberWithCommas(userCombat.hp)} /{" "}
+                      {formatNumberWithCommas(userCombat.maxHp)} HP
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <div className="combat-console-exp-progress">
             <div className="combat-console-exp">
               <img src={GoldMedalIcon} alt="exp icon" className="exp-icon" />
@@ -327,7 +367,11 @@ function CombatConsole() {
               </div>
             </div>
           </div>
-          <button className="run-button" disabled={!monster} onClick={handleRun}>
+          <button
+            className="run-button"
+            disabled={!monster}
+            onClick={handleRun}
+          >
             Run Away
           </button>
         </div>
