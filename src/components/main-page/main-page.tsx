@@ -24,6 +24,7 @@ import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import LoadingPage from "../loading-page/loading-page";
 import AccessDeniedPage from "../access-denied-page/access-denied-page";
+import { motion } from "framer-motion"; // ADD THIS
 
 function MainPage() {
   const { accessGranted, accessDeniedMessage, socketDataLoadComplete } =
@@ -120,7 +121,17 @@ function MainPage() {
           toggleSidebar={toggleSidebar}
           setPage={setPage}
         />
-        <div className="content">{renderPage()}</div>
+        <div className="content">
+          <motion.div
+            key={currentPage}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="page-motion-wrapper"
+          >
+            {renderPage()}
+          </motion.div>
+        </div>
         {view === "main" && <NotificationManager />}{" "}
       </div>
     </div>

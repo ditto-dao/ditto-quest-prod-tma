@@ -135,3 +135,8 @@
   scrollbar-color: rgba(136, 136, 136, 0.5) transparent; /* Same colors as above for consistency */
   scroll-behavior: smooth;
 }
+
+.page-motion-wrapper {
+  width: 100%;
+  height: 100%;
+}
