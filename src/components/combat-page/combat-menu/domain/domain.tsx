@@ -9,10 +9,15 @@ import Expand from "../../../../assets/images/general/down.svg";
 import Minimize from "../../../../assets/images/general/up.svg";
 import "./domain.css";
 import { useCombatSocket } from "../../../../redux/socket/idle/combat-context";
+import { useUserSocket } from "../../../../redux/socket/user/user-context";
+import { useNotification } from "../../../notifications/notification-context";
+import EquipSlimeNotification from "../../../notifications/notification-content/equip-slime-error/equip-slime-error";
 
 function DomainMenuItem(props: Domain) {
+  const { userData } = useUserSocket();
   const { enterDomain } = useCombatSocket();
   const [isExpanded, setIsExpanded] = useState(false);
+  const { addNotification } = useNotification();
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
@@ -29,7 +34,11 @@ function DomainMenuItem(props: Domain) {
   };
 
   const handleEnterDomain = () => {
-    enterDomain(props);
+    if (userData.equippedSlime && userData.equippedSlimeId) {
+      enterDomain(props);
+    } else {
+      addNotification(<EquipSlimeNotification />);
+    }
   };
 
   return (
@@ -104,7 +113,9 @@ function DomainMenuItem(props: Domain) {
                       src={monster.monster.imgsrc}
                       alt={monster.monster.name}
                     />
-                    <div className="domain-monster-name">{monster.monster.name}</div>
+                    <div className="domain-monster-name">
+                      {monster.monster.name}
+                    </div>
                   </div>
                 );
               })}
