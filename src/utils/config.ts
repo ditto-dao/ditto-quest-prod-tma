@@ -1,6 +1,6 @@
-export const SOCKET_ORIGIN = "https://ditto-quest.ditto.zone"
+export const SOCKET_ORIGIN = "https://dqdev.ditto.zone"
 
-export const SOCKET_PATH = "/ditto-quest-socket-adapter"
+export const SOCKET_PATH = "/ditto-quest-socket-adapter-dev"
 
 export const S3_SLIME_FOLDER = "slimes-test"
 
