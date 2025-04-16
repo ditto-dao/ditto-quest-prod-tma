@@ -1,0 +1,71 @@
+.first-login-notification {
+  color: var(--cream-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+}
+
+.first-login-notification-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.first-login-notification-header > div {
+  background-color: var(--misty-teal);
+  font-size: 12px;
+  padding: 13px 25px;
+  text-align: center;
+  border-radius: 7px;
+}
+
+.first-login-notification-header > img {
+  max-width: 120px;
+}
+
+.first-login-notification > .first-login-message {
+    font-size: 10px;
+    text-align: left;
+    line-height: 16px;
+}
+
+.first-login-notification > .first-login-gift {
+    font-size: 10px;
+    gap: 10px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.first-login-notification > .first-login-message > span {
+    color: var(--rarity-s);
+}
+
+.first-login-gift {
+    display: flex;
+}
+
+.first-login-gift > .gift-label {
+    background-color: var(--steel-blue);
+    padding: 3px 10px;
+    border-radius: 40px;
+}
+
+.first-login-gift > .first-login-slimes {
+    gap: 10px;
+    display: flex;
+}
+
+.first-login-gift > .first-login-slimes > img {
+    max-width: 60px;
+    border-radius: 4px;
+}
+
+.first-login-gift > .first-login-slimes > .free-item {
+    max-width: 30px;
+}

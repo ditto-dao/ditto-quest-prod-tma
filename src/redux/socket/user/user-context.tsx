@@ -23,7 +23,7 @@ import { useNotification } from "../../../components/notifications/notification-
 import LevelUpNotification from "../../../components/notifications/notification-content/level-up/level-up-notification";
 import ErrorNotification from "../../../components/notifications/notification-content/error/error-notification";
 import { SlimeGachaPullRes } from "../gacha/gacha-context";
-import FirstLoginNotification from "../../../components/notifications/first-login/first-login";
+import FirstLoginNotification from "../../../components/notifications/notification-content/first-login/first-login";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -498,12 +498,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [userData, userContextLoaded]);
 
   useEffect(() => {
-    console.log(
-      `user combat changed: ${JSON.stringify(userData.combat, null, 2)}`
-    );
-  }, [userData, userData.combat]);
-
-  useEffect(() => {
     if (socket && !loadingSocket && accessGranted) {
       socket.on("update-inventory", (data: Inventory[]) => {
         setUserData((prevUserData) => {
@@ -710,7 +704,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         FIRST_LOGIN_EVENT,
         (payload: {
           freeSlimes: SlimeGachaPullRes[];
-          freeItems: Inventory;
+          freeItems: Inventory[];
         }) => {
           addNotification(
             <FirstLoginNotification
