@@ -1,5 +1,5 @@
 import { formatUnits } from "ethers";
-import { Combat, DittoBalanceBN, EquipmentType, Inventory, Rarity, SlimeTrait, SlimeWithTraits, StatEffect, User, UserBalanceUpdate } from "./types";
+import { Combat, DittoBalanceBN, Inventory, Rarity, SlimeWithTraits, StatEffect, User, UserBalanceUpdate } from "./types";
 import { DEVELOPMENT_FUNDS_KEY, DITTO_DECIMALS } from "./config";
 import Decimal from "decimal.js";
 
@@ -336,7 +336,6 @@ function applyDelta(user: User, combat: Combat, delta: ReturnType<typeof calcula
 export function updateUserStatsFromEquipmentAndSlime(user: User, userCombat: Combat): void {
     const statEffects: StatEffect[] = [];
 
-    // Get all equipped equipment
     const equippedItems: (Inventory | null | undefined)[] = [
         user.hat,
         user.armour,
@@ -346,41 +345,82 @@ export function updateUserStatsFromEquipmentAndSlime(user: User, userCombat: Com
         user.necklace,
     ];
 
+    // ✅ Reset to base values first
+    userCombat.hp = user.maxHp;
+    userCombat.maxHp = user.maxHp;
+    userCombat.atkSpd = user.atkSpd;
+    userCombat.acc = user.acc;
+    userCombat.eva = user.eva;
+    userCombat.maxMeleeDmg = user.maxMeleeDmg;
+    userCombat.maxRangedDmg = user.maxRangedDmg;
+    userCombat.maxMagicDmg = user.maxMagicDmg;
+    userCombat.critChance = user.critChance;
+    userCombat.critMultiplier = user.critMultiplier;
+    userCombat.dmgReduction = user.dmgReduction;
+    userCombat.magicDmgReduction = user.magicDmgReduction;
+    userCombat.hpRegenRate = user.hpRegenRate;
+    userCombat.hpRegenAmount = user.hpRegenAmount;
+
+    // ✅ Reset multipliers
+    userCombat.meleeFactor = 0;
+    userCombat.rangeFactor = 0;
+    userCombat.magicFactor = 0;
+    userCombat.reinforceAir = 0;
+    userCombat.reinforceWater = 0;
+    userCombat.reinforceEarth = 0;
+    userCombat.reinforceFire = 0;
+
     let updatedAttackType = false;
 
     for (const item of equippedItems) {
-        if (item?.equipment) {
-            const effect = item.equipment.statEffect;
-            if (effect) {
-                statEffects.push(effect);
-            } else {
-                console.error(`Equipment "${item.equipment.name}" (ID: ${item.equipment.id}) has no statEffect linked.`);
-                alert(`Equipment "${item.equipment.name}" (ID: ${item.equipment.id}) has no statEffect linked.`);
-            }
+        const effect = item?.equipment?.statEffect;
+        if (effect) {
+            statEffects.push(effect);
+        } else if (item?.equipment) {
+            console.error(`Equipment "${item.equipment.name}" (ID: ${item.equipment.id}) has no statEffect linked.`);
+        }
 
-            // set combat attack type based on equipped weapon
-            if (item.equipment.type === EquipmentType.weapon && item.equipment.attackType) {
-                userCombat.attackType = item.equipment.attackType;
-                updatedAttackType = true;
-            }
+        if (item?.equipment?.attackType && !updatedAttackType) {
+            userCombat.attackType = item.equipment.attackType;
+            updatedAttackType = true;
         }
     }
 
     if (!updatedAttackType) userCombat.attackType = 'Melee';
 
-    // Get all traits of the equipped slime
+    // ✅ Add only DOMINANT slime traits
     if (user.equippedSlime) {
-        const slimeTraits: SlimeTrait[] = Object.values(user.equippedSlime);
-        for (const trait of slimeTraits) {
-            const effect = trait?.statEffect;
-            if (effect) {
-                statEffects.push(effect);
-            }
+        const {
+            BodyDominant,
+            PatternDominant,
+            PrimaryColourDominant,
+            AccentDominant,
+            DetailDominant,
+            EyeColourDominant,
+            EyeShapeDominant,
+            MouthDominant,
+        } = user.equippedSlime;
+
+        const dominantTraits = [
+            BodyDominant,
+            PatternDominant,
+            PrimaryColourDominant,
+            AccentDominant,
+            DetailDominant,
+            EyeColourDominant,
+            EyeShapeDominant,
+            MouthDominant,
+        ];
+
+        for (const trait of dominantTraits) {
+            if (trait?.statEffect) statEffects.push(trait.statEffect);
         }
     }
 
     const delta = calculateNetStatDelta(user, statEffects);
     applyDelta(user, userCombat, delta);
+
+    userCombat.cp = calculateCombatPower(userCombat).toString();
 }
 
 export function calculateCombatPower(c: Combat): Decimal {
