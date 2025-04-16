@@ -317,6 +317,17 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   };
 
   const incrementUserHp = (amount: number) => {
+
+    if (!userData) {
+      console.error(`User data not found. Unable to run incrementUserHp()`);
+      return;
+    }
+
+    if (!userData.combat) {
+      console.error(`User combat not found. Unable to run incrementUserHp()`);
+      return;
+    }
+
     setUserData((prevUserData) => {
       if (!prevUserData.combat) {
         console.error("No combat object found for user");
@@ -337,6 +348,16 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   };
 
   const setUserHp = (hp: number, maxHp: number) => {
+    if (!userData) {
+      console.error(`User data not found. Unable to run setUserHp()`);
+      return;
+    }
+
+    if (!userData.combat) {
+      console.error(`User combat not found. Unable to run setUserHp()`);
+      return;
+    }
+
     setUserData((prevUserData) => {
       if (!prevUserData.combat) {
         console.error("No combat object found for user");
@@ -638,6 +659,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           console.log(
             `Received COMBAT_EXP_UPDATE_EVENT: ${JSON.stringify(data, null, 2)}`
           );
+
+          if (!userData) {
+            console.error(`User data not found. Unable to process COMBAT_EXP_UPDATE_EVENT`);
+            return;
+          }
+
           setUserData((prev) => {
             return {
               ...prev,
