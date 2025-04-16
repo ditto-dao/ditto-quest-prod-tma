@@ -1,5 +1,5 @@
 import "./first-login.css";
-import DQLogo from "../../../assets/images/general/dq-logo.png";
+import DQLogo from "../../../../assets/images/general/dq-logo.png";
 import { useEffect } from "react";
 import { preloadImage } from "../../../../utils/helpers";
 import { SlimeGachaPullRes } from "../../../../redux/socket/gacha/gacha-context";
