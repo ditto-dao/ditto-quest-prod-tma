@@ -68,6 +68,7 @@
 
 .stats-exp-progress {
   height: 100%;
+  transition: width 0.3s ease-in-out;
   background-color: var(--rarity-s);
 }
 
