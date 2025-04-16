@@ -1,4 +1,5 @@
 // User
+export const FIRST_LOGIN_EVENT = 'user-first-login';
 
 // Combat
 export const START_COMBAT_DOMAIN_EVENT = 'start-combat-domain';

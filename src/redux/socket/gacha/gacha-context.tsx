@@ -5,7 +5,7 @@ import { useLoginSocket } from "../login/login-context";
 import { useNotification } from "../../../components/notifications/notification-context";
 import ErrorNotification from "../../../components/notifications/notification-content/error/error-notification";
 
-interface SlimeGachaPullRes {
+export interface SlimeGachaPullRes {
   slime: SlimeWithTraits;
   rankPull: string;
   slimeNoBg: ArrayBuffer;
