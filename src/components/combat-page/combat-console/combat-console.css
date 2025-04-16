@@ -77,7 +77,8 @@
 
 .monster-img-wrapper {
   position: relative;
-  width: 100%;
+  width: 70px;
+  height: 70px;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -86,9 +87,10 @@
 .monster-bg-img {
   position: absolute;
   bottom: -10px;
-  left: -29px; /* adjust this */
-  width: 128px; /* don't scale it down to 70x70 */
-  height: 128px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 120px;
   image-rendering: pixelated;
   z-index: 0;
 }
@@ -97,7 +99,7 @@
 .monster-img {
   position: relative;
   z-index: 1;
-  max-width: 100%;
+  max-width: 70px;
   max-height: 70px;
   border-radius: 7px;
   object-fit: contain;
