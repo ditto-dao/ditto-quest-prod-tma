@@ -15,7 +15,10 @@ import {
   removeUndefined,
   updateUserStatsFromEquipmentAndSlime,
 } from "../../../utils/helpers";
-import { COMBAT_EXP_UPDATE_EVENT, FIRST_LOGIN_EVENT } from "../../../utils/events";
+import {
+  COMBAT_EXP_UPDATE_EVENT,
+  FIRST_LOGIN_EVENT,
+} from "../../../utils/events";
 import { useNotification } from "../../../components/notifications/notification-context";
 import LevelUpNotification from "../../../components/notifications/notification-content/level-up/level-up-notification";
 import ErrorNotification from "../../../components/notifications/notification-content/error/error-notification";
@@ -285,7 +288,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     socket.emit("equip-slime", slime.id);
     setLastEventEmittedTimestamp(Date.now());
-    setIsUpgradingStats(true);
   };
 
   const unequipSlime = () => {
@@ -317,20 +319,14 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   };
 
   const incrementUserHp = (amount: number) => {
-
-    if (!userData) {
-      console.error(`User data not found. Unable to run incrementUserHp()`);
-      return;
-    }
-
-    if (!userData.combat) {
-      console.error(`User combat not found. Unable to run incrementUserHp()`);
-      return;
-    }
-
     setUserData((prevUserData) => {
+      if (!prevUserData) {
+        console.error(`User data not found. Unable to run incrementUserHp()`);
+        return prevUserData;
+      }
+
       if (!prevUserData.combat) {
-        console.error("No combat object found for user");
+        console.error(`User combat not found. Unable to run incrementUserHp()`);
         return prevUserData;
       }
 
@@ -348,19 +344,15 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   };
 
   const setUserHp = (hp: number, maxHp: number) => {
-    if (!userData) {
-      console.error(`User data not found. Unable to run setUserHp()`);
-      return;
-    }
-
-    if (!userData.combat) {
-      console.error(`User combat not found. Unable to run setUserHp()`);
-      return;
-    }
-
     setUserData((prevUserData) => {
+      if (!prevUserData) {
+        console.error(`User data not found. Unable to run setUserHp()`);
+        return prevUserData;
+      }
+
       if (!prevUserData.combat) {
-        console.error("No combat object found for user");
+        console.error(`User combat not found. Unable to run setUserHp()`);
+        console.log(`user combat: ${prevUserData.combat}`);
         return prevUserData;
       }
 
@@ -368,8 +360,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         ...prevUserData,
         combat: {
           ...prevUserData.combat,
-          hp: hp,
-          maxHp: maxHp
+          hp,
+          maxHp,
         },
       };
     });
@@ -506,6 +498,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [userData, userContextLoaded]);
 
   useEffect(() => {
+    console.log(
+      `user combat changed: ${JSON.stringify(userData.combat, null, 2)}`
+    );
+  }, [userData, userData.combat]);
+
+  useEffect(() => {
     if (socket && !loadingSocket && accessGranted) {
       socket.on("update-inventory", (data: Inventory[]) => {
         setUserData((prevUserData) => {
@@ -600,7 +598,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.farmingLevelsGained > 0) {
-          addNotification(<LevelUpNotification newLevel={data.farmingLevel} lvlLabel="Farming Lvl" />);
+          addNotification(
+            <LevelUpNotification
+              newLevel={data.farmingLevel}
+              lvlLabel="Farming Lvl"
+            />
+          );
         }
       });
 
@@ -618,7 +621,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.craftingLevelsGained > 0) {
-          addNotification(<LevelUpNotification newLevel={data.craftingLevel} lvlLabel="Crafting Lvl" />);
+          addNotification(
+            <LevelUpNotification
+              newLevel={data.craftingLevel}
+              lvlLabel="Crafting Lvl"
+            />
+          );
         }
       });
 
@@ -661,7 +669,9 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           );
 
           if (!userData) {
-            console.error(`User data not found. Unable to process COMBAT_EXP_UPDATE_EVENT`);
+            console.error(
+              `User data not found. Unable to process COMBAT_EXP_UPDATE_EVENT`
+            );
             return;
           }
 
@@ -679,11 +689,15 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           });
 
           if (data.levelUp) {
-            addNotification(<LevelUpNotification newLevel={data.level} lvlLabel="Lvl" />);
+            addNotification(
+              <LevelUpNotification newLevel={data.level} lvlLabel="Lvl" />
+            );
           }
 
           if (data.hpLevelUp) {
-            addNotification(<LevelUpNotification newLevel={data.hpLevel} lvlLabel="HP Lvl" />);
+            addNotification(
+              <LevelUpNotification newLevel={data.hpLevel} lvlLabel="HP Lvl" />
+            );
           }
         }
       );
@@ -692,12 +706,23 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setIsUpgradingStats(false);
       });
 
-      socket.on(FIRST_LOGIN_EVENT, (payload: { freeSlimes: SlimeGachaPullRes[], freeItems: Inventory }) => {
-        addNotification(<FirstLoginNotification freeSlimes={payload.freeSlimes} freeItems={payload.freeItems} />)
-      });
+      socket.on(
+        FIRST_LOGIN_EVENT,
+        (payload: {
+          freeSlimes: SlimeGachaPullRes[];
+          freeItems: Inventory;
+        }) => {
+          addNotification(
+            <FirstLoginNotification
+              freeSlimes={payload.freeSlimes}
+              freeItems={payload.freeItems}
+            />
+          );
+        }
+      );
 
       socket.on("error", (msg: string) => {
-        addNotification(<ErrorNotification msg={msg} />)
+        addNotification(<ErrorNotification msg={msg} />);
       });
 
       // Clean up on unmount
