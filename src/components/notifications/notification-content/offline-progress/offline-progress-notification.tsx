@@ -28,7 +28,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
   const { updates, offlineProgressMs } = props;
 
   const renderLine = (imgSrc: string, label: string, iconSmall?: boolean) => {
-    const match = label.match(/(.+?)\s([+×]\d.*)$/); // match label + value
+    const match = label.match(/(.+?)\s([+\-×]\d.*)$/);
     const itemLabel = match ? match[1] : label;
     const value = match ? match[2] : "";
   
