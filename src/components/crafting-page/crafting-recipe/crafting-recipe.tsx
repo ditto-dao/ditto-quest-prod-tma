@@ -52,10 +52,10 @@ function CraftingRecipe(props: CraftingRecipeProps) {
       } else {
         socket.emit("craft-equipment", props.equipmentId);
         startCrafting(props.equipmentId, Date.now(), props.durationS);
-        setIsCrafting(false);
+        setIsCrafting(true);
       }
+      setLastEventEmittedTimestamp(Date.now());
     }
-    setLastEventEmittedTimestamp(Date.now());
   };
 
   useEffect(() => {
