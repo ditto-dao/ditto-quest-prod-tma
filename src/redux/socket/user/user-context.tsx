@@ -15,10 +15,12 @@ import {
   removeUndefined,
   updateUserStatsFromEquipmentAndSlime,
 } from "../../../utils/helpers";
-import { COMBAT_EXP_UPDATE_EVENT } from "../../../utils/events";
+import { COMBAT_EXP_UPDATE_EVENT, FIRST_LOGIN_EVENT } from "../../../utils/events";
 import { useNotification } from "../../../components/notifications/notification-context";
 import LevelUpNotification from "../../../components/notifications/notification-content/level-up/level-up-notification";
 import ErrorNotification from "../../../components/notifications/notification-content/error/error-notification";
+import { SlimeGachaPullRes } from "../gacha/gacha-context";
+import FirstLoginNotification from "../../../components/notifications/first-login/first-login";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -317,7 +319,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const incrementUserHp = (amount: number) => {
     setUserData((prevUserData) => {
       if (!prevUserData.combat) {
-        throw new Error("No combat object found for user");
+        console.error("No combat object found for user");
+        return prevUserData;
       }
 
       const { hp, maxHp } = prevUserData.combat;
@@ -336,7 +339,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const setUserHp = (hp: number, maxHp: number) => {
     setUserData((prevUserData) => {
       if (!prevUserData.combat) {
-        throw new Error("No combat object found for user");
+        console.error("No combat object found for user");
+        return prevUserData;
       }
 
       return {
@@ -661,6 +665,10 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setIsUpgradingStats(false);
       });
 
+      socket.on(FIRST_LOGIN_EVENT, (payload: { freeSlimes: SlimeGachaPullRes[], freeItems: Inventory }) => {
+        addNotification(<FirstLoginNotification freeSlimes={payload.freeSlimes} freeItems={payload.freeItems} />)
+      });
+
       socket.on("error", (msg: string) => {
         addNotification(<ErrorNotification msg={msg} />)
       });
@@ -670,10 +678,14 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         socket.off("update-inventory");
         socket.off("update-slime-inventory");
         socket.off("unequip-update");
+        socket.off("equip-update");
         socket.off("update-farming-exp");
         socket.off("update-crafting-exp");
+        socket.off("equip-slime-update");
         socket.off("combat-update");
         socket.off(COMBAT_EXP_UPDATE_EVENT);
+        socket.off("pump-stats-complete");
+        socket.off(FIRST_LOGIN_EVENT);
         socket.off("error");
       };
     }
