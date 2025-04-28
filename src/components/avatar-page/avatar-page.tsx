@@ -146,7 +146,15 @@ function AvatarPage() {
           <div className="equipment-slot-label">Equipment</div>
           {/* Row 1: Hat */}
           <div className="avatar-row">
-            <div className="hat-slot">
+            <div
+              className="hat-slot"
+              style={{
+                border:
+                  userData.hat && userData.hat.equipment
+                    ? `1.5px solid var(--rarity-${userData.hat.equipment.rarity.toLowerCase()})`
+                    : "1.5px solid var(--bright-teal)",
+              }}
+            >
               {userData.hat ? (
                 <img
                   className="slot-image"
@@ -161,7 +169,15 @@ function AvatarPage() {
 
           {/* Row 2: Cape, Necklace, Pet */}
           <div className="avatar-row">
-            <div className="cape-slot">
+            <div
+              className="cape-slot"
+              style={{
+                border:
+                  userData.cape && userData.cape.equipment
+                    ? `1.5px solid var(--rarity-${userData.cape.equipment.rarity.toLowerCase()})`
+                    : "1.5px solid var(--bright-teal)",
+              }}
+            >
               {userData.cape ? (
                 <img
                   className="slot-image"
@@ -172,7 +188,15 @@ function AvatarPage() {
                 <img className="slot-image-default" src={DefaultCape}></img>
               )}
             </div>
-            <div className="necklace-slot">
+            <div
+              className="necklace-slot"
+              style={{
+                border:
+                  userData.necklace && userData.necklace.equipment
+                    ? `1.5px solid var(--rarity-${userData.necklace.equipment.rarity.toLowerCase()})`
+                    : "1.5px solid var(--bright-teal)",
+              }}
+            >
               {userData.necklace ? (
                 <img
                   className="slot-image"
@@ -190,7 +214,15 @@ function AvatarPage() {
 
           {/* Row 3: Shield, Armour, Weapon */}
           <div className="avatar-row">
-            <div className="shield-slot">
+            <div
+              className="shield-slot"
+              style={{
+                border:
+                  userData.shield && userData.shield.equipment
+                    ? `1.5px solid var(--rarity-${userData.shield.equipment.rarity.toLowerCase()})`
+                    : "1.5px solid var(--bright-teal)",
+              }}
+            >
               {userData.shield ? (
                 <img
                   className="slot-image"
@@ -201,7 +233,15 @@ function AvatarPage() {
                 <img className="slot-image-default" src={DefaultShield}></img>
               )}
             </div>
-            <div className="armour-slot">
+            <div
+              className="armour-slot"
+              style={{
+                border:
+                  userData.armour && userData.armour.equipment
+                    ? `1.5px solid var(--rarity-${userData.armour.equipment.rarity.toLowerCase()})`
+                    : "1.5px solid var(--bright-teal)",
+              }}
+            >
               {userData.armour ? (
                 <img
                   className="slot-image"
@@ -212,7 +252,15 @@ function AvatarPage() {
                 <img className="slot-image-default" src={DefaultArmour}></img>
               )}
             </div>
-            <div className="weapon-slot">
+            <div
+              className="weapon-slot"
+              style={{
+                border:
+                  userData.weapon && userData.weapon.equipment
+                    ? `1.5px solid var(--rarity-${userData.weapon.equipment.rarity.toLowerCase()})`
+                    : "1.5px solid var(--bright-teal)",
+              }}
+            >
               {userData.weapon ? (
                 <img
                   className="slot-image"
