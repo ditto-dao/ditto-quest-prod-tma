@@ -592,12 +592,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.farmingLevelsGained > 0) {
-          addNotification(
+          addNotification(() => (
             <LevelUpNotification
               newLevel={data.farmingLevel}
               lvlLabel="Farming Lvl"
             />
-          );
+          ));
         }
       });
 
@@ -615,12 +615,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
 
         if (data.craftingLevelsGained > 0) {
-          addNotification(
+          addNotification(() => (
             <LevelUpNotification
               newLevel={data.craftingLevel}
               lvlLabel="Crafting Lvl"
             />
-          );
+          ));
         }
       });
 
@@ -683,15 +683,15 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           });
 
           if (data.levelUp) {
-            addNotification(
+            addNotification(() => (
               <LevelUpNotification newLevel={data.level} lvlLabel="Lvl" />
-            );
+            ));
           }
 
           if (data.hpLevelUp) {
-            addNotification(
+            addNotification(() => (
               <LevelUpNotification newLevel={data.hpLevel} lvlLabel="HP Lvl" />
-            );
+            ));
           }
         }
       );
@@ -706,17 +706,17 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           freeSlimes: SlimeGachaPullRes[];
           freeItems: Inventory[];
         }) => {
-          addNotification(
+          addNotification(() => (
             <FirstLoginNotification
               freeSlimes={payload.freeSlimes}
               freeItems={payload.freeItems}
             />
-          );
+          ));
         }
       );
 
       socket.on("error", (msg: string) => {
-        addNotification(<ErrorNotification msg={msg} />);
+        addNotification(() => <ErrorNotification msg={msg} />);
       });
 
       // Clean up on unmount

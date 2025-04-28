@@ -2,6 +2,8 @@ import Separator from "../../../../assets/images/general/separator.svg";
 import "./slime-modal.css";
 import { SlimeWithTraits } from "../../../../utils/types";
 import { getHighestDominantTraitRarity } from "../../../../utils/helpers";
+import { useUserSocket } from "../../../../redux/socket/user/user-context";
+import { useIdleSkillSocket } from "../../../../redux/socket/idle/skill-context";
 
 const TRAIT_KEYS = [
   "Body",
@@ -15,32 +17,36 @@ const TRAIT_KEYS = [
 ] as const;
 
 interface SlimeModalProps {
-  onRequestClose: () => void;
-  selectedSlime: SlimeWithTraits | null;
-  isSlimeEquipped: (slimeId: number) => boolean;
-  canSetSlimeToBreed: (slime: SlimeWithTraits) => boolean;
-  equipSlime: (slime: SlimeWithTraits) => void;
-  unequipSlime: () => void;
-  setSlimeToBreed: (slime: SlimeWithTraits) => void;
+  notificationId: string;
+  selectedSlime: SlimeWithTraits | null | undefined;
+  removeNotification: (id: string) => void;
 }
 
 export default function SlimeModal({
-  onRequestClose,
+  notificationId,
   selectedSlime,
-  isSlimeEquipped,
-  canSetSlimeToBreed,
-  equipSlime,
-  unequipSlime,
-  setSlimeToBreed,
+  removeNotification,
 }: SlimeModalProps) {
+  const { userData, equipSlime, unequipSlime } = useUserSocket();
+  const { breedingStatus, slimeToBreed0, slimeToBreed1, setSlimeToBreed } =
+    useIdleSkillSocket();
+
+  const isSlimeEquipped = (slimeId: number): boolean => {
+    return !!(userData?.equippedSlime?.id === slimeId);
+  };
+
+  const canSetSlimeToBreed = (slime: SlimeWithTraits) => {
+    return (
+      slime.id !== userData.equippedSlime?.id &&
+      !breedingStatus &&
+      slime.id !== slimeToBreed0?.id &&
+      slime.id !== slimeToBreed1?.id
+    );
+  };
   if (!selectedSlime) return null;
 
   return (
     <div className="slime-modal-content">
-      <button onClick={onRequestClose} className="close-modal-button">
-        X
-      </button>
-
       {/* Slime Image */}
       <div className="slime-image-container">
         <img
@@ -64,7 +70,10 @@ export default function SlimeModal({
         {isSlimeEquipped(selectedSlime.id) ? (
           <button
             className="equip-slime-button equip-slime-active"
-            onClick={() => unequipSlime()}
+            onClick={() => {
+              unequipSlime();
+              removeNotification(notificationId);
+            }}
           >
             Unequip Slime
           </button>

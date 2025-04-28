@@ -29,6 +29,8 @@
 
 .level-up-message {
     font-size: 10px;
+    padding: 10px;
+    padding-top: 0;
     line-height: 12px;
 }
 

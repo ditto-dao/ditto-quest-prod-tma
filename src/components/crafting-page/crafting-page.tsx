@@ -12,6 +12,8 @@ import { useState } from "react";
 import { EquipmentType } from "../../utils/types";
 import Stats from "../stats/stats";
 import { useUserSocket } from "../../redux/socket/user/user-context";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 
 const categoryImages: { [key: string]: string } = {
   Weapon: DefaultWeapon,
@@ -44,8 +46,7 @@ function CraftingPage() {
           secondaryColour="var(--seafoam-green)"
           bgColour="var(--midnight-teal)"
         />
-      </div>
-      <div className="equipment-category-buttons-wrapper">
+        <SimpleBar className="equipment-category-buttons-scrollbar" autoHide={false}>
         <div className="equipment-category-buttons">
           {categories.map((category) => (
             <div
@@ -63,6 +64,7 @@ function CraftingPage() {
             </div>
           ))}
         </div>
+        </SimpleBar>
       </div>
 
       <div className="crafting-recipes-container">

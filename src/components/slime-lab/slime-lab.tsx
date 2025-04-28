@@ -22,6 +22,8 @@ function SlimeLabPage() {
   useEffect(() => {
     if (userData?.equippedSlime) {
       setEquippedSlimeId(userData.equippedSlime.id);
+    } else {
+      setEquippedSlimeId(undefined);
     }
   }, [userData]);
 

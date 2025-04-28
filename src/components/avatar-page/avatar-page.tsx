@@ -10,17 +10,12 @@ import DefaultArmour from "../../assets/images/avatar-page/default-armour.png";
 import DefaultPet from "../../assets/images/avatar-page/default-pet.png";
 import SlimeLogo from "../../assets/images/general/slime-mage.png";
 //import DefaultSkillbook from "../../assets/images/avatar-page/default-skillbook.png";
-import EquipmentIcon from "../../assets/images/general/equipment-icon.png";
 import CPIcon from "../../assets/images/combat/cp-logo.png";
 import GoldMedalIcon from "../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../assets/images/combat/hp-lvl.png";
-import Modal from "react-modal";
-import { useState } from "react";
 import {
   defaultCombat,
-  Equipment,
-  EquipmentType,
-  SlimeWithTraits,
+  Inventory,
 } from "../../utils/types";
 import {
   calculateCombatPower,
@@ -29,64 +24,32 @@ import {
   formatNumberWithCommas,
 } from "../../utils/helpers";
 import SlimeModal from "../slime-lab/slime-lab-inventory/slime-modal/slime-modal";
-import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
+import { useNotification } from "../notifications/notification-context";
+import ItemEqModal from "../item-eq-modal/item-eq-modal";
 
 function AvatarPage() {
-  const { userData, unequip, equipSlime, unequipSlime } = useUserSocket();
-  const { setSlimeToBreed, breedingStatus, slimeToBreed0, slimeToBreed1 } =
-    useIdleSkillSocket();
-  const [isSlimeModalOpen, setIsSlimeModalOpen] = useState(false);
-  const [selectedEquipment, setSelectedEquipment] = useState<Equipment | null>(
-    null
-  );
-  const [isEquipmentModalOpen, setIsEquipmentModalOpen] = useState(false);
+  const { addNotification, removeNotification } = useNotification();
+  const { userData } = useUserSocket();
 
   const cp = calculateCombatPower(userData.combat || defaultCombat);
 
   // Slime Modal
   const openSlimeModal = () => {
-    setIsSlimeModalOpen(true);
-  };
-
-  const closeSlimeModal = () => {
-    setIsSlimeModalOpen(false);
-  };
-
-  const unequipSlimeFromAvatarPage = () => {
-    closeSlimeModal();
-    unequipSlime();
-  };
-
-  const canSetSlimeToBreed = (slime: SlimeWithTraits) => {
-    return (
-      slime.id !== userData.equippedSlime?.id &&
-      !breedingStatus &&
-      slime.id !== slimeToBreed0?.id &&
-      slime.id !== slimeToBreed1?.id
-    );
-  };
-
-  const isSlimeEquipped = (slimeId: number): boolean => {
-    return !!(userData?.equippedSlime?.id === slimeId);
-  };
-
-  // Equipment Modal
-  const handleEquipmentOpenModal = (equipment: Equipment) => {
-    if (!isEquipmentModalOpen) {
-      setSelectedEquipment(equipment);
-      setIsEquipmentModalOpen(true);
+    if (userData.equippedSlime) {
+      addNotification((id) => (
+        <SlimeModal
+          notificationId={id}
+          removeNotification={removeNotification}
+          selectedSlime={userData.equippedSlime}
+        />
+      ));
     }
   };
 
-  const handleCloseEquipmentModal = () => {
-    setSelectedEquipment(null);
-    setIsEquipmentModalOpen(false);
-  };
+  // Equipment Modal
+  const handleEquipmentOpenModal = (equipmentInv: Inventory) => {
+    addNotification(() => <ItemEqModal selectedItem={equipmentInv} />);
 
-  const handleUnequip = (equipmentType: EquipmentType) => {
-    setSelectedEquipment(null);
-    setIsEquipmentModalOpen(false);
-    unequip(equipmentType);
   };
 
   return (
@@ -182,7 +145,7 @@ function AvatarPage() {
                   className="slot-image"
                   src={userData.hat.equipment!.imgsrc}
                   onClick={() =>
-                    handleEquipmentOpenModal(userData.hat!.equipment!)
+                    handleEquipmentOpenModal(userData.hat!)
                   }
                 ></img>
               ) : (
@@ -199,7 +162,7 @@ function AvatarPage() {
                   className="slot-image"
                   src={userData.cape.equipment!.imgsrc}
                   onClick={() =>
-                    handleEquipmentOpenModal(userData.cape!.equipment!)
+                    handleEquipmentOpenModal(userData.cape!)
                   }
                 ></img>
               ) : (
@@ -212,7 +175,7 @@ function AvatarPage() {
                   className="slot-image"
                   src={userData.necklace.equipment!.imgsrc}
                   onClick={() =>
-                    handleEquipmentOpenModal(userData.necklace!.equipment!)
+                    handleEquipmentOpenModal(userData.necklace!)
                   }
                 ></img>
               ) : (
@@ -232,7 +195,7 @@ function AvatarPage() {
                   className="slot-image"
                   src={userData.shield.equipment!.imgsrc}
                   onClick={() =>
-                    handleEquipmentOpenModal(userData.shield!.equipment!)
+                    handleEquipmentOpenModal(userData.shield!)
                   }
                 ></img>
               ) : (
@@ -245,7 +208,7 @@ function AvatarPage() {
                   className="slot-image"
                   src={userData.armour.equipment!.imgsrc}
                   onClick={() =>
-                    handleEquipmentOpenModal(userData.armour!.equipment!)
+                    handleEquipmentOpenModal(userData.armour!)
                   }
                 ></img>
               ) : (
@@ -258,7 +221,7 @@ function AvatarPage() {
                   className="slot-image"
                   src={userData.weapon.equipment!.imgsrc}
                   onClick={() =>
-                    handleEquipmentOpenModal(userData.weapon!.equipment!)
+                    handleEquipmentOpenModal(userData.weapon!)
                   }
                 ></img>
               ) : (
@@ -286,120 +249,6 @@ function AvatarPage() {
           </div>
         </div>
       </div> */}
-
-      {/* Render the slime modal */}
-      <Modal
-        isOpen={isSlimeModalOpen}
-        onRequestClose={closeSlimeModal}
-        contentLabel="Slime Details"
-        className="slime-modal"
-        overlayClassName="slime-modal-overlay"
-      >
-        {userData.equippedSlime && (
-          <SlimeModal
-            selectedSlime={userData.equippedSlime}
-            isSlimeEquipped={isSlimeEquipped}
-            canSetSlimeToBreed={canSetSlimeToBreed}
-            equipSlime={equipSlime}
-            unequipSlime={unequipSlimeFromAvatarPage}
-            setSlimeToBreed={setSlimeToBreed}
-            onRequestClose={closeSlimeModal}
-          />
-        )}
-      </Modal>
-
-      {/* Render the equipment modal */}
-      <Modal
-        isOpen={isEquipmentModalOpen}
-        onRequestClose={handleCloseEquipmentModal}
-        contentLabel="Inventory Item Details"
-        className="inventory-item-modal"
-        overlayClassName="inventory-item-modal-overlay"
-      >
-        {selectedEquipment && (
-          <div className="modal-content">
-            <div className="modal-border-container">
-              <div className="modal-content">
-                <button
-                  onClick={handleCloseEquipmentModal}
-                  className="close-inventory-modal-button"
-                >
-                  X
-                </button>
-                <div className="item-details">
-                  <div className="item-header">
-                    <img
-                      src={EquipmentIcon}
-                      alt="Equipment icon"
-                      className="equipment-icon"
-                    />
-                    <div className="inv-modal-header-name">
-                      {selectedEquipment.name}
-                    </div>
-                  </div>
-                  <div className="item-content">
-                    <div className="item-image-container">
-                      <div
-                        className={`rarity-badge rarity-${selectedEquipment.rarity.toLowerCase()}`}
-                      >
-                        {selectedEquipment.rarity}
-                      </div>
-                      <img
-                        src={selectedEquipment.imgsrc}
-                        alt={selectedEquipment.name}
-                        className="item-image"
-                      />
-                    </div>
-                    <div className="inv-modal-item-description-container">
-                      <div className="inv-eq-tab-info">
-                        {selectedEquipment.attackType && (
-                          <div
-                            className={`attack-type ${
-                              selectedEquipment.requiredLvl > userData.level
-                                ? "red"
-                                : ""
-                            } ${
-                              selectedEquipment.attackType === "Melee"
-                                ? "melee"
-                                : selectedEquipment.attackType === "Ranged"
-                                ? "ranged"
-                                : selectedEquipment.attackType === "Magic"
-                                ? "magic"
-                                : ""
-                            }`}
-                          >
-                            {selectedEquipment.attackType}
-                          </div>
-                        )}
-                        <div
-                          className={`required-lvl ${
-                            selectedEquipment.requiredLvl > userData.level
-                              ? "red"
-                              : ""
-                          }`}
-                        >
-                          Req. Lvl. {selectedEquipment.requiredLvl}
-                        </div>
-                      </div>
-                      <div>{selectedEquipment.description}</div>
-                    </div>
-                  </div>
-                </div>
-                <div className="inv-buttons-div">
-                  <button
-                    className={"equip-button equip-active"}
-                    onClick={() => {
-                      handleUnequip(selectedEquipment.type);
-                    }}
-                  >
-                    Unequip
-                  </button>
-                </div>
-              </div>
-            </div>{" "}
-          </div>
-        )}
-      </Modal>
     </div>
   );
 }

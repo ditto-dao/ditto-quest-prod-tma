@@ -1,11 +1,8 @@
-import { useState } from "react";
-import Modal from "react-modal";
 import "./slime-lab-inventory.css";
 import { SlimeWithTraits } from "../../../utils/types";
 import { getHighestDominantTraitRarity } from "../../../utils/helpers";
-import { useIdleSkillSocket } from "../../../redux/socket/idle/skill-context";
-import { useUserSocket } from "../../../redux/socket/user/user-context";
 import SlimeModal from "./slime-modal/slime-modal";
+import { useNotification } from "../../notifications/notification-context";
 
 interface SlimeLabInventoryProps {
   slimes: SlimeWithTraits[];
@@ -16,37 +13,16 @@ function SlimeLabInventory({
   slimes,
   equippedSlimeId,
 }: SlimeLabInventoryProps) {
-  const { setSlimeToBreed, breedingStatus, slimeToBreed0, slimeToBreed1 } =
-    useIdleSkillSocket();
-  const { userData, equipSlime, unequipSlime } = useUserSocket();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedSlime, setSelectedSlime] = useState<SlimeWithTraits | null>(
-    null
-  );
+  const { addNotification, removeNotification } = useNotification();
 
   const openModal = (slime: SlimeWithTraits) => {
-    setSelectedSlime(slime);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedSlime(null);
-    setTimeout(() => setSelectedSlime(null), 300); // delay cleanup to avoid flicker
-  };
-
-  const canSetSlimeToBreed = (slime: SlimeWithTraits) => {
-    return (
-      slime.id !== userData.equippedSlime?.id &&
-      !breedingStatus &&
-      slime.id !== slimeToBreed0?.id &&
-      slime.id !== slimeToBreed1?.id
-    );
-  };
-
-  const isSlimeEquipped = (slimeId: number): boolean => {
-    return !!(userData?.equippedSlime?.id === slimeId);
+    addNotification((id) => (
+      <SlimeModal
+        notificationId={id}
+        removeNotification={removeNotification}
+        selectedSlime={slime}
+      />
+    ));
   };
 
   return (
@@ -86,26 +62,6 @@ function SlimeLabInventory({
           )}
         </div>
       </div>
-
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Slime Details"
-        className="slime-modal"
-        overlayClassName="slime-modal-overlay"
-      >
-        {selectedSlime && (
-          <SlimeModal
-            selectedSlime={selectedSlime}
-            isSlimeEquipped={isSlimeEquipped}
-            canSetSlimeToBreed={canSetSlimeToBreed}
-            equipSlime={equipSlime}
-            unequipSlime={unequipSlime}
-            setSlimeToBreed={setSlimeToBreed}
-            onRequestClose={closeModal}
-          />
-        )}
-      </Modal>
     </div>
   );
 }

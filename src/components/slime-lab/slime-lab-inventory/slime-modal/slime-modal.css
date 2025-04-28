@@ -1,64 +1,16 @@
-.slime-modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 85%;
-  max-width: 100%;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 0 0 var(--dark-navy);
-  border: 2px solid var(--dark-navy);
-  font-family: "PixelOperatorMono8", "Impact", sans-serif;
-  color: var(--cream-white);
-  outline: none;
-  animation: slide-up 0.25s ease-in-out forwards;
-  user-select: none;
-}
-
-.slime-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  animation: fade-in 0.3s ease-in-out forwards;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .slime-modal-content {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 15px;
   position: relative;
-  padding: 30px;
-  background: var(--forest-green);
-  border: 2px solid var(--bright-teal);
-  border-radius: 7px;
-  max-height: 80vh;
-  overflow-y: auto;
-  overflow-x: hidden;
-  scrollbar-gutter: stable;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(136, 136, 136, 0.5) transparent;
-  scroll-behavior: smooth;
-
   -webkit-touch-callout: none; /* iOS Safari */
   -webkit-user-select: none; /* Safari */
   -khtml-user-select: none; /* Konqueror HTML */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+  padding: 10px 0 20px 0;
 }
 
 .slime-modal-content::-webkit-scrollbar {
@@ -77,30 +29,13 @@
   background-color: rgba(85, 85, 85, 0.8);
 }
 
-.close-modal-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #ff4d4d;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 10px;
-  font-weight: bolder;
-}
-.close-modal-button:active {
-  background: #ff1a1a;
-}
-
 .slime-image-container {
-  margin-top: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   border-radius: 10px;
+  padding: 0 30px;
 }
 .slime-image {
   max-width: 100%;

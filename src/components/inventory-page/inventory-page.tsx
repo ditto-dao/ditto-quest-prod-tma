@@ -1,14 +1,11 @@
 import { useState, useEffect } from "react";
 import "./inventory-page.css";
 import { useUserSocket } from "../../redux/socket/user/user-context";
-import {
-  formatNumberForInvQty,
-} from "../../utils/helpers";
-import EquipmentIcon from "../../assets/images/general/equipment-icon.png";
-import ItemIcon from "../../assets/images/general/item-icon.png";
+import { formatNumberForInvQty } from "../../utils/helpers";
 import { Inventory } from "../../utils/types";
-import Modal from "react-modal";
 import BalancesDisplay from "../balances/balances";
+import { useNotification } from "../notifications/notification-context";
+import ItemEqModal from "../item-eq-modal/item-eq-modal";
 
 // Helper function to chunk inventory into rows
 function chunkInventory(array: Inventory[], size: number) {
@@ -28,11 +25,9 @@ function chunkInventory(array: Inventory[], size: number) {
 }
 
 function InventoryPage() {
-  const { userData, equip } = useUserSocket();
+  const { addNotification } = useNotification();
+  const { userData } = useUserSocket();
   const [inventory, setInventory] = useState<Inventory[]>([]);
-
-  const [selectedItem, setSelectedItem] = useState<Inventory | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     if (userData) {
@@ -45,30 +40,7 @@ function InventoryPage() {
 
   // Modal
   const handleOpenModal = (item: Inventory) => {
-    if (!isModalOpen) {
-      setSelectedItem(item);
-      setIsModalOpen(true);
-    }
-  };
-
-  const handleCloseModal = () => {
-    setSelectedItem(null);
-    setIsModalOpen(false);
-  };
-
-  const meetsLvlReq = (reqLvl: number) => {
-    return reqLvl <= userData.level;
-  };
-
-  const isEquipped = () => {
-    return !!(
-      userData &&
-      selectedItem &&
-      selectedItem.equipment &&
-      selectedItem.equipmentId &&
-      userData[selectedItem.equipment.type]?.equipmentId ===
-        selectedItem.equipmentId
-    );
+    addNotification(() => <ItemEqModal selectedItem={item} />);
   };
 
   return (
@@ -124,137 +96,6 @@ function InventoryPage() {
           )}
         </div>
       </div>
-      {/* Render the modal */}
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={handleCloseModal}
-        contentLabel="Inventory Item Details"
-        className="inventory-item-modal"
-        overlayClassName="inventory-item-modal-overlay"
-      >
-        {selectedItem && (
-          <div className="modal-content">
-            <div className="modal-border-container">
-              <div className="modal-content">
-                <button
-                  onClick={handleCloseModal}
-                  className="close-inventory-modal-button"
-                >
-                  X
-                </button>
-                <div className="item-details">
-                  <div className="item-header">
-                    {selectedItem.itemId ? (
-                      <img
-                        src={ItemIcon}
-                        alt="Item icon"
-                        className="item-icon"
-                      />
-                    ) : (
-                      <img
-                        src={EquipmentIcon}
-                        alt="Equipment icon"
-                        className="equipment-icon"
-                      />
-                    )}
-                    <div className="inv-modal-header-name">
-                      {selectedItem.item?.name || selectedItem.equipment?.name}
-                    </div>
-                  </div>
-                  <div className="item-content">
-                    <div className="item-image-container">
-                      <div
-                        className={`rarity-badge rarity-${
-                          selectedItem.item?.rarity?.toLowerCase() ||
-                          selectedItem.equipment?.rarity?.toLowerCase()
-                        }`}
-                      >
-                        {selectedItem.item?.rarity ||
-                          selectedItem.equipment?.rarity}
-                      </div>
-                      <img
-                        src={
-                          selectedItem.item?.imgsrc ||
-                          selectedItem.equipment?.imgsrc
-                        }
-                        alt={
-                          selectedItem.item?.name ||
-                          selectedItem.equipment?.name
-                        }
-                        className="item-image"
-                      />
-                    </div>
-                    <div className="inv-modal-item-description-container">
-                      {selectedItem.equipmentId && (
-                        <div className="inv-eq-tab-info">
-                          {selectedItem.equipment?.attackType && (
-                            <div
-                              className={`attack-type ${
-                                selectedItem.equipment.requiredLvl >
-                                userData.level
-                                  ? "red"
-                                  : ""
-                              } ${
-                                selectedItem.equipment.attackType === "Melee"
-                                  ? "melee"
-                                  : selectedItem.equipment.attackType ===
-                                    "Ranged"
-                                  ? "ranged"
-                                  : selectedItem.equipment.attackType ===
-                                    "Magic"
-                                  ? "magic"
-                                  : ""
-                              }`}
-                            >
-                              {selectedItem.equipment.attackType}
-                            </div>
-                          )}
-                          <div
-                            className={`required-lvl ${
-                              selectedItem.equipment!.requiredLvl >
-                              userData.level
-                                ? "red"
-                                : ""
-                            }`}
-                          >
-                            Req. Lvl. {selectedItem.equipment!.requiredLvl}
-                          </div>
-                        </div>
-                      )}{" "}
-                      <div>
-                        {selectedItem.item?.description ||
-                          selectedItem.equipment?.description}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="inv-buttons-div">
-                  {selectedItem.equipment && selectedItem.equipmentId && (
-                    <button
-                      className={`equip-button ${
-                        isEquipped() ? "equip-active" : ""
-                      }`}
-                      onClick={() =>
-                        equip(selectedItem.id, selectedItem.equipment!.type)
-                      }
-                      disabled={
-                        isEquipped() ||
-                        !meetsLvlReq(selectedItem.equipment.requiredLvl)
-                      }
-                    >
-                      {!meetsLvlReq(selectedItem.equipment.requiredLvl)
-                        ? `Requires Lvl ${selectedItem.equipment.requiredLvl}`
-                        : isEquipped()
-                        ? "Equipped"
-                        : "Equip"}
-                    </button>
-                  )}
-                </div>
-              </div>
-            </div>{" "}
-          </div>
-        )}
-      </Modal>
     </div>
   );
 }

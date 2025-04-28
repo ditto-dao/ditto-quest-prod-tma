@@ -37,7 +37,7 @@ function DomainMenuItem(props: Domain) {
     if (userData.equippedSlime && userData.equippedSlimeId) {
       enterDomain(props);
     } else {
-      addNotification(<EquipSlimeNotification />);
+      addNotification(() => <EquipSlimeNotification />);
     }
   };
 

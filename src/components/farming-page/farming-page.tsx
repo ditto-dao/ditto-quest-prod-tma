@@ -5,6 +5,8 @@ import FarmingItem from "./farming-item/farming-item";
 import { useState } from "react";
 import Stats from "../stats/stats";
 import { useUserSocket } from "../../redux/socket/user/user-context";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
 
 const categories = ["Lumber", "Fiber", "Ore", "Crystal", "Shards"];
 
@@ -29,22 +31,21 @@ function FarmingPage() {
           secondaryColour="var(--sage-green)"
           bgColour="var(--pine-green)"
         />
-      </div>
-      {/* Scrollable Category Buttons (Fixed at the Top) */}
-      <div className="category-buttons-wrapper">
-        <div className="category-buttons">
-          {categories.map((category) => (
-            <div
-              key={category}
-              className={`category-button ${
-                selectedCategory === category ? "active" : ""
-              }`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              {category}
-            </div>
-          ))}
-        </div>
+        <SimpleBar className="category-buttons-scrollbar" autoHide={false}>
+          <div className="category-buttons">
+            {categories.map((category) => (
+              <div
+                key={category}
+                className={`category-button ${
+                  selectedCategory === category ? "active" : ""
+                }`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                {category}
+              </div>
+            ))}
+          </div>
+        </SimpleBar>
       </div>
 
       {/* Scrollable Farming Items Section */}

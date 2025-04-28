@@ -5,38 +5,26 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
-}
-
-.category-buttons-wrapper {
-  width: 100%;
-  z-index: 4;
-  overflow: hidden;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  padding: 0 10px 10px 10px;
-  min-height: 50px;
 }
 
 .stats-sticky {
   flex-shrink: 0;
-  position: sticky; /* optional if you want it sticky */
-  top: 0; /* adjust if needed */
-  background-color: var(--deep-teal); /* to match background */
+  position: sticky;
+  top: 0;
+  background-color: var(--deep-teal);
   z-index: 5;
   width: 100%;
   padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
 
 .category-buttons {
-  overflow-x: auto;
   display: flex;
   gap: 14px;
-  padding: 4px;
+  padding: 8px 14px 2px 8px;
   width: max-content;
 }
 
@@ -85,31 +73,30 @@
   box-sizing: border-box;
 }
 
-.category-buttons::-webkit-scrollbar {
-  height: 4px;
+.category-buttons-scrollbar {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 0 10px 10px 10px;
   background-color: transparent;
 }
 
-.farming-items-container::-webkit-scrollbar {
-  width: 4px;
-  background-color: transparent;
-}
-
-.category-buttons::-webkit-scrollbar-thumb,
-.farming-items-container::-webkit-scrollbar-thumb {
+.category-buttons-scrollbar .simplebar-scrollbar::before {
   background-color: rgba(136, 136, 136, 0.3);
   border-radius: 3px;
-  transition: background-color 0.3s ease-in-out;
+  transition: background-color 3s ease-in-out;
 }
 
-.category-buttons::-webkit-scrollbar-thumb:hover,
-.farming-items-container::-webkit-scrollbar-thumb:hover {
+.category-buttons-scrollbar .simplebar-scrollbar:hover::before {
   background-color: rgba(85, 85, 85, 0.8);
 }
 
-.category-buttons,
-.farming-items-container {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(136, 136, 136, 0.5) transparent;
-  scroll-behavior: smooth;
+.category-buttons-scrollbar .simplebar-track.simplebar-horizontal {
+  height: 9px;
+  background: transparent !important;
+}
+
+.category-buttons-scrollbar .simplebar-track {
+  background: transparent !important;
 }

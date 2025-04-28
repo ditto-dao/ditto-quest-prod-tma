@@ -17,7 +17,8 @@
 }
 
 .error-message {
-  padding: 5px;
+  padding: 10px;
+  padding-top: 0;
   font-size: 9px;
   line-height: 15px;
 }

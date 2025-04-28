@@ -68,7 +68,7 @@ export const GachaSocketProvider: React.FC<SocketProviderProps> = ({
       socket.on("slime-gacha-update", handleSlimeGachaUpdate);
 
       socket.on("mint-slime-error", (msg: string) => {
-        addNotification(<ErrorNotification msg={msg} />)
+        addNotification(() => <ErrorNotification msg={msg} />)
         setRollingSlime(false);
       });
 

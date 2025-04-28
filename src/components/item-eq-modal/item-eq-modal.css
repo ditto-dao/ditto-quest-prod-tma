@@ -1,0 +1,163 @@
+.item-eq-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.item-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-color: var(--muted-teal-green);
+  border-radius: 5px 5px 0 0;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 15px;
+}
+
+.item-icon {
+  width: auto;
+  height: 35px;
+}
+
+.equipment-icon {
+  width: auto;
+  height: 25px;
+  margin: 5px 2px;
+}
+
+.inv-modal-header-name {
+  height: 100%;
+  font-size: 11px;
+  width: 80%;
+  text-align: left;
+  text-overflow: wrap;
+}
+
+.item-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  padding: 0 20px 20px 20px;
+}
+
+.item-image-wrapper {
+  width: 100%;
+  padding: 15px 15px 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-image-container {
+  border: 3px solid var(--bright-teal);
+  background-color: var(--cream-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  width: 100%;
+  padding: 20px 50px;
+  position: relative;
+}
+
+.rarity-badge {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  padding: 4px 8px;
+  border-radius: 8px; /* Rounded corners for the badge */
+  font-size: 10px; /* Adjust size for readability */
+  font-weight: bold;
+  color: #f4f1de; /* Cream white for text */
+  text-transform: uppercase; /* Make the rarity text uppercase */
+}
+
+.item-image {
+  width: 75%;
+}
+
+.inv-modal-item-description-container {
+  border: 1.5px solid  var(--muted-teal-green);
+  border-radius: 8px;
+  background-color: var(--deep-teal);
+  font-size: 8px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+}
+
+.inv-eq-tab-info {
+  display: flex;
+  gap: 8px;
+  padding: 15px;
+  padding-bottom: 0;
+}
+
+.inv-eq-tab-info .attack-type.melee {
+  background-color: var(--melee);
+}
+
+.inv-eq-tab-info .attack-type.ranged {
+  background-color: var(--ranged);
+}
+
+.inv-eq-tab-info .attack-type.magic {
+  background-color: var(--magic);
+}
+
+.inv-eq-tab-info .required-lvl,
+.inv-eq-tab-info .attack-type {
+  font-size: 7px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  text-align: center;
+  align-self: start;
+  width: fit-content;
+}
+
+.inv-eq-tab-info .required-lvl {
+  background-color: var(--steel-blue);
+}
+
+.inv-eq-tab-info .required-lvl.red {
+  background-color: var(--deep-warm-red);
+}
+
+.inv-modal-item-description {
+  text-align: left;
+  font-size: 10px;
+}
+
+.description-text {
+  padding: 15px;
+}
+
+.equip-button {
+  padding: 8px 12px;
+  font-size: 10px;
+  color: var(--cream-white);
+  background-color: var(--burnt-orange);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.equip-button.equip-active {
+  background-color: var(--deep-warm-red);
+}
+
+.equip-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.equip-button:not(:disabled):active {
+  transform: translateY(0.5px);
+}

@@ -9,33 +9,22 @@
 
 .stats-sticky {
   flex-shrink: 0;
-  position: sticky; /* optional if you want it sticky */
-  top: 0; /* adjust if needed */
-  background-color: var(--deep-teal); /* to match background */
+  position: sticky;
+  top: 0;
+  background-color: var(--deep-teal);
   z-index: 5;
   width: 100%;
   padding: 0 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.equipment-category-buttons-wrapper {
-  width: 100%;
-  z-index: 4;
-  overflow: hidden;
-  white-space: nowrap;
-  display: flex;
-  align-items: center;
-  padding: 0 10px 10px 10px;
-  min-height: 50px;
+  flex-direction: column;
 }
 
 .equipment-category-buttons {
-  overflow-x: auto;
   display: flex;
   gap: 14px;
-  padding: 4px;
+  padding: 8px 14px 2px 8px;
   width: max-content;
 }
 
@@ -98,4 +87,33 @@
   scrollbar-width: thin;
   scrollbar-color: rgba(136, 136, 136, 0.5) transparent;
   scroll-behavior: smooth;
+}
+
+
+.equipment-category-buttons-scrollbar {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding: 0 10px 10px 10px;
+  background-color: transparent;
+}
+
+.equipment-category-buttons-scrollbar .simplebar-scrollbar::before {
+  background-color: rgba(136, 136, 136, 0.3);
+  border-radius: 3px;
+  transition: background-color 3s ease-in-out;
+}
+
+.equipment-category-buttons-scrollbar .simplebar-scrollbar:hover::before {
+  background-color: rgba(85, 85, 85, 0.8);
+}
+
+.equipment-category-buttons-scrollbar .simplebar-track.simplebar-horizontal {
+  height: 9px;
+  background: transparent !important;
+}
+
+.equipment-category-buttons-scrollbar .simplebar-track {
+  background: transparent !important;
 }
