@@ -13,15 +13,13 @@ import SlimeLogo from "../../assets/images/general/slime-mage.png";
 import CPIcon from "../../assets/images/combat/cp-logo.png";
 import GoldMedalIcon from "../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../assets/images/combat/hp-lvl.png";
-import {
-  defaultCombat,
-  Inventory,
-} from "../../utils/types";
+import { defaultCombat, Inventory } from "../../utils/types";
 import {
   calculateCombatPower,
   formatDecimalWithCommas,
   formatDecimalWithSuffix,
   formatNumberWithCommas,
+  getHighestDominantTraitRarity,
 } from "../../utils/helpers";
 import SlimeModal from "../slime-lab/slime-lab-inventory/slime-modal/slime-modal";
 import { useNotification } from "../notifications/notification-context";
@@ -49,7 +47,6 @@ function AvatarPage() {
   // Equipment Modal
   const handleEquipmentOpenModal = (equipmentInv: Inventory) => {
     addNotification(() => <ItemEqModal selectedItem={equipmentInv} />);
-
   };
 
   return (
@@ -61,6 +58,16 @@ function AvatarPage() {
             <div className="equipped-slime-image-container">
               {userData.equippedSlime ? (
                 <div className="equipped-slime-avatar">
+                  <div
+                    className="slime-rank-display"
+                    style={{
+                      color: `var(--rarity-${getHighestDominantTraitRarity(
+                        userData.equippedSlime
+                      ).toLowerCase()})`,
+                    }}
+                  >
+                    {getHighestDominantTraitRarity(userData.equippedSlime)}
+                  </div>
                   <img
                     src={userData.equippedSlime.imageUri}
                     alt="Equipped Slime"
@@ -144,9 +151,7 @@ function AvatarPage() {
                 <img
                   className="slot-image"
                   src={userData.hat.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.hat!)
-                  }
+                  onClick={() => handleEquipmentOpenModal(userData.hat!)}
                 ></img>
               ) : (
                 <img className="slot-image-default" src={DefaultHat}></img>
@@ -161,9 +166,7 @@ function AvatarPage() {
                 <img
                   className="slot-image"
                   src={userData.cape.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.cape!)
-                  }
+                  onClick={() => handleEquipmentOpenModal(userData.cape!)}
                 ></img>
               ) : (
                 <img className="slot-image-default" src={DefaultCape}></img>
@@ -174,9 +177,7 @@ function AvatarPage() {
                 <img
                   className="slot-image"
                   src={userData.necklace.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.necklace!)
-                  }
+                  onClick={() => handleEquipmentOpenModal(userData.necklace!)}
                 ></img>
               ) : (
                 <img className="slot-image-default" src={DefaultNecklace}></img>
@@ -194,9 +195,7 @@ function AvatarPage() {
                 <img
                   className="slot-image"
                   src={userData.shield.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.shield!)
-                  }
+                  onClick={() => handleEquipmentOpenModal(userData.shield!)}
                 ></img>
               ) : (
                 <img className="slot-image-default" src={DefaultShield}></img>
@@ -207,9 +206,7 @@ function AvatarPage() {
                 <img
                   className="slot-image"
                   src={userData.armour.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.armour!)
-                  }
+                  onClick={() => handleEquipmentOpenModal(userData.armour!)}
                 ></img>
               ) : (
                 <img className="slot-image-default" src={DefaultArmour}></img>
@@ -220,9 +217,7 @@ function AvatarPage() {
                 <img
                   className="slot-image"
                   src={userData.weapon.equipment!.imgsrc}
-                  onClick={() =>
-                    handleEquipmentOpenModal(userData.weapon!)
-                  }
+                  onClick={() => handleEquipmentOpenModal(userData.weapon!)}
                 ></img>
               ) : (
                 <img className="slot-image-default" src={DefaultWeapon}></img>

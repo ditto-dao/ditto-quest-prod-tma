@@ -31,6 +31,7 @@
 }
 
 .slime-inventory-item {
+  position: relative;
   border: 1px solid var(--bright-teal);
   border-radius: 9px;
   padding: 16px;
@@ -46,6 +47,22 @@
   height: 150px;
   box-sizing: border-box;
   cursor: pointer;
+}
+
+.slime-inventory-item > .slime-rank-display {
+  position: absolute;
+  top: 10%;
+  right: 16%;
+  font-size: 16px;
+  font-weight: bold;
+  -webkit-text-stroke: 1px white;
+  pointer-events: none;
+  text-shadow:
+    1px 1px var(--cream-white),
+    -1px -1px var(--cream-white),
+    1px -1px var(--cream-white),
+    -1px 1px var(--cream-white);
+  z-index: 2;
 }
 
 .slime-inventory-item.empty {

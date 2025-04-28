@@ -65,10 +65,27 @@
 }
 
 .equipped-slime-image-container .equipped-slime-avatar {
+  position: relative;
   border: 1.5px solid var(--bright-teal);
   border-radius: 8px;
   overflow: hidden;
   cursor: pointer;
+}
+
+.slime-rank-display {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  -webkit-text-stroke: 1px white;
+  pointer-events: none;
+  text-shadow:
+    1px 1px var(--cream-white),
+    -1px -1px var(--cream-white),
+    1px -1px var(--cream-white),
+    -1px 1px var(--cream-white);
+  z-index: 2;
 }
 
 .equipped-slime-image-container .equipped-slime-avatar.empty {

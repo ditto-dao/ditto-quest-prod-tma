@@ -30,6 +30,7 @@
 }
 
 .slime-image-container {
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,6 +38,20 @@
   border-radius: 10px;
   padding: 0 30px;
 }
+
+.slime-image-container > .slime-rank-display {
+  position: absolute;
+  top: 8%;
+  right: 16%;
+  font-size: 24px;
+  font-weight: bold;
+  -webkit-text-stroke: 1px white;
+  pointer-events: none;
+  text-shadow: 1px 1px var(--cream-white), -1px -1px var(--cream-white),
+    1px -1px var(--cream-white), -1px 1px var(--cream-white);
+  z-index: 2;
+}
+
 .slime-image {
   max-width: 100%;
   height: auto;

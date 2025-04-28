@@ -39,6 +39,16 @@ function SlimeLabInventory({
                   }`}
                   onClick={() => openModal(slime)}
                 >
+                  <div
+                    className="slime-rank-display"
+                    style={{
+                      color: `var(--rarity-${getHighestDominantTraitRarity(
+                        slime
+                      ).toLowerCase()})`,
+                    }}
+                  >
+                    {getHighestDominantTraitRarity(slime)}
+                  </div>
                   <img
                     className={`slime-inventory-img rarity-${getHighestDominantTraitRarity(
                       slime

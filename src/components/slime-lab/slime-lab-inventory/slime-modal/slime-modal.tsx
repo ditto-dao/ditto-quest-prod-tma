@@ -49,6 +49,16 @@ export default function SlimeModal({
     <div className="slime-modal-content">
       {/* Slime Image */}
       <div className="slime-image-container">
+        <div
+          className="slime-rank-display"
+          style={{
+            color: `var(--rarity-${getHighestDominantTraitRarity(
+              selectedSlime
+            ).toLowerCase()})`,
+          }}
+        >
+          {getHighestDominantTraitRarity(selectedSlime)}
+        </div>
         <img
           src={selectedSlime.imageUri}
           alt={`#${selectedSlime.id}`}
