@@ -1,142 +1,83 @@
 #main-page-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--deep-teal);
-}
-
-/* These three stack on top of each other */
-.fade-view {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 0;
-  transition: opacity 1s ease-in-out;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   background-color: var(--deep-teal);
 }
 
-.fade-view.active {
-  opacity: 1;
-  pointer-events: auto;
-  z-index: 1;
-}
-
-/* Just for placeholder screens */
-.placeholder-page {
+.main-view {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-colour);
-  font-size: 18px;
-  background-color: var(--deep-teal);
-  padding: 20px;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .header {
+  flex-shrink: 0;
   display: flex;
-  align-items: center; /* Vertically center all child elements */
-  justify-content: space-between;
-  width: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 20px 2px 10px;
   background-color: var(--deep-teal);
   color: var(--text-colour);
-  padding: 10px 20px 2px 10px;
 }
 
 .open-sidebar-btn {
   font-size: 28px;
-  background-color: transparent;
+  background: transparent;
   cursor: pointer;
-  padding: 10px; /* Reduce padding to align with the header */
+  padding: 10px;
   display: flex;
-  align-items: center; /* Ensure the icon is vertically centered */
+  align-items: center;
 }
 
 .header-title {
   display: flex;
-  align-items: center; /* Vertically align icon and text */
-  margin: 0;
-  flex: 1;
-  gap: 8px; /* Add spacing between the icon and text */
+  align-items: center;
+  gap: 8px;
 }
 
 .header-icon {
-  height: 40px; /* Set consistent icon size */
+  height: 40px;
   width: auto;
-  vertical-align: middle; /* Center image inline */
-}
-
-.header-user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.username {
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.user-stats {
-  display: flex;
-  flex-direction: column;
-  font-size: 12px;
 }
 
 .content {
-  width: 100%;
   flex: 1;
-  overflow-y: scroll;
+  height: 0; /* Ensures it respects parent constraints */
   background-color: var(--deep-teal);
-}
-
-/* Styles for WebKit-based browsers */
-.content::-webkit-scrollbar {
-  width: 3px; /* Narrow width for the scrollbar */
-  background-color: transparent; /* Fully transparent background */
-}
-
-.content::-webkit-scrollbar-track {
-  background-color: transparent; /* Transparent track, makes it unnoticeable */
-}
-
-.content::-webkit-scrollbar-thumb {
-  background-color: rgba(
-    136,
-    136,
-    136,
-    0.3
-  ); /* Semi-transparent thumb for minimal visibility */
-  border-radius: 3px; /* Slightly rounded corners for the scrollbar thumb */
-  transition: background-color 0.3s ease-in-out; /* Add smooth transition for background color */
-}
-
-.content::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(
-    85,
-    85,
-    85,
-    0.8
-  ); /* Darker color on hover for better visibility */
-}
-
-/* Firefox scrollbar styles */
-.content {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(136, 136, 136, 0.5) transparent; /* Same colors as above for consistency */
   scroll-behavior: smooth;
+  position: relative;
+}
+
+/* Let SimpleBar calculate scroll area */
+.content .simplebar-content {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.content .simplebar-scrollbar::before {
+  background-color: rgba(136, 136, 136, 0.3);
+  border-radius: 3px;
+  transition: background-color 3s ease-in-out;
+}
+
+.content .simplebar-scrollbar:hover::before {
+  background-color: rgba(85, 85, 85, 0.8);
+}
+
+.content .simplebar-track.simplebar-vertical {
+  width: 10px;
+}
+
+.content .simplebar-track {
+  background: transparent !important;
 }
 
 .page-motion-wrapper {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }

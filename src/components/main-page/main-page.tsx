@@ -24,7 +24,10 @@ import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import LoadingPage from "../loading-page/loading-page";
 import AccessDeniedPage from "../access-denied-page/access-denied-page";
-import { motion } from "framer-motion"; // ADD THIS
+import { AnimatePresence, motion } from "framer-motion";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
+import CurrentActivityDisplay from "../current-activity-display/current-activity-display";
 
 function MainPage() {
   const { accessGranted, accessDeniedMessage, socketDataLoadComplete } =
@@ -84,56 +87,87 @@ function MainPage() {
 
   return (
     <div id="main-page-container" className="noselect">
-      <div className={`fade-view ${view === "loading" ? "active" : ""}`}>
-        <LoadingPage
-          accessGranted={accessGranted}
-          socketDataLoadComplete={socketDataLoadComplete}
-          userContextLoaded={userContextLoaded}
-          offlineProgressUpdatesReceived={offlineProgressUpdatesReceived}
-          onFinishLoading={(page: string) => {
-            setView(page);
-          }}
-          accessDeniedMessage={accessDeniedMessage}
-        />
-      </div>
-
-      <div className={`fade-view ${view === "access-denied" ? "active" : ""}`}>
-        <AccessDeniedPage msg={accessDeniedMessage} />
-      </div>
-
-      <div className={`fade-view ${view === "main" ? "active" : ""}`}>
-        <header className="header">
-          <div className="open-sidebar-btn" onClick={toggleSidebar}>
-            ☰
-          </div>
-          <div className="header-title">
-            {pageIcons[currentPage] && (
-              <img
-                src={pageIcons[currentPage]}
-                alt={`${currentPage} Icon`}
-                className="header-icon"
-              />
-            )}
-          </div>
-        </header>
-        <Sidebar
-          isOpen={isSidebarOpen}
-          toggleSidebar={toggleSidebar}
-          setPage={setPage}
-        />
-        <div className="content">
+      <AnimatePresence mode="wait">
+        {view === "loading" && (
           <motion.div
-            key={currentPage}
+            key="loading"
+            className="main-view"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="page-motion-wrapper"
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
           >
-            {renderPage()}
+            <LoadingPage
+              accessGranted={accessGranted}
+              socketDataLoadComplete={socketDataLoadComplete}
+              userContextLoaded={userContextLoaded}
+              offlineProgressUpdatesReceived={offlineProgressUpdatesReceived}
+              onFinishLoading={(page: string) => setView(page)}
+              accessDeniedMessage={accessDeniedMessage}
+            />
           </motion.div>
-        </div>
-        {view === "main" && <NotificationManager />}{" "}
-      </div>
+        )}
+
+        {view === "access-denied" && (
+          <motion.div
+            key="access-denied"
+            className="main-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <AccessDeniedPage msg={accessDeniedMessage} />
+          </motion.div>
+        )}
+
+        {view === "main" && (
+          <motion.div
+            key="main"
+            className="main-view"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6 }}
+          >
+            <header className="header">
+              <div className="open-sidebar-btn" onClick={toggleSidebar}>
+                ☰
+              </div>
+              <div className="header-title">
+                {pageIcons[currentPage] && (
+                  <img
+                    src={pageIcons[currentPage]}
+                    alt={`${currentPage} Icon`}
+                    className="header-icon"
+                  />
+                )}
+              </div>
+              <CurrentActivityDisplay />
+            </header>
+
+            <Sidebar
+              isOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
+              setPage={setPage}
+            />
+
+            <SimpleBar className="content">
+              <motion.div
+                key={currentPage}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6 }}
+                className="page-motion-wrapper"
+              >
+                {renderPage()}
+              </motion.div>
+            </SimpleBar>
+
+            <NotificationManager />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
