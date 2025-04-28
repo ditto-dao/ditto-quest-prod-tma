@@ -32,6 +32,23 @@ export default function ItemEqModal({ selectedItem }: ItemEqModalProps) {
 
   return (
     <div className="item-eq-content">
+      <div className="item-image-wrapper">
+        <div className="item-image-container">
+          <div
+            className={`rarity-badge rarity-${
+              selectedItem.item?.rarity?.toLowerCase() ||
+              selectedItem.equipment?.rarity?.toLowerCase()
+            }`}
+          >
+            {selectedItem.item?.rarity || selectedItem.equipment?.rarity}
+          </div>
+          <img
+            src={selectedItem.item?.imgsrc || selectedItem.equipment?.imgsrc}
+            alt={selectedItem.item?.name || selectedItem.equipment?.name}
+            className="item-image"
+          />
+        </div>
+      </div>
       <div className="item-details">
         <div className="item-content">
           <div className="inv-modal-item-description-container">
@@ -47,25 +64,6 @@ export default function ItemEqModal({ selectedItem }: ItemEqModalProps) {
               )}
               <div className="inv-modal-header-name">
                 {selectedItem.item?.name || selectedItem.equipment?.name}
-              </div>
-            </div>
-            <div className="item-image-wrapper">
-              <div className="item-image-container">
-                <div
-                  className={`rarity-badge rarity-${
-                    selectedItem.item?.rarity?.toLowerCase() ||
-                    selectedItem.equipment?.rarity?.toLowerCase()
-                  }`}
-                >
-                  {selectedItem.item?.rarity || selectedItem.equipment?.rarity}
-                </div>
-                <img
-                  src={
-                    selectedItem.item?.imgsrc || selectedItem.equipment?.imgsrc
-                  }
-                  alt={selectedItem.item?.name || selectedItem.equipment?.name}
-                  className="item-image"
-                />
               </div>
             </div>
 
