@@ -25,7 +25,7 @@ function chunkInventory(array: Inventory[], size: number) {
 }
 
 function InventoryPage() {
-  const { addNotification } = useNotification();
+  const { addNotification, removeNotification } = useNotification();
   const { userData } = useUserSocket();
   const [inventory, setInventory] = useState<Inventory[]>([]);
 
@@ -40,7 +40,13 @@ function InventoryPage() {
 
   // Modal
   const handleOpenModal = (item: Inventory) => {
-    addNotification(() => <ItemEqModal selectedItem={item} />);
+    addNotification((id) => (
+      <ItemEqModal
+        selectedItem={item}
+        notificationId={id}
+        removeNotification={removeNotification}
+      />
+    ));
   };
 
   return (

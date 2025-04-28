@@ -19,12 +19,16 @@ const TRAIT_KEYS = [
 interface SlimeModalProps {
   notificationId: string;
   selectedSlime: SlimeWithTraits | null | undefined;
+  closeOnEquip: boolean;
+  closeOnUnequip: boolean;
   removeNotification: (id: string) => void;
 }
 
 export default function SlimeModal({
   notificationId,
   selectedSlime,
+  closeOnEquip,
+  closeOnUnequip,
   removeNotification,
 }: SlimeModalProps) {
   const { userData, equipSlime, unequipSlime } = useUserSocket();
@@ -82,7 +86,7 @@ export default function SlimeModal({
             className="equip-slime-button equip-slime-active"
             onClick={() => {
               unequipSlime();
-              removeNotification(notificationId);
+              if (closeOnUnequip) removeNotification(notificationId);
             }}
           >
             Unequip Slime
@@ -90,7 +94,10 @@ export default function SlimeModal({
         ) : (
           <button
             className="equip-slime-button"
-            onClick={() => equipSlime(selectedSlime)}
+            onClick={() => {
+              equipSlime(selectedSlime);
+              if (closeOnEquip) removeNotification(notificationId);
+            }}
           >
             Equip Slime
           </button>
@@ -103,7 +110,10 @@ export default function SlimeModal({
           className={`set-breed-slime-button ${
             canSetSlimeToBreed(selectedSlime) ? "set-breed-slime-active" : ""
           }`}
-          onClick={() => setSlimeToBreed(selectedSlime)}
+          onClick={() => {
+            setSlimeToBreed(selectedSlime);
+            removeNotification(notificationId);
+          }}
           disabled={!canSetSlimeToBreed(selectedSlime)}
         >
           Select for Breeding

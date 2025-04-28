@@ -38,6 +38,8 @@ function AvatarPage() {
         <SlimeModal
           notificationId={id}
           removeNotification={removeNotification}
+          closeOnEquip={true}
+          closeOnUnequip={true}
           selectedSlime={userData.equippedSlime}
         />
       ));
@@ -46,7 +48,7 @@ function AvatarPage() {
 
   // Equipment Modal
   const handleEquipmentOpenModal = (equipmentInv: Inventory) => {
-    addNotification(() => <ItemEqModal selectedItem={equipmentInv} />);
+    addNotification((id) => <ItemEqModal notificationId={id} selectedItem={equipmentInv} closeOnUnequip={true} removeNotification={removeNotification}/>);
   };
 
   return (

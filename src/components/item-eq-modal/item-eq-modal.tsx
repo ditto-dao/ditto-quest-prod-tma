@@ -6,9 +6,19 @@ import { EquipmentType, Inventory } from "../../utils/types";
 
 interface ItemEqModalProps {
   selectedItem: Inventory;
+  notificationId: string;
+  closeOnEquip?: boolean;
+  closeOnUnequip?: boolean;
+  removeNotification: (id: string) => void;
 }
 
-export default function ItemEqModal({ selectedItem }: ItemEqModalProps) {
+export default function ItemEqModal({ 
+  selectedItem,
+  notificationId,
+  closeOnEquip,
+  closeOnUnequip,
+  removeNotification
+}: ItemEqModalProps) {
   const { userData, equip, unequip } = useUserSocket();
 
   const meetsLvlReq = (reqLvl: number) => {
@@ -114,8 +124,10 @@ export default function ItemEqModal({ selectedItem }: ItemEqModalProps) {
             onClick={() => {
               if (isEquipped() && selectedItem.equipment) {
                 handleUnequip(selectedItem.equipment.type);
+                if (closeOnUnequip) removeNotification(notificationId);
               } else {
                 equip(selectedItem.id, selectedItem.equipment!.type);
+                if (closeOnEquip) removeNotification(notificationId);
               }
             }}
             disabled={!meetsLvlReq(selectedItem.equipment.requiredLvl)}

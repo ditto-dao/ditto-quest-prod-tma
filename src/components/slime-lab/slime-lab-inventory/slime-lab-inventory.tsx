@@ -20,6 +20,8 @@ function SlimeLabInventory({
       <SlimeModal
         notificationId={id}
         removeNotification={removeNotification}
+        closeOnEquip={false}
+        closeOnUnequip={false}
         selectedSlime={slime}
       />
     ));
