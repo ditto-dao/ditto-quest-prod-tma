@@ -24,6 +24,7 @@ import Domains from "../../../assets/json/domains.json";
 import { useNotification } from "../../../components/notifications/notification-context";
 import DeathNotification from "../../../components/notifications/notification-content/user-death/death-notification";
 import { delay } from "../../../utils/helpers";
+import { useCurrentActivityContext } from "./current-activity-context";
 
 interface CombatHpChangeEventPayload {
   target: "user" | "monster";
@@ -70,6 +71,8 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   const { accessGranted } = useLoginSocket();
   const { addNotification } = useNotification();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
+  const { setCurrentActivity } = useCurrentActivityContext();
+
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
 
   const [isBattling, setIsBattling] = useState(false);
@@ -107,7 +110,8 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
       socket.emit(STOP_COMBAT_EVENT, telegramId);
       setLastEventEmittedTimestamp(Date.now());
       setIsBattling(false);
-      await delay(300)
+      setCurrentActivity(null);
+      await delay(300);
       setMonster(null);
       setCombatArea(null);
     }
@@ -137,7 +141,20 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
           if (payload.monster) {
             setIsBattling(true);
             setMonster(payload.monster);
+            setCurrentActivity({
+              type: "combat",
+              name: payload.monster.name,
+              imgsrc1: payload.monster.imgsrc,
+            });
           } else {
+            setCurrentActivity((prev) => {
+              if (prev?.type === "combat") {
+                console.log("stopping combat current activity");
+                return null;
+              }
+              console.log("NOTsstopping combat current activity");
+              return prev;
+            });
             setMonster(null);
           }
           if (payload.combatAreaType === "Domain") {
@@ -164,6 +181,14 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         setMonster(null);
         setCombatArea(null);
         setUserHpChange(undefined);
+        setCurrentActivity((prev) => {
+          if (prev?.type === "combat") {
+            console.log("stopping combat current activity");
+            return null;
+          }
+          console.log("NOTsstopping combat current activity");
+          return prev;
+        });
       });
 
       socket.on(COMBAT_HP_CHANGE_EVENT, (data: CombatHpChangeEventPayload) => {
@@ -209,7 +234,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         console.log(`Received COMBAT_USER_DIED_EVENT`);
         await delay(800);
 
-        addNotification(<DeathNotification />)
+        addNotification(() => <DeathNotification />);
 
         setIsBattling(false);
         setMonster(null);

@@ -7,6 +7,7 @@ import { useIdleSkillSocket } from "../../../redux/socket/idle/skill-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
+import { useCurrentActivityContext } from "../../../redux/socket/idle/current-activity-context";
 
 interface FarmingItemProps {
   id: number;
@@ -30,24 +31,25 @@ function FarmingItem(props: FarmingItemProps) {
   const { socket } = useSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { startFarming, stopFarming } = useIdleSkillSocket();
+  const { setCurrentActivity } = useCurrentActivityContext();
   const [isFarming, setIsFarming] = useState(false);
 
   const handleFarmButton = () => {
     if (socket && canEmitEvent() && telegramId) {
       if (isFarming) {
         socket.emit("stop-farm-item", props.id);
-        setLastEventEmittedTimestamp(Date.now());
 
         stopFarming(props.id);
         setIsFarming(false);
       } else {
         console.log(props.id)
         socket.emit("farm-item", props.id);
-        setLastEventEmittedTimestamp(Date.now());
 
         startFarming(props.id, Date.now(), props.farmingDurationS);
         setIsFarming(true);
       }
+      setLastEventEmittedTimestamp(Date.now());
+
     }
   };
 
@@ -58,6 +60,14 @@ function FarmingItem(props: FarmingItemProps) {
   useEffect(() => {
     if (props.farmingStatus !== null) {
       setIsFarming(true);
+      setCurrentActivity({
+        type: 'farming',
+        id: props.id,
+        name: props.name,
+        startTimestamp: props.farmingStatus.startTimestamp,
+        durationS: props.farmingStatus.durationS,
+        imgsrc1: props.imgsrc
+      });
     } else {
       setIsFarming(false);
     }

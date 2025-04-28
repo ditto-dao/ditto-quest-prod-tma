@@ -12,6 +12,7 @@ import "./crafting-recipe.css";
 import { useState, useEffect } from "react";
 import { formatDuration } from "../../../utils/helpers";
 import { EquipmentType } from "../../../utils/types";
+import { useCurrentActivityContext } from "../../../redux/socket/idle/current-activity-context";
 
 interface CraftingRecipeProps {
   equipmentId: number;
@@ -31,10 +32,13 @@ interface CraftingRecipeProps {
 }
 
 function CraftingRecipe(props: CraftingRecipeProps) {
-  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket(); 
+  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { userData } = useUserSocket();
-  const { startCrafting, stopCrafting } = useIdleSkillSocket();
+  const { startCrafting, stopCrafting } =
+    useIdleSkillSocket();
   const { socket } = useSocket();
+  const { setCurrentActivity } = useCurrentActivityContext();
+
   const [isCraftable, setIsCraftable] = useState(false);
   const [isCrafting, setIsCrafting] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -63,6 +67,14 @@ function CraftingRecipe(props: CraftingRecipeProps) {
       setIsCrafting(false);
     } else {
       setIsCrafting(true);
+      setCurrentActivity({
+        type: 'crafting',
+        id: props.equipmentId,
+        name: props.equipmentName,
+        startTimestamp: props.craftingStatus.startTimestamp,
+        durationS: props.craftingStatus.durationS,
+        imgsrc1: props.imgsrc,
+      });
     }
   }, [props.craftingStatus]);
 
@@ -75,12 +87,16 @@ function CraftingRecipe(props: CraftingRecipeProps) {
       return userItem && userItem.quantity >= requiredItem.quantity;
     });
 
-    setIsCraftable(canCraft && userData.craftingLevel >= props.craftingLevelRequired);
+    setIsCraftable(
+      canCraft && userData.craftingLevel >= props.craftingLevelRequired
+    );
   }, [props.requiredItems, userData.inventory]);
 
   return (
     <div className="crafting-recipe-container">
-      <div className="crafting-recipe-level">Lvl {props.craftingLevelRequired}</div>
+      <div className="crafting-recipe-level">
+        Lvl {props.craftingLevelRequired}
+      </div>
       <div className="crafting-recipe-inner-container">
         <div className="crafting-recipe-header">
           <div className="crafting-equipment-img-container">
@@ -93,7 +109,10 @@ function CraftingRecipe(props: CraftingRecipeProps) {
                 <img src={TimerIcon}></img>
                 <div>{formatDuration(props.durationS)}</div>
               </div>
-              <div className="equipment-craft-exp"><div>XP</div><div>{props.craftingExp}</div></div>
+              <div className="equipment-craft-exp">
+                <div>XP</div>
+                <div>{props.craftingExp}</div>
+              </div>
             </div>
             <button
               className={`craft-button ${isCrafting ? "crafting-active" : ""}`}

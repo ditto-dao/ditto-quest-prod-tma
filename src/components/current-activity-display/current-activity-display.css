@@ -1,0 +1,213 @@
+.current-activity-display-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.current-activity-wrapper {
+  padding: 1px;
+  background-color: var(--cream-white);
+  border-radius: 4px;
+  overflow: hidden;
+  min-width: 150px;
+  max-width: 90%;
+}
+
+.current-activity {
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  gap: 5px;
+}
+
+.current-activity.farming {
+  background-color: var(--forest-green);
+}
+
+.current-activity.crafting {
+  background-color: var(--midnight-teal);
+}
+
+.current-activity.breeding {
+  background-color: var(--medium-teal);
+}
+
+.current-activity.combat {
+  background-color: var(--midnight-teal);
+}
+
+.current-activity-images-container {
+  width: 30px;
+  background-color: var(--cream-white);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-activity-images-container.combat > img {
+  padding: 0;
+}
+
+.current-activity-images-container > img {
+  height: 25px;
+  padding: 4px;
+}
+
+.current-activity-images-container.breeding {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-activity-images-container.breeding > img {
+  position: absolute;
+  object-fit: contain;
+  border-radius: 50%;
+  pointer-events: none;
+  padding: 3px;
+}
+
+.current-activity-images-container.breeding > img:first-child {
+  bottom: 50%;
+  left: 50%;
+  transform: translate(-65%, 40%);
+  z-index: 1;
+}
+
+.current-activity-images-container.breeding > img:last-child {
+  top: 50%;
+  right: 50%;
+  transform: translate(65%, -40%);
+  z-index: 2;
+}
+
+.current-activity-main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  flex: 1;
+}
+
+.current-activity-labels-container {
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  width: 100%;
+  padding-right: 20px;
+}
+
+.current-activity-label {
+  font-size: 8px;
+  padding: 1px 6px;
+  border-radius: 5px;
+  display: block;
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+  max-width: 150px;
+  max-height: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.current-activity-img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-activity-img-container > img {
+  width: 18px;
+}
+
+.current-activity-label.farming {
+  background-color: var(--sage-green);
+}
+
+.current-activity-label.crafting {
+  background-color: var(--seafoam-green);
+}
+
+.current-activity-label.breeding {
+  background-color: var(--bright-teal);
+}
+
+.current-activity-label.combat {
+  background-color: var(--light-teal);
+}
+
+.combat-hp-bar {
+  width: 100%;
+  height: 3px;
+  background-color: var(--deep-navy-blue);
+  border-radius: 8px;
+}
+
+.combat-hp-bar-fill {
+  height: 100%;
+  transition: width 0.5s ease-in-out;
+  border-radius: 8px;
+}
+
+/* Base shimmer styles */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 150%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
+  animation: shimmerMove 1.2s infinite;
+}
+
+@keyframes shimmerMove {
+  100% {
+    left: 100%;
+  }
+}
+
+.shimmer-block {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+  height: 12px;
+  width: 100px;
+}
+
+.shimmer-bar {
+  height: 4px;
+  width: 150px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+.image-loader {
+  width: 25px;
+  background-color: var(--cream-white);
+  width: 40px;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.shimmer-circle {
+  width: 18px;
+  height: 18px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}

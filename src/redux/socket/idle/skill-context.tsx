@@ -5,6 +5,8 @@ import { useLoginSocket } from "../login/login-context";
 import { useUserSocket } from "../user/user-context";
 import { useNotification } from "../../../components/notifications/notification-context";
 import OfflineProgressNotification from "../../../components/notifications/notification-content/offline-progress/offline-progress-notification";
+import DQLogo from "../../../assets/images/general/dq-logo.png";
+import { useCurrentActivityContext } from "./current-activity-context";
 
 export interface FarmingStatus {
   startTimestamp: number;
@@ -13,6 +15,8 @@ export interface FarmingStatus {
 
 interface FarmingStartPayload {
   itemId: number;
+  name: string;
+  imgsrc: string;
   startTimestamp: number;
   durationS: number;
 }
@@ -28,6 +32,8 @@ export interface CraftingStatus {
 
 interface CraftingStartPayload {
   equipmentId: number;
+  name: string;
+  imgsrc: string;
   startTimestamp: number;
   durationS: number;
 }
@@ -125,6 +131,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
   const { addNotification } = useNotification();
   const { accessGranted } = useLoginSocket();
   const { userData } = useUserSocket();
+  const { setCurrentActivity } = useCurrentActivityContext();
 
   // Farming
   const [farmingStatuses, setFarmingStatuses] = useState<
@@ -151,6 +158,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
       ...prevStatuses,
       [itemId]: null,
     }));
+    setCurrentActivity(null);
     console.log(`Stopped farming for item ID ${itemId}`);
   };
 
@@ -179,6 +187,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
       ...prevStatuses,
       [equipmentId]: null,
     }));
+    setCurrentActivity(null);
     console.log(`Stopped crafting for equipment ID ${equipmentId}`);
   };
 
@@ -212,6 +221,17 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
         dameId: slimeToBreed1.id,
         durationS: durationS,
       });
+
+      setCurrentActivity({
+        type: "breeding",
+        name: `Breeding Slime #${slimeToBreed0.id} and #${slimeToBreed1.id}`,
+        sireId: slimeToBreed0.id,
+        dameId: slimeToBreed1.id,
+        startTimestamp,
+        durationS,
+        imgsrc1: slimeToBreed0.imageUri,
+        imgsrc2: slimeToBreed1.imageUri,
+      });
     }
 
     console.log(
@@ -221,6 +241,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
 
   const stopBreeding = () => {
     setBreedingStatus(undefined);
+    setCurrentActivity(null);
     console.log(`Stopped breeding.`);
   };
 
@@ -228,7 +249,8 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
   const [unresolvedSireId, setUnresolvedSireId] = useState<number | null>(null);
   const [unresolvedDameId, setUnresolvedDameId] = useState<number | null>(null);
 
-  const [offlineProgressUpdatesReceived, setOfflineProgressUpdatesReceived] = useState(false);
+  const [offlineProgressUpdatesReceived, setOfflineProgressUpdatesReceived] =
+    useState(false);
 
   useEffect(() => {
     if (socket && !loadingSocket) {
@@ -253,6 +275,14 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
             },
           };
         });
+        setCurrentActivity({
+          type: "farming",
+          id: data.itemId,
+          name: data.name,
+          startTimestamp: data.startTimestamp,
+          durationS: data.durationS,
+          imgsrc1: data.imgsrc,
+        });
       });
 
       socket.on("farming-stop", (data: FarmingStopPayload) => {
@@ -261,6 +291,13 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
           ...prevStatuses,
           [data.itemId]: null,
         }));
+        setCurrentActivity((prev) => {
+          if (prev?.type === "farming" && prev.id === data.itemId) {
+            console.log('stopping farming current activity');
+            return null;
+          }
+          return prev;
+        });
       });
 
       // Crafting
@@ -275,6 +312,14 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
             durationS: data.durationS,
           },
         }));
+        setCurrentActivity({
+          type: "crafting",
+          id: data.equipmentId,
+          name: data.name,
+          startTimestamp: data.startTimestamp,
+          durationS: data.durationS,
+          imgsrc1: data.imgsrc,
+        });
       });
 
       socket.on("crafting-stop", (data: CraftingStopPayload) => {
@@ -283,6 +328,13 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
           ...prevStatuses,
           [data.equipmentId]: null,
         }));
+        setCurrentActivity((prev) => {
+          if (prev?.type === "crafting" && prev.id === data.equipmentId) {
+            console.log('stopping crafting current activity');
+            return null;
+          }
+          return prev;
+        });
       });
 
       // Breeding
@@ -304,11 +356,34 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
         );
         if (dame) setSlimeToBreed1(dame);
         else setUnresolvedDameId(data.dameId); // Temporarily store the ID
+
+        setCurrentActivity({
+          type: "breeding",
+          name: `Breeding Slime`,
+          sireId: sire ? sire.id : -1,
+          dameId: dame ? dame.id : -1,
+          startTimestamp: data.startTimestamp,
+          durationS: data.durationS,
+          imgsrc1: DQLogo,
+          imgsrc2: DQLogo,
+        });
       });
 
       socket.on("breeding-stop", (data: { sireId: number; dameId: number }) => {
         console.log(`Received breeding-stop: ${JSON.stringify(data, null, 2)}`);
         setBreedingStatus(undefined);
+
+        setCurrentActivity((prev) => {
+          if (
+            prev?.type === "breeding" &&
+            prev?.sireId === data.sireId &&
+            prev?.dameId === data.dameId
+          ) {
+            console.log('stopping breeding current activity');
+            return null;
+          }
+          return prev;
+        });
       });
 
       // Idle progress
@@ -342,12 +417,12 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
           });
 
           if (!hasMeaningfulProgress) return;
-          addNotification(
+          addNotification(() => (
             <OfflineProgressNotification
               updates={data.updates}
               offlineProgressMs={data.offlineProgressMs}
             />
-          );
+          ));
         }
       );
 
@@ -365,10 +440,11 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
 
   // Resolve unresolved IDs to slimes once userData.slimes is available
   useEffect(() => {
+    let sire;
+    let dame;
+
     if (unresolvedSireId && userData.slimes) {
-      const sire = userData.slimes.find(
-        (slime) => slime.id === unresolvedSireId
-      );
+      sire = userData.slimes.find((slime) => slime.id === unresolvedSireId);
       if (sire) {
         setSlimeToBreed0(sire);
         setUnresolvedSireId(null); // Clear temporary storage
@@ -376,13 +452,38 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
     }
 
     if (unresolvedDameId && userData.slimes) {
-      const dame = userData.slimes.find(
-        (slime) => slime.id === unresolvedDameId
-      );
+      dame = userData.slimes.find((slime) => slime.id === unresolvedDameId);
       if (dame) {
         setSlimeToBreed1(dame);
         setUnresolvedDameId(null); // Clear temporary storage
       }
+    }
+
+    if (sire && dame) {
+      setCurrentActivity((prev) => {
+        if (prev && prev.type === "breeding") {
+          // If already breeding, update the images and IDs
+          return {
+            ...prev,
+            imgsrc1: sire.imageUri,
+            imgsrc2: dame.imageUri,
+            sireId: sire.id,
+            dameId: dame.id,
+          };
+        } else {
+          // Else create new breeding activity
+          return {
+            type: "breeding",
+            name: "Breeding Slimes",
+            sireId: sire.id,
+            dameId: dame.id,
+            startTimestamp: Date.now(),
+            durationS: 0,
+            imgsrc1: sire.imageUri ?? DQLogo,
+            imgsrc2: dame.imageUri ?? DQLogo,
+          };
+        }
+      });
     }
   }, [unresolvedSireId, unresolvedDameId, userData.slimes]);
 
