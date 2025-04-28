@@ -28,6 +28,10 @@ import { useFloatingUpdate } from "../idle/floating-update-context";
 import GoldIcon from "../../../assets/images/general/gold-coin.png";
 import DittoCoinIcon from "../../../assets/images/general/ditto-coin.png";
 import GenericSlime from "../../../assets/images/general/generic-pixel-slime.png";
+import HPIcon from "../../../assets/images/combat/hp-lvl.png";
+import GoldMedalIcon from "../../../assets/images/combat/gold-medal.png";
+import FarmingIcon from "../../../assets/images/sidebar/farm.png";
+import CraftingIcon from "../../../assets/images/sidebar/craft.png";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../utils/config";
 
@@ -647,6 +651,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           `Received update-farming-exp: ${JSON.stringify(data, null, 2)}`
         );
         setUserData((prevUserData) => {
+          addFloatingUpdate({
+            icon: FarmingIcon,
+            text: "Farming EXP",
+            amount: data.farmingExp - prevUserData.farmingExp,
+          });
+
           return {
             ...prevUserData,
             farmingExp: data.farmingExp,
@@ -670,6 +680,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           `Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`
         );
         setUserData((prevUserData) => {
+          addFloatingUpdate({
+            icon: CraftingIcon,
+            text: "Crafting EXP",
+            amount: data.craftingExp - prevUserData.craftingExp,
+          });
+
           return {
             ...prevUserData,
             craftingExp: data.craftingExp,
@@ -734,6 +750,21 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           }
 
           setUserData((prev) => {
+            if (prev.expHp !== data.hpExp) {
+              addFloatingUpdate({
+                icon: HPIcon,
+                text: "HP EXP",
+                amount: data.hpExp - prev.expHp,
+              });
+            }
+
+            if (prev.exp !== data.exp) {
+              addFloatingUpdate({
+                icon: GoldMedalIcon,
+                text: "EXP",
+                amount: data.exp - prev.exp,
+              });
+            }
             return {
               ...prev,
               level: data.level,

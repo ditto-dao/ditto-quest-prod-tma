@@ -13,7 +13,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
+  padding: 8px 10px;
   background: var(--muted-greenish-blue);
   border: 1.1px solid var(--misty-teal);
   color: var(--cream-white);
@@ -37,12 +37,12 @@
   overflow-wrap: break-word;
   text-align: center;
   font-size: 8px;
-  line-height: 1.2;
+  line-height: 1.8;
 }
 
 .floating-update-amount {
   flex-shrink: 0;
   font-size: 9px;
-  text-align: right;
+  text-align: center;
   min-width: 30px;
 }
