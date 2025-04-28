@@ -1,0 +1,48 @@
+.floating-update-container {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+  z-index: 999;
+}
+
+.floating-update-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: var(--muted-greenish-blue);
+  border: 1.1px solid var(--misty-teal);
+  color: var(--cream-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  font-weight: bold;
+  gap: 12px;
+  max-width: 50vw;
+}
+
+.floating-update-icon {
+  width: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.floating-update-text {
+  flex: 1;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  text-align: center;
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.floating-update-amount {
+  flex-shrink: 0;
+  font-size: 9px;
+  text-align: right;
+  min-width: 30px;
+}

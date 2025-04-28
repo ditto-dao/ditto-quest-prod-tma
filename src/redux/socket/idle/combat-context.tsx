@@ -152,7 +152,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
                 console.log("stopping combat current activity");
                 return null;
               }
-              console.log("NOTsstopping combat current activity");
+              console.log("NOT stopping combat current activity");
               return prev;
             });
             setMonster(null);
@@ -186,7 +186,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
             console.log("stopping combat current activity");
             return null;
           }
-          console.log("NOTsstopping combat current activity");
+          console.log("NOT stopping combat current activity");
           return prev;
         });
       });

@@ -14,6 +14,7 @@ import { GachaSocketProvider } from "./redux/socket/gacha/gacha-context";
 import { CombatSocketProvider } from "./redux/socket/idle/combat-context";
 import { NotificationProvider } from "./components/notifications/notification-context";
 import { CurrentActivityProvider } from "./redux/socket/idle/current-activity-context";
+import { FloatingUpdateProvider } from "./redux/socket/idle/floating-update-context";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -44,6 +45,9 @@ function App() {
         root.style.setProperty("--medium-teal", "#1F5B58");
         root.style.setProperty("--misty-teal", "#4FA99A");
         root.style.setProperty("--steel-blue", "#4682B4");
+        root.style.setProperty("--ocean-blue", "#102A37");
+        root.style.setProperty("--deep-forest-green", "#1E5B4F");
+        root.style.setProperty("--muted-greenish-blue", "#1C4E57");
         root.style.setProperty("--melee", "#B5533A");
         root.style.setProperty("--ranged", "#4B6A47");
         root.style.setProperty("--magic", "#6D5ED2");
@@ -91,17 +95,19 @@ function App() {
       <NotificationProvider>
         <SocketProvider>
           <LoginSocketProvider>
-            <UserProvider>
-              <CurrentActivityProvider>
-                <IdleSkillSocketProvider>
-                  <GachaSocketProvider>
-                    <CombatSocketProvider>
-                      <MainPage />
-                    </CombatSocketProvider>
-                  </GachaSocketProvider>
-                </IdleSkillSocketProvider>
-              </CurrentActivityProvider>
-            </UserProvider>
+            <FloatingUpdateProvider>
+              <UserProvider>
+                <CurrentActivityProvider>
+                  <IdleSkillSocketProvider>
+                    <GachaSocketProvider>
+                      <CombatSocketProvider>
+                        <MainPage />
+                      </CombatSocketProvider>
+                    </GachaSocketProvider>
+                  </IdleSkillSocketProvider>
+                </CurrentActivityProvider>
+              </UserProvider>
+            </FloatingUpdateProvider>
           </LoginSocketProvider>
         </SocketProvider>
       </NotificationProvider>

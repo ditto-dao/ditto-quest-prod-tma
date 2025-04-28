@@ -24,6 +24,12 @@ import LevelUpNotification from "../../../components/notifications/notification-
 import ErrorNotification from "../../../components/notifications/notification-content/error/error-notification";
 import { SlimeGachaPullRes } from "../gacha/gacha-context";
 import FirstLoginNotification from "../../../components/notifications/notification-content/first-login/first-login";
+import { useFloatingUpdate } from "../idle/floating-update-context";
+import GoldIcon from "../../../assets/images/general/gold-coin.png";
+import DittoCoinIcon from "../../../assets/images/general/ditto-coin.png";
+import GenericSlime from "../../../assets/images/general/generic-pixel-slime.png";
+import { formatUnits } from "ethers";
+import { DITTO_DECIMALS } from "../../../utils/config";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -116,6 +122,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
   const { addNotification } = useNotification();
+  const { addFloatingUpdate } = useFloatingUpdate();
 
   // User
   const [userData, setUserData] = useState<User>(defaultUser);
@@ -150,6 +157,11 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         (entry) => entry[idKey] === idToMatch
       );
       if (indexToRemove !== -1) {
+        addFloatingUpdate({
+          icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+          text: update.equipment?.name ?? update.item?.name!,
+          amount: inventory[indexToRemove].quantity,
+        });
         inventory.splice(indexToRemove, 1);
         console.log(`Removed ${idKey} ${idToMatch} from inventory.`);
       }
@@ -159,11 +171,28 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         (entry) => entry[idKey] === idToMatch
       );
       if (existingIndex !== -1) {
+        const quantityDiff =
+          update.quantity - inventory[existingIndex].quantity;
+
         inventory[existingIndex] = update; // Replace the existing entry
         console.log(`Updated ${idKey} ${idToMatch} in inventory.`);
+
+        if (quantityDiff !== 0) {
+          addFloatingUpdate({
+            icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+            text: update.equipment?.name ?? update.item?.name!,
+            amount: quantityDiff,
+          });
+        }
       } else {
         inventory.push(update); // Add as a new entry
         console.log(`Added ${idKey} ${idToMatch} to inventory.`);
+
+        addFloatingUpdate({
+          icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+          text: update.equipment?.name ?? update.item?.name!,
+          amount: update.quantity,
+        });
       }
     }
   }
@@ -440,6 +469,17 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         setUserData((prev) => {
           if (!prev) return prev;
 
+          if (
+            partialUpdate.goldBalance &&
+            prev.goldBalance !== partialUpdate.goldBalance
+          ) {
+            addFloatingUpdate({
+              icon: GoldIcon,
+              text: "GP",
+              amount: partialUpdate.goldBalance - prev.goldBalance,
+            });
+          }
+
           const updated = {
             ...prev,
             ...cleanPartialupdate,
@@ -462,6 +502,24 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           console.log(`accumulatedBalance: ${balance.accumulatedBalance}`);
           console.log(`isBot: ${balance.isBot}`);
           console.log(`isAdmin: ${balance.isAdmin}`);
+
+          if (
+            BigInt(balance.accumulatedBalanceChange) +
+              BigInt(balance.liveBalanceChange) !==
+            0n
+          ) {
+            addFloatingUpdate({
+              icon: DittoCoinIcon,
+              text: "DITTO",
+              amount: Number(
+                formatUnits(
+                  BigInt(balance.accumulatedBalanceChange) +
+                    BigInt(balance.liveBalanceChange),
+                  DITTO_DECIMALS
+                )
+              ),
+            });
+          }
 
           setDittoBalance({
             accumulatedBalance: BigInt(balance.accumulatedBalance),
@@ -530,6 +588,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           let updatedSlimes = prevUserData.slimes
             ? [...prevUserData.slimes]
             : [];
+
+          addFloatingUpdate({
+            icon: GenericSlime,
+            text: `Slime #${slime.id}`,
+            amount: 1,
+          });
 
           return {
             ...prevUserData,
