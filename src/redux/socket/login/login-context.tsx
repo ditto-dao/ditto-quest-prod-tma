@@ -6,6 +6,8 @@ import { useSocket } from "../socket-context";
 import { setTelegramUsername } from "../../telegram-username-slice";
 import { RootState } from "../../store";
 import { SocketProviderProps } from "../../../utils/types";
+import { getFingerprint } from "../../../utils/fingerprint";
+import { STORE_FINGERPRINT_EVENT } from "../../../utils/events";
 
 // Context
 interface LoginContext {
@@ -60,7 +62,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
 
   useEffect(() => {
     if (socket && !loadingSocket) {
-      socket.on("login-validated", (telegramId: string) => {
+      socket.on("login-validated", async (telegramId: string) => {
         setConnectionEstablished(true);
         console.log(`Login validated for user: ${telegramId}`);
         setAccessGranted(true);
@@ -71,6 +73,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
             WebApp.initDataUnsafe.user?.username || `user_${telegramId}`
           )
         );
+        socket.emit(STORE_FINGERPRINT_EVENT, await getFingerprint());
       });
 
       socket.on("login-invalid", (msg: string) => {
