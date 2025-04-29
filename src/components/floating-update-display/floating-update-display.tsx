@@ -40,7 +40,7 @@ export function FloatingUpdateDisplay({
                 style={{
                   color:
                     update.amount >= 0
-                      ? "var(--bright-teal)"
+                      ? "var(--forest-green)"
                       : "var(--deep-warm-red)",
                 }}
               >

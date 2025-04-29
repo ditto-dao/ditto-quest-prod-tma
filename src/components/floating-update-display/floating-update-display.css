@@ -1,7 +1,8 @@
 .floating-update-container {
   position: absolute;
   bottom: 20px;
-  left: 20px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -14,11 +15,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 10px;
-  background: var(--muted-greenish-blue);
-  border: 1.1px solid var(--misty-teal);
-  color: var(--cream-white);
+  background: var(--cream-white);
+  border: 1.5px solid var(--bright-teal);
+  color: black;
   border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
   font-size: 12px;
   font-weight: bold;
   gap: 12px;
