@@ -88,10 +88,20 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
         setSocketDataLoadComplete(true);
       });
 
+      socket.on("disconnect", () => {
+        console.warn("Socket disconnected");
+        if (connectionEstablished) {
+          setAccessGranted(false);
+          setAccessDeniedMessage("Disconnected from server");
+          setSocketDataLoadComplete(true);
+        }
+      });
+
       return () => {
         socket.off("login-validated");
         socket.off("login-invalid");
         socket.off("tele-validate-error");
+        socket.off("disconnect");
       };
     }
   }, [socket, loadingSocket]);
