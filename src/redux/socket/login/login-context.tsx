@@ -7,7 +7,8 @@ import { setTelegramUsername } from "../../telegram-username-slice";
 import { RootState } from "../../store";
 import { SocketProviderProps } from "../../../utils/types";
 import { getFingerprint } from "../../../utils/fingerprint";
-import { STORE_FINGERPRINT_EVENT } from "../../../utils/events";
+import { STORE_FINGERPRINT_EVENT, USE_REFERRAL_CODE } from "../../../utils/events";
+import { DQ_REFERRAL_LINK_PREFIX } from "../../../utils/config";
 
 // Context
 interface LoginContext {
@@ -74,6 +75,11 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
           )
         );
         socket.emit(STORE_FINGERPRINT_EVENT, await getFingerprint());
+        const inviteLink = WebApp.initDataUnsafe.start_param
+
+        if (inviteLink && inviteLink.startsWith(DQ_REFERRAL_LINK_PREFIX)) {
+          socket.emit(USE_REFERRAL_CODE, inviteLink);
+        }
       });
 
       socket.on("login-invalid", (msg: string) => {
