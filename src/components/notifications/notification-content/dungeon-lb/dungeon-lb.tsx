@@ -22,6 +22,7 @@ import MonsterIcon from "../../../../assets/images/combat/monster-icon.png";
 import TimerIcon from "../../../../assets/images/general/timer.png";
 import HPIcon from "../../../../assets/images/combat/hp-lvl.png";
 import BattleIcon from "../../../../assets/images/combat/battle-icon.png";
+import DQIcon from "../../../../assets/images/general/dq-logo.png";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type DungeonLeaderboardEntry = {
@@ -219,7 +220,7 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
                               <div className="lb-detail-upper">
                                 <div className="lb-detail-image">
                                   <img
-                                    src={entry.user.equippedSlime?.imageUri}
+                                    src={entry.user.equippedSlime?.imageUri || DQIcon}
                                     alt="slime"
                                   />
                                 </div>
