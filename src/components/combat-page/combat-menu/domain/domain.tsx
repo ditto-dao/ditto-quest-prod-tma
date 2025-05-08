@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Domain } from "../../../../utils/types";
 import DittoCoinIcon from "../../../../assets/images/general/ditto-coin.png";
 import GPIcon from "../../../../assets/images/general/gold-coin.png";
@@ -12,12 +12,42 @@ import { useCombatSocket } from "../../../../redux/socket/idle/combat-context";
 import { useUserSocket } from "../../../../redux/socket/user/user-context";
 import { useNotification } from "../../../notifications/notification-context";
 import EquipSlimeNotification from "../../../notifications/notification-content/equip-slime-error/equip-slime-error";
+import { formatNumberWithCommas, formatNumberWithSuffix } from "../../../../utils/helpers";
 
 function DomainMenuItem(props: Domain) {
   const { userData } = useUserSocket();
   const { enterDomain } = useCombatSocket();
   const [isExpanded, setIsExpanded] = useState(false);
   const { addNotification } = useNotification();
+
+  const [entryPriceDitto, setEntryPriceDitto] = useState(props.entryPriceDittoWei || '0');
+  const [entryPriceGp, setEntryPriceGp] = useState(props.entryPriceGP?.toString() || '0');
+
+  useEffect(() => {
+    if (props.entryPriceDittoWei) {
+        const entryPriceDittoWeiNumber = Number(formatUnits(props.entryPriceDittoWei || "0", DITTO_DECIMALS));
+        if (entryPriceDittoWeiNumber < 1000000) {
+            setEntryPriceDitto(formatNumberWithCommas(entryPriceDittoWeiNumber));
+        } else {
+            setEntryPriceDitto(formatNumberWithSuffix(entryPriceDittoWeiNumber));
+        }
+    } else {
+        setEntryPriceDitto('0')
+    }
+  }, [props.entryPriceDittoWei]);
+
+  useEffect(() => {
+    if (props.entryPriceGP) {
+        const entryPriceGpNumber = Number(props.entryPriceGP);
+        if (entryPriceGpNumber < 1000000) {
+            setEntryPriceGp(formatNumberWithCommas(entryPriceGpNumber));
+        } else {
+            setEntryPriceGp(formatNumberWithSuffix(entryPriceGpNumber));
+        }
+    } else {
+        setEntryPriceGp('0')
+    }
+  }, [props.entryPriceGP]);
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
@@ -63,7 +93,7 @@ function DomainMenuItem(props: Domain) {
                 <div>Entry Price</div>
               </div>
               <div>
-                {formatUnits(props.entryPriceDittoWei, DITTO_DECIMALS)} DITTO
+                {entryPriceDitto} DITTO
               </div>
             </div>
             <div className="domain-main-stat">
@@ -71,7 +101,7 @@ function DomainMenuItem(props: Domain) {
                 <img src={GPIcon} />
                 <div>Entry Price</div>
               </div>
-              <div>{props.entryPriceGP} GP</div>
+              <div>{entryPriceGp} GP</div>
             </div>
           </div>
         </div>

@@ -8,6 +8,9 @@ import { useUserSocket } from "../../../redux/socket/user/user-context";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../redux/store";
 import { useCurrentActivityContext } from "../../../redux/socket/idle/current-activity-context";
+import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
+import { useNotification } from "../../notifications/notification-context";
+import ExitCombatMsg from "../../notifications/notification-content/exit-combat-first/exit-combat-first";
 
 interface FarmingItemProps {
   id: number;
@@ -32,6 +35,8 @@ function FarmingItem(props: FarmingItemProps) {
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { startFarming, stopFarming } = useIdleSkillSocket();
   const { setCurrentActivity } = useCurrentActivityContext();
+  const { isBattling } = useCombatSocket();
+  const { addNotification } = useNotification();
   const [isFarming, setIsFarming] = useState(false);
 
   const handleFarmButton = () => {
@@ -42,7 +47,12 @@ function FarmingItem(props: FarmingItemProps) {
         stopFarming(props.id);
         setIsFarming(false);
       } else {
-        console.log(props.id)
+        if (isBattling) {
+          addNotification(() => <ExitCombatMsg />);
+          return;
+        }
+        
+        console.log(props.id);
         socket.emit("farm-item", props.id);
 
         startFarming(props.id, Date.now(), props.farmingDurationS);

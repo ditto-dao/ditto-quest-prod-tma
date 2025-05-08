@@ -13,6 +13,9 @@ import { useState, useEffect } from "react";
 import { formatDuration } from "../../../utils/helpers";
 import { EquipmentType } from "../../../utils/types";
 import { useCurrentActivityContext } from "../../../redux/socket/idle/current-activity-context";
+import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
+import ExitCombatMsg from "../../notifications/notification-content/exit-combat-first/exit-combat-first";
+import { useNotification } from "../../notifications/notification-context";
 
 interface CraftingRecipeProps {
   equipmentId: number;
@@ -38,7 +41,9 @@ function CraftingRecipe(props: CraftingRecipeProps) {
     useIdleSkillSocket();
   const { socket } = useSocket();
   const { setCurrentActivity } = useCurrentActivityContext();
-
+  const { isBattling } = useCombatSocket();
+  const { addNotification } = useNotification();
+  
   const [isCraftable, setIsCraftable] = useState(false);
   const [isCrafting, setIsCrafting] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -54,6 +59,11 @@ function CraftingRecipe(props: CraftingRecipeProps) {
         stopCrafting(props.equipmentId);
         setIsCrafting(false);
       } else {
+        if (isBattling) {
+          addNotification(() => <ExitCombatMsg />);
+          return;
+        }
+
         socket.emit("craft-equipment", props.equipmentId);
         startCrafting(props.equipmentId, Date.now(), props.durationS);
         setIsCrafting(true);

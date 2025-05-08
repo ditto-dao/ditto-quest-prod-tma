@@ -4,6 +4,7 @@ import {
   defaultCombat,
   defaultMonster,
   Domain,
+  Dungeon,
   FullMonster,
   SocketProviderProps,
 } from "../../../utils/types";
@@ -15,16 +16,20 @@ import {
   COMBAT_STARTED_EVENT,
   COMBAT_STOPPED_EVENT,
   COMBAT_USER_DIED_EVENT,
+  LEDGER_UPDATE_BALANCE_EVENT,
   START_COMBAT_DOMAIN_EVENT,
+  START_COMBAT_DUNGEON_EVENT,
   STOP_COMBAT_EVENT,
 } from "../../../utils/events";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import Domains from "../../../assets/json/domains.json";
+import DungeonsJson from "../../../assets/json/dungeons.json";
 import { useNotification } from "../../../components/notifications/notification-context";
 import DeathNotification from "../../../components/notifications/notification-content/user-death/death-notification";
-import { delay } from "../../../utils/helpers";
+import { delay, getDeductionPayloadToDevFunds } from "../../../utils/helpers";
 import { useCurrentActivityContext } from "./current-activity-context";
+import { ENTER_DUNGEON_TRX_NOTE } from "../../../utils/trx-config";
 
 interface CombatHpChangeEventPayload {
   target: "user" | "monster";
@@ -39,8 +44,12 @@ interface CombatContext {
   isBattling: boolean;
   userCombat: Combat;
   monster: FullMonster | null;
-  combatArea: Domain | null;
+  combatArea: Domain | Dungeon | null;
+  dungeonFloor: number | null;
+  dungeonMonsterId: number | null;
   enterDomain: (domain: Domain) => void;
+  enterDungeonGp: (dungeon: Dungeon) => void;
+  enterDungeonDitto: (dungeon: Dungeon) => void;
   runAway: () => Promise<void>;
   userHpChange:
     | { timestamp: number; hpChange: number; crit: boolean }
@@ -55,7 +64,11 @@ const CombatContext = createContext<CombatContext>({
   userCombat: defaultCombat,
   monster: defaultMonster,
   combatArea: null,
+  dungeonFloor: null,
+  dungeonMonsterId: null,
   enterDomain: () => {},
+  enterDungeonGp: () => {},
+  enterDungeonDitto: () => {},
   runAway: async () => {},
   userHpChange: undefined,
   monsterHpChange: undefined,
@@ -66,7 +79,8 @@ export const useCombatSocket = () => useContext(CombatContext);
 export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   children,
 }) => {
-  const { userData, incrementUserHp, setUserHp } = useUserSocket();
+  const { userData, dittoBalance, incrementUserHp, setUserHp } =
+    useUserSocket();
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
   const { addNotification } = useNotification();
@@ -78,7 +92,9 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   const [isBattling, setIsBattling] = useState(false);
   const [userCombat, setUserCombat] = useState(defaultCombat);
   const [monster, setMonster] = useState<FullMonster | null>(null);
-  const [combatArea, setCombatArea] = useState<Domain | null>(null);
+  const [combatArea, setCombatArea] = useState<Domain | Dungeon | null>(null);
+  const [dungeonFloor, setDungeonFloor] = useState<number | null>(null);
+  const [dungeonMonsterId, setDungeonMonsterId] = useState<number | null>(null);
 
   const [userHpChange, setUserHpChange] = useState<{
     timestamp: number;
@@ -93,7 +109,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
 
   const enterDomain = (domain: Domain) => {
     if (isBattling) {
-      console.warn(`Already in battle, ignoring duplicate enterDomain`);
+      console.warn(`Already in battle, ignoring duplicate start battle`);
       return;
     }
     setIsBattling(true);
@@ -105,6 +121,42 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
     console.log(`Entering domain ${domain.id}, ${domain.name}`);
   };
 
+  const enterDungeonGp = (dungeon: Dungeon) => {
+    if (isBattling) {
+      console.warn(`Already in battle, ignoring duplicate start battle`);
+      return;
+    }
+    setIsBattling(true);
+    setCombatArea(dungeon);
+    if (socket && canEmitEvent() && telegramId) {
+      socket.emit(START_COMBAT_DUNGEON_EVENT, dungeon.id);
+      setLastEventEmittedTimestamp(Date.now());
+    }
+    console.log(`Entering dungeon ${dungeon.id}, ${dungeon.name}`);
+  };
+
+  const enterDungeonDitto = (dungeon: Dungeon) => {
+    if (socket && canEmitEvent() && telegramId) {
+      if (isBattling) {
+        console.warn(`Already in battle, ignoring duplicate start battle`);
+        return;
+      }
+      setIsBattling(true);
+      setCombatArea(dungeon);
+
+      socket.emit(
+        LEDGER_UPDATE_BALANCE_EVENT,
+        getDeductionPayloadToDevFunds(
+          telegramId.toString(),
+          dittoBalance,
+          BigInt(dungeon.entryPriceDittoWei || "0"),
+          ENTER_DUNGEON_TRX_NOTE + ` ${dungeon.id}`
+        )
+      );
+      setLastEventEmittedTimestamp(Date.now());
+    }
+  };
+
   const runAway = async () => {
     if (socket && canEmitEvent() && telegramId) {
       socket.emit(STOP_COMBAT_EVENT, telegramId);
@@ -114,6 +166,8 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
       await delay(300);
       setMonster(null);
       setCombatArea(null);
+      setDungeonFloor(null);
+      setDungeonMonsterId(null);
     }
     console.log(`Emitting stop combat event`);
   };
@@ -130,14 +184,23 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
           monster: FullMonster;
           combatAreaType: "Dungeon" | "Domain";
           combatAreaId: number;
+          dungeonFloor: number;
+          dungeonMonsterId: number;
         }) => {
           console.log(
             `Received COMBAT_STARTED_EVENT monster: ${JSON.stringify(
-              payload.monster,
+              {
+                monsterDefined: !!payload.monster,
+                combatAreaType: payload.combatAreaType,
+                combatAreaId: payload.combatAreaId,
+                dungeonFloor: payload.dungeonFloor,
+                dungeonMonsterId: payload.dungeonMonsterId,
+              },
               null,
               2
             )}`
           );
+
           if (payload.monster) {
             setIsBattling(true);
             setMonster(payload.monster);
@@ -157,6 +220,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
             });
             setMonster(null);
           }
+
           if (payload.combatAreaType === "Domain") {
             const domain = (Domains as Domain[]).find(
               (d) => d.id === payload.combatAreaId
@@ -169,8 +233,29 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
               );
             }
           }
+
           if (payload.combatAreaType === "Dungeon") {
-            // TODO
+            const dungeon = (DungeonsJson as unknown as Dungeon[]).find(
+              (d) => d.id === payload.combatAreaId
+            );
+            if (dungeon) {
+              setCombatArea(dungeon);
+            } else {
+              console.warn(
+                `Dungeon with ID ${payload.combatAreaId} not found in Dungeons JSON`
+              );
+            }
+          }
+
+          if (
+            payload.dungeonFloor !== null &&
+            payload.dungeonFloor !== undefined &&
+            payload.dungeonMonsterId !== null &&
+            payload.dungeonMonsterId !== undefined
+          ) {
+            console.log(`Setting dungeon floor and id.`);
+            setDungeonFloor(payload.dungeonFloor);
+            setDungeonMonsterId(payload.dungeonMonsterId + 1);
           }
         }
       );
@@ -179,6 +264,8 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         console.log(`Received COMBAT_STOPPED_EVENT`);
         setIsBattling(false);
         setMonster(null);
+        setDungeonFloor(null);
+        setDungeonMonsterId(null);
         setCombatArea(null);
         setUserHpChange(undefined);
         setCurrentActivity((prev) => {
@@ -238,6 +325,8 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
 
         setIsBattling(false);
         setMonster(null);
+        setDungeonFloor(null);
+        setDungeonMonsterId(null);
         setCombatArea(null);
         incrementUserHp(Infinity);
         setUserHpChange(undefined);
@@ -259,7 +348,11 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         userCombat,
         monster,
         combatArea,
+        dungeonFloor,
+        dungeonMonsterId,
         enterDomain,
+        enterDungeonGp,
+        enterDungeonDitto,
         runAway,
         userHpChange,
         monsterHpChange,

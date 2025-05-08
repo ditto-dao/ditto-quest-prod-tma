@@ -10,11 +10,22 @@ import { useIdleSkillSocket } from "../../../redux/socket/idle/skill-context";
 import { useSocket } from "../../../redux/socket/socket-context";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
+import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
+import ExitCombatMsg from "../../notifications/notification-content/exit-combat-first/exit-combat-first";
+import { useNotification } from "../../notifications/notification-context";
 
 function SlimeLabBreedingPage() {
   const { socket } = useSocket();
-  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket(); 
-  const { slimeToBreed0, slimeToBreed1, breedingStatus, startBreeding, stopBreeding } = useIdleSkillSocket();
+  const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
+  const {
+    slimeToBreed0,
+    slimeToBreed1,
+    breedingStatus,
+    startBreeding,
+    stopBreeding,
+  } = useIdleSkillSocket();
+  const { isBattling } = useCombatSocket();
+  const { addNotification } = useNotification();
 
   // Generate trait probabilities when both slimes are selected
   const traitProbabilities =
@@ -24,14 +35,22 @@ function SlimeLabBreedingPage() {
 
   const handleBreed = () => {
     if (socket && slimeToBreed0 && slimeToBreed1 && canEmitEvent()) {
+      if (isBattling) {
+        addNotification(() => <ExitCombatMsg />);
+        return;
+      }
+
       if (!breedingStatus) {
         socket.emit("breed-slimes", {
           sireId: slimeToBreed0.id,
           dameId: slimeToBreed1.id,
         });
         setLastEventEmittedTimestamp(Date.now());
-        startBreeding(Date.now(), getBreedingTimesByGeneration(slimeToBreed0.generation)  + getBreedingTimesByGeneration(slimeToBreed1.generation))
-
+        startBreeding(
+          Date.now(),
+          getBreedingTimesByGeneration(slimeToBreed0.generation) +
+            getBreedingTimesByGeneration(slimeToBreed1.generation)
+        );
       } else {
         socket.emit("stop-breed-slimes", {
           sireId: slimeToBreed0.id,
@@ -93,9 +112,12 @@ function SlimeLabBreedingPage() {
 
       {breedingStatus && slimeToBreed0 && slimeToBreed1 && (
         <LoopingTimerBar
-            durationS={getBreedingTimesByGeneration(slimeToBreed0.generation) + getBreedingTimesByGeneration(slimeToBreed1.generation)} // Use standard duration for looping
-            startTimestamp={breedingStatus.startTimestamp}
-          />
+          durationS={
+            getBreedingTimesByGeneration(slimeToBreed0.generation) +
+            getBreedingTimesByGeneration(slimeToBreed1.generation)
+          } // Use standard duration for looping
+          startTimestamp={breedingStatus.startTimestamp}
+        />
       )}
 
       {traitProbabilities && (
@@ -110,7 +132,12 @@ function SlimeLabBreedingPage() {
           </button>
           <div className="breed-duration-container">
             <img src={TimerIcon}></img>
-            <div className="breed-duration-text">{formatDuration(getBreedingTimesByGeneration(slimeToBreed0!.generation) + getBreedingTimesByGeneration(slimeToBreed1!.generation))}</div>
+            <div className="breed-duration-text">
+              {formatDuration(
+                getBreedingTimesByGeneration(slimeToBreed0!.generation) +
+                  getBreedingTimesByGeneration(slimeToBreed1!.generation)
+              )}
+            </div>
           </div>
         </div>
       )}

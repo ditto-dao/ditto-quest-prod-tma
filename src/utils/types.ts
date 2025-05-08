@@ -475,6 +475,32 @@ export interface DomainMonsterEntry {
     spawnRate: number;
 }
 
+export interface Dungeon {
+    id: number;
+    name: string;
+    description: string;
+    imgsrc: string;
+    monsterGrowthFactor: number;
+    entryPriceGP: number | null;
+    entryPriceDittoWei: string | null; // Decimal values are returned as strings
+    isActive: boolean;
+    monsterSequence: FullMonster[];
+}
+
+export interface DungeonLeaderboard {
+    id: number;
+    userId: string;
+    dungeonId: number;
+    monstersKilled: number;
+    damageDealt: number;
+    damageTaken: number;
+    timeElapsedMs: number;
+    runDate: string;
+    score: number;
+    user: User;
+    dungeon: Dungeon;
+}
+
 export interface MonsterDrop {
     id: number;
     monsterId: number;

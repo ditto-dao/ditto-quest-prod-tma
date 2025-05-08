@@ -93,23 +93,22 @@ export function getHighestDominantTraitRarity(slime: SlimeWithTraits): Rarity {
 
 export function formatNumberWithSuffix(value: number): string {
     if (value < 1000) {
-        // If the number is less than 1000, return it with 2 decimal places
-        return value.toFixed(2);
+        return parseFloat(value.toFixed(2)).toString(); // trims trailing zeros
     }
 
     const suffixes = ["", "k", "m", "b"];
     let suffixIndex = 0;
 
-    // Divide the number by 1000 iteratively to determine the suffix
     while (value >= 1000 && suffixIndex < suffixes.length - 1) {
         value /= 1000;
         suffixIndex++;
     }
 
-    // Format the value to 4 significant digits (including decimals)
-    const formattedValue = value.toFixed(value < 10 ? 3 : value < 100 ? 2 : 1);
+    // Use toFixed, then parseFloat to remove trailing zeros
+    const fixed = value.toFixed(value < 10 ? 3 : value < 100 ? 2 : 1);
+    const trimmed = parseFloat(fixed).toString();
 
-    return `${formattedValue}${suffixes[suffixIndex]}`;
+    return `${trimmed}${suffixes[suffixIndex]}`;
 }
 
 export function formatDecimalWithCommas(num: Decimal): string {
@@ -130,14 +129,31 @@ export function formatDecimalWithSuffix(value: Decimal): string {
     }
 
     const v = value.toNumber();
-    const formatted =
+    const fixed =
         v < 10
             ? value.toFixed(3)
             : v < 100
                 ? value.toFixed(2)
                 : value.toFixed(1);
 
-    return `${formatted}${suffixes[suffixIndex]}`;
+    const trimmed = parseFloat(fixed).toString(); // strips trailing zeros
+
+    return `${trimmed}${suffixes[suffixIndex]}`;
+}
+
+export function formatDecimalWithSuffix3sf(value: Decimal): string {
+    const thousand = new Decimal(1000);
+    const suffixes = ["", "k", "m", "b", "t"];
+    let suffixIndex = 0;
+
+    while (value.gte(thousand) && suffixIndex < suffixes.length - 1) {
+        value = value.div(thousand);
+        suffixIndex++;
+    }
+
+    // Round to 3 significant figures
+    const rounded = new Decimal(value.toSignificantDigits(3));
+    return `${rounded.toString()}${suffixes[suffixIndex]}`;
 }
 
 export function formatNumberForInvQty(num: number): string {
@@ -490,4 +506,35 @@ export function preloadImage(src: string): Promise<void> {
         };
         img.src = src;
     });
+}
+
+export function toRoman(num: number): string {
+    if (num <= 0 || num >= 4000) throw new Error("Number out of range (1–3999)");
+
+    const romanMap: [number, string][] = [
+        [1000, 'M'],
+        [900, 'CM'],
+        [500, 'D'],
+        [400, 'CD'],
+        [100, 'C'],
+        [90, 'XC'],
+        [50, 'L'],
+        [40, 'XL'],
+        [10, 'X'],
+        [9, 'IX'],
+        [5, 'V'],
+        [4, 'IV'],
+        [1, 'I'],
+    ];
+
+    let result = '';
+
+    for (const [value, numeral] of romanMap) {
+        while (num >= value) {
+            result += numeral;
+            num -= value;
+        }
+    }
+
+    return result;
 }

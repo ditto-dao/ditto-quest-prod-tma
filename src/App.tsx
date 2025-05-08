@@ -51,6 +51,10 @@ function App() {
         root.style.setProperty("--melee", "#B5533A");
         root.style.setProperty("--ranged", "#4B6A47");
         root.style.setProperty("--magic", "#6D5ED2");
+        root.style.setProperty("--muted-crimson", "#d27676");
+        root.style.setProperty("--muted-brick", "#c67c55");
+        root.style.setProperty("--muted-indigo", "#4e4b74");
+        root.style.setProperty("--muted-slate", "#3f536c");
 
         // Rank Background Colors with Muted Tones
         root.style.setProperty(

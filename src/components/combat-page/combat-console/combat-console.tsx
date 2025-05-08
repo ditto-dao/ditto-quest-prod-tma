@@ -41,6 +41,8 @@ function CombatConsole() {
     combatArea,
     userHpChange,
     monsterHpChange,
+    dungeonFloor,
+    dungeonMonsterId,
   } = useCombatSocket();
   const userHpChangeRef = useRef<HTMLDivElement>(null);
   const monsterHpChangeRef = useRef<HTMLDivElement>(null);
@@ -178,6 +180,14 @@ function CombatConsole() {
           {combatArea?.name || monster?.name || "Battle"}
         </div>
         <div className="battle-box">
+          {dungeonFloor && dungeonMonsterId && (
+            <div className="dungeon-progress-stats">
+              <div className="floor-number">Floor {dungeonFloor}</div>
+              <div className="dungeon-monster-id">
+                Monster {dungeonMonsterId}
+              </div>
+            </div>
+          )}
           <div className="battle-box-inner">
             <AnimatePresence mode="wait">
               {!monster || !iconImagesLoaded || !monsterImagesLoaded ? (
@@ -226,7 +236,9 @@ function CombatConsole() {
                       <div className="monster-name">{monster.name}</div>
                     </div>
                     <div className="monster-stats">
-                      <div className="monster-level">LVL {monster.level}</div>
+                      {!dungeonFloor && !dungeonMonsterId && (
+                        <div className="monster-level">LVL {monster.level}</div>
+                      )}
                       <div className="monster-cp">
                         CP{" "}
                         {monsterCp.lt(1_000_000)

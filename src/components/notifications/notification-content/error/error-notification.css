@@ -9,7 +9,7 @@
 }
 
 .error-notification > .error-notificaation-header {
-  font-size: 16px;
+  font-size: 12px;
   margin-bottom: 6px;
   background-color: var(--deep-warm-red);
   padding: 8px 20px;
@@ -17,8 +17,8 @@
 }
 
 .error-message {
-  padding: 10px;
+  padding: 11px;
   padding-top: 0;
-  font-size: 9px;
+  font-size: 10px;
   line-height: 15px;
 }

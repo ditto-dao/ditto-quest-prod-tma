@@ -1,9 +1,10 @@
 import { useState } from "react";
 import Domains from "../../../assets/json/domains.json";
-//import Dungeons from "../../../assets/json/dungeons.json";
+import Dungeons from "../../../assets/json/dungeons.json";
 import "./combat-menu.css";
 import DomainMenuItem from "./domain/domain";
-import { Domain } from "../../../utils/types";
+import { Domain, Dungeon } from "../../../utils/types";
+import DungeonMenuItem from "./dungeon/dungeon";
 
 function DomainComponent() {
   return (
@@ -26,7 +27,22 @@ function DomainComponent() {
 
 function DungeonComponent() {
   return (
-    <div className="combat-tab-panel dungeon">Dungeon content here...</div>
+    <div className="combat-tab-panel domain-list">
+      {(Dungeons as unknown as Dungeon[]).map((dungeon) => (
+        <DungeonMenuItem
+          key={dungeon.id}
+          id={dungeon.id}
+          name={dungeon.name}
+          description={dungeon.description}
+          imgsrc={dungeon.imgsrc}
+          entryPriceGP={dungeon.entryPriceGP || 0}
+          entryPriceDittoWei={dungeon.entryPriceDittoWei || '0'}
+          monsterGrowthFactor={dungeon.monsterGrowthFactor}
+          isActive={dungeon.isActive}
+          monsterSequence={dungeon.monsterSequence}
+        />
+      ))}
+    </div>
   );
 }
 

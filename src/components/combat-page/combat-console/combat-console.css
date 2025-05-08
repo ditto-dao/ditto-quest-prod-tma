@@ -109,9 +109,18 @@
 
 .monster-stats {
   display: flex;
+  flex-wrap: wrap;
   width: 100%;
   justify-content: flex-start;
   gap: 4px;
+}
+
+.dungeon-progress-stats {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: flex-start;
+  gap: 10px;
 }
 
 .monster-header {
@@ -128,6 +137,24 @@
   padding: 2px 6px;
   border-radius: 4px;
   text-align: center;
+}
+
+.floor-number {
+  background-color: var(--muted-indigo);
+  font-size: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 4px 0 0 var(--dark-navy);
+}
+
+.dungeon-monster-id {
+  background-color: var(--muted-slate);
+  font-size: 8px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  text-align: center;
+  box-shadow: 0 4px 0 0 var(--dark-navy);
 }
 
 .monster-cp {

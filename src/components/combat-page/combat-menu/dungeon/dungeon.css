@@ -1,4 +1,4 @@
-.domain-container {
+.dungeon-container {
   display: flex;
   flex-direction: column;
   border-radius: 8px;
@@ -10,23 +10,23 @@
   height: auto; /* Grows naturally with content */
 }
 
-.domain-level {
+.dungeon-level {
   padding: 3px;
   font-size: 9px;
 }
 
-.domain-inner-container {
+.dungeon-inner-container {
   display: flex;
   flex-direction: column;
-  background-color: var(--midnight-teal);
+  background-color: var(--ocean-blue);
   border-radius: 0 0 6px 6px;
   padding: 15px;
   width: 100%;
   height: 100%;
 }
 
-.domain-expand-row {
-  width: 100%;
+.dungeon-expand-row {
+  width: 30%;
   display: flex;
   justify-content: flex-end;
 }
@@ -37,7 +37,7 @@
   cursor: pointer;
 }
 
-.domain-main-display {
+.dungeon-main-display {
   display: flex;
   gap: 10px;
   align-items: center;
@@ -45,7 +45,7 @@
   margin-bottom: 12px;
 }
 
-.domain-img-container {
+.dungeon-img-container {
   width: 50%;
   border-radius: 8px;
   display: flex;
@@ -53,14 +53,14 @@
   justify-content: center;
 }
 
-.domain-img-container img {
+.dungeon-img-container img {
   width: 100%;
   height: auto;
   object-fit: cover;
   border-radius: 5px;
 }
 
-.domain-description {
+.dungeon-description {
   font-size: 8px;
   color: var(--cream-white);
   text-align: left;
@@ -68,7 +68,7 @@
   width: 100%;
 }
 
-.domain-stats {
+.dungeon-stats {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -77,7 +77,7 @@
   width: 50%;
 }
 
-.domain-main-stat-header {
+.dungeon-main-stat-header {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -85,7 +85,7 @@
   gap: 6px;
 }
 
-.domain-main-stat {
+.dungeon-main-stat {
   display: flex;
   flex-direction: column;
   background-color: var(--light-teal);
@@ -94,16 +94,45 @@
   gap: 6px;
 }
 
-.domain-main-stat-header img {
+.dungeon-main-stat-header img {
   height: 14px;
   width: auto;
 }
 
-.domain-main-stat div {
+.dungeon-main-stat div {
   font-size: 8px;
 }
 
-.domain-button {
+.dungeon-button-group {
+  gap: 10px;
+  width: 100%;
+}
+
+.lb-button {
+  background-color: var(--muted-crimson);
+  padding: 6px;
+  width: 40%;
+  font-size: 10px;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+
+.lb-button > img {
+  max-width: 20px;
+}
+
+.lb-button:active {
+  transform: translateY(0.5px);
+}
+
+.dungeon-button {
   padding: 6px;
   width: 100%;
   font-size: 10px;
@@ -119,23 +148,23 @@
   align-items: center;
 }
 
-.domain-button:disabled {
+.dungeon-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.domain-button:not(:disabled):active {
+.dungeon-button:not(:disabled):active {
   transform: translateY(0.5px);
 }
 
-.domain-monsters {
+.dungeon-monsters {
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
   opacity: 0;
 }
 
-.domain-monsters.expanded {
+.dungeon-monsters.expanded {
   max-height: 500vh; /* Adjust based on content size */
   opacity: 1;
   margin-top: 18px;
@@ -143,23 +172,23 @@
   border-radius: 7px; /* Match the outer radius */
 }
 
-.domain-monsters.collapsed {
+.dungeon-monsters.collapsed {
   max-height: 0;
   opacity: 0;
 }
 
-.domain-header-info {
+.dungeon-header-info {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.domain-header-info div {
+.dungeon-header-info div {
   display: flex;
   flex-direction: row;
 }
 
-.domain-monsters-header {
+.dungeon-monsters-header {
   font-size: 9px;
   width: 100%;
   border-radius: 5px 5px 0 0;
@@ -167,7 +196,7 @@
   background-color: var(--seafoam-green);
 }
 
-.domain-monster {
+.dungeon-monster {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
@@ -177,20 +206,20 @@
   gap: 8px;
 }
 
-.domain-monster.alternate {
+.dungeon-monster.alternate {
   background-color: var(--light-teal);
 }
 
-.domain-monster.last-monster {
+.dungeon-monster.last-monster {
   border-radius: 0 0 5px 5px;
 }
 
-.domain-monster img {
+.dungeon-monster img {
   width: 25px;
   height: auto;
 }
 
-.domain-monster-name {
+.dungeon-monster-name {
   font-weight: bold;
   font-size: 8px;
   height: 100%;

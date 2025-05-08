@@ -1,0 +1,176 @@
+import { useEffect, useState } from "react";
+import { Dungeon } from "../../../../utils/types";
+import DittoCoinIcon from "../../../../assets/images/general/ditto-coin.png";
+import GPIcon from "../../../../assets/images/general/gold-coin.png";
+import MonsterIcon from "../../../../assets/images/combat/monster-icon.png";
+import { formatUnits } from "ethers";
+import { DITTO_DECIMALS } from "../../../../utils/config";
+import Expand from "../../../../assets/images/general/down.svg";
+import Minimize from "../../../../assets/images/general/up.svg";
+import "./dungeon.css";
+import { useCombatSocket } from "../../../../redux/socket/idle/combat-context";
+import { useUserSocket } from "../../../../redux/socket/user/user-context";
+import { useNotification } from "../../../notifications/notification-context";
+import EquipSlimeNotification from "../../../notifications/notification-content/equip-slime-error/equip-slime-error";
+import {
+  formatNumberWithCommas,
+  formatNumberWithSuffix,
+} from "../../../../utils/helpers";
+import PaywallNotification from "../../../notifications/notification-content/paywall/paywall-notification";
+import LBIcon from "../../../../assets/images/general/leaderboard-icon.svg";
+import DungeonLb from "../../../notifications/notification-content/dungeon-lb/dungeon-lb";
+
+function DungeonMenuItem(props: Dungeon) {
+  const { userData } = useUserSocket();
+  const { enterDungeonGp, enterDungeonDitto } = useCombatSocket();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { addNotification, removeNotification } = useNotification();
+
+  const [entryPriceDitto, setEntryPriceDitto] = useState(
+    props.entryPriceDittoWei || "0"
+  );
+  const [entryPriceGp, setEntryPriceGp] = useState(
+    props.entryPriceGP?.toString() || "0"
+  );
+
+  useEffect(() => {
+    if (props.entryPriceDittoWei) {
+      const entryPriceDittoWeiNumber = Number(
+        formatUnits(props.entryPriceDittoWei || "0", DITTO_DECIMALS)
+      );
+      if (entryPriceDittoWeiNumber < 1000000) {
+        setEntryPriceDitto(formatNumberWithCommas(entryPriceDittoWeiNumber));
+      } else {
+        setEntryPriceDitto(formatNumberWithSuffix(entryPriceDittoWeiNumber));
+      }
+    } else {
+      setEntryPriceDitto("0");
+    }
+  }, [props.entryPriceDittoWei]);
+
+  useEffect(() => {
+    if (props.entryPriceGP) {
+      const entryPriceGpNumber = Number(props.entryPriceGP);
+      if (entryPriceGpNumber < 1000000) {
+        setEntryPriceGp(formatNumberWithCommas(entryPriceGpNumber));
+      } else {
+        setEntryPriceGp(formatNumberWithSuffix(entryPriceGpNumber));
+      }
+    } else {
+      setEntryPriceGp("0");
+    }
+  }, [props.entryPriceGP]);
+
+  const toggleExpand = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+  const handleEnterDungeon = () => {
+    if (userData.equippedSlime && userData.equippedSlimeId) {
+      addNotification((id) => (
+        <PaywallNotification
+          notificationId={id}
+          removeNotification={removeNotification}
+          gpAmount={props.entryPriceGP || 0}
+          dittoAmountWei={props.entryPriceDittoWei || "0"}
+          message="Confirm fee to enter the dungeon."
+          onUseGp={{ fn: enterDungeonGp, args: props }}
+          onUseDitto={{ fn: enterDungeonDitto, args: props }}
+        />
+      ));
+    } else {
+      addNotification(() => <EquipSlimeNotification />);
+    }
+  };
+
+  const handleOpenLb = () => {
+    addNotification(() => <DungeonLb dungeonName={props.name} dungeonId={props.id} />);
+  };
+
+  return (
+    <div className="dungeon-container">
+      <div className="dungeon-level">{props.name}</div>
+      <div className="dungeon-inner-container">
+        <div className="dungeon-main-display">
+          <div className="dungeon-img-container">
+            <img src={props.imgsrc} />
+          </div>
+          <div className="dungeon-stats">
+            <div className="dungeon-main-stat">
+              <div className="dungeon-main-stat-header">
+                <img src={MonsterIcon} />
+                <div>Growth Factor</div>
+              </div>
+              <div>{props.monsterGrowthFactor}</div>
+            </div>
+            <div className="dungeon-main-stat">
+              <div className="dungeon-main-stat-header">
+                <img src={DittoCoinIcon} />
+                <div>Entry Price</div>
+              </div>
+              <div>{entryPriceDitto} DITTO</div>
+            </div>
+            <div className="dungeon-main-stat">
+              <div className="dungeon-main-stat-header">
+                <img src={GPIcon} />
+                <div>Entry Price</div>
+              </div>
+              <div>{entryPriceGp} GP</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="dungeon-header-info">
+          <div className="dungeon-description">{props.description}</div>
+          <div>
+            <div className="dungeon-button-group">
+              <button className="dungeon-button" onClick={handleEnterDungeon}>
+                Enter
+              </button>
+              <button className="lb-button" onClick={handleOpenLb}>
+                <img src={LBIcon}></img>
+              </button>
+            </div>
+            <div className="dungeon-expand-row">
+              <img
+                src={isExpanded ? Minimize : Expand}
+                onClick={toggleExpand}
+                alt="Toggle Expand"
+                className="expand-button"
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Monster List */}
+        <div
+          className={`dungeon-monsters ${
+            isExpanded ? "expanded" : "collapsed"
+          }`}
+        >
+          {isExpanded && (
+            <>
+              <div className="dungeon-monsters-header">Monsters</div>
+              {props.monsterSequence.map((monster, index) => {
+                const isAlternate = index % 2 === 1;
+                const isLast = index === props.monsterSequence.length - 1;
+                const monsterClassName = `dungeon-monster ${
+                  isAlternate ? "alternate" : ""
+                } ${isLast ? "last-monster" : ""}`;
+
+                return (
+                  <div key={monster.id} className={monsterClassName}>
+                    <img src={monster.imgsrc} alt={monster.name} />
+                    <div className="dungeon-monster-name">{monster.name}</div>
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default DungeonMenuItem;
