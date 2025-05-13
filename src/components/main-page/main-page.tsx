@@ -24,6 +24,7 @@ import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import LoadingPage from "../loading-page/loading-page";
 import AccessDeniedPage from "../access-denied-page/access-denied-page";
+import AccessDeniedPageDQLogo from "../access-denied-page/access-denied-page-dq-logo";
 import { AnimatePresence, motion } from "framer-motion";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
@@ -84,6 +85,8 @@ function MainPage() {
         return <AvatarPage />;
     }
   }
+
+  return (<AccessDeniedPageDQLogo msg="Ditto Quest Beta has ended. Thank you for participating!" />)
 
   return (
     <div id="main-page-container" className="noselect">

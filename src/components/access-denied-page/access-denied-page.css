@@ -13,6 +13,7 @@
 }
 
 .access-denied-page > .access-denied-text {
-  padding: 20px;
+  padding: 0 18px;
   font-size: 12px;
+  line-height: 20px;
 }
