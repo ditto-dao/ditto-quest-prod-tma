@@ -3,7 +3,17 @@ export const FIRST_LOGIN_EVENT = 'user-first-login';
 
 export const STORE_FINGERPRINT_EVENT = 'store-user-fingerprint';
 
+export const READ_REFERRAL_CODE = 'read-user-referral-code';
+
+export const READ_REFERRAL_CODE_RES = 'read-user-referral-code-res';
+
+export const READ_REFERRAL_STATS = 'read-user-referral-stats';
+
+export const READ_REFERRAL_STATS_RES = 'read-user-referral-stats-res';
+
 export const USE_REFERRAL_CODE = 'use-referral-code';
+
+export const USE_REFERRAL_CODE_SUCCESS = 'use-referral-code-success';
 
 // Combat
 export const START_COMBAT_DOMAIN_EVENT = 'start-combat-domain';

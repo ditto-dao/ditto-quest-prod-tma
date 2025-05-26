@@ -9,6 +9,7 @@ import CraftingIcon from "../../assets/images/sidebar/craft.png";
 import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
+import ReferralIcon from "../../assets/images/sidebar/referral.png";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -94,6 +95,12 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           <a onClick={() => setPage("Shop")}>
             <img src={ShopIcon} alt="Shop Icon" className="sidebar-icon" />
             Shop
+          </a>
+        </li>
+        <li>
+          <a onClick={() => setPage("Referral")}>
+            <img src={ReferralIcon} alt="Referral Icon" className="sidebar-icon" />
+            Referral
           </a>
         </li>
       </ul>

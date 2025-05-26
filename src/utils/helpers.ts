@@ -538,3 +538,41 @@ export function toRoman(num: number): string {
 
     return result;
 }
+
+export function formatMax6Digits(value: number): string {
+    const suffixes = ["", "k", "m", "b", "t"];
+    const absValue = Math.abs(value);
+
+    // Count digits (excluding dot and commas)
+    const digitCount = value
+        .toLocaleString("en-US", { maximumFractionDigits: 20 })
+        .replace(/[^0-9]/g, "").length;
+
+    if (digitCount <= 6) {
+        return value.toLocaleString("en-US"); // show full with commas
+    }
+
+    // Compact format with max 6 visible characters before suffix
+    let suffixIndex = 0;
+    let compactValue = absValue;
+
+    while (compactValue >= 1000 && suffixIndex < suffixes.length - 1) {
+        compactValue /= 1000;
+        suffixIndex++;
+    }
+
+    // Dynamically reduce decimal places until length ≤ 6
+    let result = "";
+    for (let decimals = 5; decimals >= 0; decimals--) {
+        const formatted = compactValue.toFixed(decimals);
+        if (formatted.replace(".", "").length <= 6) {
+            result = formatted;
+            break;
+        }
+    }
+
+    // Add minus sign back if needed
+    if (value < 0) result = "-" + result;
+
+    return `${result}${suffixes[suffixIndex]}`;
+}

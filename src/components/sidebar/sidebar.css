@@ -48,7 +48,7 @@
   display: flex;
   align-items: center; /* Align icon and text */
   gap: 10px; /* Add space between icon and text */
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .sidebar-icon {

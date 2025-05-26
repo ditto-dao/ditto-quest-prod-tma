@@ -22,12 +22,14 @@ import CraftingIcon from "../../assets/images/sidebar/craft.png";
 import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
+import ReferralIcon from "../../assets/images/sidebar/referral.png";
 import LoadingPage from "../loading-page/loading-page";
 import AccessDeniedPage from "../access-denied-page/access-denied-page";
 import { AnimatePresence, motion } from "framer-motion";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import CurrentActivityDisplay from "../current-activity-display/current-activity-display";
+import ReferralPage from "../referral-page/referral-page";
 
 function MainPage() {
   const { accessGranted, accessDeniedMessage, socketDataLoadComplete } =
@@ -49,6 +51,7 @@ function MainPage() {
     "Slime Lab": SlimeLabIcon,
     Combat: CombatIcon,
     Gacha: GachaIcon,
+    Referral: ReferralIcon
   };
 
   function toggleSidebar() {
@@ -80,6 +83,8 @@ function MainPage() {
         return <CombatPage />;
       case "Gacha":
         return <GachaPage />;
+      case "Referral":
+        return <ReferralPage />
       default:
         return <AvatarPage />;
     }

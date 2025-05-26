@@ -18,6 +18,7 @@ import {
 import {
   COMBAT_EXP_UPDATE_EVENT,
   FIRST_LOGIN_EVENT,
+  USE_REFERRAL_CODE_SUCCESS,
 } from "../../../utils/events";
 import { useNotification } from "../../../components/notifications/notification-context";
 import LevelUpNotification from "../../../components/notifications/notification-content/level-up/level-up-notification";
@@ -34,6 +35,7 @@ import FarmingIcon from "../../../assets/images/sidebar/farm.png";
 import CraftingIcon from "../../../assets/images/sidebar/craft.png";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../utils/config";
+import TextNotification from "../../../components/notifications/notification-content/text-notification/text-notification";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -805,6 +807,21 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             <FirstLoginNotification
               freeSlimes={payload.freeSlimes}
               freeItems={payload.freeItems}
+            />
+          ));
+        }
+      );
+
+      socket.on(
+        USE_REFERRAL_CODE_SUCCESS,
+        (data: { referredBy: string | null; isUserReferrer: boolean }) => {
+          console.log(`USE_REFERRAL_CODE_SUCCESS: ${data}`);
+          addNotification(() => (
+            <TextNotification
+              header={"Referral Link Applied"}
+              msg={
+                "You have successfully used a DQ referral link. Enjoy a 10% increase in DITTO earnings!"
+              }
             />
           ));
         }
