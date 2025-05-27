@@ -229,7 +229,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         !inventoryEntry.itemId;
 
       if (isEquipment) {
-        if (inventoryEntry.equipment!.requiredLvl > userData.level) {
+        if (inventoryEntry.equipment!.requiredLvlCombat > userData.level) {
           console.error(
             `User does not meet level requirements to equip ${
               inventoryEntry.equipment!.name

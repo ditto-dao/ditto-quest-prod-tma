@@ -214,7 +214,8 @@ export interface Equipment {
     buyPriceGP?: number | null;
     sellPriceGP: number;
     buyPriceDittoWei?: number | null;
-    requiredLvl: number;
+    requiredLvlCombat: number;
+    requiredLvlCraft: number;
     statEffectId?: number | null;
     statEffect?: StatEffect | null;
     rarity: Rarity;
