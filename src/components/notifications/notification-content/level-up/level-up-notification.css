@@ -7,7 +7,7 @@
     padding: 10px;
 }
 
-.level-up-notification > .level-up-notificaation-header {
+.level-up-notification > .level-up-notification-header {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -15,11 +15,11 @@
     gap: 12px;
 }
 
-.level-up-notificaation-header > img {
-    max-width: 120px;
+.level-up-notification-header > img {
+    max-width: 140px;
 }
 
-.level-up-notificaation-header > div {
+.level-up-notification-header > div {
     font-size: 12px;
     margin-bottom: 6px;
     background-color: var(--burnt-orange);

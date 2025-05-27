@@ -1,0 +1,38 @@
+.referral-notification {
+  color: var(--cream-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 0;
+}
+
+.referral-notification > .referral-header {
+  font-size: 12px;
+  margin-bottom: 6px;
+  background-color: var(--muted-brick);
+  padding: 8px 20px;
+  border-radius: 150px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.referral-notification-img-container {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.referral-notification-img-container > img {
+  max-width: 140px;
+}
+
+.referral-message {
+  padding: 20px;
+  padding-top: 0;
+  font-size: 10px;
+  line-height: 15px;
+}

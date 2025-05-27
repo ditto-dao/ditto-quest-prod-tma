@@ -21,7 +21,7 @@ function LevelUpNotification(props: LevelUpNotificationProps) {
 
   return (
     <div className="level-up-notification">
-      <div className="level-up-notificaation-header">
+      <div className="level-up-notification-header">
         <img src={Fireworks} alt="Fireworks" />
         <div>Level Up</div>
       </div>
