@@ -20,7 +20,7 @@ import {
 import { useGachaSocket } from "../../redux/socket/gacha/gacha-context";
 import { useEffect, useRef, useState } from "react";
 import { formatUnits } from "ethers";
-import { DITTO_DECIMALS } from "../../utils/config";
+import { DITTO_DECIMALS, MAX_INITIAL_SLIME_INVENTORY_SLOTS } from "../../utils/config";
 import BalancesDisplay from "../balances/balances";
 
 function GachaPage() {
@@ -28,7 +28,7 @@ function GachaPage() {
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
-  const { dittoBalance } = useUserSocket();
+  const { dittoBalance, userData } = useUserSocket();
   const {
     rollingSlime,
     setRollingSlime,
@@ -91,6 +91,7 @@ function GachaPage() {
 
   const isButtonActive = () => {
     return (
+      (userData.slimes?.length ?? 0) < (userData.maxSlimeInventorySlots ?? MAX_INITIAL_SLIME_INVENTORY_SLOTS) &&
       getTotalBalanceBNF(dittoBalance) > SLIME_GACHA_PRICE_DITTO_WEI &&
       !rollingSlime
     );
