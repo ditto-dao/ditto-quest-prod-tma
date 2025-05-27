@@ -68,7 +68,7 @@ function ReferralPage() {
         socket.emit(READ_REFERRAL_CODE);
       }
 
-      if (!referralStats) {
+      if (!referralStatsLoaded) {
         console.log("Emitting READ_REFERRAL_STATS");
         socket.emit(READ_REFERRAL_STATS);
       }
