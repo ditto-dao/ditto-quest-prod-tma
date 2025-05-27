@@ -82,10 +82,6 @@ export default function ItemEqModal({
                 {selectedItem.equipment?.attackType && (
                   <div
                     className={`attack-type ${
-                      selectedItem.equipment.requiredLvl > userData.level
-                        ? "red"
-                        : ""
-                    } ${
                       selectedItem.equipment.attackType === "Melee"
                         ? "melee"
                         : selectedItem.equipment.attackType === "Ranged"
@@ -100,12 +96,12 @@ export default function ItemEqModal({
                 )}
                 <div
                   className={`required-lvl ${
-                    selectedItem.equipment!.requiredLvl > userData.level
+                    selectedItem.equipment!.requiredLvlCombat > userData.level
                       ? "red"
                       : ""
                   }`}
                 >
-                  Req. Lvl. {selectedItem.equipment!.requiredLvl}
+                  Req. Lvl. {selectedItem.equipment!.requiredLvlCombat}
                 </div>
               </div>
             )}
@@ -130,10 +126,10 @@ export default function ItemEqModal({
                 if (closeOnEquip) removeNotification(notificationId);
               }
             }}
-            disabled={!meetsLvlReq(selectedItem.equipment.requiredLvl)}
+            disabled={!meetsLvlReq(selectedItem.equipment.requiredLvlCombat)}
           >
-            {!meetsLvlReq(selectedItem.equipment.requiredLvl)
-              ? `Requires Lvl ${selectedItem.equipment.requiredLvl}`
+            {!meetsLvlReq(selectedItem.equipment.requiredLvlCombat)
+              ? `Requires Lvl ${selectedItem.equipment.requiredLvlCombat}`
               : isEquipped()
               ? "Unequip"
               : "Equip"}
