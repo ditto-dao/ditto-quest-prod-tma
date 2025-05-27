@@ -35,7 +35,7 @@ import FarmingIcon from "../../../assets/images/sidebar/farm.png";
 import CraftingIcon from "../../../assets/images/sidebar/craft.png";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../utils/config";
-import TextNotification from "../../../components/notifications/notification-content/text-notification/text-notification";
+import ReferralSuccessNotification from "../../../components/notifications/notification-content/referral-notification/referral-notification";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -822,10 +822,10 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         (data: { referredBy: string | null; isUserReferrer: boolean }) => {
           console.log(`USE_REFERRAL_CODE_SUCCESS: ${data}`);
           addNotification(() => (
-            <TextNotification
+            <ReferralSuccessNotification
               header={"Referral Link Applied"}
               msg={
-                "You have successfully used a DQ referral link. Enjoy a 10% increase in DITTO earnings!"
+                "Referral activated! You’ll now earn 10% more DITTO in combat."
               }
             />
           ));
