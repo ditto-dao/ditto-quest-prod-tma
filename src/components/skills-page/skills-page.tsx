@@ -107,7 +107,7 @@ function SkillsPage() {
             canIncrement={remainingPoints > 0}
           />
           <Skill
-            skill="luk"
+            skill="eva"
             level={userData.luk}
             pointsToPump={numLukToPump}
             setPointsToPump={setNumLukToPump}
