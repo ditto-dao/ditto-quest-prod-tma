@@ -17,7 +17,7 @@ import {
   READ_REFERRAL_STATS_RES,
 } from "../../utils/events";
 import { formatUnits } from "ethers";
-import { DITTO_DECIMALS } from "../../utils/config";
+import { DITTO_DECIMALS, DQ_TMA_LINK_PREFIX } from "../../utils/config";
 
 interface ReferralStats {
   referrerUserId?: string | null;
@@ -54,7 +54,7 @@ function ReferralPage() {
 
   const handleCopy = () => {
     navigator.clipboard
-      .writeText("https://t.me/ditto_quest_bot/dqgame?startapp=" + referralLink)
+      .writeText(DQ_TMA_LINK_PREFIX + referralLink)
       .then(() => {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
