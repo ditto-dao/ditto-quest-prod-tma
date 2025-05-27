@@ -12,40 +12,50 @@ import { useCombatSocket } from "../../../../redux/socket/idle/combat-context";
 import { useUserSocket } from "../../../../redux/socket/user/user-context";
 import { useNotification } from "../../../notifications/notification-context";
 import EquipSlimeNotification from "../../../notifications/notification-content/equip-slime-error/equip-slime-error";
-import { formatNumberWithCommas, formatNumberWithSuffix } from "../../../../utils/helpers";
+import {
+  formatNumberWithCommas,
+  formatNumberWithSuffix,
+} from "../../../../utils/helpers";
+import PaywallNotification from "../../../notifications/notification-content/paywall/paywall-notification";
 
 function DomainMenuItem(props: Domain) {
   const { userData } = useUserSocket();
-  const { enterDomain } = useCombatSocket();
+  const { enterDomainDitto, enterDomainGp } = useCombatSocket();
   const [isExpanded, setIsExpanded] = useState(false);
-  const { addNotification } = useNotification();
+  const { addNotification, removeNotification } = useNotification();
 
-  const [entryPriceDitto, setEntryPriceDitto] = useState(props.entryPriceDittoWei || '0');
-  const [entryPriceGp, setEntryPriceGp] = useState(props.entryPriceGP?.toString() || '0');
+  const [entryPriceDitto, setEntryPriceDitto] = useState(
+    props.entryPriceDittoWei || "0"
+  );
+  const [entryPriceGp, setEntryPriceGp] = useState(
+    props.entryPriceGP?.toString() || "0"
+  );
 
   useEffect(() => {
     if (props.entryPriceDittoWei) {
-        const entryPriceDittoWeiNumber = Number(formatUnits(props.entryPriceDittoWei || "0", DITTO_DECIMALS));
-        if (entryPriceDittoWeiNumber < 1000000) {
-            setEntryPriceDitto(formatNumberWithCommas(entryPriceDittoWeiNumber));
-        } else {
-            setEntryPriceDitto(formatNumberWithSuffix(entryPriceDittoWeiNumber));
-        }
+      const entryPriceDittoWeiNumber = Number(
+        formatUnits(props.entryPriceDittoWei || "0", DITTO_DECIMALS)
+      );
+      if (entryPriceDittoWeiNumber < 1000000) {
+        setEntryPriceDitto(formatNumberWithCommas(entryPriceDittoWeiNumber));
+      } else {
+        setEntryPriceDitto(formatNumberWithSuffix(entryPriceDittoWeiNumber));
+      }
     } else {
-        setEntryPriceDitto('0')
+      setEntryPriceDitto("0");
     }
   }, [props.entryPriceDittoWei]);
 
   useEffect(() => {
     if (props.entryPriceGP) {
-        const entryPriceGpNumber = Number(props.entryPriceGP);
-        if (entryPriceGpNumber < 1000000) {
-            setEntryPriceGp(formatNumberWithCommas(entryPriceGpNumber));
-        } else {
-            setEntryPriceGp(formatNumberWithSuffix(entryPriceGpNumber));
-        }
+      const entryPriceGpNumber = Number(props.entryPriceGP);
+      if (entryPriceGpNumber < 1000000) {
+        setEntryPriceGp(formatNumberWithCommas(entryPriceGpNumber));
+      } else {
+        setEntryPriceGp(formatNumberWithSuffix(entryPriceGpNumber));
+      }
     } else {
-        setEntryPriceGp('0')
+      setEntryPriceGp("0");
     }
   }, [props.entryPriceGP]);
 
@@ -64,8 +74,20 @@ function DomainMenuItem(props: Domain) {
   };
 
   const handleEnterDomain = () => {
-    if (userData.equippedSlime && userData.equippedSlimeId) {
-      enterDomain(props);
+    if (BigInt(props.entryPriceDittoWei) === 0n && props.entryPriceGP === 0) {
+      enterDomainGp(props);
+    } else if (userData.equippedSlime && userData.equippedSlimeId) {
+      addNotification((id) => (
+        <PaywallNotification
+          notificationId={id}
+          removeNotification={removeNotification}
+          gpAmount={props.entryPriceGP || 0}
+          dittoAmountWei={props.entryPriceDittoWei || "0"}
+          message="Confirm fee to enter the domain."
+          onUseGp={{ fn: enterDomainGp, args: props }}
+          onUseDitto={{ fn: enterDomainDitto, args: props }}
+        />
+      ));
     } else {
       addNotification(() => <EquipSlimeNotification />);
     }
@@ -92,9 +114,7 @@ function DomainMenuItem(props: Domain) {
                 <img src={DittoCoinIcon} />
                 <div>Entry Price</div>
               </div>
-              <div>
-                {entryPriceDitto} DITTO
-              </div>
+              <div>{entryPriceDitto} DITTO</div>
             </div>
             <div className="domain-main-stat">
               <div className="domain-main-stat-header">

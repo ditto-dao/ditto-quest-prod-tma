@@ -543,16 +543,15 @@ export function formatMaxDigits(value: number, maxDigits: number = 6): string {
     const suffixes = ["", "k", "m", "b", "t"];
     const absValue = Math.abs(value);
 
-    // Count digits (excluding dot and commas)
+    // Count digits excluding dots and commas
     const digitCount = value
         .toLocaleString("en-US", { maximumFractionDigits: 20 })
         .replace(/[^0-9]/g, "").length;
 
     if (digitCount <= maxDigits) {
-        return value.toLocaleString("en-US"); // show full with commas
+        return value.toLocaleString("en-US");
     }
 
-    // Compact format with max visible digits before suffix
     let suffixIndex = 0;
     let compactValue = absValue;
 
@@ -561,12 +560,15 @@ export function formatMaxDigits(value: number, maxDigits: number = 6): string {
         suffixIndex++;
     }
 
-    // Dynamically reduce decimal places until length ≤ maxDigits
+    // Try to find a clean representation that fits maxDigits
     let result = "";
     for (let decimals = maxDigits; decimals >= 0; decimals--) {
         const formatted = compactValue.toFixed(decimals);
-        if (formatted.replace(".", "").length <= maxDigits) {
-            result = formatted;
+        const noDotLength = formatted.replace(".", "").replace(/0+$/, "").length;
+
+        if (noDotLength <= maxDigits) {
+            // Remove trailing zeros and trailing dot
+            result = formatted.replace(/\.?0+$/, "");
             break;
         }
     }

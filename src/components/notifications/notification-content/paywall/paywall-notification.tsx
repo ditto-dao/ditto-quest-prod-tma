@@ -12,7 +12,7 @@ import GPIcon from "../../../../assets/images/general/gold-coin.png";
 import { useUserSocket } from "../../../../redux/socket/user/user-context";
 
 interface PaywallProps {
-	notificationId: string;
+  notificationId: string;
   removeNotification: (id: string) => void;
   message: string;
   dittoAmountWei?: string;
@@ -20,15 +20,16 @@ interface PaywallProps {
   onUseDitto?: {
     fn: (param?: any) => void;
     args?: any;
-  };  onUseGp?: {
+  };
+  onUseGp?: {
     fn: (param?: any) => void;
     args?: any;
   };
 }
 
 function PaywallNotification(props: PaywallProps) {
-	const { message, dittoAmountWei, gpAmount, onUseDitto, onUseGp } = props;
-	const { userData, dittoBalance } = useUserSocket();
+  const { message, dittoAmountWei, gpAmount, onUseDitto, onUseGp } = props;
+  const { userData, dittoBalance } = useUserSocket();
 
   const [dittoAmountStr, setDittoAmountStr] = useState(dittoAmountWei || "0");
   const [gpAmountStr, setGpAmountStr] = useState(gpAmount?.toString() || "0");
@@ -70,7 +71,7 @@ function PaywallNotification(props: PaywallProps) {
   const hasDitto =
     !!dittoAmountWei && BigInt(dittoAmountWei) > 0n && !!onUseDitto;
 
-  const hasGP = !!gpAmount && Number(gpAmount) > 0 && !!onUseGp;
+  const hasGP = typeof gpAmount !== "undefined" && gpAmount >= 0 && !!onUseGp;
 
   if (!hasDitto && !hasGP) {
     return (
@@ -80,15 +81,15 @@ function PaywallNotification(props: PaywallProps) {
     );
   }
 
-	const handlePayDitto = async () => {
-		if (onUseDitto) onUseDitto.fn(onUseDitto.args);
-		props.removeNotification(props.notificationId);
+  const handlePayDitto = async () => {
+    if (onUseDitto) onUseDitto.fn(onUseDitto.args);
+    props.removeNotification(props.notificationId);
   };
 
-	const handlePayGp = () => {
-		if (onUseGp) onUseGp.fn(onUseGp.args);
-		props.removeNotification(props.notificationId);
-	}
+  const handlePayGp = () => {
+    if (onUseGp) onUseGp.fn(onUseGp.args);
+    props.removeNotification(props.notificationId);
+  };
 
   return (
     <div className="paywall-notification">
@@ -98,7 +99,14 @@ function PaywallNotification(props: PaywallProps) {
         className={`paywall-buttons ${hasDitto && hasGP ? "dual" : "single"}`}
       >
         {hasDitto && (
-          <button className="paywall-button" disabled={dittoBalance.accumulatedBalance + dittoBalance.liveBalance < BigInt(dittoAmountWei || "0")} onClick={handlePayDitto}>
+          <button
+            className="paywall-button"
+            disabled={
+              dittoBalance.accumulatedBalance + dittoBalance.liveBalance <
+              BigInt(dittoAmountWei || "0")
+            }
+            onClick={handlePayDitto}
+          >
             <div className="paywall-button-top">
               <img src={DittoCoinIcon} alt="Ditto" />
               <span>DITTO</span>
@@ -110,7 +118,9 @@ function PaywallNotification(props: PaywallProps) {
         {hasGP && (
           <button
             className="paywall-button"
-						disabled={userData.goldBalance < (gpAmount || 0)}
+            disabled={
+              typeof gpAmount === "number" && userData.goldBalance < gpAmount
+            }
             onClick={handlePayGp}
           >
             <div className="paywall-button-top">

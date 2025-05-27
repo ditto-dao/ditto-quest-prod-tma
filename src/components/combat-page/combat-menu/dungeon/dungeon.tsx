@@ -66,7 +66,9 @@ function DungeonMenuItem(props: Dungeon) {
   };
 
   const handleEnterDungeon = () => {
-    if (userData.equippedSlime && userData.equippedSlimeId) {
+    if (BigInt(props.entryPriceDittoWei || 0) === 0n && props.entryPriceGP === 0) {
+      enterDungeonGp(props);
+    } else if (userData.equippedSlime && userData.equippedSlimeId) {
       addNotification((id) => (
         <PaywallNotification
           notificationId={id}

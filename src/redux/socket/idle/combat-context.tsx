@@ -29,7 +29,7 @@ import { useNotification } from "../../../components/notifications/notification-
 import DeathNotification from "../../../components/notifications/notification-content/user-death/death-notification";
 import { delay, getDeductionPayloadToDevFunds } from "../../../utils/helpers";
 import { useCurrentActivityContext } from "./current-activity-context";
-import { ENTER_DUNGEON_TRX_NOTE } from "../../../utils/trx-config";
+import { ENTER_DOMAIN_TRX_NOTE, ENTER_DUNGEON_TRX_NOTE } from "../../../utils/trx-config";
 
 interface CombatHpChangeEventPayload {
   target: "user" | "monster";
@@ -47,7 +47,8 @@ interface CombatContext {
   combatArea: Domain | Dungeon | null;
   dungeonFloor: number | null;
   dungeonMonsterId: number | null;
-  enterDomain: (domain: Domain) => void;
+  enterDomainGp: (domain: Domain) => void;
+  enterDomainDitto: (domain: Domain) => void;
   enterDungeonGp: (dungeon: Dungeon) => void;
   enterDungeonDitto: (dungeon: Dungeon) => void;
   runAway: () => Promise<void>;
@@ -66,7 +67,8 @@ const CombatContext = createContext<CombatContext>({
   combatArea: null,
   dungeonFloor: null,
   dungeonMonsterId: null,
-  enterDomain: () => {},
+  enterDomainGp: () => {},
+  enterDomainDitto: () => {},
   enterDungeonGp: () => {},
   enterDungeonDitto: () => {},
   runAway: async () => {},
@@ -107,7 +109,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
     crit: boolean;
   }>();
 
-  const enterDomain = (domain: Domain) => {
+  const enterDomainGp = (domain: Domain) => {
     if (isBattling) {
       console.warn(`Already in battle, ignoring duplicate start battle`);
       return;
@@ -119,6 +121,28 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
       setLastEventEmittedTimestamp(Date.now());
     }
     console.log(`Entering domain ${domain.id}, ${domain.name}`);
+  };
+
+  const enterDomainDitto = (domain: Domain) => {
+    if (socket && canEmitEvent() && telegramId) {
+      if (isBattling) {
+        console.warn(`Already in battle, ignoring duplicate start battle`);
+        return;
+      }
+      setIsBattling(true);
+      setCombatArea(domain);
+
+      socket.emit(
+        LEDGER_UPDATE_BALANCE_EVENT,
+        getDeductionPayloadToDevFunds(
+          telegramId.toString(),
+          dittoBalance,
+          BigInt(domain.entryPriceDittoWei || "0"),
+          ENTER_DOMAIN_TRX_NOTE + ` ${domain.id}`
+        )
+      );
+      setLastEventEmittedTimestamp(Date.now());
+    }
   };
 
   const enterDungeonGp = (dungeon: Dungeon) => {
@@ -350,7 +374,8 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         combatArea,
         dungeonFloor,
         dungeonMonsterId,
-        enterDomain,
+        enterDomainGp,
+        enterDomainDitto,
         enterDungeonGp,
         enterDungeonDitto,
         runAway,
