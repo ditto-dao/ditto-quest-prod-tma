@@ -52,6 +52,10 @@ export interface User {
     doubleResourceOdds: number;
     skillIntervalReductionMultiplier: number;
 
+    // Max inventory
+    maxInventorySlots: number;
+    maxSlimeInventorySlots: number;
+
     // Equipped Inventory IDs (Nullable)
     hatInventoryId?: number | null;
     armourInventoryId?: number | null;
@@ -100,12 +104,12 @@ export const defaultUser: User = {
     maxMeleeDmg: 30,
     maxRangedDmg: 30,
     maxMagicDmg: 30,
-    critChance: 0.006623,
+    critChance: 0.00398,
     critMultiplier: 1.29,
-    dmgReduction: 10,
+    dmgReduction: 15,
     magicDmgReduction: 10,
     hpRegenRate: 20,
-    hpRegenAmount: 5.7,
+    hpRegenAmount: 10.8,
     lastBattleEndTimestamp: null,
     farmingLevel: 1,
     farmingExp: 0,
@@ -115,6 +119,8 @@ export const defaultUser: User = {
     expToNextCraftingLevel: 570,
     doubleResourceOdds: 0.01,
     skillIntervalReductionMultiplier: 1,
+    maxInventorySlots: 40,
+    maxSlimeInventorySlots: 40,
     hatInventoryId: null,
     armourInventoryId: null,
     weaponInventoryId: null,

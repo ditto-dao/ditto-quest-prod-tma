@@ -28,3 +28,7 @@ export const DQ_TMA_LINK_PREFIX = "https://t.me/ditto_quest_bot/dqgame?startapp=
 */
 
 export const DQ_REFERRAL_LINK_PREFIX = "DQR";
+
+export const MAX_INITIAL_INVENTORY_SLOTS = 40;
+
+export const MAX_INITIAL_SLIME_INVENTORY_SLOTS = 40;

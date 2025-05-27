@@ -6,19 +6,23 @@ import { Inventory } from "../../utils/types";
 import BalancesDisplay from "../balances/balances";
 import { useNotification } from "../notifications/notification-context";
 import ItemEqModal from "../item-eq-modal/item-eq-modal";
+import { MAX_INITIAL_INVENTORY_SLOTS } from "../../utils/config";
 
 // Helper function to chunk inventory into rows
-function chunkInventory(array: Inventory[], size: number) {
-  const chunks: (Inventory | null)[][] = [];
-  for (let i = 0; i < array.length; i += size) {
-    chunks.push(array.slice(i, i + size));
+function chunkInventoryWithPadding(
+  array: Inventory[],
+  maxSlots: number,
+  rowSize: number
+): (Inventory | null)[][] {
+  const padded: (Inventory | null)[] = [...array];
+
+  while (padded.length < maxSlots) {
+    padded.push(null);
   }
 
-  // Add empty slots for incomplete rows
-  const lastChunk = chunks[chunks.length - 1];
-  if (lastChunk && lastChunk.length < size) {
-    const emptySlots = Array(size - lastChunk.length).fill(null);
-    chunks[chunks.length - 1] = [...lastChunk, ...emptySlots];
+  const chunks: (Inventory | null)[][] = [];
+  for (let i = 0; i < padded.length; i += rowSize) {
+    chunks.push(padded.slice(i, i + rowSize));
   }
 
   return chunks;
@@ -36,7 +40,11 @@ function InventoryPage() {
   }, [userData]);
 
   // Chunk inventory into rows of 4
-  const inventoryRows = chunkInventory(inventory, 4);
+  const inventoryRows = chunkInventoryWithPadding(
+    inventory,
+    userData?.maxInventorySlots ?? MAX_INITIAL_INVENTORY_SLOTS,
+    4
+  );
 
   // Modal
   const handleOpenModal = (item: Inventory) => {
