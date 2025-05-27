@@ -5,7 +5,7 @@ import FriendsImage from "../../assets/images/general/friends.png";
 import TreasureImage from "../../assets/images/general/treasure.png";
 import DittoCoin from "../../assets/images/general/ditto-coin.png";
 import {
-  formatMax6Digits,
+	formatMaxDigits,
   formatNumberWithCommas,
   preloadImage,
 } from "../../utils/helpers";
@@ -163,7 +163,7 @@ function ReferralPage() {
             </div>
           </div>
           <div className="referral-stat-value">
-            {formatMax6Digits(
+            {formatMaxDigits(
               parseFloat(
                 formatUnits(referralStats.totalEarningsWei, DITTO_DECIMALS)
               )

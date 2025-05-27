@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import "./floating-update-display.css";
 import { useEffect } from "react";
+import { formatMaxDigits } from "../../utils/helpers";
 
 export interface FloatingUpdate {
   id: string;
@@ -20,7 +21,7 @@ export function FloatingUpdateDisplay({
       img.src = update.icon;
     });
   }, [updates]);
-  
+
   return (
     <div className="floating-update-container">
       <AnimatePresence>
@@ -44,7 +45,9 @@ export function FloatingUpdateDisplay({
                       : "var(--deep-warm-red)",
                 }}
               >
-                {update.amount > 0 ? `+${update.amount}` : `${update.amount}`}
+                {update.amount > 0
+                  ? `+${formatMaxDigits(update.amount, 4)}`
+                  : `${formatMaxDigits(update.amount, 4)}`}
               </span>
             </div>
           </motion.div>

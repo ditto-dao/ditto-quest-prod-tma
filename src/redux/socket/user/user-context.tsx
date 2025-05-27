@@ -512,7 +512,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           if (
             BigInt(balance.accumulatedBalanceChange) +
               BigInt(balance.liveBalanceChange) !==
-            0n
+              0n &&
+            dittoBalanceLoaded
           ) {
             addFloatingUpdate({
               icon: DittoCoinIcon,
@@ -552,7 +553,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         socket.off("ditto-ledger-socket-balance-update");
       };
     }
-  }, [socket, loadingSocket]);
+  }, [socket, loadingSocket, dittoBalanceLoaded]);
 
   useEffect(() => {
     if (!userContextLoaded) return;
@@ -653,11 +654,13 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           `Received update-farming-exp: ${JSON.stringify(data, null, 2)}`
         );
         setUserData((prevUserData) => {
-          addFloatingUpdate({
-            icon: FarmingIcon,
-            text: "Farming EXP",
-            amount: data.farmingExp - prevUserData.farmingExp,
-          });
+          if (data.farmingLevelsGained <= 0) {
+            addFloatingUpdate({
+              icon: FarmingIcon,
+              text: "Farming EXP",
+              amount: data.farmingExp - prevUserData.farmingExp,
+            });
+          }
 
           return {
             ...prevUserData,
@@ -682,11 +685,13 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           `Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`
         );
         setUserData((prevUserData) => {
-          addFloatingUpdate({
-            icon: CraftingIcon,
-            text: "Crafting EXP",
-            amount: data.craftingExp - prevUserData.craftingExp,
-          });
+          if (data.craftingLevelsGained <= 0) {
+            addFloatingUpdate({
+              icon: CraftingIcon,
+              text: "Crafting EXP",
+              amount: data.craftingExp - prevUserData.craftingExp,
+            });
+          }
 
           return {
             ...prevUserData,
@@ -752,7 +757,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           }
 
           setUserData((prev) => {
-            if (prev.expHp !== data.hpExp) {
+            if (prev.expHp !== data.hpExp && !data.hpLevelUp) {
               addFloatingUpdate({
                 icon: HPIcon,
                 text: "HP EXP",
@@ -760,7 +765,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
               });
             }
 
-            if (prev.exp !== data.exp) {
+            if (prev.exp !== data.exp && !data.levelUp) {
               addFloatingUpdate({
                 icon: GoldMedalIcon,
                 text: "EXP",

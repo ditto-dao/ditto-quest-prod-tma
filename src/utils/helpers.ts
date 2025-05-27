@@ -539,7 +539,7 @@ export function toRoman(num: number): string {
     return result;
 }
 
-export function formatMax6Digits(value: number): string {
+export function formatMaxDigits(value: number, maxDigits: number = 6): string {
     const suffixes = ["", "k", "m", "b", "t"];
     const absValue = Math.abs(value);
 
@@ -548,11 +548,11 @@ export function formatMax6Digits(value: number): string {
         .toLocaleString("en-US", { maximumFractionDigits: 20 })
         .replace(/[^0-9]/g, "").length;
 
-    if (digitCount <= 6) {
+    if (digitCount <= maxDigits) {
         return value.toLocaleString("en-US"); // show full with commas
     }
 
-    // Compact format with max 6 visible characters before suffix
+    // Compact format with max visible digits before suffix
     let suffixIndex = 0;
     let compactValue = absValue;
 
@@ -561,17 +561,16 @@ export function formatMax6Digits(value: number): string {
         suffixIndex++;
     }
 
-    // Dynamically reduce decimal places until length ≤ 6
+    // Dynamically reduce decimal places until length ≤ maxDigits
     let result = "";
-    for (let decimals = 5; decimals >= 0; decimals--) {
+    for (let decimals = maxDigits; decimals >= 0; decimals--) {
         const formatted = compactValue.toFixed(decimals);
-        if (formatted.replace(".", "").length <= 6) {
+        if (formatted.replace(".", "").length <= maxDigits) {
             result = formatted;
             break;
         }
     }
 
-    // Add minus sign back if needed
     if (value < 0) result = "-" + result;
 
     return `${result}${suffixes[suffixIndex]}`;
