@@ -84,6 +84,16 @@ function DungeonMenuItem(props: Dungeon) {
     setIsExpanded((prev) => !prev);
   };
 
+  const isWithinLevelRange = (
+    userLevel: number,
+    minLevel: number | null,
+    maxLevel: number | null
+  ): boolean => {
+    if (minLevel !== null && userLevel < minLevel) return false;
+    if (maxLevel !== null && userLevel > maxLevel) return false;
+    return true;
+  };
+
   const handleEnterDungeon = () => {
     if (
       userData.equippedSlime &&
@@ -125,7 +135,7 @@ function DungeonMenuItem(props: Dungeon) {
           </div>
           <div className="dungeon-stats">
             <div className="dungeon-main-stat">
-            <div className="dungeon-main-stat-header">
+              <div className="dungeon-main-stat-header">
                 <img src={GoldMedal} />
                 <div>Req. Lvl</div>
               </div>
@@ -152,7 +162,7 @@ function DungeonMenuItem(props: Dungeon) {
           <div className="dungeon-description">{props.description}</div>
           <div>
             <div className="dungeon-button-group">
-              <button className="dungeon-button" onClick={handleEnterDungeon}>
+              <button className="dungeon-button" onClick={handleEnterDungeon} disabled={!isWithinLevelRange(userData.level, props.minCombatLevel, props.maxCombatLevel)}>
                 Enter
               </button>
               <button className="lb-button" onClick={handleOpenLb}>

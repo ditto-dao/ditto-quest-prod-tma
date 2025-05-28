@@ -32,6 +32,16 @@ function DomainMenuItem(props: Domain) {
     props.entryPriceGP?.toString() || "0"
   );
 
+  const isWithinLevelRange = (
+    userLevel: number,
+    minLevel: number | null,
+    maxLevel: number | null
+  ): boolean => {
+    if (minLevel !== null && userLevel < minLevel) return false;
+    if (maxLevel !== null && userLevel > maxLevel) return false;
+    return true;
+  };
+
   useEffect(() => {
     if (props.entryPriceDittoWei) {
       const entryPriceDittoWeiNumber = Number(
@@ -64,7 +74,7 @@ function DomainMenuItem(props: Domain) {
     setIsExpanded((prev) => !prev);
   };
 
-/*   const getDomainLevelRange = (domain: Domain): string => {
+  /*   const getDomainLevelRange = (domain: Domain): string => {
     if (!domain.monsters || domain.monsters.length === 0) return "N/A";
 
     const levels = domain.monsters.map((m) => m.monster.level);
@@ -153,7 +163,7 @@ function DomainMenuItem(props: Domain) {
         <div className="domain-header-info">
           <div className="domain-description">{props.description}</div>
           <div>
-            <button className="domain-button" onClick={handleEnterDomain}>
+            <button className="domain-button" onClick={handleEnterDomain} disabled={!isWithinLevelRange(userData.level, props.minCombatLevel, props.maxCombatLevel)}>
               Enter
             </button>
             <div className="domain-expand-row">
