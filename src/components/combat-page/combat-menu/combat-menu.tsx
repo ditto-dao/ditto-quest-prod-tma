@@ -19,6 +19,8 @@ function DomainComponent() {
           entryPriceGP={domain.entryPriceGP}
           entryPriceDittoWei={domain.entryPriceDittoWei}
           monsters={domain.monsters}
+          minCombatLevel={domain.minCombatLevel}
+          maxCombatLevel={domain.maxCombatLevel}
         />
       ))}
     </div>
@@ -36,10 +38,12 @@ function DungeonComponent() {
           description={dungeon.description}
           imgsrc={dungeon.imgsrc}
           entryPriceGP={dungeon.entryPriceGP || 0}
-          entryPriceDittoWei={dungeon.entryPriceDittoWei || '0'}
+          entryPriceDittoWei={dungeon.entryPriceDittoWei || "0"}
           monsterGrowthFactor={dungeon.monsterGrowthFactor}
           isActive={dungeon.isActive}
           monsterSequence={dungeon.monsterSequence}
+          minCombatLevel={dungeon.minCombatLevel}
+          maxCombatLevel={dungeon.maxCombatLevel}
         />
       ))}
     </div>

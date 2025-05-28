@@ -8,7 +8,7 @@ import { useUserSocket } from "../../redux/socket/user/user-context";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
-const categories = ["Lumber", "Fiber", "Ore", "Crystal", "Shards"];
+const categories = ["Lumber", "Ore", "Crystal"];
 
 function FarmingPage() {
   const { userData } = useUserSocket();
@@ -32,18 +32,20 @@ function FarmingPage() {
           bgColour="var(--pine-green)"
         />
         <SimpleBar className="category-buttons-scrollbar" autoHide={false}>
-          <div className="category-buttons">
-            {categories.map((category) => (
-              <div
-                key={category}
-                className={`category-button ${
-                  selectedCategory === category ? "active" : ""
-                }`}
-                onClick={() => setSelectedCategory(category)}
-              >
-                {category}
-              </div>
-            ))}
+          <div className="category-buttons-wrapper">
+            <div className="category-buttons">
+              {categories.map((category) => (
+                <div
+                  key={category}
+                  className={`category-button ${
+                    selectedCategory === category ? "active" : ""
+                  }`}
+                  onClick={() => setSelectedCategory(category)}
+                >
+                  {category}
+                </div>
+              ))}
+            </div>
           </div>
         </SimpleBar>
       </div>

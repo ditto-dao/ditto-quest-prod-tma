@@ -32,15 +32,18 @@
 }
 
 .crafting-equipment-img-container {
-  padding: 15px;
-  height: 100px;
-  min-width: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: var(--cream-white);
   border-radius: 8px;
 }
 
 .crafting-equipment-img-container img {
-  max-height: 100%;
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .crafting-recipe-header-info {

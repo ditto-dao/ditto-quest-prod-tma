@@ -28,6 +28,8 @@
 
 .floating-update-icon {
   width: 14px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
   object-fit: contain;
   flex-shrink: 0;
 }

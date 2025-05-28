@@ -15,6 +15,8 @@ export const USE_REFERRAL_CODE = 'use-referral-code';
 
 export const USE_REFERRAL_CODE_SUCCESS = 'use-referral-code-success';
 
+export const BETA_TESTER_LOGIN_EVENT = 'beta-tester-login-event';
+
 // Combat
 export const START_COMBAT_DOMAIN_EVENT = 'start-combat-domain';
 

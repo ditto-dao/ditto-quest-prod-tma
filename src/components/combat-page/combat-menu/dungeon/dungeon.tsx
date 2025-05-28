@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Dungeon } from "../../../../utils/types";
 import DittoCoinIcon from "../../../../assets/images/general/ditto-coin.png";
 import GPIcon from "../../../../assets/images/general/gold-coin.png";
-import MonsterIcon from "../../../../assets/images/combat/monster-icon.png";
+//import MonsterIcon from "../../../../assets/images/combat/monster-icon.png";
+import GoldMedal from "../../../../assets/images/combat/gold-medal.png";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../../utils/config";
 import Expand from "../../../../assets/images/general/down.svg";
@@ -32,6 +33,24 @@ function DungeonMenuItem(props: Dungeon) {
   const [entryPriceGp, setEntryPriceGp] = useState(
     props.entryPriceGP?.toString() || "0"
   );
+
+  const getDungeonReqLvl = (dungeon: Dungeon): string => {
+    const { minCombatLevel, maxCombatLevel } = dungeon;
+
+    if (minCombatLevel == null && maxCombatLevel == null) {
+      return "Any";
+    }
+
+    if (minCombatLevel != null && maxCombatLevel != null) {
+      return `${minCombatLevel} - ${maxCombatLevel}`;
+    }
+
+    if (minCombatLevel != null) {
+      return `≥ ${minCombatLevel}`;
+    }
+
+    return `≤ ${maxCombatLevel}`;
+  };
 
   useEffect(() => {
     if (props.entryPriceDittoWei) {
@@ -66,7 +85,12 @@ function DungeonMenuItem(props: Dungeon) {
   };
 
   const handleEnterDungeon = () => {
-    if (BigInt(props.entryPriceDittoWei || 0) === 0n && props.entryPriceGP === 0) {
+    if (
+      userData.equippedSlime &&
+      userData.equippedSlimeId &&
+      BigInt(props.entryPriceDittoWei ?? "0") === 0n &&
+      props.entryPriceGP === 0
+    ) {
       enterDungeonGp(props);
     } else if (userData.equippedSlime && userData.equippedSlimeId) {
       addNotification((id) => (
@@ -86,7 +110,9 @@ function DungeonMenuItem(props: Dungeon) {
   };
 
   const handleOpenLb = () => {
-    addNotification(() => <DungeonLb dungeonName={props.name} dungeonId={props.id} />);
+    addNotification(() => (
+      <DungeonLb dungeonName={props.name} dungeonId={props.id} />
+    ));
   };
 
   return (
@@ -99,11 +125,11 @@ function DungeonMenuItem(props: Dungeon) {
           </div>
           <div className="dungeon-stats">
             <div className="dungeon-main-stat">
-              <div className="dungeon-main-stat-header">
-                <img src={MonsterIcon} />
-                <div>Growth Factor</div>
+            <div className="dungeon-main-stat-header">
+                <img src={GoldMedal} />
+                <div>Req. Lvl</div>
               </div>
-              <div>{props.monsterGrowthFactor}</div>
+              <div>{getDungeonReqLvl(props)}</div>
             </div>
             <div className="dungeon-main-stat">
               <div className="dungeon-main-stat-header">

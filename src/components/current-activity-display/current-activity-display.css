@@ -126,6 +126,8 @@
 
 .current-activity-img-container > img {
   width: 18px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .current-activity-label.farming {

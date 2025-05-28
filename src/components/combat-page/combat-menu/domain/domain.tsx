@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Domain } from "../../../../utils/types";
 import DittoCoinIcon from "../../../../assets/images/general/ditto-coin.png";
 import GPIcon from "../../../../assets/images/general/gold-coin.png";
-import MonsterIcon from "../../../../assets/images/combat/monster-icon.png";
+//import MonsterIcon from "../../../../assets/images/combat/monster-icon.png";
+import GoldMedal from "../../../../assets/images/combat/gold-medal.png";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../../utils/config";
 import Expand from "../../../../assets/images/general/down.svg";
@@ -63,7 +64,7 @@ function DomainMenuItem(props: Domain) {
     setIsExpanded((prev) => !prev);
   };
 
-  const getDomainLevelRange = (domain: Domain): string => {
+/*   const getDomainLevelRange = (domain: Domain): string => {
     if (!domain.monsters || domain.monsters.length === 0) return "N/A";
 
     const levels = domain.monsters.map((m) => m.monster.level);
@@ -71,10 +72,33 @@ function DomainMenuItem(props: Domain) {
     const max = Math.max(...levels);
 
     return `${min} - ${max}`;
+  }; */
+
+  const getDomainReqLvl = (domain: Domain): string => {
+    const { minCombatLevel, maxCombatLevel } = domain;
+
+    if (minCombatLevel == null && maxCombatLevel == null) {
+      return "Any";
+    }
+
+    if (minCombatLevel != null && maxCombatLevel != null) {
+      return `${minCombatLevel} - ${maxCombatLevel}`;
+    }
+
+    if (minCombatLevel != null) {
+      return `≥ ${minCombatLevel}`;
+    }
+
+    return `≤ ${maxCombatLevel}`;
   };
 
   const handleEnterDomain = () => {
-    if (BigInt(props.entryPriceDittoWei) === 0n && props.entryPriceGP === 0) {
+    if (
+      userData.equippedSlime &&
+      userData.equippedSlimeId &&
+      BigInt(props.entryPriceDittoWei ?? "0") === 0n &&
+      props.entryPriceGP === 0
+    ) {
       enterDomainGp(props);
     } else if (userData.equippedSlime && userData.equippedSlimeId) {
       addNotification((id) => (
@@ -104,10 +128,10 @@ function DomainMenuItem(props: Domain) {
           <div className="domain-stats">
             <div className="domain-main-stat">
               <div className="domain-main-stat-header">
-                <img src={MonsterIcon} />
-                <div>Monster Lvl</div>
+                <img src={GoldMedal} />
+                <div>Req. Lvl</div>
               </div>
-              <div>{getDomainLevelRange(props)}</div>
+              <div>{getDomainReqLvl(props)}</div>
             </div>
             <div className="domain-main-stat">
               <div className="domain-main-stat-header">

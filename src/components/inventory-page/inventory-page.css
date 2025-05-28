@@ -110,6 +110,8 @@
 .inv-item-image {
   width: 60%;
   height: 60%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
   object-fit: contain;
 }
 

@@ -95,6 +95,8 @@
 .farm-item-img-container img {
   width: 45px;
   height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .farm-item-description {

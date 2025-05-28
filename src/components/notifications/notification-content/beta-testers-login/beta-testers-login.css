@@ -1,0 +1,46 @@
+.beta-testers-login-notification {
+  color: var(--cream-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-top: 0;
+}
+
+.beta-testers-login-notification > .beta-testers-login-header {
+  font-size: 12px;
+  margin-bottom: 6px;
+  background-color: var(--muted-brick);
+  padding: 8px 20px;
+  border-radius: 150px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.beta-testers-login-notification-img-container {
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.beta-testers-login-notification-img-container > img {
+  width: 72px;
+  height: 72px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.beta-testers-login-message {
+  padding: 20px;
+  padding-top: 0;
+  font-size: 10px;
+  line-height: 17px;
+}
+
+.beta-testers-login-message > span{
+    color: var(--golden-yellow);
+  }
+  

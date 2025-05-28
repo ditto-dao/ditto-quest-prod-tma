@@ -92,6 +92,7 @@
   width: 120px;
   height: 120px;
   image-rendering: pixelated;
+  image-rendering: crisp-edges;
   z-index: 0;
 }
 

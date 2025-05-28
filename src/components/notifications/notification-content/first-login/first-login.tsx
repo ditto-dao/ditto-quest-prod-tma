@@ -48,7 +48,7 @@ function FirstLoginNotification(props: FirstLoginNotifProps) {
         </div>
       </div>
       <div className="first-login-gift">
-        <div className="gift-label">30 Wood</div>
+        <div className="gift-label">30 Barkwood</div>
         <div className="first-login-slimes">
           {props.freeItems.map((item, idx) => (
             <img

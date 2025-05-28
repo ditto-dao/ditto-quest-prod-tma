@@ -11,8 +11,6 @@
     "statEffect": {
       "maxHpMod": 1.15,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.21,
-      "atkSpdEffect": "mul",
       "accMod": 1.17,
       "accEffect": "mul",
       "evaMod": 1.09,
@@ -23,16 +21,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.44,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.09,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.32,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.13,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.04,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.81,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -49,8 +41,6 @@
     "statEffect": {
       "maxHpMod": 1.21,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.07,
-      "atkSpdEffect": "mul",
       "accMod": 1.1,
       "accEffect": "mul",
       "evaMod": 1.14,
@@ -61,16 +51,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.04,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.04,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.14,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.49,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.09,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.88,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -87,8 +71,6 @@
     "statEffect": {
       "maxHpMod": 1.29,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.14,
-      "atkSpdEffect": "mul",
       "accMod": 1.08,
       "accEffect": "mul",
       "evaMod": 1.08,
@@ -99,16 +81,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.17,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.05,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.12,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.06,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.04,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.8,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.06,
       "hpRegenAmountEffect": "mul"
     }
@@ -125,8 +101,6 @@
     "statEffect": {
       "maxHpMod": 1.02,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.03,
-      "atkSpdEffect": "mul",
       "accMod": 1.12,
       "accEffect": "mul",
       "evaMod": 1.12,
@@ -137,16 +111,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.03,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.08,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.28,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.08,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.09,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.84,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.21,
       "hpRegenAmountEffect": "mul"
     }
@@ -163,8 +131,6 @@
     "statEffect": {
       "maxHpMod": 1.16,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.32,
-      "atkSpdEffect": "mul",
       "accMod": 1.11,
       "accEffect": "mul",
       "evaMod": 1.1,
@@ -175,16 +141,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.14,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.35,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.49,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.22,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.13,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.8,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.1,
       "hpRegenAmountEffect": "mul"
     }
@@ -201,8 +161,6 @@
     "statEffect": {
       "maxHpMod": 1.56,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.07,
-      "atkSpdEffect": "mul",
       "accMod": 1.09,
       "accEffect": "mul",
       "evaMod": 1.12,
@@ -213,16 +171,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.17,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.3,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.22,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.32,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.23,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.84,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.26,
       "hpRegenAmountEffect": "mul"
     }
@@ -239,8 +191,6 @@
     "statEffect": {
       "maxHpMod": 1.43,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.47,
-      "atkSpdEffect": "mul",
       "accMod": 1.19,
       "accEffect": "mul",
       "evaMod": 1.02,
@@ -251,16 +201,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.05,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.08,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.1,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.03,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.47,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.82,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.03,
       "hpRegenAmountEffect": "mul"
     }
@@ -277,8 +221,6 @@
     "statEffect": {
       "maxHpMod": 1.65,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.46,
-      "atkSpdEffect": "mul",
       "accMod": 1.1,
       "accEffect": "mul",
       "evaMod": 1.14,
@@ -289,16 +231,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.25,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.46,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.43,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.39,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.31,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.8,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.12,
       "hpRegenAmountEffect": "mul"
     }
@@ -313,8 +249,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.04,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.04,
       "atkSpdEffect": "mul",
       "accMod": 1.09,
@@ -327,10 +261,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.11,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.34,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.03,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.06,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.25,
@@ -351,8 +281,6 @@
     "pair1Id": 11,
     "mutation1Id": 13,
     "statEffect": {
-      "maxHpMod": 1.42,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.16,
       "atkSpdEffect": "mul",
       "accMod": 1.08,
@@ -365,10 +293,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.1,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.03,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.12,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.11,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.45,
@@ -389,8 +313,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.06,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.09,
       "atkSpdEffect": "mul",
       "accMod": 1.22,
@@ -403,10 +325,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.18,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.45,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.03,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.2,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.06,
@@ -427,8 +345,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.37,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.08,
       "atkSpdEffect": "mul",
       "accMod": 1.2,
@@ -441,10 +357,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.4,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.2,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.06,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.49,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.13,
@@ -465,8 +377,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.32,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.45,
       "atkSpdEffect": "mul",
       "accMod": 1.14,
@@ -479,10 +389,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.21,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.24,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.2,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.24,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.1,
@@ -503,8 +409,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.72,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.35,
       "atkSpdEffect": "mul",
       "accMod": 1.28,
@@ -517,10 +421,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.4,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.49,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.41,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.06,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.41,
@@ -555,16 +455,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.02,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.2,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.19,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.34,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.03,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.83,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -593,16 +487,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.44,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.09,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.02,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.1,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.15,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.86,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.17,
       "hpRegenAmountEffect": "mul"
     }
@@ -631,16 +519,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.07,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.44,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.21,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.07,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.33,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.9,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.1,
       "hpRegenAmountEffect": "mul"
     }
@@ -669,16 +551,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.42,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.02,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.04,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.02,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.26,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.86,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.02,
       "hpRegenAmountEffect": "mul"
     }
@@ -707,16 +583,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.18,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.47,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.13,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.17,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.1,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.85,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.08,
       "hpRegenAmountEffect": "mul"
     }
@@ -745,16 +615,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.33,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.41,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.05,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.44,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.47,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.92,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.03,
       "hpRegenAmountEffect": "mul"
     }
@@ -783,16 +647,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.16,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.08,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.04,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.46,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.33,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.87,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.21,
       "hpRegenAmountEffect": "mul"
     }
@@ -821,16 +679,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.42,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.26,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.27,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.33,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.38,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.83,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.26,
       "hpRegenAmountEffect": "mul"
     }
@@ -859,16 +711,10 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.36,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.46,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.46,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.37,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.23,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.84,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.11,
       "hpRegenAmountEffect": "mul"
     }
@@ -885,8 +731,6 @@
     "statEffect": {
       "maxHpMod": 1.31,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.03,
-      "atkSpdEffect": "mul",
       "accMod": 1.28,
       "accEffect": "mul",
       "evaMod": 1.2,
@@ -905,8 +749,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.31,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.75,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.03,
       "hpRegenAmountEffect": "mul"
     }
@@ -923,8 +765,6 @@
     "statEffect": {
       "maxHpMod": 1.19,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.19,
-      "atkSpdEffect": "mul",
       "accMod": 1.2,
       "accEffect": "mul",
       "evaMod": 1.1,
@@ -943,8 +783,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.15,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.85,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.18,
       "hpRegenAmountEffect": "mul"
     }
@@ -961,8 +799,6 @@
     "statEffect": {
       "maxHpMod": 1.4,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.06,
-      "atkSpdEffect": "mul",
       "accMod": 1.14,
       "accEffect": "mul",
       "evaMod": 1.27,
@@ -981,8 +817,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.19,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.76,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.03,
       "hpRegenAmountEffect": "mul"
     }
@@ -999,8 +833,6 @@
     "statEffect": {
       "maxHpMod": 1.73,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.33,
-      "atkSpdEffect": "mul",
       "accMod": 1.21,
       "accEffect": "mul",
       "evaMod": 1.08,
@@ -1019,8 +851,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.06,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.87,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.06,
       "hpRegenAmountEffect": "mul"
     }
@@ -1037,8 +867,6 @@
     "statEffect": {
       "maxHpMod": 1.4,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.48,
-      "atkSpdEffect": "mul",
       "accMod": 1.27,
       "accEffect": "mul",
       "evaMod": 1.21,
@@ -1057,8 +885,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.27,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.91,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.17,
       "hpRegenAmountEffect": "mul"
     }
@@ -1075,8 +901,6 @@
     "statEffect": {
       "maxHpMod": 1.16,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.16,
-      "atkSpdEffect": "mul",
       "accMod": 1.08,
       "accEffect": "mul",
       "evaMod": 1.1,
@@ -1095,8 +919,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.12,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.81,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -1113,8 +935,6 @@
     "statEffect": {
       "maxHpMod": 1.27,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.25,
-      "atkSpdEffect": "mul",
       "accMod": 1.17,
       "accEffect": "mul",
       "evaMod": 1.24,
@@ -1133,8 +953,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.32,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.77,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -1151,8 +969,6 @@
     "statEffect": {
       "maxHpMod": 1.72,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.13,
-      "atkSpdEffect": "mul",
       "accMod": 1.24,
       "accEffect": "mul",
       "evaMod": 1.17,
@@ -1171,8 +987,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.48,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.77,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.14,
       "hpRegenAmountEffect": "mul"
     }
@@ -1189,8 +1003,6 @@
     "statEffect": {
       "maxHpMod": 1.5,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.3,
-      "atkSpdEffect": "mul",
       "accMod": 1.05,
       "accEffect": "mul",
       "evaMod": 1.26,
@@ -1209,8 +1021,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.48,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.91,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.16,
       "hpRegenAmountEffect": "mul"
     }
@@ -1227,8 +1037,6 @@
     "statEffect": {
       "maxHpMod": 1.46,
       "maxHpEffect": "mul",
-      "atkSpdMod": 1.23,
-      "atkSpdEffect": "mul",
       "accMod": 1.07,
       "accEffect": "mul",
       "evaMod": 1.3,
@@ -1247,8 +1055,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.13,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.88,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.24,
       "hpRegenAmountEffect": "mul"
     }
@@ -1263,8 +1069,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.02,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.39,
       "atkSpdEffect": "mul",
       "accMod": 1.13,
@@ -1285,8 +1089,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.24,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.79,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -1301,8 +1103,6 @@
     "pair1Id": 36,
     "mutation1Id": 39,
     "statEffect": {
-      "maxHpMod": 1.03,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.19,
       "atkSpdEffect": "mul",
       "accMod": 1.06,
@@ -1323,8 +1123,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.13,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.81,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.1,
       "hpRegenAmountEffect": "mul"
     }
@@ -1339,8 +1137,6 @@
     "pair1Id": 37,
     "mutation1Id": 40,
     "statEffect": {
-      "maxHpMod": 1.07,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.34,
       "atkSpdEffect": "mul",
       "accMod": 1.16,
@@ -1361,8 +1157,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.05,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.91,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.25,
       "hpRegenAmountEffect": "mul"
     }
@@ -1377,8 +1171,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.33,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.07,
       "atkSpdEffect": "mul",
       "accMod": 1.05,
@@ -1399,8 +1191,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.34,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.86,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.15,
       "hpRegenAmountEffect": "mul"
     }
@@ -1415,8 +1205,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.74,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.45,
       "atkSpdEffect": "mul",
       "accMod": 1.19,
@@ -1437,8 +1225,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.26,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.78,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.11,
       "hpRegenAmountEffect": "mul"
     }
@@ -1453,8 +1239,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.35,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.42,
       "atkSpdEffect": "mul",
       "accMod": 1.27,
@@ -1475,8 +1259,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.17,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.85,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.27,
       "hpRegenAmountEffect": "mul"
     }
@@ -1491,8 +1273,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.26,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.18,
       "atkSpdEffect": "mul",
       "accMod": 1.21,
@@ -1513,8 +1293,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.18,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.78,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.27,
       "hpRegenAmountEffect": "mul"
     }
@@ -1529,8 +1307,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.75,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.25,
       "atkSpdEffect": "mul",
       "accMod": 1.22,
@@ -1551,8 +1327,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.2,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.93,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.23,
       "hpRegenAmountEffect": "mul"
     }
@@ -1567,10 +1341,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.07,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.04,
-      "atkSpdEffect": "mul",
       "accMod": 1.08,
       "accEffect": "mul",
       "evaMod": 1.17,
@@ -1589,8 +1359,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.02,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.79,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.11,
       "hpRegenAmountEffect": "mul"
     }
@@ -1605,10 +1373,6 @@
     "pair1Id": 44,
     "mutation1Id": 47,
     "statEffect": {
-      "maxHpMod": 1.07,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.16,
-      "atkSpdEffect": "mul",
       "accMod": 1.12,
       "accEffect": "mul",
       "evaMod": 1.02,
@@ -1627,8 +1391,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.32,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.88,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -1643,10 +1405,6 @@
     "pair1Id": 45,
     "mutation1Id": 48,
     "statEffect": {
-      "maxHpMod": 1.16,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.09,
-      "atkSpdEffect": "mul",
       "accMod": 1.25,
       "accEffect": "mul",
       "evaMod": 1.27,
@@ -1665,8 +1423,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.21,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.8,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.05,
       "hpRegenAmountEffect": "mul"
     }
@@ -1681,10 +1437,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.03,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.03,
-      "atkSpdEffect": "mul",
       "accMod": 1.04,
       "accEffect": "mul",
       "evaMod": 1.19,
@@ -1703,8 +1455,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.1,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.85,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.12,
       "hpRegenAmountEffect": "mul"
     }
@@ -1719,10 +1469,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.55,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.17,
-      "atkSpdEffect": "mul",
       "accMod": 1.29,
       "accEffect": "mul",
       "evaMod": 1.25,
@@ -1741,8 +1487,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.48,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.81,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.09,
       "hpRegenAmountEffect": "mul"
     }
@@ -1757,10 +1501,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.54,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.27,
-      "atkSpdEffect": "mul",
       "accMod": 1.03,
       "accEffect": "mul",
       "evaMod": 1.21,
@@ -1779,8 +1519,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.5,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.94,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.04,
       "hpRegenAmountEffect": "mul"
     }
@@ -1795,10 +1533,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.18,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.4,
-      "atkSpdEffect": "mul",
       "accMod": 1.25,
       "accEffect": "mul",
       "evaMod": 1.27,
@@ -1817,8 +1551,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.17,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.83,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.18,
       "hpRegenAmountEffect": "mul"
     }
@@ -1833,10 +1565,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.53,
-      "maxHpEffect": "mul",
-      "atkSpdMod": 1.08,
-      "atkSpdEffect": "mul",
       "accMod": 1.22,
       "accEffect": "mul",
       "evaMod": 1.24,
@@ -1855,8 +1583,6 @@
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.26,
       "magicDmgReductionEffect": "mul",
-      "hpRegenRateMod": 0.9,
-      "hpRegenRateEffect": "mul",
       "hpRegenAmountMod": 1.14,
       "hpRegenAmountEffect": "mul"
     }
@@ -1871,8 +1597,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.04,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.06,
       "atkSpdEffect": "mul",
       "accMod": 1.18,
@@ -1885,10 +1609,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.13,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.06,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.14,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.15,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.06,
@@ -1909,8 +1629,6 @@
     "pair1Id": 52,
     "mutation1Id": 55,
     "statEffect": {
-      "maxHpMod": 1.56,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.2,
       "atkSpdEffect": "mul",
       "accMod": 1.07,
@@ -1923,10 +1641,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.21,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.11,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.24,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.17,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.11,
@@ -1947,8 +1661,6 @@
     "pair1Id": 53,
     "mutation1Id": 56,
     "statEffect": {
-      "maxHpMod": 1.21,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.1,
       "atkSpdEffect": "mul",
       "accMod": 1.25,
@@ -1961,10 +1673,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.04,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.17,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.09,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.12,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.04,
@@ -1985,8 +1693,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.05,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.05,
       "atkSpdEffect": "mul",
       "accMod": 1.2,
@@ -1999,10 +1705,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.03,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.26,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.28,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.07,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.03,
@@ -2023,8 +1725,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.04,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.04,
       "atkSpdEffect": "mul",
       "accMod": 1.15,
@@ -2037,10 +1737,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.13,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.24,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.18,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.11,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.35,
@@ -2061,8 +1757,6 @@
     "pair1Id": 56,
     "mutation1Id": 58,
     "statEffect": {
-      "maxHpMod": 1.22,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.29,
       "atkSpdEffect": "mul",
       "accMod": 1.23,
@@ -2075,10 +1769,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.23,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.34,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.38,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.36,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.05,
@@ -2099,8 +1789,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.21,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.02,
       "atkSpdEffect": "mul",
       "accMod": 1.14,
@@ -2113,10 +1801,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.33,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.41,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.07,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.29,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.32,
@@ -2137,8 +1821,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.14,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.13,
       "atkSpdEffect": "mul",
       "accMod": 1.19,
@@ -2151,10 +1833,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.41,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.32,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.31,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.48,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.49,
@@ -2175,8 +1853,6 @@
     "pair1Id": null,
     "mutation1Id": null,
     "statEffect": {
-      "maxHpMod": 1.62,
-      "maxHpEffect": "mul",
       "atkSpdMod": 1.24,
       "atkSpdEffect": "mul",
       "accMod": 1.29,
@@ -2189,10 +1865,6 @@
       "maxRangedDmgEffect": "mul",
       "maxMagicDmgMod": 1.5,
       "maxMagicDmgEffect": "mul",
-      "critChanceMod": 1.29,
-      "critChanceEffect": "mul",
-      "critMultiplierMod": 1.12,
-      "critMultiplierEffect": "mul",
       "dmgReductionMod": 1.11,
       "dmgReductionEffect": "mul",
       "magicDmgReductionMod": 1.38,

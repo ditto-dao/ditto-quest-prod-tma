@@ -40,13 +40,15 @@
 .dungeon-main-display {
   display: flex;
   gap: 10px;
-  align-items: center;
+  align-items: stretch; /* ✅ allows children like domain-stats to stretch */
   justify-content: center;
   margin-bottom: 12px;
 }
 
 .dungeon-img-container {
-  width: 50%;
+  height: 140px;
+  width: 140px;
+  overflow: hidden;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -55,8 +57,9 @@
 
 .dungeon-img-container img {
   width: 100%;
-  height: auto;
-  object-fit: cover;
+  height: 100%;
+  object-fit: cover; /* crop image to fill container */
+  object-position: center; /* center the cropped portion */
   border-radius: 5px;
 }
 
@@ -66,15 +69,15 @@
   text-align: left;
   font-weight: bolder;
   width: 100%;
+  line-height: 15px;
 }
 
 .dungeon-stats {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  align-items: center;
   justify-content: space-between;
-  gap: 14px;
-  width: 50%;
+  flex-grow: 1;
 }
 
 .dungeon-main-stat-header {
@@ -90,7 +93,8 @@
   flex-direction: column;
   background-color: var(--light-teal);
   border-radius: 5px;
-  padding: 4px;
+  padding: 4px 10px;
+  width: 100%;
   gap: 6px;
 }
 

@@ -16,6 +16,7 @@ import {
   updateUserStatsFromEquipmentAndSlime,
 } from "../../../utils/helpers";
 import {
+  BETA_TESTER_LOGIN_EVENT,
   COMBAT_EXP_UPDATE_EVENT,
   FIRST_LOGIN_EVENT,
   USE_REFERRAL_CODE_SUCCESS,
@@ -36,6 +37,7 @@ import CraftingIcon from "../../../assets/images/sidebar/craft.png";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../utils/config";
 import ReferralSuccessNotification from "../../../components/notifications/notification-content/referral-notification/referral-notification";
+import BetaTestersLoginNotif from "../../../components/notifications/notification-content/beta-testers-login/beta-testers-login";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -153,7 +155,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   function processInventoryUpdate(
     inventory: Inventory[],
     update: Inventory,
-    idKey: "itemId" | "equipmentId"
+    idKey: "itemId" | "equipmentId",
+    accessGranted: boolean
   ) {
     const idToMatch = update[idKey];
 
@@ -163,11 +166,13 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         (entry) => entry[idKey] === idToMatch
       );
       if (indexToRemove !== -1) {
-        addFloatingUpdate({
-          icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
-          text: update.equipment?.name ?? update.item?.name!,
-          amount: inventory[indexToRemove].quantity,
-        });
+        if (accessGranted) {
+          addFloatingUpdate({
+            icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+            text: update.equipment?.name ?? update.item?.name!,
+            amount: inventory[indexToRemove].quantity,
+          });
+        }
         inventory.splice(indexToRemove, 1);
         console.log(`Removed ${idKey} ${idToMatch} from inventory.`);
       }
@@ -183,7 +188,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         inventory[existingIndex] = update; // Replace the existing entry
         console.log(`Updated ${idKey} ${idToMatch} in inventory.`);
 
-        if (quantityDiff !== 0) {
+        if (quantityDiff !== 0 && accessGranted) {
           addFloatingUpdate({
             icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
             text: update.equipment?.name ?? update.item?.name!,
@@ -194,11 +199,13 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         inventory.push(update); // Add as a new entry
         console.log(`Added ${idKey} ${idToMatch} to inventory.`);
 
-        addFloatingUpdate({
-          icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
-          text: update.equipment?.name ?? update.item?.name!,
-          amount: update.quantity,
-        });
+        if (accessGranted) {
+          addFloatingUpdate({
+            icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+            text: update.equipment?.name ?? update.item?.name!,
+            amount: update.quantity,
+          });
+        }
       }
     }
   }
@@ -304,6 +311,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       console.error(`User does not own this slime!`);
       return;
     }
+
+    if (userData.equippedSlimeId === slime.id) return;
 
     console.log(`Equipping slime: ${slime.id}`);
 
@@ -477,7 +486,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
           if (
             partialUpdate.goldBalance &&
-            prev.goldBalance !== partialUpdate.goldBalance
+            prev.goldBalance !== partialUpdate.goldBalance &&
+            accessGranted
           ) {
             addFloatingUpdate({
               icon: GoldIcon,
@@ -513,7 +523,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             BigInt(balance.accumulatedBalanceChange) +
               BigInt(balance.liveBalanceChange) !==
               0n &&
-            dittoBalanceLoaded
+            accessGranted
           ) {
             addFloatingUpdate({
               icon: DittoCoinIcon,
@@ -553,7 +563,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         socket.off("ditto-ledger-socket-balance-update");
       };
     }
-  }, [socket, loadingSocket, dittoBalanceLoaded]);
+  }, [socket, loadingSocket, accessGranted]);
 
   useEffect(() => {
     if (!userContextLoaded) return;
@@ -571,10 +581,20 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           data.forEach((update) => {
             if (update.equipment && update.equipmentId && !update.item) {
               // Process equipment updates
-              processInventoryUpdate(updatedInventory, update, "equipmentId");
+              processInventoryUpdate(
+                updatedInventory,
+                update,
+                "equipmentId",
+                accessGranted
+              );
             } else if (update.item && update.itemId && !update.equipment) {
               // Process item updates
-              processInventoryUpdate(updatedInventory, update, "itemId");
+              processInventoryUpdate(
+                updatedInventory,
+                update,
+                "itemId",
+                accessGranted
+              );
             } else {
               console.error(
                 `Erroneous update-inventory event: ${JSON.stringify(update)}`
@@ -596,11 +616,13 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             ? [...prevUserData.slimes]
             : [];
 
-          addFloatingUpdate({
-            icon: GenericSlime,
-            text: `Slime #${slime.id}`,
-            amount: 1,
-          });
+          if (accessGranted) {
+            addFloatingUpdate({
+              icon: GenericSlime,
+              text: `Slime #${slime.id}`,
+              amount: 1,
+            });
+          }
 
           return {
             ...prevUserData,
@@ -654,11 +676,20 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           `Received update-farming-exp: ${JSON.stringify(data, null, 2)}`
         );
         setUserData((prevUserData) => {
-          if (data.farmingLevelsGained <= 0) {
+          let expGain = data.farmingExp - prevUserData.farmingExp;
+
+          if (data.farmingLevelsGained > 0) {
+            expGain =
+              prevUserData.expToNextFarmingLevel -
+              prevUserData.farmingExp +
+              data.farmingExp;
+          }
+
+          if (accessGranted) {
             addFloatingUpdate({
               icon: FarmingIcon,
               text: "Farming EXP",
-              amount: data.farmingExp - prevUserData.farmingExp,
+              amount: expGain,
             });
           }
 
@@ -685,11 +716,20 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           `Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`
         );
         setUserData((prevUserData) => {
-          if (data.craftingLevelsGained <= 0) {
+          let expGain = data.craftingExp - prevUserData.craftingExp;
+
+          if (data.craftingLevelsGained > 0) {
+            expGain =
+              prevUserData.expToNextCraftingLevel -
+              prevUserData.craftingExp +
+              data.craftingExp;
+          }
+
+          if (accessGranted) {
             addFloatingUpdate({
               icon: CraftingIcon,
               text: "Crafting EXP",
-              amount: data.craftingExp - prevUserData.craftingExp,
+              amount: expGain,
             });
           }
 
@@ -749,15 +789,15 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             `Received COMBAT_EXP_UPDATE_EVENT: ${JSON.stringify(data, null, 2)}`
           );
 
-          if (!userData) {
-            console.error(
-              `User data not found. Unable to process COMBAT_EXP_UPDATE_EVENT`
-            );
-            return;
-          }
-
           setUserData((prev) => {
-            if (prev.expHp !== data.hpExp && !data.hpLevelUp) {
+            if (!prev) {
+              console.error(
+                `User data not found. Unable to process COMBAT_EXP_UPDATE_EVENT`
+              );
+              return prev;
+            }
+
+            if (prev.expHp !== data.hpExp && !data.hpLevelUp && accessGranted) {
               addFloatingUpdate({
                 icon: HPIcon,
                 text: "HP EXP",
@@ -765,7 +805,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
               });
             }
 
-            if (prev.exp !== data.exp && !data.levelUp) {
+            if (prev.exp !== data.exp && !data.levelUp && accessGranted) {
               addFloatingUpdate({
                 icon: GoldMedalIcon,
                 text: "EXP",
@@ -831,6 +871,14 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           ));
         }
       );
+
+      socket.on(BETA_TESTER_LOGIN_EVENT, () => {
+        console.log(`BETA_TESTER_LOGIN_EVENT received`);
+        addNotification(() => (
+          <BetaTestersLoginNotif
+          />
+        ));
+      });
 
       socket.on("error", (msg: string) => {
         addNotification(() => <ErrorNotification msg={msg} />);

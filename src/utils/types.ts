@@ -472,8 +472,10 @@ export interface Domain {
     name: string;
     description: string;
     imgsrc: string;
-    entryPriceGP: number;
-    entryPriceDittoWei: string;
+    entryPriceGP: number | null;
+    entryPriceDittoWei: string | null;
+    minCombatLevel: number | null;
+    maxCombatLevel: number | null;
     monsters: DomainMonsterEntry[];
 }
 
@@ -490,6 +492,8 @@ export interface Dungeon {
     monsterGrowthFactor: number;
     entryPriceGP: number | null;
     entryPriceDittoWei: string | null; // Decimal values are returned as strings
+    minCombatLevel: number | null;
+    maxCombatLevel: number | null;
     isActive: boolean;
     monsterSequence: FullMonster[];
 }

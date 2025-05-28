@@ -21,11 +21,17 @@
   flex-direction: column;
 }
 
+.category-buttons-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
 .category-buttons {
   display: flex;
   gap: 14px;
-  padding: 8px 14px 2px 8px;
   width: max-content;
+  padding: 14px 14px 0 8px;
 }
 
 .category-button {
@@ -77,9 +83,7 @@
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap;
   padding: 0 10px 10px 10px;
-  background-color: transparent;
 }
 
 .category-buttons-scrollbar .simplebar-scrollbar::before {

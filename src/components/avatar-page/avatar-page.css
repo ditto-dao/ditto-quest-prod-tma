@@ -130,6 +130,8 @@
 
 .stats-summary-field .stats-summary-label img {
   max-height: 16px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
 .stats-summary-field-with-progress,
@@ -188,6 +190,8 @@
   width: 100%;
   height: 100%;
   padding: 10px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
   cursor: pointer;
 }
 

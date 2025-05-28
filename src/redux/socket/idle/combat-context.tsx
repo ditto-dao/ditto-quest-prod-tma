@@ -246,7 +246,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
           }
 
           if (payload.combatAreaType === "Domain") {
-            const domain = (Domains as Domain[]).find(
+            const domain = (Domains as unknown as Domain[]).find(
               (d) => d.id === payload.combatAreaId
             );
             if (domain) {

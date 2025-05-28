@@ -5,6 +5,7 @@
   align-items: center;
   gap: 20px;
   padding: 10px;
+  padding-bottom: 20px;
 }
 
 .first-login-notification-header {
@@ -30,6 +31,7 @@
     font-size: 10px;
     text-align: left;
     line-height: 16px;
+    padding: 0 12px;
 }
 
 .first-login-notification > .first-login-gift {
