@@ -7,25 +7,29 @@ interface AccessDeniedPageProps {
   msg: string;
 }
 
-function AccessDeniedPage(props: AccessDeniedPageProps) {
-  const {
-    msg,
-  } = props;
-
+function AccessDeniedPage({ msg }: AccessDeniedPageProps) {
   useEffect(() => {
-    const iconsToPreload = [PanicSlime];
-
-    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
-      console.log(`loading page icon loaded`)
-    );
+    preloadImage(PanicSlime);
   }, []);
+
+  const showRefresh = msg.toLowerCase().includes("disconnect");
 
   return (
     <div className="access-denied-page">
-      <img className="access-denied-sprite" src={PanicSlime} alt="Access denied" />
-      <div className="access-denied-text">
-        {msg}.
-      </div>
+      <img
+        className="access-denied-sprite"
+        src={PanicSlime}
+        alt="Access denied"
+      />
+      <div className="access-denied-text">{msg}.</div>
+      {showRefresh && (
+        <button
+          className="access-denied-refresh-btn"
+          onClick={() => window.location.reload()}
+        >
+          Refresh
+        </button>
+      )}
     </div>
   );
 }

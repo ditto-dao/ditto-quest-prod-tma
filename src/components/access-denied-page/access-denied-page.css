@@ -13,7 +13,24 @@
 }
 
 .access-denied-page > .access-denied-text {
+  margin-top: 16px;
   padding: 0 18px;
   font-size: 12px;
   line-height: 20px;
+}
+
+.access-denied-refresh-btn {
+  margin-top: 16px;
+  background-color: var(--sage-green);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.access-denied-refresh-btn:active {
+  background-color: var(--sage-green-dark);
 }
