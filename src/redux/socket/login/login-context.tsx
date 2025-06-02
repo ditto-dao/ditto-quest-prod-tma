@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import WebApp from "@twa-dev/sdk";
 import { setTelegramId } from "../../telegram-id-slice";
@@ -7,20 +13,24 @@ import { setTelegramUsername } from "../../telegram-username-slice";
 import { RootState } from "../../store";
 import { SocketProviderProps } from "../../../utils/types";
 import { getFingerprint } from "../../../utils/fingerprint";
-import { STORE_FINGERPRINT_EVENT, USE_REFERRAL_CODE } from "../../../utils/events";
+import {
+  STORE_FINGERPRINT_EVENT,
+  USE_REFERRAL_CODE,
+} from "../../../utils/events";
 import { DQ_REFERRAL_LINK_PREFIX } from "../../../utils/config";
 
-// Context
 interface LoginContext {
   accessGranted: boolean;
   accessDeniedMessage: string;
-  socketDataLoadComplete: boolean;
+  loginComplete: boolean;
+  loginProgress: number;
 }
 
 const LoginContext = createContext<LoginContext>({
   accessGranted: false,
   accessDeniedMessage: "",
-  socketDataLoadComplete: false,
+  loginComplete: false,
+  loginProgress: 0,
 });
 
 export const useLoginSocket = () => useContext(LoginContext);
@@ -31,116 +41,132 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   const dispatch = useDispatch();
   const { socket, loadingSocket } = useSocket();
 
-  // Login
-  const [loginAttempted, setLoginAttempted] = useState(false);
-  const [accessGranted, setAccessGranted] = useState(false);
-  const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
-
   const isSocketConnected = useSelector(
     (state: RootState) => state.socket.isConnected
   );
 
-  const [socketDataLoadComplete, setSocketDataLoadComplete] = useState(false);
-  const [connectionEstablished, setConnectionEstablished] = useState(false);
+  const [accessGranted, setAccessGranted] = useState(false);
+  const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
+  const [loginComplete, setLoginComplete] = useState(false);
+  const [loginProgress, setLoginProgress] = useState(0);
+
+  const [validationSent, setValidationSent] = useState(false);
+  const loginSucceededRef = useRef(false);
 
   useEffect(() => {
     if (!WebApp.initDataUnsafe.user) {
       setAccessDeniedMessage("Open the game using our TMA instead");
-      setSocketDataLoadComplete(true);
+      setLoginProgress(100);
+      setLoginComplete(true);
       return;
     }
 
-    if (socket && !loadingSocket && !loginAttempted) {
-      console.log(`Attempting validate login`);
-      console.log(WebApp.initDataUnsafe.user);
+    if (socket && !loadingSocket && !validationSent) {
       socket.emit("validate-login", {
         initData: WebApp.initData,
         userData: WebApp.initDataUnsafe.user,
       });
-      setLoginAttempted(true);
+      setValidationSent(true);
+      setLoginProgress(10);
     }
-  }, [socket, loadingSocket, loginAttempted]);
+  }, [socket, loadingSocket, validationSent]);
 
   useEffect(() => {
-    if (socket && !loadingSocket) {
-      socket.on("login-validated", async (telegramId: string) => {
-        setConnectionEstablished(true);
-        console.log(`Login validated for user: ${telegramId}`);
-        setAccessGranted(true);
-        setSocketDataLoadComplete(true);
-        dispatch(setTelegramId(telegramId));
-        dispatch(
-          setTelegramUsername(
-            WebApp.initDataUnsafe.user?.username || `user_${telegramId}`
-          )
-        );
-        socket.emit(STORE_FINGERPRINT_EVENT, await getFingerprint());
-        const inviteLink = WebApp.initDataUnsafe.start_param
+    if (!socket || loadingSocket) return;
 
-        if (inviteLink && inviteLink.startsWith(DQ_REFERRAL_LINK_PREFIX)) {
-          socket.emit(USE_REFERRAL_CODE, inviteLink);
-        }
-      });
+    const onLoginValidated = async (telegramId: string) => {
+      setLoginProgress((p) => Math.max(p, 50));
+      dispatch(setTelegramId(telegramId));
+      dispatch(
+        setTelegramUsername(
+          WebApp.initDataUnsafe.user?.username || `user_${telegramId}`
+        )
+      );
 
-      socket.on("login-invalid", (msg: string) => {
-        console.log(`Login invalidated`);
-        setAccessDeniedMessage(msg);
-        setSocketDataLoadComplete(true);
-      });
+      socket.emit(STORE_FINGERPRINT_EVENT, await getFingerprint());
+      setLoginProgress((p) => Math.max(p, 70));
 
-      socket.on("tele-validate-error", (msg: string) => {
-        console.log(`Tele validate error received`);
-        setAccessDeniedMessage(msg);
-        setSocketDataLoadComplete(true);
-      });
+      const inviteLink = WebApp.initDataUnsafe.start_param;
+      if (inviteLink?.startsWith(DQ_REFERRAL_LINK_PREFIX)) {
+        socket.emit(USE_REFERRAL_CODE, inviteLink);
+        setLoginProgress((p) => Math.max(p, 85));
+      }
 
-      socket.on("disconnect", () => {
-        console.warn("Socket disconnected");
-        if (connectionEstablished) {
-          setAccessGranted(false);
-          setAccessDeniedMessage("Disconnected from server");
-          setSocketDataLoadComplete(true);
-        }
-      });
+      setAccessGranted(true);
+      loginSucceededRef.current = true;
 
-      return () => {
-        socket.off("login-validated");
-        socket.off("login-invalid");
-        socket.off("tele-validate-error");
-        socket.off("disconnect");
-      };
-    }
+      // Add a short delay before marking login complete
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoginProgress(100);
+      await new Promise((resolve) => setTimeout(resolve, 800));
+      setLoginComplete(true);
+    };
+
+    const onLoginInvalid = (msg: string) => {
+      setAccessGranted(false);
+      loginSucceededRef.current = false;
+      setAccessDeniedMessage(msg);
+      setLoginProgress(100);
+      setLoginComplete(true);
+    };
+
+    const onTeleValidateError = (msg: string) => {
+      setAccessGranted(false);
+      loginSucceededRef.current = false;
+      setAccessDeniedMessage(msg);
+      setLoginProgress(100);
+      setLoginComplete(true);
+    };
+
+    const onDisconnect = () => {
+      console.warn("Socket disconnected");
+      if (loginSucceededRef.current) {
+        setAccessGranted(false);
+        setAccessDeniedMessage("Disconnected from server");
+        setLoginProgress(100);
+        setLoginComplete(true);
+      }
+    };
+
+    socket.on("login-validated", onLoginValidated);
+    socket.on("login-invalid", onLoginInvalid);
+    socket.on("tele-validate-error", onTeleValidateError);
+    socket.on("disconnect", onDisconnect);
+
+    return () => {
+      socket.off("login-validated", onLoginValidated);
+      socket.off("login-invalid", onLoginInvalid);
+      socket.off("tele-validate-error", onTeleValidateError);
+      socket.off("disconnect", onDisconnect);
+    };
   }, [socket, loadingSocket]);
 
   useEffect(() => {
-    if (!loginAttempted) return;
+    if (!validationSent) return;
 
     if (!socket && !loadingSocket) {
       setAccessGranted(false);
       setAccessDeniedMessage("Unable to connect to server");
-      setSocketDataLoadComplete(true);
+      setLoginProgress(100);
+      setLoginComplete(true);
       return;
     }
 
-    if (connectionEstablished && !isSocketConnected && !loadingSocket) {
+    if (loginSucceededRef.current && !isSocketConnected && !loadingSocket) {
       setAccessGranted(false);
       setAccessDeniedMessage("Disconnected from server");
-      setSocketDataLoadComplete(true);
+      setLoginProgress(100);
+      setLoginComplete(true);
     }
-  }, [
-    socket,
-    loadingSocket,
-    isSocketConnected,
-    loginAttempted,
-    connectionEstablished,
-  ]);
+  }, [socket, loadingSocket, isSocketConnected, validationSent]);
 
   return (
     <LoginContext.Provider
       value={{
         accessGranted,
         accessDeniedMessage,
-        socketDataLoadComplete,
+        loginComplete,
+        loginProgress,
       }}
     >
       {children}

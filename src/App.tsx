@@ -15,6 +15,7 @@ import { CombatSocketProvider } from "./redux/socket/idle/combat-context";
 import { NotificationProvider } from "./components/notifications/notification-context";
 import { CurrentActivityProvider } from "./redux/socket/idle/current-activity-context";
 import { FloatingUpdateProvider } from "./redux/socket/idle/floating-update-context";
+import SocketInactivityManager from "./redux/socket/socket-inactivity-manager";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -106,6 +107,7 @@ function App() {
                     <GachaSocketProvider>
                       <CombatSocketProvider>
                         <MainPage />
+                        <SocketInactivityManager />
                       </CombatSocketProvider>
                     </GachaSocketProvider>
                   </IdleSkillSocketProvider>

@@ -26,5 +26,4 @@
 .loading-page > .loading-progress-container > .loading-progress-bar {
   background-color: var(--sage-green);
   height: 100%;
-  transition: width 0.3s ease-in-out;
 }

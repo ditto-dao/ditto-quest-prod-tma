@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./main-page.css";
 import Sidebar from "../sidebar/sidebar";
 import InventoryPage from "../inventory-page/inventory-page";
@@ -10,9 +10,16 @@ import AvatarPage from "../avatar-page/avatar-page";
 import GachaPage from "../gacha-page/gacha-page";
 import CombatPage from "../combat-page/combat-page";
 import NotificationManager from "../notifications/notification-manager";
+import LoadingPage from "../loading-page/loading-page";
+import AccessDeniedPage from "../access-denied-page/access-denied-page";
+import CurrentActivityDisplay from "../current-activity-display/current-activity-display";
+import ReferralPage from "../referral-page/referral-page";
+import { AnimatePresence, motion } from "framer-motion";
+import SimpleBar from "simplebar-react";
+import "simplebar-react/dist/simplebar.min.css";
+
 import { useLoginSocket } from "../../redux/socket/login/login-context";
-import { useUserSocket } from "../../redux/socket/user/user-context";
-import { useIdleSkillSocket } from "../../redux/socket/idle/skill-context";
+
 import ShopIcon from "../../assets/images/sidebar/shop.png";
 import AvatarIcon from "../../assets/images/sidebar/avatar.png";
 import InventoryIcon from "../../assets/images/sidebar/bag.png";
@@ -23,72 +30,55 @@ import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import ReferralIcon from "../../assets/images/sidebar/referral.png";
-import LoadingPage from "../loading-page/loading-page";
-import AccessDeniedPage from "../access-denied-page/access-denied-page";
-import { AnimatePresence, motion } from "framer-motion";
-import SimpleBar from "simplebar-react";
-import "simplebar-react/dist/simplebar.min.css";
-import CurrentActivityDisplay from "../current-activity-display/current-activity-display";
-import ReferralPage from "../referral-page/referral-page";
+
+const pageIcons: Record<string, string> = {
+  Shop: ShopIcon,
+  Avatar: AvatarIcon,
+  Inventory: InventoryIcon,
+  Skills: SkillsIcon,
+  Farming: FarmingIcon,
+  Crafting: CraftingIcon,
+  "Slime Lab": SlimeLabIcon,
+  Combat: CombatIcon,
+  Gacha: GachaIcon,
+  Referral: ReferralIcon,
+};
 
 function MainPage() {
-  const { accessGranted, accessDeniedMessage, socketDataLoadComplete } =
-    useLoginSocket();
-  const { userContextLoaded } = useUserSocket();
-  const { offlineProgressUpdatesReceived } = useIdleSkillSocket();
+  const {
+    accessGranted,
+    accessDeniedMessage,
+    loginProgress,
+    loginComplete,
+  } = useLoginSocket();
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [view, setView] = useState<"loading" | "main" | "access-denied">("loading");
   const [currentPage, setCurrentPage] = useState("Avatar");
-  const [view, setView] = useState("loading"); // 'loading', 'access-denied', 'main'
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-  const pageIcons: { [key: string]: string } = {
-    Shop: ShopIcon,
-    Avatar: AvatarIcon,
-    Inventory: InventoryIcon,
-    Skills: SkillsIcon,
-    Farming: FarmingIcon,
-    Crafting: CraftingIcon,
-    "Slime Lab": SlimeLabIcon,
-    Combat: CombatIcon,
-    Gacha: GachaIcon,
-    Referral: ReferralIcon
-  };
-
-  function toggleSidebar() {
-    setIsSidebarOpen(!isSidebarOpen);
-  }
-
-  function setPage(page: string) {
-    setCurrentPage(page);
-    toggleSidebar();
-  }
-
-  function renderPage() {
-    switch (currentPage) {
-      case "Shop":
-        return <div>Shop Page Content</div>;
-      case "Avatar":
-        return <AvatarPage />;
-      case "Inventory":
-        return <InventoryPage />;
-      case "Skills":
-        return <SkillsPage />;
-      case "Farming":
-        return <FarmingPage />;
-      case "Crafting":
-        return <CraftingPage />;
-      case "Slime Lab":
-        return <SlimeLabPage />;
-      case "Combat":
-        return <CombatPage />;
-      case "Gacha":
-        return <GachaPage />;
-      case "Referral":
-        return <ReferralPage />
-      default:
-        return <AvatarPage />;
+  useEffect(() => {
+    if (loginComplete && accessGranted) {
+      setTimeout(() => setView("main"), 400); // slight delay for smooth UX
+    } else if (loginComplete && !accessGranted && accessDeniedMessage.trim()) {
+      setView("access-denied");
     }
-  }
+  }, [loginComplete, accessGranted, accessDeniedMessage]);
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case "Shop": return <div>Shop Page Content</div>;
+      case "Avatar": return <AvatarPage />;
+      case "Inventory": return <InventoryPage />;
+      case "Skills": return <SkillsPage />;
+      case "Farming": return <FarmingPage />;
+      case "Crafting": return <CraftingPage />;
+      case "Slime Lab": return <SlimeLabPage />;
+      case "Combat": return <CombatPage />;
+      case "Gacha": return <GachaPage />;
+      case "Referral": return <ReferralPage />;
+      default: return <AvatarPage />;
+    }
+  };
 
   return (
     <div id="main-page-container" className="noselect">
@@ -100,16 +90,9 @@ function MainPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
-            <LoadingPage
-              accessGranted={accessGranted}
-              socketDataLoadComplete={socketDataLoadComplete}
-              userContextLoaded={userContextLoaded}
-              offlineProgressUpdatesReceived={offlineProgressUpdatesReceived}
-              onFinishLoading={(page: string) => setView(page)}
-              accessDeniedMessage={accessDeniedMessage}
-            />
+            <LoadingPage progress={loginProgress} />
           </motion.div>
         )}
 
@@ -120,7 +103,7 @@ function MainPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
             <AccessDeniedPage msg={accessDeniedMessage} />
           </motion.div>
@@ -133,10 +116,10 @@ function MainPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.5 }}
           >
             <header className="header">
-              <div className="open-sidebar-btn" onClick={toggleSidebar}>
+              <div className="open-sidebar-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                 ☰
               </div>
               <div className="header-title">
@@ -153,8 +136,11 @@ function MainPage() {
 
             <Sidebar
               isOpen={isSidebarOpen}
-              toggleSidebar={toggleSidebar}
-              setPage={setPage}
+              toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+              setPage={(page) => {
+                setCurrentPage(page);
+                setIsSidebarOpen(false);
+              }}
             />
 
             <SimpleBar className="content">
@@ -162,7 +148,7 @@ function MainPage() {
                 key={currentPage}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
+                transition={{ duration: 0.5 }}
                 className="page-motion-wrapper"
               >
                 {renderPage()}
