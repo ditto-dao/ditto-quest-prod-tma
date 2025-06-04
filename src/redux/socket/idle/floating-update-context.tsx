@@ -1,5 +1,4 @@
 import { createContext, useContext, useState } from "react";
-import { FloatingUpdateDisplay } from "../../../components/floating-update-display/floating-update-display";
 
 interface FloatingUpdate {
   id: string;
@@ -10,10 +9,12 @@ interface FloatingUpdate {
 
 interface FloatingUpdateContextType {
   addFloatingUpdate: (Update: Omit<FloatingUpdate, "id">) => void;
+  updates: FloatingUpdate[];
 }
 
 const FloatingUpdateContext = createContext<FloatingUpdateContextType>({
   addFloatingUpdate: () => {},
+  updates: [],
 });
 
 export const useFloatingUpdate = () => useContext(FloatingUpdateContext);
@@ -30,9 +31,8 @@ export const FloatingUpdateProvider: React.FC<{ children: React.ReactNode }> = (
   };
 
   return (
-    <FloatingUpdateContext.Provider value={{ addFloatingUpdate }}>
+    <FloatingUpdateContext.Provider value={{ addFloatingUpdate, updates }}>
       {children}
-      <FloatingUpdateDisplay updates={updates} />
     </FloatingUpdateContext.Provider>
   );
 };

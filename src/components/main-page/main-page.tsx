@@ -30,6 +30,8 @@ import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import ReferralIcon from "../../assets/images/sidebar/referral.png";
+import { FloatingUpdateDisplay } from "../floating-update-display/floating-update-display";
+import { useFloatingUpdate } from "../../redux/socket/idle/floating-update-context";
 
 const pageIcons: Record<string, string> = {
   Shop: ShopIcon,
@@ -51,6 +53,7 @@ function MainPage() {
     loginProgress,
     loginComplete,
   } = useLoginSocket();
+  const { updates } = useFloatingUpdate();
 
   const [view, setView] = useState<"loading" | "main" | "access-denied">("loading");
   const [currentPage, setCurrentPage] = useState("Avatar");
@@ -154,8 +157,8 @@ function MainPage() {
                 {renderPage()}
               </motion.div>
             </SimpleBar>
-
             <NotificationManager />
+            <FloatingUpdateDisplay updates={updates}/>
           </motion.div>
         )}
       </AnimatePresence>
