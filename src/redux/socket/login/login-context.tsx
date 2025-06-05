@@ -17,7 +17,16 @@ import {
   STORE_FINGERPRINT_EVENT,
   USE_REFERRAL_CODE,
 } from "../../../utils/events";
-import { DQ_REFERRAL_LINK_PREFIX } from "../../../utils/config";
+import {
+  DITTO_STATUS_JSON_URI,
+  DQ_REFERRAL_LINK_PREFIX,
+} from "../../../utils/config";
+
+export enum DittoStatus {
+  error = "ERROR",
+  live = "LIVE",
+  maintenance = "MAINTENANCE",
+}
 
 interface LoginContext {
   accessGranted: boolean;
@@ -45,6 +54,8 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
     (state: RootState) => state.socket.isConnected
   );
 
+  const [dittoStatus, setDittoStatus] = useState<DittoStatus>();
+
   const [accessGranted, setAccessGranted] = useState(false);
   const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
   const [loginComplete, setLoginComplete] = useState(false);
@@ -52,6 +63,40 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
 
   const [validationSent, setValidationSent] = useState(false);
   const loginSucceededRef = useRef(false);
+
+  // Early status fetch before triggering login
+  useEffect(() => {
+    async function fetchStatus() {
+      try {
+        const response = await fetch(DITTO_STATUS_JSON_URI, {
+          cache: "no-store",
+        });
+        const data = await response.json();
+
+        if (data.status === DittoStatus.live) {
+          setDittoStatus(DittoStatus.live); // Proceed normally
+        } else if (data.status === DittoStatus.maintenance) {
+          setDittoStatus(DittoStatus.maintenance);
+          setAccessDeniedMessage("Ditto Quest is currently under maintenance");
+          setLoginProgress(100);
+          setLoginComplete(true);
+        } else {
+          setDittoStatus(DittoStatus.error);
+          setAccessDeniedMessage("Unexpected server status.");
+          setLoginProgress(100);
+          setLoginComplete(true);
+        }
+      } catch (err) {
+        console.error("Error fetching status:", err);
+        setDittoStatus(DittoStatus.error);
+        setAccessDeniedMessage("Unable to reach server.");
+        setLoginProgress(100);
+        setLoginComplete(true);
+      }
+    }
+
+    fetchStatus();
+  }, []);
 
   useEffect(() => {
     if (!WebApp.initDataUnsafe.user) {
@@ -61,6 +106,8 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
       return;
     }
 
+    if (dittoStatus !== DittoStatus.live) return;
+
     if (socket && !loadingSocket && !validationSent) {
       socket.emit("validate-login", {
         initData: WebApp.initData,
@@ -69,7 +116,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
       setValidationSent(true);
       setLoginProgress(10);
     }
-  }, [socket, loadingSocket, validationSent]);
+  }, [socket, loadingSocket, validationSent, dittoStatus]);
 
   useEffect(() => {
     if (!socket || loadingSocket) return;
