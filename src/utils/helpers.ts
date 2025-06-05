@@ -61,8 +61,7 @@ export function getChildTraitProbabilities(sire: SlimeWithTraits, dame: SlimeWit
     return result;
 }
 
-export function getHighestDominantTraitRarity(slime: SlimeWithTraits): Rarity {
-    // Map rarity values to a rank for comparison
+export function getHighestDominantTraitRarity(slime: SlimeWithTraits): Rarity | "SS" {
     const rarityRank: Record<Rarity, number> = {
         [Rarity.S]: 5,
         [Rarity.A]: 4,
@@ -71,7 +70,6 @@ export function getHighestDominantTraitRarity(slime: SlimeWithTraits): Rarity {
         [Rarity.D]: 1,
     };
 
-    // Collect all dominant traits
     const dominantTraits = [
         slime.BodyDominant,
         slime.PatternDominant,
@@ -83,12 +81,18 @@ export function getHighestDominantTraitRarity(slime: SlimeWithTraits): Rarity {
         slime.MouthDominant,
     ];
 
-    // Find the highest rarity among the dominant traits
-    const highestRarity = dominantTraits.reduce<Rarity>((highest, trait) => {
-        return rarityRank[trait.rarity] > rarityRank[highest] ? trait.rarity : highest;
-    }, Rarity.D); // Start with the lowest rarity as the initial value
+    let highest: Rarity = Rarity.D;
+    let sRankCount = 0;
 
-    return highestRarity;
+    for (const trait of dominantTraits) {
+        if (trait.rarity === Rarity.S) sRankCount++;
+        if (rarityRank[trait.rarity] > rarityRank[highest]) {
+            highest = trait.rarity;
+        }
+    }
+
+    if (sRankCount >= 3) return "SS";
+    return highest;
 }
 
 export function formatNumberWithSuffix(value: number): string {

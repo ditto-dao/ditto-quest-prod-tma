@@ -32,6 +32,7 @@ import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import ReferralIcon from "../../assets/images/sidebar/referral.png";
 import { FloatingUpdateDisplay } from "../floating-update-display/floating-update-display";
 import { useFloatingUpdate } from "../../redux/socket/idle/floating-update-context";
+import { MissionModal } from "../missions/mission-modal";
 
 const pageIcons: Record<string, string> = {
   Shop: ShopIcon,
@@ -47,15 +48,13 @@ const pageIcons: Record<string, string> = {
 };
 
 function MainPage() {
-  const {
-    accessGranted,
-    accessDeniedMessage,
-    loginProgress,
-    loginComplete,
-  } = useLoginSocket();
+  const { accessGranted, accessDeniedMessage, loginProgress, loginComplete } =
+    useLoginSocket();
   const { updates } = useFloatingUpdate();
 
-  const [view, setView] = useState<"loading" | "main" | "access-denied">("loading");
+  const [view, setView] = useState<"loading" | "main" | "access-denied">(
+    "loading"
+  );
   const [currentPage, setCurrentPage] = useState("Avatar");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -69,17 +68,28 @@ function MainPage() {
 
   const renderPage = () => {
     switch (currentPage) {
-      case "Shop": return <div>Shop Page Content</div>;
-      case "Avatar": return <AvatarPage />;
-      case "Inventory": return <InventoryPage />;
-      case "Skills": return <SkillsPage />;
-      case "Farming": return <FarmingPage />;
-      case "Crafting": return <CraftingPage />;
-      case "Slime Lab": return <SlimeLabPage />;
-      case "Combat": return <CombatPage />;
-      case "Gacha": return <GachaPage />;
-      case "Referral": return <ReferralPage />;
-      default: return <AvatarPage />;
+      case "Shop":
+        return <div>Shop Page Content</div>;
+      case "Avatar":
+        return <AvatarPage />;
+      case "Inventory":
+        return <InventoryPage />;
+      case "Skills":
+        return <SkillsPage />;
+      case "Farming":
+        return <FarmingPage />;
+      case "Crafting":
+        return <CraftingPage />;
+      case "Slime Lab":
+        return <SlimeLabPage />;
+      case "Combat":
+        return <CombatPage />;
+      case "Gacha":
+        return <GachaPage />;
+      case "Referral":
+        return <ReferralPage />;
+      default:
+        return <AvatarPage />;
     }
   };
 
@@ -122,7 +132,10 @@ function MainPage() {
             transition={{ duration: 0.5 }}
           >
             <header className="header">
-              <div className="open-sidebar-btn" onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
+              <div
+                className="open-sidebar-btn"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              >
                 ☰
               </div>
               <div className="header-title">
@@ -158,7 +171,8 @@ function MainPage() {
               </motion.div>
             </SimpleBar>
             <NotificationManager />
-            <FloatingUpdateDisplay updates={updates}/>
+            <FloatingUpdateDisplay updates={updates} />
+            <MissionModal />
           </motion.div>
         )}
       </AnimatePresence>

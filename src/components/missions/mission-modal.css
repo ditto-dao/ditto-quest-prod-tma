@@ -1,0 +1,145 @@
+.drag-wrapper {
+  height: 100vh;
+  width: 100vw;
+  z-index: -2;
+}
+
+.mission-modal {
+  position: fixed;
+  bottom: 40px;
+  transform: translateX(-50%);
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  pointer-events: auto;
+  cursor: grab;
+  opacity: 0.9;
+}
+
+.mission-drag-handle {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.mission-box {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--midnight-teal);
+  border: 3px solid var(--ocean-blue);
+  border-radius: 12px;
+  width: 75vw;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-size: 8px;
+  color: var(--sage-green);
+}
+
+.mission-left {
+  padding: 10px 0 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.guide-img {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+.mission-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 9px;
+  flex: 1;
+}
+
+.guide-name {
+  font-weight: bold;
+  color: var(--highlight);
+  margin-bottom: 6px;
+  border-bottom: 3px solid var(--deep-forest-green);
+  padding-bottom: 2px;
+  font-size: 9px;
+}
+
+.guide-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.guide-text p {
+  margin: 0 0 3px 0;
+  line-height: 13px;
+  text-align: left;
+}
+
+.nav-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px; /* Add space between buttons */
+}
+
+.nav-buttons button {
+  padding: 6px;
+  font-size: 8px;
+  border-radius: 6px;
+  border: none;
+  background-color: var(--emerald-green);
+  opacity: 0.8;
+  color: var(--cream-white);
+  cursor: pointer;
+}
+
+.nav-buttons button:active {
+  background-color: var(--sage-green);
+}
+
+.mission-label {
+  margin: 0 0 2px 0;
+  text-align: left;
+}
+
+.mission-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  width: 100%;
+}
+
+.mission-payout {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 6px;
+}
+
+.ditto-icon img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.mission-progress-bar {
+  flex: 1;
+  height: 4px;
+  min-width: 40px;
+  background-color: var(--rarity-d);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.mission-progress-fill {
+  height: 100%;
+  background-color: var(--golden-yellow);
+  transition: width 0.3s ease;
+}
+
+.progress-label {
+  font-size: 8px;
+  color: var(--cream-white);
+  white-space: nowrap;
+}

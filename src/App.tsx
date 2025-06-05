@@ -16,6 +16,7 @@ import { NotificationProvider } from "./components/notifications/notification-co
 import { CurrentActivityProvider } from "./redux/socket/idle/current-activity-context";
 import { FloatingUpdateProvider } from "./redux/socket/idle/floating-update-context";
 import SocketInactivityManager from "./redux/socket/socket-inactivity-manager";
+import { MissionNotificationProvider } from "./components/missions/mission-context";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -78,6 +79,7 @@ function App() {
           "--rarity-s",
           "#f6b74c"
         ); /* Muted Gold for S rank */
+        root.style.setProperty("--rarity-ss", "#f6b74c");
       } else {
       }
     }
@@ -106,7 +108,9 @@ function App() {
                   <IdleSkillSocketProvider>
                     <GachaSocketProvider>
                       <CombatSocketProvider>
-                        <MainPage />
+                        <MissionNotificationProvider>
+                          <MainPage />
+                        </MissionNotificationProvider>
                         <SocketInactivityManager />
                       </CombatSocketProvider>
                     </GachaSocketProvider>

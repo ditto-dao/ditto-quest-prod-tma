@@ -38,6 +38,11 @@ export const GET_DUNGEON_LB = 'get-dungeon-lb';
 
 export const DUNGEON_LB_UPDATE_EVENT = 'dungeon-lb-update';
 
+// Mission
+export const MISSION_UPDATE = 'mission-update';
+
+export const GET_NEXT_MISSION = 'refresh-mission';
+
 // Ledger
 export const LEDGER_READ_BALANCE_EVENT = 'ditto-ledger-read-balance';
 

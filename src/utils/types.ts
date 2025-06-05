@@ -537,3 +537,24 @@ export interface UserBalanceUpdate {
     notes?: string;
 }
 
+export type UserMission = {
+    telegramId: string;
+    type: "FARM" | "CRAFT" | "COMBAT" | "BREED" | "GACHA";
+    label: string;
+
+    // Optional target identifiers
+    itemId?: number;        // FARM
+    equipmentId?: number;   // CRAFT
+    monsterId?: number;     // COMBAT
+    slimeRarity?: "S" | "A" | "B" | "C" | "D"; // BREED or GACHA
+
+    quantity: number;
+    progress: number;
+    rewardDitto: string; // in wei as string for consistency with backend
+    imgsrc?: string;
+
+    round: number;
+    claimed: boolean;
+    createdAt: string; // ISO string
+    updatedAt: string; // ISO string
+};

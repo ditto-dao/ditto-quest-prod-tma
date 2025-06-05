@@ -37,6 +37,7 @@
   align-items: center;
   background-color: var(--cream-white);
   border-radius: 8px;
+  padding: 20px;
 }
 
 .crafting-equipment-img-container img {
