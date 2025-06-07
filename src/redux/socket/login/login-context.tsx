@@ -76,12 +76,10 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
         if (data.status === DittoStatus.live) {
           setDittoStatus(DittoStatus.live); // Proceed normally
         } else if (data.status === DittoStatus.maintenance) {
-          setDittoStatus(DittoStatus.live); // Proceed normally
-
-/*           setDittoStatus(DittoStatus.maintenance);
+          setDittoStatus(DittoStatus.maintenance);
           setAccessDeniedMessage("Ditto Quest is currently under maintenance");
           setLoginProgress(100);
-          setLoginComplete(true); */
+          setLoginComplete(true);
         } else {
           setDittoStatus(DittoStatus.error);
           setAccessDeniedMessage("Unexpected server status.");
