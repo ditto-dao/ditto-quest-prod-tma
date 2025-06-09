@@ -14,6 +14,8 @@ import GetMoreDittoIcon from "../../assets/images/sidebar/get-more-ditto.png";
 import { useNotification } from "../notifications/notification-context";
 import OpenDGNotification from "../notifications/notification-content/open-dg-notification/open-dg-notification";
 import SimpleBar from "simplebar-react";
+import TgIcon from "../../assets/images/sidebar/tg-icon.png";
+import BotIcon from "../../assets/images/sidebar/bot-icon.png";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -31,10 +33,26 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
       </button>
       <div className="dq-icon-container">
         <img src={DQIcon} alt="Game Icon" className="dq-icon" />
+        <div className="dq-icon-buttons">
+          <a
+            href="https://t.me/teamditto"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={TgIcon} alt="Telegram Icon" className="dq-icon-button" />
+          </a>
+          <a
+            href="https://t.me/the_ditto_bot"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src={BotIcon} alt="Bot Icon" className="dq-icon-button" />
+          </a>
+        </div>
       </div>
       <SimpleBar
         className="sidebar-scrollbar"
-        style={{ maxHeight: "calc(100vh - 115px)" }}
+        style={{ maxHeight: "calc(100vh - 120px)" }}
       >
         <ul>
           <li>

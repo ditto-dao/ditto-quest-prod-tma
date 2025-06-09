@@ -27,12 +27,27 @@
 }
 
 .dq-icon-container {
-  width: 100%;
-  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 20px 20px 10px 20px;
 }
 
 .dq-icon {
-  height: 75px;
+  height: 90px;
+}
+
+.dq-icon-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.dq-icon-button {
+  height: 32px;
+  width: 32px;
+  border-radius: 50%;
+  padding: 1px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
 }
 
 .sidebar ul li {
