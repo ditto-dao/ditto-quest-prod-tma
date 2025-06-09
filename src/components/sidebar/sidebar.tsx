@@ -10,6 +10,10 @@ import SlimeLabIcon from "../../assets/images/sidebar/slime-lab.png";
 import CombatIcon from "../../assets/images/sidebar/combat.png";
 import GachaIcon from "../../assets/images/sidebar/gacha.png";
 import ReferralIcon from "../../assets/images/sidebar/referral.png";
+import GetMoreDittoIcon from "../../assets/images/sidebar/get-more-ditto.png";
+import { useNotification } from "../notifications/notification-context";
+import OpenDGNotification from "../notifications/notification-content/open-dg-notification/open-dg-notification";
+import SimpleBar from "simplebar-react";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -18,6 +22,8 @@ interface SidebarProps {
 }
 
 function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
+  const { addNotification } = useNotification();
+
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       <button className="close-btn" onClick={toggleSidebar}>
@@ -26,84 +32,119 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
       <div className="dq-icon-container">
         <img src={DQIcon} alt="Game Icon" className="dq-icon" />
       </div>
-      <ul>
-        <li>
-          <a onClick={() => setPage("Avatar")}>
-            <img src={AvatarIcon} alt="Avatar Icon" className="sidebar-icon" />
-            Avatar
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Inventory")}>
-            <img
-              src={InventoryIcon}
-              alt="Inventory Icon"
-              className="sidebar-icon"
-            />
-            Inventory
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Skills")}>
-            <img src={SkillsIcon} alt="Skills Icon" className="sidebar-icon" />
-            Stats
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Farming")}>
-            <img
-              src={FarmingIcon}
-              alt="Farming Icon"
-              className="sidebar-icon"
-            />
-            Farming
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Crafting")}>
-            <img
-              src={CraftingIcon}
-              alt="Crafting Icon"
-              className="sidebar-icon"
-            />
-            Crafting
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Slime Lab")}>
-            <img
-              src={SlimeLabIcon}
-              alt="Slime Lab Icon"
-              className="sidebar-icon"
-            />
-            Slime Lab
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Combat")}>
-            <img src={CombatIcon} alt="Combat Icon" className="sidebar-icon" />
-            Combat
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Gacha")}>
-            <img src={GachaIcon} alt="Gacha Icon" className="sidebar-icon" />
-            Gacha
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Shop")}>
-            <img src={ShopIcon} alt="Shop Icon" className="sidebar-icon" />
-            Shop
-          </a>
-        </li>
-        <li>
-          <a onClick={() => setPage("Referral")}>
-            <img src={ReferralIcon} alt="Referral Icon" className="sidebar-icon" />
-            Referral
-          </a>
-        </li>
-      </ul>
+      <SimpleBar
+        className="sidebar-scrollbar"
+        style={{ maxHeight: "calc(100vh - 115px)" }}
+      >
+        <ul>
+          <li>
+            <a onClick={() => setPage("Avatar")}>
+              <img
+                src={AvatarIcon}
+                alt="Avatar Icon"
+                className="sidebar-icon"
+              />
+              Avatar
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Inventory")}>
+              <img
+                src={InventoryIcon}
+                alt="Inventory Icon"
+                className="sidebar-icon"
+              />
+              Inventory
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Skills")}>
+              <img
+                src={SkillsIcon}
+                alt="Skills Icon"
+                className="sidebar-icon"
+              />
+              Stats
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Farming")}>
+              <img
+                src={FarmingIcon}
+                alt="Farming Icon"
+                className="sidebar-icon"
+              />
+              Farming
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Crafting")}>
+              <img
+                src={CraftingIcon}
+                alt="Crafting Icon"
+                className="sidebar-icon"
+              />
+              Crafting
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Slime Lab")}>
+              <img
+                src={SlimeLabIcon}
+                alt="Slime Lab Icon"
+                className="sidebar-icon"
+              />
+              Slime Lab
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Combat")}>
+              <img
+                src={CombatIcon}
+                alt="Combat Icon"
+                className="sidebar-icon"
+              />
+              Combat
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Gacha")}>
+              <img src={GachaIcon} alt="Gacha Icon" className="sidebar-icon" />
+              Gacha
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Shop")}>
+              <img src={ShopIcon} alt="Shop Icon" className="sidebar-icon" />
+              Shop
+            </a>
+          </li>
+          <li>
+            <a onClick={() => setPage("Referral")}>
+              <img
+                src={ReferralIcon}
+                alt="Referral Icon"
+                className="sidebar-icon"
+              />
+              Referral
+            </a>
+          </li>
+          <li>
+            <a
+              onClick={() => {
+                addNotification(() => <OpenDGNotification />);
+              }}
+            >
+              <img
+                src={GetMoreDittoIcon}
+                alt="Get More Ditto Icon"
+                className="sidebar-icon"
+              />
+              Get More DITTO
+            </a>
+          </li>
+        </ul>
+      </SimpleBar>
     </div>
   );
 }

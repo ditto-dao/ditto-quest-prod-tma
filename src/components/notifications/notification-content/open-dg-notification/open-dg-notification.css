@@ -1,0 +1,57 @@
+.open-dg-notification {
+  color: var(--cream-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.open-dg-notification > .open-dg-notification-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.open-dg-notification-header > img {
+  max-width: 140px;
+}
+
+.open-dg-notification-header > div {
+  font-size: 12px;
+  margin-bottom: 6px;
+  background-color: var(--burnt-orange);
+  padding: 8px 16px;
+  border-radius: 5px;
+}
+
+.open-dg-message {
+  font-size: 10px;
+  padding: 10px;
+  padding-top: 0;
+  line-height: 16px;
+}
+
+.open-dg-message > span {
+  color: var(--rarity-s);
+}
+
+.open-dg-button {
+  margin-bottom: 6px;
+  border-radius: 5px;
+  background-color: #004094;
+  color: var(--cream-white);
+  padding: 6px 20px;
+  font-size: 12px;
+  border: 1px solid #1e80ff;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.open-dg-button:active {
+  background-color: #00306c;
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}

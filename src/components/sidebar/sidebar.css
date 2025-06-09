@@ -61,3 +61,22 @@
 .gap {
   margin-bottom: 45px; /* Adds gap between Shop and the rest of the items */
 }
+
+.sidebar-scrollbar .simplebar-scrollbar::before {
+  background-color: rgba(136, 136, 136, 0.3);
+  border-radius: 3px;
+  transition: background-color 3s ease-in-out;
+}
+
+.sidebar-scrollbar .simplebar-scrollbar:hover::before {
+  background-color: rgba(85, 85, 85, 0.8);
+}
+
+.sidebar-scrollbar .simplebar-track.simplebar-horizontal {
+  height: 9px;
+  background: transparent !important;
+}
+
+.sidebar-scrollbar .simplebar-track {
+  background: transparent !important;
+}
