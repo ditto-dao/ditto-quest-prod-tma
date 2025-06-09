@@ -23,7 +23,7 @@
   font-size: 12px;
   font-weight: bold;
   gap: 12px;
-  max-width: 50vw;
+  width: 50vw;
 }
 
 .floating-update-icon {
