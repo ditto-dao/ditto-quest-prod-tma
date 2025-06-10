@@ -3,6 +3,8 @@ import "./item-eq-modal.css";
 import EquipmentIcon from "../../assets/images/general/equipment-icon.png";
 import ItemIcon from "../../assets/images/general/item-icon.png";
 import { EquipmentType, Inventory } from "../../utils/types";
+import { useNotification } from "../notifications/notification-context";
+import SellNotification from "../sell-modal/sell-modal";
 
 interface ItemEqModalProps {
   selectedItem: Inventory;
@@ -12,14 +14,15 @@ interface ItemEqModalProps {
   removeNotification: (id: string) => void;
 }
 
-export default function ItemEqModal({ 
+export default function ItemEqModal({
   selectedItem,
   notificationId,
   closeOnEquip,
   closeOnUnequip,
-  removeNotification
+  removeNotification,
 }: ItemEqModalProps) {
   const { userData, equip, unequip } = useUserSocket();
+  const { addNotification } = useNotification();
 
   const meetsLvlReq = (reqLvl: number) => {
     return reqLvl <= userData.level;
@@ -38,6 +41,13 @@ export default function ItemEqModal({
 
   const handleUnequip = (equipmentType: EquipmentType) => {
     unequip(equipmentType);
+  };
+
+  const canSell = () => {
+    if (selectedItem.item && selectedItem.itemId) return true;
+    if (!isEquipped()) return true;
+    if (isEquipped() && selectedItem.quantity > 1) return true;
+    return false;
   };
 
   return (
@@ -135,6 +145,23 @@ export default function ItemEqModal({
               : "Equip"}
           </button>
         )}
+        <button
+          className={`sell-button ${canSell() ? "sell-active" : ""}`}
+          onClick={() => {
+            addNotification((id) => (
+              <SellNotification
+                notificationId={id}
+                parentNotificationId={notificationId}
+                removeNotification={removeNotification}
+                selectedItem={selectedItem}
+                isEquipped={isEquipped()}
+              />
+            ));
+          }}
+          disabled={!canSell()}
+        >
+          Sell
+        </button>
       </div>
     </div>
   );

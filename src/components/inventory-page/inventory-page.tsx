@@ -63,51 +63,35 @@ function InventoryPage() {
       <div className="inventory-page-content-wrapper">
         <div className="inventory-page-content-container">
           <div className="inv-container-label">Inventory</div>
-          {inventory.length === 0 ? (
-            <div className="inventory-rows-wrapper">
-              {/* Render a single row with 4 empty slots */}
-              <div className="inventory-row">
-                {Array(4)
-                  .fill(null)
-                  .map((_, index) => (
+          <div className="inventory-rows-wrapper">
+            {inventoryRows.map((row, rowIndex) => (
+              <div key={`row-${rowIndex}`} className="inventory-row">
+                {row.map((entry, colIndex) =>
+                  entry ? (
                     <div
-                      key={`empty-${index}`}
+                      key={`entry-${entry.id}`}
+                      onClick={() => handleOpenModal(entry)} // Open modal on click
+                      className="inventory-item"
+                    >
+                      <img
+                        src={entry.equipment?.imgsrc || entry.item?.imgsrc}
+                        alt={entry.equipment?.name || entry.item?.name}
+                        className="inv-item-image"
+                      />
+                      <div className="inv-item-quantity">
+                        {formatNumberForInvQty(entry.quantity)}
+                      </div>
+                    </div>
+                  ) : (
+                    <div
+                      key={`empty-${rowIndex}-${colIndex}`} // Unique key for empty slots
                       className="inventory-item empty"
                     ></div>
-                  ))}
+                  )
+                )}
               </div>
-            </div>
-          ) : (
-            <div className="inventory-rows-wrapper">
-              {inventoryRows.map((row, rowIndex) => (
-                <div key={`row-${rowIndex}`} className="inventory-row">
-                  {row.map((entry, colIndex) =>
-                    entry ? (
-                      <div
-                        key={`entry-${entry.id}`}
-                        onClick={() => handleOpenModal(entry)} // Open modal on click
-                        className="inventory-item"
-                      >
-                        <img
-                          src={entry.equipment?.imgsrc || entry.item?.imgsrc}
-                          alt={entry.equipment?.name || entry.item?.name}
-                          className="inv-item-image"
-                        />
-                        <div className="inv-item-quantity">
-                          {formatNumberForInvQty(entry.quantity)}
-                        </div>
-                      </div>
-                    ) : (
-                      <div
-                        key={`empty-${rowIndex}-${colIndex}`} // Unique key for empty slots
-                        className="inventory-item empty"
-                      ></div>
-                    )
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       </div>
     </div>
