@@ -443,6 +443,33 @@ export function updateUserStatsFromEquipmentAndSlime(user: User, userCombat: Com
     userCombat.cp = calculateCombatPower(userCombat).toString();
 }
 
+function getAtkCooldownFromAtkSpd(atkSpd: number): number {
+    if (atkSpd < 10) return 4;
+
+    if (atkSpd <= 500) {
+        return 4 - ((atkSpd - 10) / (500 - 10)) * (4 - 3.5); // 4 → 3.5
+    }
+
+    if (atkSpd <= 2000) {
+        return 3.5 - ((atkSpd - 500) / (2000 - 500)) * (3.5 - 2.5); // 3.5 → 2.5
+    }
+
+    if (atkSpd <= 5000) {
+        return 2.5 - ((atkSpd - 2000) / (5000 - 2000)) * (2.5 - 1.5); // 2.5 → 1.5
+    }
+
+    if (atkSpd <= 10000) {
+        return 1.5 - ((atkSpd - 5000) / (10000 - 5000)) * (1.5 - 1.0); // 1.5 → 1.0
+    }
+
+    // Late game: 10k+ scales slowly toward 0.85s
+    return 0.85 + 0.15 * Math.exp(-0.001 * (atkSpd - 10000));
+}
+
+export function getPercentageDmgReduct(dmgReduction: number): number {
+    return 1 / (1 + dmgReduction / 5000);
+}
+
 export function calculateCombatPower(c: Combat): Decimal {
     const maxMeleeDmg = new Decimal(c.maxMeleeDmg);
     const maxRangedDmg = new Decimal(c.maxRangedDmg);
@@ -460,30 +487,49 @@ export function calculateCombatPower(c: Combat): Decimal {
     const maxHp = new Decimal(c.maxHp);
 
     const relevantMaxDmg =
-        c.attackType === "Melee" ? maxMeleeDmg :
-            c.attackType === "Ranged" ? maxRangedDmg :
-                c.attackType === "Magic" ? maxMagicDmg :
-                    new Decimal(0);
+        c.attackType === "Melee"
+            ? maxMeleeDmg
+            : c.attackType === "Ranged"
+                ? maxRangedDmg
+                : c.attackType === "Magic"
+                    ? maxMagicDmg
+                    : new Decimal(0);
 
-    const critBonus = critChance.mul(critMultiplier.minus(1));
-    const offenseScore = relevantMaxDmg
-        .mul(new Decimal(1).plus(critBonus))
-        .mul(new Decimal(1).plus(atkSpd.div(10)));
+    // === OFFENSE SCORE ===
+    const cooldown = new Decimal(getAtkCooldownFromAtkSpd(atkSpd.toNumber())); // seconds
+    const attacksPerSecond = new Decimal(1).div(cooldown);
+    const averageHitDmg = relevantMaxDmg.mul(Decimal.add(1, critChance.mul(critMultiplier.minus(1))));
+    const dps = averageHitDmg.mul(attacksPerSecond);
 
+    // === ACCURACY & EVASION SCORE ===
     const accuracyScore = acc.sqrt();
     const evasionScore = eva.sqrt();
-    const defenseScore = dmgReduction.plus(magicDmgReduction);
-    const sustainScore = hpRegenRate.mul(hpRegenAmount).mul(0.1);
+
+    // === DEFENSE SCORE ===
+    const physMitigation = new Decimal(1).minus(
+        new Decimal(getPercentageDmgReduct(dmgReduction.toNumber()))
+    );
+    const magicMitigation = new Decimal(1).minus(
+        new Decimal(getPercentageDmgReduct(magicDmgReduction.toNumber()))
+    );
+    const avgMitigation = physMitigation.plus(magicMitigation).div(2);
+    const defenseScore = avgMitigation.mul(100); // scale to readable number
+
+    // === SUSTAIN SCORE ===
+    const sustainScore = hpRegenAmount.div(hpRegenRate); // heals per second
+
+    // === HP SCORE ===
     const hpScore = maxHp.sqrt();
 
-    const totalScore = offenseScore.mul(12)
+    // === FINAL SCORE ===
+    const totalScore = dps.mul(10)
         .plus(accuracyScore.mul(5))
         .plus(evasionScore.mul(5))
-        .plus(defenseScore.mul(4))
-        .plus(sustainScore.mul(2))
-        .plus(hpScore.mul(1.5));
+        .plus(defenseScore.mul(3))
+        .plus(sustainScore.mul(3))
+        .plus(hpScore.mul(2));
 
-    return totalScore.round(); // return as Decimal
+    return totalScore.round();
 }
 
 export function removeUndefined<T extends object>(obj: Partial<T>): Partial<T> {
