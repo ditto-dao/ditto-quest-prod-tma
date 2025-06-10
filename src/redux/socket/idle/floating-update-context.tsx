@@ -27,7 +27,7 @@ export const FloatingUpdateProvider: React.FC<{ children: React.ReactNode }> = (
     setUpdates((prev) => [...prev, { id, ...Update }]);
     setTimeout(() => {
       setUpdates((prev) => prev.filter((r) => r.id !== id));
-    }, 2500); // 2s later remove
+    }, 2000); // 2s later remove
   };
 
   return (
