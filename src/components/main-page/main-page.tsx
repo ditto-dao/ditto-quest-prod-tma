@@ -33,6 +33,7 @@ import ReferralIcon from "../../assets/images/sidebar/referral.png";
 import { FloatingUpdateDisplay } from "../floating-update-display/floating-update-display";
 import { useFloatingUpdate } from "../../redux/socket/idle/floating-update-context";
 import { MissionModal } from "../missions/mission-modal";
+import TokenPage from "../token-page/token-page";
 
 const pageIcons: Record<string, string> = {
   Shop: ShopIcon,
@@ -88,6 +89,8 @@ function MainPage() {
         return <GachaPage />;
       case "Referral":
         return <ReferralPage />;
+      case "Token":
+        return <TokenPage />;
       default:
         return <AvatarPage />;
     }

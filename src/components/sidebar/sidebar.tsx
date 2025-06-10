@@ -16,6 +16,7 @@ import OpenDGNotification from "../notifications/notification-content/open-dg-no
 import SimpleBar from "simplebar-react";
 import TgIcon from "../../assets/images/sidebar/tg-icon.png";
 import BotIcon from "../../assets/images/sidebar/bot-icon.png";
+import WalletIcon from "../../assets/images/sidebar/wallet-icon.png";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -34,6 +35,11 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
       <div className="dq-icon-container">
         <img src={DQIcon} alt="Game Icon" className="dq-icon" />
         <div className="dq-icon-buttons">
+          <a
+            onClick={() => setPage("Token")}
+          >
+            <img src={WalletIcon} alt="Bot Icon" className="dq-icon-button" />
+          </a>
           <a
             href="https://t.me/teamditto"
             target="_blank"

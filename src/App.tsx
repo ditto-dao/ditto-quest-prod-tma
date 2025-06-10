@@ -17,6 +17,8 @@ import { CurrentActivityProvider } from "./redux/socket/idle/current-activity-co
 import { FloatingUpdateProvider } from "./redux/socket/idle/floating-update-context";
 import SocketInactivityManager from "./redux/socket/socket-inactivity-manager";
 import { MissionNotificationProvider } from "./components/missions/mission-context";
+import { THEME, TonConnectUIProvider } from "@tonconnect/ui-react";
+import { MANIFEST_URL, REDIRECT_URL } from "./utils/config";
 
 //initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
@@ -98,30 +100,40 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store}>
-      <NotificationProvider>
-        <SocketProvider>
-          <LoginSocketProvider>
-            <FloatingUpdateProvider>
-              <UserProvider>
-                <CurrentActivityProvider>
-                  <IdleSkillSocketProvider>
-                    <GachaSocketProvider>
-                      <CombatSocketProvider>
-                        <MissionNotificationProvider>
-                          <MainPage />
-                        </MissionNotificationProvider>
-                        <SocketInactivityManager />
-                      </CombatSocketProvider>
-                    </GachaSocketProvider>
-                  </IdleSkillSocketProvider>
-                </CurrentActivityProvider>
-              </UserProvider>
-            </FloatingUpdateProvider>
-          </LoginSocketProvider>
-        </SocketProvider>
-      </NotificationProvider>
-    </Provider>
+    <TonConnectUIProvider
+      manifestUrl={MANIFEST_URL}
+      actionsConfiguration={{
+        twaReturnUrl: REDIRECT_URL,
+      }}
+      uiPreferences={{
+        theme: THEME.DARK,
+      }}
+    >
+      <Provider store={store}>
+        <NotificationProvider>
+          <SocketProvider>
+            <LoginSocketProvider>
+              <FloatingUpdateProvider>
+                <UserProvider>
+                  <CurrentActivityProvider>
+                    <IdleSkillSocketProvider>
+                      <GachaSocketProvider>
+                        <CombatSocketProvider>
+                          <MissionNotificationProvider>
+                            <MainPage />
+                          </MissionNotificationProvider>
+                          <SocketInactivityManager />
+                        </CombatSocketProvider>
+                      </GachaSocketProvider>
+                    </IdleSkillSocketProvider>
+                  </CurrentActivityProvider>
+                </UserProvider>
+              </FloatingUpdateProvider>
+            </LoginSocketProvider>
+          </SocketProvider>
+        </NotificationProvider>
+      </Provider>
+    </TonConnectUIProvider>
   );
 }
 

@@ -12,6 +12,7 @@
   "dependencies": {
     "@fingerprintjs/fingerprintjs": "^4.6.2",
     "@reduxjs/toolkit": "^2.2.3",
+    "@tonconnect/ui-react": "^2.1.0",
     "@twa-dev/sdk": "^7.0.0",
     "@types/socket.io-client": "^3.0.0",
     "@vitejs/plugin-basic-ssl": "^1.0.1",

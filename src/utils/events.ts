@@ -49,3 +49,8 @@ export const LEDGER_READ_BALANCE_EVENT = 'ditto-ledger-read-balance';
 export const LEDGER_UPDATE_BALANCE_EVENT = 'ditto-ledger-update-balance';
 
 export const LEDGER_READ_BALANCE_UPDATES_EVENT = 'ditto-ledger-read-balance-updates';
+
+// On-chain price
+export const READ_ON_CHAIN_PRICE_EVENT = 'ditto-ledger-read-on-chain-price';
+
+export const ON_CHAIN_PRICE_UPDATE_RES_EVENT = 'ditto-ledger-on-chain-price-update';
