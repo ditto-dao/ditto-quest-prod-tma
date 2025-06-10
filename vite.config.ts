@@ -9,5 +9,5 @@ export default defineConfig({
     outDir: './docs'
   },
   //base: '/ditto-quest-tma/',
-  //base: '/ditto-quest-prod-tma',
+  base: '/ditto-quest-prod-tma',
 });
