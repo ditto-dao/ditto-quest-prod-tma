@@ -6,16 +6,30 @@
   border: 1px solid var(--sage-green);
   border-radius: 8px;
   gap: 10px;
+  position: relative; /* Added for tooltip positioning */
 }
 
 .skill-name {
-  background-color: var(--sage-green); 
+  background-color: var(--sage-green);
   padding: 6px 5px;
   border-radius: 4px;
   width: 25%;
   text-align: center;
   font-size: 9px;
   white-space: nowrap;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.skill-name.clickable {
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.skill-name.clickable:active {
+  transform: translateY(1px);
+  background-color: var(--burnt-orange);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
 }
 
 .skill-level {
@@ -55,4 +69,58 @@
   color: var(--sage-green);
   cursor: not-allowed;
   opacity: 0.5;
+}
+
+/* Tooltip Styles */
+.skill-tooltip {
+  position: fixed;
+  background-color: var(--midnight-teal);
+  border: 2px solid var(--light-teal);
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  min-width: 250px;
+  max-width: 300px;
+  animation: tooltipFadeIn 0.2s ease-out;
+  pointer-events: none; /* Prevent tooltip from interfering with clicks */
+}
+
+.skill-tooltip-header {
+  background-color: var(--light-teal);
+  color: var(--cream-white);
+  padding: 3px 10px;
+  font-size: 9px;
+  font-weight: bold;
+  border-radius: 4px 4px 0 0;
+  text-align: center;
+  border-bottom: 1px solid var(--dark-navy);
+}
+
+.skill-tooltip-content {
+  padding: 10px;
+  font-size: 7px;
+  line-height: 14px;
+  color: var(--cream-white);
+  text-align: left;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive positioning for mobile */
+@media (max-width: 480px) {
+  .skill-tooltip {
+    right: 0;
+    left: 0;
+    min-width: auto;
+    max-width: 280px;
+  }
 }
