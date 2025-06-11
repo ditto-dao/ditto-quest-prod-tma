@@ -101,6 +101,7 @@ interface UserContext {
   pumpStats: (stats: StatsToPumpPayload) => void;
   canEmitEvent: () => boolean;
   setLastEventEmittedTimestamp: React.Dispatch<React.SetStateAction<number>>;
+  removeSlimeById: (slimeId: number) => void;
 }
 
 const UserContext = createContext<UserContext>({
@@ -122,6 +123,7 @@ const UserContext = createContext<UserContext>({
   pumpStats: () => {},
   canEmitEvent: () => false,
   setLastEventEmittedTimestamp: () => {},
+  removeSlimeById: () => {},
 });
 
 export const useUserSocket = () => useContext(UserContext);
@@ -455,6 +457,22 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
     return Date.now() - lastEventEmittedTimestamp >= 500;
   };
 
+  const removeSlimeById = (slimeId: number) => {
+    setUserData((prevUserData) => {
+      if (!prevUserData || !prevUserData.slimes) return prevUserData;
+
+      const updatedSlimes = prevUserData.slimes.filter(
+        (slime) => slime.id !== slimeId
+      );
+      console.log(`Removed slime with ID ${slimeId}`);
+
+      return {
+        ...prevUserData,
+        slimes: updatedSlimes,
+      };
+    });
+  };
+
   useEffect(() => {
     // Listener for login
     if (socket && !loadingSocket) {
@@ -611,10 +629,15 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
       socket.on("update-slime-inventory", (slime: SlimeWithTraits) => {
         setUserData((prevUserData) => {
-          // Create a copy of the current itemInventory
           let updatedSlimes = prevUserData.slimes
             ? [...prevUserData.slimes]
             : [];
+
+          // Check if slime id already exists
+          const alreadyExists = updatedSlimes.some((s) => s.id === slime.id);
+          if (alreadyExists) {
+            return prevUserData; // do nothing if exists
+          }
 
           if (accessGranted) {
             addFloatingUpdate({
@@ -874,10 +897,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
       socket.on(BETA_TESTER_LOGIN_EVENT, () => {
         console.log(`BETA_TESTER_LOGIN_EVENT received`);
-        addNotification(() => (
-          <BetaTestersLoginNotif
-          />
-        ));
+        addNotification(() => <BetaTestersLoginNotif />);
       });
 
       socket.on("error", (msg: string) => {
@@ -923,6 +943,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         pumpStats,
         canEmitEvent,
         setLastEventEmittedTimestamp,
+        removeSlimeById
       }}
     >
       {children}

@@ -1,0 +1,178 @@
+.sell-slime-notification {
+  color: var(--cream-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 10px;
+  padding-top: 0;
+}
+
+.sell-slime-message {
+  font-size: 11px;
+  padding: 0 15px;
+}
+
+.sell-slime-slider-container {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sell-slime-slider-labels {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  color: var(--cream-white);
+  padding: 0 2px;
+}
+
+.sell-slime-amount-display {
+  background-color: var(--deep-forest-green);
+  border: 1px solid var(--emerald-green);
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+.sell-slime-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--deep-forest-green);
+  border: 1px solid var(--emerald-green);
+  outline: none;
+  cursor: pointer;
+}
+
+.sell-slime-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--burnt-orange);
+  border: 1px solid var(--cream-white);
+  cursor: pointer;
+  box-shadow: 0 2px 0 0 var(--dark-navy);
+}
+
+.sell-slime-slider::-webkit-slider-thumb:active {
+  transform: translateY(0.5px);
+  box-shadow: 0 1px 0 0 var(--dark-navy);
+}
+
+.sell-slime-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--burnt-orange);
+  border: 1px solid var(--cream-white);
+  cursor: pointer;
+  box-shadow: 0 2px 0 0 var(--dark-navy);
+}
+
+.sell-slime-slider::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  cursor: pointer;
+  background: var(--deep-forest-green);
+  border: 1px solid var(--emerald-green);
+  border-radius: 3px;
+}
+
+.sell-slime-quick-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.sell-slime-quick-button {
+  background-color: var(--deep-forest-green);
+  color: var(--cream-white);
+  border: 1px solid var(--emerald-green);
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 9px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 60px;
+  box-shadow: 0 2px 0 0 var(--dark-navy);
+}
+
+.sell-slime-quick-button:active:not(:disabled) {
+  transform: translateY(0.5px);
+  background-color: var(--emerald-green);
+  box-shadow: 0 1px 0 0 var(--dark-navy);
+}
+
+.sell-slime-quick-button:disabled {
+  background-color: var(--rarity-d);
+  border-color: var(--rarity-d);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.sell-slime-value {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--deep-forest-green);
+  border: 1px solid var(--emerald-green);
+  border-radius: 4px;
+  width: 55%;
+  max-width: 70%;
+  padding: 8px 10px;
+}
+
+.sell-slime-value-img-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px;
+}
+
+.sell-slime-value-img-container img {
+  width: 16px;
+  height: 16px;
+}
+
+.sell-slime-value-amount {
+  font-size: 11px;
+}
+
+.notif-sell-slime-button {
+  background-color: var(--burnt-orange);
+  color: var(--cream-white);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 9px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  box-shadow: 0 4px 0 0 var(--dark-navy);
+  margin-bottom: 2vh;
+}
+
+.notif-sell-slime-button:disabled {
+  background-color: var(--rarity-d);
+  cursor: not-allowed;
+}
+
+.notif-sell-slime-button:not(:disabled):active {
+  transform: translateY(0.5px);
+  box-shadow: 0 0 0 0 var(--dark-navy);
+}

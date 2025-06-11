@@ -4,6 +4,8 @@ import { SlimeWithTraits } from "../../../../utils/types";
 import { getHighestDominantTraitRarity } from "../../../../utils/helpers";
 import { useUserSocket } from "../../../../redux/socket/user/user-context";
 import { useIdleSkillSocket } from "../../../../redux/socket/idle/skill-context";
+import { useNotification } from "../../../notifications/notification-context";
+import SellSlimeNotification from "../sell-slime-modal/sell-slime-modal";
 
 const TRAIT_KEYS = [
   "Body",
@@ -34,6 +36,8 @@ export default function SlimeModal({
   const { userData, equipSlime, unequipSlime } = useUserSocket();
   const { breedingStatus, slimeToBreed0, slimeToBreed1, setSlimeToBreed } =
     useIdleSkillSocket();
+  const { addNotification } = useNotification();
+
 
   const isSlimeEquipped = (slimeId: number): boolean => {
     return !!(userData?.equippedSlime?.id === slimeId);
@@ -102,6 +106,22 @@ export default function SlimeModal({
             Equip Slime
           </button>
         )}
+        <button
+          className="sell-slime-button"
+          onClick={() => {
+            addNotification((id) => (
+              <SellSlimeNotification
+                notificationId={id}
+                parentNotificationId={notificationId}
+                removeNotification={removeNotification}
+                selectedSlime={selectedSlime}
+              />
+            ));
+          }}
+          disabled={isSlimeEquipped(selectedSlime.id)}
+        >
+          Sell
+        </button>
       </div>
 
       {/* Set for Breeding */}

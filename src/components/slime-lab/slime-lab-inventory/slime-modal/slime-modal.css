@@ -83,6 +83,7 @@
 .set-breed-slime-button-container {
   display: flex;
   justify-content: center;
+  gap: 10px;
 }
 
 .equip-slime-button,
@@ -167,4 +168,28 @@
   padding: 2px 6px;
   border-radius: 4px;
   font-weight: bold;
+}
+
+.sell-slime-button {
+  padding: 8px 12px;
+  font-size: 10px;
+  color: var(--cream-white);
+  background-color: var(--muted-crimson);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.sell-slime-button.sell-active {
+  background-color: var(--muted-crimson);
+}
+
+.sell-slime-button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.sell-slime-button:not(:disabled):active {
+  transform: translateY(0.5px);
 }
