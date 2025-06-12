@@ -2,7 +2,7 @@ import "./balances.css";
 import DittoCoinLogo from "../../assets/images/general/ditto-coin.png";
 import GoldCoinLogo from "../../assets/images/general/gold-coin.png";
 import {
-  formatNumberWithSuffix,
+  formatMaxDigits,
   getTotalFormattedBalance,
 } from "../../utils/helpers";
 import { useUserSocket } from "../../redux/socket/user/user-context";
@@ -20,7 +20,7 @@ function BalancesDisplay() {
               <span>DITTO</span>
             </div>
             <div className="coin-amount">
-              {formatNumberWithSuffix(getTotalFormattedBalance(dittoBalance))}
+              {formatMaxDigits(getTotalFormattedBalance(dittoBalance), 6)}
             </div>
           </div>
 
@@ -30,7 +30,7 @@ function BalancesDisplay() {
               <span>GP</span>
             </div>
             <div className="coin-amount">
-              {formatNumberWithSuffix(userData.goldBalance)}
+              {formatMaxDigits(userData.goldBalance, 6)}
             </div>
           </div>
         </div>
