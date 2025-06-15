@@ -20,16 +20,40 @@ import {
   formatDecimalWithSuffix,
   formatNumberWithCommas,
   getHighestDominantTraitRarity,
+  preloadImage,
 } from "../../utils/helpers";
 import SlimeModal from "../slime-lab/slime-lab-inventory/slime-modal/slime-modal";
 import { useNotification } from "../notifications/notification-context";
 import ItemEqModal from "../item-eq-modal/item-eq-modal";
+import { useEffect, useState } from "react";
 
 function AvatarPage() {
   const { addNotification, removeNotification } = useNotification();
   const { userData } = useUserSocket();
 
+  const [_, setIconImagesLoaded] = useState(false);
+
   const cp = calculateCombatPower(userData.combat || defaultCombat);
+
+  useEffect(() => {
+    const iconsToPreload = [
+      DefaultHat,
+      DefaultCape,
+      DefaultWeapon,
+      DefaultShield,
+      DefaultNecklace,
+      DefaultArmour,
+      DefaultPet,
+      SlimeLogo,
+      CPIcon,
+      GoldMedalIcon,
+      HPLevelIcon,
+    ];
+
+    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
+      setIconImagesLoaded(true)
+    );
+  }, []);
 
   // Slime Modal
   const openSlimeModal = () => {
@@ -48,7 +72,14 @@ function AvatarPage() {
 
   // Equipment Modal
   const handleEquipmentOpenModal = (equipmentInv: Inventory) => {
-    addNotification((id) => <ItemEqModal notificationId={id} selectedItem={equipmentInv} closeOnUnequip={true} removeNotification={removeNotification}/>);
+    addNotification((id) => (
+      <ItemEqModal
+        notificationId={id}
+        selectedItem={equipmentInv}
+        closeOnUnequip={true}
+        removeNotification={removeNotification}
+      />
+    ));
   };
 
   return (
