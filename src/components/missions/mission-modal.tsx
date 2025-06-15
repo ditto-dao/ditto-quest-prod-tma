@@ -94,7 +94,7 @@ export function MissionModal() {
                       <p className="mission-label">{mission.label}</p>
                       {mission.rewardDitto && (
                         <div className="mission-payout">
-                          <div className="ditto-icon">
+                          <div className="mission-payout-ditto-icon">
                             <img src={DittoCoin}></img>
                           </div>
                           <div className="mission-payout-amount">{INTL_FORMATTER_INT.format(parseFloat(formatUnits(mission.rewardDitto, DITTO_DECIMALS)))}</div>
