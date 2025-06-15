@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 17px;
+  gap: 10px;
 }
 
 .tonconnect-button {
@@ -153,7 +153,7 @@
 }
 
 .stats-container {
-margin-top: 3vh;
+  margin-top: 3vh;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -191,4 +191,71 @@ margin-top: 3vh;
 
 .stat-value.negative {
   color: var(--deep-warm-red);
+}
+
+.stat-box-full {
+  width: 90%;
+  background-color: var(--dark-navy);
+  border: 1px solid var(--rarity-d);
+  border-radius: 7px;
+  padding: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 16px;
+}
+
+.stat-label-img-container img {
+  height: 20px;
+}
+
+.token-footer-buttons {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+/* Outer clickable box with shadow + press down - NO overflow hidden here */
+.token-footer-buttons .logo-wrapper {
+  width: 90px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.1s ease, transform 0.1s ease;
+  cursor: pointer;
+  overflow: visible;
+  margin: 4px;
+}
+
+.token-footer-buttons .logo-wrapper:active {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  transform: translateY(1px);
+}
+
+/* Inner container with overflow hidden to clip scaled images */
+.token-footer-buttons .logo-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px; /* Match parent border radius */
+  overflow: hidden; /* Move overflow hidden here */
+}
+
+.token-footer-buttons .logo-container img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.token-footer-buttons .tonviewer-zoom img {
+  transform: scale(1.5);
 }

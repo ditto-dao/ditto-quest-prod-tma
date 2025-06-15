@@ -1,7 +1,7 @@
 import { useLoginSocket } from "../../redux/socket/login/login-context";
 import { useSocket } from "../../redux/socket/socket-context";
 import { useUserSocket } from "../../redux/socket/user/user-context";
-import { /* TonConnectButton, */ useTonAddress } from "@tonconnect/ui-react";
+import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
 import "./token-page.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
@@ -12,11 +12,14 @@ import { DITTO_DECIMALS } from "../../utils/config";
 import { FORMATTER_MIN_0_MAX_3_DP } from "../../utils/formatter";
 import TonLogo from "../../assets/images/general/ton-logo.png";
 import GameEcosystemLogo from "../../assets/images/sidebar/game-eco-icon.png";
-import { formatMaxDigits } from "../../utils/helpers";
+import { formatMaxDigits, preloadImage } from "../../utils/helpers";
 import {
   ON_CHAIN_PRICE_UPDATE_RES_EVENT,
   READ_ON_CHAIN_PRICE_EVENT,
 } from "../../utils/events";
+import SwapLogo from "../../assets/images/general/swap.svg";
+import TonViewerLogo from "../../assets/images/general/tonviewer-logo-w-name.png";
+import StonFiLogo from "../../assets/images/general/ston-fi-logo-w-name.webp";
 
 function TokenPage() {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
@@ -26,8 +29,85 @@ function TokenPage() {
 
   const walletAddress = useTonAddress();
 
-  const [pricesUsd, setPricesUsd] = useState([0.00001]);
+  const [_, setIconImagesLoaded] = useState(false);
+
+  const [pricesUsd, setPricesUsd] = useState<number[]>([0]);
   const [pricesLoaded, setPricesLoaded] = useState(false);
+
+  function formatPriceWithSubscript(
+    price: number,
+    maxDigits: number = 6
+  ): JSX.Element {
+    if (price === 0) {
+      return <span>$0</span>;
+    }
+
+    const priceStr = price.toString();
+
+    // Handle very small numbers that might be in scientific notation
+    let normalizedPrice = price;
+    if (priceStr.includes("e")) {
+      normalizedPrice = parseFloat(price.toFixed(20));
+    }
+
+    const priceString = normalizedPrice.toString();
+    const [integerPart, decimalPart = ""] = priceString.split(".");
+
+    // If no decimal part or integer part is not zero, handle normally
+    if (integerPart !== "0" || !decimalPart) {
+      const truncated = parseFloat(normalizedPrice.toPrecision(maxDigits));
+      return <span>${truncated}</span>;
+    }
+
+    // Count leading zeros in decimal part
+    let leadingZeros = 0;
+    for (let i = 0; i < decimalPart.length; i++) {
+      if (decimalPart[i] === "0") {
+        leadingZeros++;
+      } else {
+        break;
+      }
+    }
+
+    // Get the significant digits after leading zeros
+    const significantPart = decimalPart.substring(leadingZeros);
+
+    // If we have leading zeros and they're more than 2, use subscript notation
+    if (leadingZeros > 2 && significantPart.length > 0) {
+      // Take up to maxDigits from significant part
+      const displaySignificant = significantPart.substring(0, maxDigits);
+
+      return (
+        <span>
+          $0.0<sub>{leadingZeros}</sub>
+          {displaySignificant}
+        </span>
+      );
+    }
+
+    // For cases with 1-2 leading zeros, display normally with truncation
+    const fullDecimal = "0." + decimalPart;
+    const truncated = parseFloat(
+      parseFloat(fullDecimal).toPrecision(maxDigits)
+    );
+
+    return <span>${truncated}</span>;
+  }
+
+  useEffect(() => {
+    const iconsToPreload = [
+      DittoCoinLogo,
+      TonLogo,
+      GameEcosystemLogo,
+      SwapLogo,
+      TonViewerLogo,
+      StonFiLogo,
+    ];
+
+    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
+      setIconImagesLoaded(true)
+    );
+  }, []);
 
   useEffect(() => {
     if (socket) {
@@ -62,10 +142,7 @@ function TokenPage() {
   useEffect(() => {
     if (socket && accessGranted) {
       if (walletAddress.length > 0 && telegramId) {
-        socket.emit(`update-user-wallet-address`, {
-          userId: telegramId,
-          walletAddress: walletAddress,
-        });
+        socket.emit(`update-user-wallet-address`, walletAddress);
         console.log(
           `updated wallet address for user: ${telegramId}, wallet address: ${walletAddress}`
         );
@@ -75,7 +152,7 @@ function TokenPage() {
 
   return (
     <div className="token-page">
-      {/* <TonConnectButton className="tonconnect-button" /> */}
+      <TonConnectButton className="tonconnect-button" />
       <div className="tab-selector">
         <div className="tab active">Balance</div>
         <div className="tab disabled">Withdraw</div>
@@ -126,32 +203,32 @@ function TokenPage() {
         <div className="stat-box">
           <div className="stat-label">Price</div>
           <div className="stat-value">
-            $0.0<sub>4</sub>1
+            {formatPriceWithSubscript(pricesUsd[pricesUsd.length - 1], 5)}
           </div>
         </div>
         <div className="stat-box">
           <div className="stat-label">24h</div>
           <div
             className={`stat-value ${
-/*               pricesUsd.length >= 6
+              pricesUsd.length >= 6
                 ? pricesUsd[pricesUsd.length - 1] >= pricesUsd[0]
                   ? "positive"
                   : "negative"
-                :  */""
+                : ""
             }`}
           >
             {pricesUsd.length < 6 ? (
               "0%"
             ) : (
               <>
-{/*                 {pricesUsd[pricesUsd.length - 1] >= pricesUsd[0] ? "▲" : "▼"}{" "}
+                {pricesUsd[pricesUsd.length - 1] >= pricesUsd[0] ? "▲" : "▼"}{" "}
                 {formatMaxDigits(
                   ((pricesUsd[pricesUsd.length - 1] - pricesUsd[0]) /
                     pricesUsd[0]) *
                     100,
                   3
-                )} */}
-								0%
+                )}
+                %
               </>
             )}
           </div>
@@ -159,10 +236,40 @@ function TokenPage() {
         <div className="stat-box">
           <div className="stat-label">FDV</div>
           <div className="stat-value">
-            {/* ${formatMaxDigits((pricesUsd[pricesUsd.length - 1] || 0) * 1e11, 5)} */}
-            ${formatMaxDigits(1000000, 6)}
+            ${formatMaxDigits((pricesUsd[pricesUsd.length - 1] || 0) * 1e11, 5)}
           </div>
         </div>
+      </div>
+      <div className="stat-box-full">
+        <div className="stat-value">10,000 DITTO</div>
+        <div className="stat-label-img-container">
+          <img src={SwapLogo}></img>
+        </div>
+        <div className="stat-value">
+          ${formatMaxDigits((pricesUsd[pricesUsd.length - 1] || 0) * 10000, 6)}
+        </div>
+      </div>
+      <div className="token-footer-buttons">
+        <a
+          href="https://app.ston.fi/swap?ft=EQBeLoy2H1BlIToCWll_U4M7vi5rGXzBexSnKzOj07urVMNT&chartVisible=true&chartInterval=1w&tt=TON"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="logo-wrapper"
+        >
+          <div className="logo-container">
+            <img src={StonFiLogo} alt="StonFi" />
+          </div>
+        </a>
+        <a
+          href="https://tonviewer.com/EQBeLoy2H1BlIToCWll_U4M7vi5rGXzBexSnKzOj07urVMNT"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="logo-wrapper"
+        >
+          <div className="logo-container tonviewer-zoom">
+            <img src={TonViewerLogo} alt="TonViewer" />
+          </div>
+        </a>
       </div>
     </div>
   );
