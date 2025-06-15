@@ -203,7 +203,7 @@ function TokenPage() {
         <div className="stat-box">
           <div className="stat-label">Price</div>
           <div className="stat-value">
-            {formatPriceWithSubscript(pricesUsd[pricesUsd.length - 1], 5)}
+            {formatPriceWithSubscript(pricesUsd[pricesUsd.length - 1], 4)}
           </div>
         </div>
         <div className="stat-box">
