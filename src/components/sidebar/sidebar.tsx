@@ -17,6 +17,8 @@ import SimpleBar from "simplebar-react";
 import TgIcon from "../../assets/images/sidebar/tg-icon.png";
 import BotIcon from "../../assets/images/sidebar/bot-icon.png";
 import WalletIcon from "../../assets/images/sidebar/wallet-icon.png";
+import { useEffect, useState } from "react";
+import { preloadImage } from "../../utils/helpers";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -27,6 +29,32 @@ interface SidebarProps {
 function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
   const { addNotification } = useNotification();
 
+  const [_, setIconImagesLoaded] = useState(false);
+
+  useEffect(() => {
+    const iconsToPreload = [
+      DQIcon,
+      ShopIcon,
+      AvatarIcon,
+      InventoryIcon,
+      SkillsIcon,
+      FarmingIcon,
+      CraftingIcon,
+      SlimeLabIcon,
+      CombatIcon,
+      GachaIcon,
+      ReferralIcon,
+      GetMoreDittoIcon,
+      TgIcon,
+      BotIcon,
+      WalletIcon,
+    ];
+
+    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
+      setIconImagesLoaded(true)
+    );
+  }, []);
+
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       <button className="close-btn" onClick={toggleSidebar}>
@@ -35,9 +63,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
       <div className="dq-icon-container">
         <img src={DQIcon} alt="Game Icon" className="dq-icon" />
         <div className="dq-icon-buttons">
-          <a
-            onClick={() => setPage("Token")}
-          >
+          <a onClick={() => setPage("Token")}>
             <img src={WalletIcon} alt="Bot Icon" className="dq-icon-button" />
           </a>
           <a
