@@ -61,7 +61,7 @@ function MainPage() {
 
   useEffect(() => {
     if (loginComplete && accessGranted) {
-      setTimeout(() => setView("main"), 400); // slight delay for smooth UX
+      setTimeout(() => setView("main"), 1000); // slight delay for smooth UX
     } else if (loginComplete && !accessGranted && accessDeniedMessage.trim()) {
       setView("access-denied");
     }
