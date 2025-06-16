@@ -169,11 +169,14 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       );
       if (indexToRemove !== -1) {
         if (accessGranted) {
-          addFloatingUpdate({
-            icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
-            text: update.equipment?.name ?? update.item?.name!,
-            amount: inventory[indexToRemove].quantity,
-          });
+          // ✅ Defer the floating update to avoid render warning
+          setTimeout(() => {
+            addFloatingUpdate({
+              icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+              text: update.equipment?.name ?? update.item?.name!,
+              amount: inventory[indexToRemove].quantity,
+            });
+          }, 0);
         }
         inventory.splice(indexToRemove, 1);
         console.log(`Removed ${idKey} ${idToMatch} from inventory.`);
@@ -191,22 +194,28 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         console.log(`Updated ${idKey} ${idToMatch} in inventory.`);
 
         if (quantityDiff !== 0 && accessGranted) {
-          addFloatingUpdate({
-            icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
-            text: update.equipment?.name ?? update.item?.name!,
-            amount: quantityDiff,
-          });
+          // ✅ Defer the floating update to avoid render warning
+          setTimeout(() => {
+            addFloatingUpdate({
+              icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+              text: update.equipment?.name ?? update.item?.name!,
+              amount: quantityDiff,
+            });
+          }, 0);
         }
       } else {
         inventory.push(update); // Add as a new entry
         console.log(`Added ${idKey} ${idToMatch} to inventory.`);
 
         if (accessGranted) {
-          addFloatingUpdate({
-            icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
-            text: update.equipment?.name ?? update.item?.name!,
-            amount: update.quantity,
-          });
+          // ✅ Defer the floating update to avoid render warning
+          setTimeout(() => {
+            addFloatingUpdate({
+              icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
+              text: update.equipment?.name ?? update.item?.name!,
+              amount: update.quantity,
+            });
+          }, 0);
         }
       }
     }
@@ -499,6 +508,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         const cleanPartialupdate = removeUndefined(partialUpdate);
         console.log("Received user-update:", cleanPartialupdate);
 
+        let goldDelta = 0;
+
         setUserData((prev) => {
           if (!prev) return prev;
 
@@ -507,17 +518,12 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             prev.goldBalance !== partialUpdate.goldBalance &&
             accessGranted
           ) {
-            addFloatingUpdate({
-              icon: GoldIcon,
-              text: "GP",
-              amount: partialUpdate.goldBalance - prev.goldBalance,
-            });
+            goldDelta = partialUpdate.goldBalance - prev.goldBalance;
           }
 
           const updated = {
             ...prev,
             ...cleanPartialupdate,
-            // If inventory is updated, sort it
             inventory: cleanPartialupdate.inventory
               ? [...cleanPartialupdate.inventory].sort(
                   (a, b) => a.order - b.order
@@ -527,6 +533,17 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
           return updated;
         });
+
+        // 💡 floating update done AFTER setUserData commit
+        if (goldDelta !== 0) {
+          setTimeout(() => {
+            addFloatingUpdate({
+              icon: GoldIcon,
+              text: "GP",
+              amount: goldDelta,
+            });
+          }, 0);
+        }
       });
 
       socket.on(
@@ -537,23 +554,26 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           console.log(`isBot: ${balance.isBot}`);
           console.log(`isAdmin: ${balance.isAdmin}`);
 
+          // ✅ Defer the floating update to avoid render warning
           if (
             BigInt(balance.accumulatedBalanceChange) +
               BigInt(balance.liveBalanceChange) !==
               0n &&
             accessGranted
           ) {
-            addFloatingUpdate({
-              icon: DittoCoinIcon,
-              text: "DITTO",
-              amount: Number(
-                formatUnits(
-                  BigInt(balance.accumulatedBalanceChange) +
-                    BigInt(balance.liveBalanceChange),
-                  DITTO_DECIMALS
-                )
-              ),
-            });
+            setTimeout(() => {
+              addFloatingUpdate({
+                icon: DittoCoinIcon,
+                text: "DITTO",
+                amount: Number(
+                  formatUnits(
+                    BigInt(balance.accumulatedBalanceChange) +
+                      BigInt(balance.liveBalanceChange),
+                    DITTO_DECIMALS
+                  )
+                ),
+              });
+            }, 0);
           }
 
           setDittoBalance({
@@ -628,30 +648,33 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       socket.on("update-slime-inventory", (slime: SlimeWithTraits) => {
+        let shouldAdd = false;
+
         setUserData((prevUserData) => {
           let updatedSlimes = prevUserData.slimes
             ? [...prevUserData.slimes]
             : [];
-
-          // Check if slime id already exists
           const alreadyExists = updatedSlimes.some((s) => s.id === slime.id);
-          if (alreadyExists) {
-            return prevUserData; // do nothing if exists
-          }
 
-          if (accessGranted) {
+          if (!alreadyExists) {
+            updatedSlimes.push(slime);
+            shouldAdd = true;
+          }
+          return {
+            ...prevUserData,
+            slimes: updatedSlimes,
+          };
+        });
+
+        if (shouldAdd && accessGranted) {
+          setTimeout(() => {
             addFloatingUpdate({
               icon: GenericSlime,
               text: `Slime #${slime.id}`,
               amount: 1,
             });
-          }
-
-          return {
-            ...prevUserData,
-            slimes: [...updatedSlimes, slime],
-          };
-        });
+          }, 0);
+        }
       });
 
       socket.on("unequip-update", (inventoryId: number) => {
@@ -698,24 +721,17 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         console.log(
           `Received update-farming-exp: ${JSON.stringify(data, null, 2)}`
         );
-        setUserData((prevUserData) => {
-          let expGain = data.farmingExp - prevUserData.farmingExp;
 
+        let expGain = 0;
+
+        setUserData((prevUserData) => {
+          expGain = data.farmingExp - prevUserData.farmingExp;
           if (data.farmingLevelsGained > 0) {
             expGain =
               prevUserData.expToNextFarmingLevel -
               prevUserData.farmingExp +
               data.farmingExp;
           }
-
-          if (accessGranted) {
-            addFloatingUpdate({
-              icon: FarmingIcon,
-              text: "Farming EXP",
-              amount: expGain,
-            });
-          }
-
           return {
             ...prevUserData,
             farmingExp: data.farmingExp,
@@ -723,6 +739,16 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             expToNextFarmingLevel: data.expToNextFarmingLevel,
           };
         });
+
+        if (expGain > 0 && accessGranted) {
+          setTimeout(() => {
+            addFloatingUpdate({
+              icon: FarmingIcon,
+              text: "Farming EXP",
+              amount: expGain,
+            });
+          }, 0);
+        }
 
         if (data.farmingLevelsGained > 0) {
           addNotification(() => (
@@ -738,24 +764,17 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         console.log(
           `Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`
         );
-        setUserData((prevUserData) => {
-          let expGain = data.craftingExp - prevUserData.craftingExp;
 
+        let expGain = 0;
+
+        setUserData((prevUserData) => {
+          expGain = data.craftingExp - prevUserData.craftingExp;
           if (data.craftingLevelsGained > 0) {
             expGain =
               prevUserData.expToNextCraftingLevel -
               prevUserData.craftingExp +
               data.craftingExp;
           }
-
-          if (accessGranted) {
-            addFloatingUpdate({
-              icon: CraftingIcon,
-              text: "Crafting EXP",
-              amount: expGain,
-            });
-          }
-
           return {
             ...prevUserData,
             craftingExp: data.craftingExp,
@@ -763,6 +782,16 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             expToNextCraftingLevel: data.expToNextCraftingLevel,
           };
         });
+
+        if (expGain > 0 && accessGranted) {
+          setTimeout(() => {
+            addFloatingUpdate({
+              icon: CraftingIcon,
+              text: "Crafting EXP",
+              amount: expGain,
+            });
+          }, 0);
+        }
 
         if (data.craftingLevelsGained > 0) {
           addNotification(() => (
@@ -812,29 +841,19 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             `Received COMBAT_EXP_UPDATE_EVENT: ${JSON.stringify(data, null, 2)}`
           );
 
+          let hpExpDelta = 0;
+          let expDelta = 0;
+
           setUserData((prev) => {
-            if (!prev) {
-              console.error(
-                `User data not found. Unable to process COMBAT_EXP_UPDATE_EVENT`
-              );
-              return prev;
+            if (!prev) return prev;
+
+            if (prev.expHp !== data.hpExp) {
+              hpExpDelta = data.hpExp - prev.expHp;
+            }
+            if (prev.exp !== data.exp) {
+              expDelta = data.exp - prev.exp;
             }
 
-            if (prev.expHp !== data.hpExp && !data.hpLevelUp && accessGranted) {
-              addFloatingUpdate({
-                icon: HPIcon,
-                text: "HP EXP",
-                amount: data.hpExp - prev.expHp,
-              });
-            }
-
-            if (prev.exp !== data.exp && !data.levelUp && accessGranted) {
-              addFloatingUpdate({
-                icon: GoldMedalIcon,
-                text: "EXP",
-                amount: data.exp - prev.exp,
-              });
-            }
             return {
               ...prev,
               level: data.level,
@@ -846,6 +865,26 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
               expToNextHpLevel: data.expToNextHpLevel,
             };
           });
+
+          if (hpExpDelta > 0 && !data.hpLevelUp && accessGranted) {
+            setTimeout(() => {
+              addFloatingUpdate({
+                icon: HPIcon,
+                text: "HP EXP",
+                amount: hpExpDelta,
+              });
+            }, 0);
+          }
+
+          if (expDelta > 0 && !data.levelUp && accessGranted) {
+            setTimeout(() => {
+              addFloatingUpdate({
+                icon: GoldMedalIcon,
+                text: "EXP",
+                amount: expDelta,
+              });
+            }, 0);
+          }
 
           if (data.levelUp) {
             addNotification(() => (
@@ -923,9 +962,14 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [socket, loadingSocket, accessGranted]);
 
   useEffect(() => {
-    if (userLoaded && dittoBalanceLoaded) setUserContextLoaded(true);
-    console.log(`user context loaded`);
-  }, [userLoaded]);
+    console.log(
+      `Login state check: userLoaded=${userLoaded}, dittoBalanceLoaded=${dittoBalanceLoaded}, userContextLoaded=${userContextLoaded}`
+    );
+    if (userLoaded && dittoBalanceLoaded && !userContextLoaded) {
+      setUserContextLoaded(true);
+      console.log(`✅ User context now loaded`);
+    }
+  }, [userLoaded, dittoBalanceLoaded, userContextLoaded]);
 
   return (
     <UserContext.Provider
@@ -943,7 +987,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         pumpStats,
         canEmitEvent,
         setLastEventEmittedTimestamp,
-        removeSlimeById
+        removeSlimeById,
       }}
     >
       {children}
