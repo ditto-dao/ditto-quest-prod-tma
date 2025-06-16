@@ -968,6 +968,11 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
     if (userLoaded && dittoBalanceLoaded && !userContextLoaded) {
       setUserContextLoaded(true);
       console.log(`✅ User context now loaded`);
+
+      // Signal to login-context that user context is ready
+      if ((window as any).setUserContextReady) {
+        (window as any).setUserContextReady();
+      }
     }
   }, [userLoaded, dittoBalanceLoaded, userContextLoaded]);
 

@@ -4,6 +4,7 @@ import React, {
   useState,
   useEffect,
   useRef,
+  useCallback,
 } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import WebApp from "@twa-dev/sdk";
@@ -21,8 +22,6 @@ import {
   DITTO_STATUS_JSON_URI,
   DQ_REFERRAL_LINK_PREFIX,
 } from "../../../utils/config";
-import { useUserSocket } from "../user/user-context";
-import { useIdleSkillSocket } from "../idle/skill-context";
 
 export enum DittoStatus {
   error = "ERROR",
@@ -35,6 +34,7 @@ interface LoginContext {
   accessDeniedMessage: string;
   loginComplete: boolean;
   loginProgress: number;
+  triggerLoginCompletion: () => void;
 }
 
 const LoginContext = createContext<LoginContext>({
@@ -42,31 +42,88 @@ const LoginContext = createContext<LoginContext>({
   accessDeniedMessage: "",
   loginComplete: false,
   loginProgress: 0,
+  triggerLoginCompletion: () => {},
 });
 
 export const useLoginSocket = () => useContext(LoginContext);
+
+// Global state to track completion readiness
+let userContextReady = false;
+let skillContextReady = false;
 
 export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   children,
 }) => {
   const dispatch = useDispatch();
   const { socket, loadingSocket } = useSocket();
-  const { userContextLoaded } = useUserSocket();
-  const { offlineProgressUpdatesReceived } = useIdleSkillSocket();
 
   const isSocketConnected = useSelector(
     (state: RootState) => state.socket.isConnected
   );
 
   const [dittoStatus, setDittoStatus] = useState<DittoStatus>();
-
   const [accessGranted, setAccessGranted] = useState(false);
   const [accessDeniedMessage, setAccessDeniedMessage] = useState("");
   const [loginComplete, setLoginComplete] = useState(false);
   const [loginProgress, setLoginProgress] = useState(0);
-
   const [validationSent, setValidationSent] = useState(false);
   const loginSucceededRef = useRef(false);
+
+  const triggerLoginCompletion = useCallback(() => {
+    if (!accessGranted || loginComplete) return;
+
+    console.log("🎉 Login completion triggered!");
+    setLoginProgress(100);
+    setTimeout(() => {
+      setLoginComplete(true);
+    }, 500);
+  }, [accessGranted, loginComplete]);
+
+  // Check if both contexts are ready and trigger completion
+  const checkBothReady = useCallback(() => {
+    console.log(
+      `🔍 Checking readiness: user=${userContextReady}, skill=${skillContextReady}`
+    );
+    console.log(
+      `🔍 Conditions: accessGranted=${accessGranted}, loginComplete=${loginComplete}`
+    );
+
+    if (
+      userContextReady &&
+      skillContextReady &&
+      accessGranted &&
+      !loginComplete
+    ) {
+      console.log(`🚀 All conditions met - triggering completion!`);
+      triggerLoginCompletion();
+    } else {
+      console.log(`❌ Conditions not met:`, {
+        userContextReady,
+        skillContextReady,
+        accessGranted,
+        loginComplete: !loginComplete,
+      });
+    }
+  }, [accessGranted, loginComplete, triggerLoginCompletion]);
+
+  // Expose global functions for other contexts to call
+  useEffect(() => {
+    (window as any).setUserContextReady = () => {
+      userContextReady = true;
+      setLoginProgress((p) => Math.max(p, 90));
+      checkBothReady();
+    };
+
+    (window as any).setSkillContextReady = () => {
+      skillContextReady = true;
+      checkBothReady();
+    };
+
+    return () => {
+      delete (window as any).setUserContextReady;
+      delete (window as any).setSkillContextReady;
+    };
+  }, [checkBothReady]);
 
   // Early status fetch before triggering login
   useEffect(() => {
@@ -78,7 +135,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
         const data = await response.json();
 
         if (data.status === DittoStatus.live) {
-          setDittoStatus(DittoStatus.live); // Proceed normally
+          setDittoStatus(DittoStatus.live);
         } else if (data.status === DittoStatus.maintenance) {
           setDittoStatus(DittoStatus.maintenance);
           setAccessDeniedMessage("Ditto Quest is currently under maintenance");
@@ -145,12 +202,6 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
 
       setAccessGranted(true);
       loginSucceededRef.current = true;
-
-      // Add a short delay before marking login complete
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setLoginProgress(100);
-      await new Promise((resolve) => setTimeout(resolve, 800));
-      setLoginComplete(true);
     };
 
     const onLoginInvalid = (msg: string) => {
@@ -192,23 +243,6 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
     };
   }, [socket, loadingSocket]);
 
-  // Update login progress based on user context and offline progress updates
-  useEffect(() => {
-    if (!accessGranted || loginComplete) return;
-
-    if (userContextLoaded) {
-      setLoginProgress((p) => Math.max(p, 90));
-    }
-
-    if (userContextLoaded && offlineProgressUpdatesReceived) {
-      setLoginProgress(100);
-      // Small delay before marking complete
-      setTimeout(() => {
-        setLoginComplete(true);
-      }, 500);
-    }
-  }, [userContextLoaded, offlineProgressUpdatesReceived, accessGranted, loginComplete]);
-
   useEffect(() => {
     if (!validationSent) return;
 
@@ -228,6 +262,16 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
     }
   }, [socket, loadingSocket, isSocketConnected, validationSent]);
 
+  // Check if both contexts are ready and trigger completion whenever accessGranted changes
+  useEffect(() => {
+    if (accessGranted) {
+      console.log(
+        "🔥 accessGranted became true - checking if ready to complete"
+      );
+      checkBothReady();
+    }
+  }, [accessGranted, checkBothReady]);
+
   return (
     <LoginContext.Provider
       value={{
@@ -235,6 +279,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
         accessDeniedMessage,
         loginComplete,
         loginProgress,
+        triggerLoginCompletion,
       }}
     >
       {children}

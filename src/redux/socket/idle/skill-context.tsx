@@ -254,6 +254,17 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
 
   useEffect(() => {
     if (socket && !loadingSocket) {
+      // Move onAny to the top for debugging
+      socket.onAny((eventName, ...args) => {
+        if (eventName === "idle-progress-update") {
+          console.log(
+            `🎯 IDLE PROGRESS RAW DATA:`,
+            JSON.stringify(args, null, 2)
+          );
+        }
+        console.log(`📡 Received event: ${eventName}`, args);
+      });
+
       // Farming
       socket.on("farming-start", (data: FarmingStartPayload) => {
         console.log(`Received farming-start: ${JSON.stringify(data, null, 2)}`);
@@ -262,11 +273,9 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
             prevStatuses[data.itemId] !== undefined &&
             prevStatuses[data.itemId] !== null
           ) {
-            // If the object at data.itemId is not null or undefined, return the previous state unchanged
             return prevStatuses;
           }
 
-          // Otherwise, update the state
           return {
             ...prevStatuses,
             [data.itemId]: {
@@ -293,7 +302,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
         }));
         setCurrentActivity((prev) => {
           if (prev?.type === "farming" && prev.id === data.itemId) {
-            console.log('stopping farming current activity');
+            console.log("stopping farming current activity");
             return null;
           }
           return prev;
@@ -330,7 +339,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
         }));
         setCurrentActivity((prev) => {
           if (prev?.type === "crafting" && prev.id === data.equipmentId) {
-            console.log('stopping crafting current activity');
+            console.log("stopping crafting current activity");
             return null;
           }
           return prev;
@@ -344,18 +353,17 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
         );
         setBreedingStatus(data);
 
-        // Store IDs temporarily if slimes are not yet available
         const sire = userData.slimes?.find(
           (element) => element.id === data.sireId
         );
         if (sire) setSlimeToBreed0(sire);
-        else setUnresolvedSireId(data.sireId); // Temporarily store the ID
+        else setUnresolvedSireId(data.sireId);
 
         const dame = userData.slimes?.find(
           (element) => element.id === data.dameId
         );
         if (dame) setSlimeToBreed1(dame);
-        else setUnresolvedDameId(data.dameId); // Temporarily store the ID
+        else setUnresolvedDameId(data.dameId);
 
         setCurrentActivity({
           type: "breeding",
@@ -379,54 +387,63 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
             prev?.sireId === data.sireId &&
             prev?.dameId === data.dameId
           ) {
-            console.log('stopping breeding current activity');
+            console.log("stopping breeding current activity");
             return null;
           }
           return prev;
         });
       });
 
-      // Idle progress
       socket.on(
         "idle-progress-update",
         (data: { updates: ProgressUpdate[]; offlineProgressMs: number }) => {
           console.log(
-            `Received idle-progress-update: ${JSON.stringify(data, null, 2)}`
+            `🎯 Received idle-progress-update handler called:`,
+            JSON.stringify(data, null, 2)
           );
 
+          // ✅ ALWAYS set this to true when event is received
           setOfflineProgressUpdatesReceived(true);
 
-          if (!data.updates || data.updates.length <= 0) return;
+          // Signal to login-context that skill context is ready
+          if ((window as any).setSkillContextReady) {
+            (window as any).setSkillContextReady();
+          }
 
-          const hasMeaningfulProgress = data.updates.some((update) => {
-            if (update.type !== "combat") return true; // farming/crafting/breeding always allowed
+          // Only show notification if there are meaningful updates
+          if (data.updates && data.updates.length > 0) {
+            const hasMeaningfulProgress = data.updates.some((update) => {
+              if (update.type !== "combat") return true;
 
-            const combat = update.update;
-            return (
-              combat.userDied ||
-              (combat.monstersKilled?.length ?? 0) > 0 ||
-              (combat.items?.length ?? 0) > 0 ||
-              (combat.equipment?.length ?? 0) > 0 ||
-              (combat.expGained ?? 0) > 0 ||
-              (combat.hpExpGained ?? 0) > 0 ||
-              (combat.levelsGained ?? 0) > 0 ||
-              (combat.hpLevelsGained ?? 0) > 0 ||
-              combat.dittoGained !== "0" ||
-              (combat.goldGained ?? 0) > 0
-            );
-          });
+              const combat = update.update;
+              return (
+                combat.userDied ||
+                (combat.monstersKilled?.length ?? 0) > 0 ||
+                (combat.items?.length ?? 0) > 0 ||
+                (combat.equipment?.length ?? 0) > 0 ||
+                (combat.expGained ?? 0) > 0 ||
+                (combat.hpExpGained ?? 0) > 0 ||
+                (combat.levelsGained ?? 0) > 0 ||
+                (combat.hpLevelsGained ?? 0) > 0 ||
+                combat.dittoGained !== "0" ||
+                (combat.goldGained ?? 0) > 0
+              );
+            });
 
-          if (!hasMeaningfulProgress) return;
-          addNotification(() => (
-            <OfflineProgressNotification
-              updates={data.updates}
-              offlineProgressMs={data.offlineProgressMs}
-            />
-          ));
+            if (hasMeaningfulProgress) {
+              addNotification(() => (
+                <OfflineProgressNotification
+                  updates={data.updates}
+                  offlineProgressMs={data.offlineProgressMs}
+                />
+              ));
+            }
+          }
         }
       );
 
       return () => {
+        socket.offAny();
         socket.off("farming-start");
         socket.off("farming-stop");
         socket.off("crafting-start");
