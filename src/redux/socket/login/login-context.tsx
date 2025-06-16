@@ -21,6 +21,8 @@ import {
   DITTO_STATUS_JSON_URI,
   DQ_REFERRAL_LINK_PREFIX,
 } from "../../../utils/config";
+import { useUserSocket } from "../user/user-context";
+import { useIdleSkillSocket } from "../idle/skill-context";
 
 export enum DittoStatus {
   error = "ERROR",
@@ -49,6 +51,8 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
 }) => {
   const dispatch = useDispatch();
   const { socket, loadingSocket } = useSocket();
+  const { userContextLoaded } = useUserSocket();
+  const { offlineProgressUpdatesReceived } = useIdleSkillSocket();
 
   const isSocketConnected = useSelector(
     (state: RootState) => state.socket.isConnected
@@ -187,6 +191,23 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
       socket.off("disconnect", onDisconnect);
     };
   }, [socket, loadingSocket]);
+
+  // Update login progress based on user context and offline progress updates
+  useEffect(() => {
+    if (!accessGranted || loginComplete) return;
+
+    if (userContextLoaded) {
+      setLoginProgress((p) => Math.max(p, 90));
+    }
+
+    if (userContextLoaded && offlineProgressUpdatesReceived) {
+      setLoginProgress(100);
+      // Small delay before marking complete
+      setTimeout(() => {
+        setLoginComplete(true);
+      }, 500);
+    }
+  }, [userContextLoaded, offlineProgressUpdatesReceived, accessGranted, loginComplete]);
 
   useEffect(() => {
     if (!validationSent) return;
