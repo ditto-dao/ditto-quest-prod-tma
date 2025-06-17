@@ -13,6 +13,8 @@ function LoadingPage({ progress }: LoadingPageProps) {
     preloadImage(LoadingSprite);
   }, []);
 
+  const animationDuration = progress >= 100 ? 1 : 20;
+
   return (
     <div className="loading-page">
       <img className="loading-sprite" src={LoadingSprite} alt="Loading" />
@@ -20,7 +22,11 @@ function LoadingPage({ progress }: LoadingPageProps) {
         <motion.div
           className="loading-progress-bar"
           animate={{ width: `${progress}%` }}
-          transition={{ type: "tween", duration: 1, ease: "easeInOut" }}
+          transition={{ 
+            type: "tween", 
+            duration: animationDuration, 
+            ease: progress >= 100 ? "easeOut" : "easeInOut" 
+          }}
         />
       </div>
     </div>
