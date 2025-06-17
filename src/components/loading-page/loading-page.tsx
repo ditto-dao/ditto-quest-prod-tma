@@ -13,7 +13,7 @@ function LoadingPage({ progress }: LoadingPageProps) {
     preloadImage(LoadingSprite);
   }, []);
 
-  const animationDuration = progress >= 100 ? 1 : 20;
+  const animationDuration = progress >= 100 ? 1 : 10;
 
   return (
     <div className="loading-page">
