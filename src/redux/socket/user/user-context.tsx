@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Combat,
   defaultUser,
@@ -138,6 +144,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const [userData, setUserData] = useState<User>(defaultUser);
   const [userLoaded, setUserLoaded] = useState(false); // no need export
   const [userContextLoaded, setUserContextLoaded] = useState(false);
+  const prevFarmingExpRef = useRef(userData.farmingExp);
+  const prevCraftingExpRef = useRef(userData.craftingExp);
 
   // Ditto balance
   const [dittoBalance, setDittoBalance] = useState<DittoBalanceBN>({
@@ -611,6 +619,11 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [userData, userContextLoaded]);
 
   useEffect(() => {
+    prevFarmingExpRef.current = userData.farmingExp;
+    prevCraftingExpRef.current = userData.craftingExp;
+  }, [userData.farmingExp, userData.craftingExp]);
+
+  useEffect(() => {
     if (socket && !loadingSocket && accessGranted) {
       socket.on("update-inventory", (data: Inventory[]) => {
         setUserData((prevUserData) => {
@@ -717,27 +730,23 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
       });
 
-      // Fixed Farming EXP Handler
       socket.on("update-farming-exp", (data: FarmingExpPayload) => {
         console.log(
           `Received update-farming-exp: ${JSON.stringify(data, null, 2)}`
         );
 
+        // Calculate expGain using ref (always current)
         let expGain = 0;
+        if (data.farmingLevelsGained > 0) {
+          expGain =
+            userData.expToNextFarmingLevel -
+            prevFarmingExpRef.current +
+            data.farmingExp;
+        } else {
+          expGain = data.farmingExp - prevFarmingExpRef.current;
+        }
 
         setUserData((prevUserData) => {
-          // Calculate expGain using the actual current state
-          if (data.farmingLevelsGained > 0) {
-            // When leveling up, calculate total exp gained:
-            expGain =
-              prevUserData.expToNextFarmingLevel -
-              prevUserData.farmingExp +
-              data.farmingExp;
-          } else {
-            // Normal case: just the difference
-            expGain = data.farmingExp - prevUserData.farmingExp;
-          }
-
           return {
             ...prevUserData,
             farmingExp: data.farmingExp,
@@ -746,16 +755,14 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           };
         });
 
-        // Use setTimeout to ensure expGain is calculated after setUserData runs
-        setTimeout(() => {
-          if (expGain > 0 && accessGranted) {
-            addFloatingUpdate({
-              icon: FarmingIcon,
-              text: "Farming EXP",
-              amount: expGain,
-            });
-          }
-        }, 0);
+        // Direct floating update (no setTimeout needed)
+        if (expGain > 0 && accessGranted) {
+          addFloatingUpdate({
+            icon: FarmingIcon,
+            text: "Farming EXP",
+            amount: expGain,
+          });
+        }
 
         if (data.farmingLevelsGained > 0) {
           addNotification(() => (
@@ -767,27 +774,23 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
       });
 
-      // Fixed Crafting EXP Handler
       socket.on("update-crafting-exp", (data: CraftingExpPayload) => {
         console.log(
           `Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`
         );
 
+        // Calculate expGain using ref (always current)
         let expGain = 0;
+        if (data.craftingLevelsGained > 0) {
+          expGain =
+            userData.expToNextCraftingLevel -
+            prevCraftingExpRef.current +
+            data.craftingExp;
+        } else {
+          expGain = data.craftingExp - prevCraftingExpRef.current;
+        }
 
         setUserData((prevUserData) => {
-          // Calculate expGain using the actual current state
-          if (data.craftingLevelsGained > 0) {
-            // When leveling up, calculate total exp gained:
-            expGain =
-              prevUserData.expToNextCraftingLevel -
-              prevUserData.craftingExp +
-              data.craftingExp;
-          } else {
-            // Normal case: just the difference
-            expGain = data.craftingExp - prevUserData.craftingExp;
-          }
-
           return {
             ...prevUserData,
             craftingExp: data.craftingExp,
@@ -796,16 +799,14 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           };
         });
 
-        // Use setTimeout to ensure expGain is calculated after setUserData runs
-        setTimeout(() => {
-          if (expGain > 0 && accessGranted) {
-            addFloatingUpdate({
-              icon: CraftingIcon,
-              text: "Crafting EXP",
-              amount: expGain,
-            });
-          }
-        }, 0);
+        // Direct floating update (no setTimeout needed)
+        if (expGain > 0 && accessGranted) {
+          addFloatingUpdate({
+            icon: CraftingIcon,
+            text: "Crafting EXP",
+            amount: expGain,
+          });
+        }
 
         if (data.craftingLevelsGained > 0) {
           addNotification(() => (
