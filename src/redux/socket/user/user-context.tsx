@@ -717,6 +717,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         });
       });
 
+      // Fixed Farming EXP Handler
       socket.on("update-farming-exp", (data: FarmingExpPayload) => {
         console.log(
           `Received update-farming-exp: ${JSON.stringify(data, null, 2)}`
@@ -725,13 +726,18 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         let expGain = 0;
 
         setUserData((prevUserData) => {
-          expGain = data.farmingExp - prevUserData.farmingExp;
+          // Calculate expGain using the actual current state
           if (data.farmingLevelsGained > 0) {
+            // When leveling up, calculate total exp gained:
             expGain =
               prevUserData.expToNextFarmingLevel -
               prevUserData.farmingExp +
               data.farmingExp;
+          } else {
+            // Normal case: just the difference
+            expGain = data.farmingExp - prevUserData.farmingExp;
           }
+
           return {
             ...prevUserData,
             farmingExp: data.farmingExp,
@@ -740,15 +746,16 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           };
         });
 
-        if (expGain > 0 && accessGranted) {
-          setTimeout(() => {
+        // Use setTimeout to ensure expGain is calculated after setUserData runs
+        setTimeout(() => {
+          if (expGain > 0 && accessGranted) {
             addFloatingUpdate({
               icon: FarmingIcon,
               text: "Farming EXP",
               amount: expGain,
             });
-          }, 0);
-        }
+          }
+        }, 0);
 
         if (data.farmingLevelsGained > 0) {
           addNotification(() => (
@@ -760,6 +767,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         }
       });
 
+      // Fixed Crafting EXP Handler
       socket.on("update-crafting-exp", (data: CraftingExpPayload) => {
         console.log(
           `Received update-crafting-exp: ${JSON.stringify(data, null, 2)}`
@@ -768,13 +776,18 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         let expGain = 0;
 
         setUserData((prevUserData) => {
-          expGain = data.craftingExp - prevUserData.craftingExp;
+          // Calculate expGain using the actual current state
           if (data.craftingLevelsGained > 0) {
+            // When leveling up, calculate total exp gained:
             expGain =
               prevUserData.expToNextCraftingLevel -
               prevUserData.craftingExp +
               data.craftingExp;
+          } else {
+            // Normal case: just the difference
+            expGain = data.craftingExp - prevUserData.craftingExp;
           }
+
           return {
             ...prevUserData,
             craftingExp: data.craftingExp,
@@ -783,15 +796,16 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           };
         });
 
-        if (expGain > 0 && accessGranted) {
-          setTimeout(() => {
+        // Use setTimeout to ensure expGain is calculated after setUserData runs
+        setTimeout(() => {
+          if (expGain > 0 && accessGranted) {
             addFloatingUpdate({
               icon: CraftingIcon,
               text: "Crafting EXP",
               amount: expGain,
             });
-          }, 0);
-        }
+          }
+        }, 0);
 
         if (data.craftingLevelsGained > 0) {
           addNotification(() => (
@@ -847,10 +861,23 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           setUserData((prev) => {
             if (!prev) return prev;
 
-            if (prev.expHp !== data.hpExp) {
+            // Calculate HP EXP gain
+            if (data.hpLevelUp) {
+              // When HP leveling up, calculate total exp gained:
+              // = exp needed to complete previous HP level + current exp in new HP level
+              hpExpDelta = prev.expToNextHpLevel - prev.expHp + data.hpExp;
+            } else {
+              // Normal case: just the difference
               hpExpDelta = data.hpExp - prev.expHp;
             }
-            if (prev.exp !== data.exp) {
+
+            // Calculate regular EXP gain
+            if (data.levelUp) {
+              // When leveling up, calculate total exp gained:
+              // = exp needed to complete previous level + current exp in new level
+              expDelta = prev.expToNextLevel - prev.exp + data.exp;
+            } else {
+              // Normal case: just the difference
               expDelta = data.exp - prev.exp;
             }
 
@@ -899,7 +926,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           }
         }
       );
-
       socket.on("pump-stats-complete", () => {
         setIsUpgradingStats(false);
       });
