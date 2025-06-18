@@ -10,7 +10,6 @@ import {
 } from "../../../utils/types";
 import { useUserSocket } from "../user/user-context";
 import { useSocket } from "../socket-context";
-import { useLoginSocket } from "../login/login-context";
 import {
   COMBAT_HP_CHANGE_EVENT,
   COMBAT_STARTED_EVENT,
@@ -84,7 +83,6 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   const { userData, dittoBalance, incrementUserHp, setUserHp } =
     useUserSocket();
   const { socket, loadingSocket } = useSocket();
-  const { accessGranted } = useLoginSocket();
   const { addNotification } = useNotification();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { setCurrentActivity } = useCurrentActivityContext();
@@ -201,7 +199,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
   }, [userData.combat]);
 
   useEffect(() => {
-    if (socket && !loadingSocket && accessGranted) {
+    if (socket && !loadingSocket) {
       socket.on(
         COMBAT_STARTED_EVENT,
         (payload: {
@@ -363,7 +361,7 @@ export const CombatSocketProvider: React.FC<SocketProviderProps> = ({
         socket.off(COMBAT_USER_DIED_EVENT);
       };
     }
-  }, [socket, loadingSocket, accessGranted]);
+  }, [socket, loadingSocket]);
 
   return (
     <CombatContext.Provider

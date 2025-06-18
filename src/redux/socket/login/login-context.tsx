@@ -47,10 +47,6 @@ const LoginContext = createContext<LoginContext>({
 
 export const useLoginSocket = () => useContext(LoginContext);
 
-// Global state to track completion readiness
-let userContextReady = false;
-let skillContextReady = false;
-
 export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   children,
 }) => {
@@ -67,6 +63,11 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   const [loginComplete, setLoginComplete] = useState(false);
   const [loginProgress, setLoginProgress] = useState(0);
   const [validationSent, setValidationSent] = useState(false);
+
+  // Replace global variables with React state
+  const [userContextReady, setUserContextReady] = useState(false);
+  const [skillContextReady, setSkillContextReady] = useState(false);
+
   const loginSucceededRef = useRef(false);
 
   const triggerLoginCompletion = useCallback(() => {
@@ -104,26 +105,46 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
         loginComplete: !loginComplete,
       });
     }
-  }, [accessGranted, loginComplete, triggerLoginCompletion]);
+  }, [
+    accessGranted,
+    loginComplete,
+    triggerLoginCompletion,
+    userContextReady,
+    skillContextReady,
+  ]);
 
-  // Expose global functions for other contexts to call
+  // Expose functions for other contexts to call
   useEffect(() => {
     (window as any).setUserContextReady = () => {
-      userContextReady = true;
+      console.log("🔄 Setting user context ready");
+      setUserContextReady(true);
       setLoginProgress((p) => Math.max(p, 90));
-      checkBothReady();
     };
 
     (window as any).setSkillContextReady = () => {
-      skillContextReady = true;
-      checkBothReady();
+      console.log("🔄 Setting skill context ready");
+      setSkillContextReady(true);
     };
 
     return () => {
       delete (window as any).setUserContextReady;
       delete (window as any).setSkillContextReady;
     };
+  }, []);
+
+  // Check readiness whenever any dependency changes
+  useEffect(() => {
+    checkBothReady();
   }, [checkBothReady]);
+
+  // Reset contexts on socket disconnection
+  useEffect(() => {
+    if (!isSocketConnected && validationSent) {
+      console.log("🔄 Socket disconnected - resetting contexts");
+      setUserContextReady(false);
+      setSkillContextReady(false);
+    }
+  }, [isSocketConnected, validationSent]);
 
   // Early status fetch before triggering login
   useEffect(() => {
@@ -241,7 +262,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
       socket.off("tele-validate-error", onTeleValidateError);
       socket.off("disconnect", onDisconnect);
     };
-  }, [socket, loadingSocket]);
+  }, [socket, loadingSocket, dispatch]);
 
   useEffect(() => {
     if (!validationSent) return;
