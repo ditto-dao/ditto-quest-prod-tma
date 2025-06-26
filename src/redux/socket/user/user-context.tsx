@@ -980,6 +980,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         socket.off("update-crafting-exp");
         socket.off("equip-slime-update");
         socket.off("combat-update");
+        socket.off("user-update");
         socket.off(COMBAT_EXP_UPDATE_EVENT);
         socket.off("pump-stats-complete");
         socket.off(FIRST_LOGIN_EVENT);
