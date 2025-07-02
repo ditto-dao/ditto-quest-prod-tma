@@ -5,7 +5,7 @@ import {
   formatNumberWithCommas,
   formatNumberWithSuffix,
 } from "../../../../utils/helpers";
-import { formatUnits } from "ethers/utils";
+import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../../utils/config";
 import GoldMedalIcon from "../../../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../../../assets/images/combat/hp-lvl.png";
