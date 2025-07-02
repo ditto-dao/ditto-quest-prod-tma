@@ -6,7 +6,7 @@ import WebApp from "@twa-dev/sdk";
 import Modal from "react-modal";
 import { SocketProvider } from "./redux/socket/socket-context";
 import { UserProvider } from "./redux/socket/user/user-context";
-import { initEruda } from "./utils/eruda";
+//import { initEruda } from "./utils/eruda";
 import MainPage from "./components/main-page/main-page";
 import { LoginSocketProvider } from "./redux/socket/login/login-context";
 import { IdleSkillSocketProvider } from "./redux/socket/idle/skill-context";
@@ -20,7 +20,7 @@ import { MissionNotificationProvider } from "./components/missions/mission-conte
 import { THEME, TonConnectUIProvider } from "@tonconnect/ui-react";
 import { MANIFEST_URL, REDIRECT_URL } from "./utils/config";
 
-initEruda();
+//initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
 
 function App() {
