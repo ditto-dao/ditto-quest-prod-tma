@@ -19,70 +19,17 @@ import {
   formatNumberWithCommas,
   getHighestDominantTraitRarity,
 } from "../../utils/helpers";
-import { preloadImagesBatch } from "../../utils/image-cache";
 import FastImage from "../../components/fast-image/fast-image";
 import SlimeModal from "../slime-lab/slime-lab-inventory/slime-modal/slime-modal";
 import { useNotification } from "../notifications/notification-context";
 import ItemEqModal from "../item-eq-modal/item-eq-modal";
-import { useEffect, useState } from "react";
 import Decimal from "decimal.js";
 
 function AvatarPage() {
   const { addNotification, removeNotification } = useNotification();
   const { userData } = useUserSocket();
 
-  const [_, setImagesPreloaded] = useState(false);
-
   const cp = new Decimal(userData.combat?.cp || defaultCombat.cp);
-
-  useEffect(() => {
-    const preloadAvatarImages = async () => {
-      // Static images (always needed)
-      const staticImages = [
-        DefaultHat,
-        DefaultCape,
-        DefaultWeapon,
-        DefaultShield,
-        DefaultNecklace,
-        DefaultArmour,
-        DefaultPet,
-        SlimeLogo,
-        CPIcon,
-        GoldMedalIcon,
-        HPLevelIcon,
-      ];
-
-      // Dynamic images (from userData)
-      const dynamicImages = [
-        userData.equippedSlime?.imageUri,
-        userData.hat?.equipment?.imgsrc,
-        userData.cape?.equipment?.imgsrc,
-        userData.necklace?.equipment?.imgsrc,
-        userData.shield?.equipment?.imgsrc,
-        userData.armour?.equipment?.imgsrc,
-        userData.weapon?.equipment?.imgsrc,
-      ].filter(Boolean) as string[];
-
-      try {
-        // Preload all images in parallel
-        await preloadImagesBatch([...staticImages, ...dynamicImages]);
-        setImagesPreloaded(true);
-      } catch (error) {
-        console.error("Failed to preload some avatar images:", error);
-        setImagesPreloaded(true); // Still proceed even if some images fail
-      }
-    };
-
-    preloadAvatarImages();
-  }, [
-    userData.equippedSlime?.imageUri,
-    userData.hat?.equipment?.imgsrc,
-    userData.cape?.equipment?.imgsrc,
-    userData.necklace?.equipment?.imgsrc,
-    userData.shield?.equipment?.imgsrc,
-    userData.armour?.equipment?.imgsrc,
-    userData.weapon?.equipment?.imgsrc,
-  ]);
 
   // Slime Modal
   const openSlimeModal = () => {

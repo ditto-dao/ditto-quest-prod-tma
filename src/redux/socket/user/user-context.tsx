@@ -17,9 +17,7 @@ import {
 } from "../../../utils/types";
 import { useSocket } from "../socket-context";
 import { useLoginSocket } from "../login/login-context";
-import {
-  removeUndefined,
-} from "../../../utils/helpers";
+import { removeUndefined } from "../../../utils/helpers";
 import {
   BETA_TESTER_LOGIN_EVENT,
   COMBAT_EXP_UPDATE_EVENT,
@@ -979,7 +977,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
       // Signal to login-context that user context is ready
       if ((window as any).setUserContextReady) {
-        (window as any).setUserContextReady();
+        (window as any).setUserContextReady(userData);
       }
     }
   }, [userLoaded, dittoBalanceLoaded, userContextLoaded]);
