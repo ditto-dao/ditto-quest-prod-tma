@@ -19,16 +19,11 @@ import SocketInactivityManager from "./redux/socket/socket-inactivity-manager";
 import { MissionNotificationProvider } from "./components/missions/mission-context";
 import { THEME, TonConnectUIProvider } from "@tonconnect/ui-react";
 import { MANIFEST_URL, REDIRECT_URL } from "./utils/config";
-import { preloadStaticImages } from "./utils/image-cache";
 
 initEruda();
 Modal.setAppElement("#root"); // Assuming your app's root element has the ID 'root'
 
 function App() {
-  useEffect(() => {
-    preloadStaticImages();
-  }, []);
-  
   useEffect(() => {
     const root = document.documentElement;
     if (WebApp.colorScheme) {

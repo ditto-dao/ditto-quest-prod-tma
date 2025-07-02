@@ -22,6 +22,7 @@ import {
   DITTO_STATUS_JSON_URI,
   DQ_REFERRAL_LINK_PREFIX,
 } from "../../../utils/config";
+import PreloadManager from "../../../managers/preload-manager";
 
 export enum DittoStatus {
   error = "ERROR",
@@ -63,27 +64,47 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
   const [loginComplete, setLoginComplete] = useState(false);
   const [loginProgress, setLoginProgress] = useState(0);
   const [validationSent, setValidationSent] = useState(false);
+  const [preloadComplete, setPreloadComplete] = useState(false);
 
   // Replace global variables with React state
   const [userContextReady, setUserContextReady] = useState(false);
   const [skillContextReady, setSkillContextReady] = useState(false);
 
   const loginSucceededRef = useRef(false);
+  const preloadManagerRef = useRef(PreloadManager.getInstance());
+
+  // Start preload immediately
+  useEffect(() => {
+    const preloadManager = preloadManagerRef.current;
+
+    const handleProgress = (progress: any) => {
+      if (progress.complete) {
+        setPreloadComplete(true);
+      }
+    };
+
+    preloadManager.addProgressCallback(handleProgress);
+    preloadManager.preloadEverything();
+
+    return () => {
+      preloadManager.removeProgressCallback(handleProgress);
+    };
+  }, []);
 
   const triggerLoginCompletion = useCallback(() => {
-    if (!accessGranted || loginComplete) return;
+    if (!accessGranted || loginComplete || !preloadComplete) return;
 
     console.log("🎉 Login completion triggered!");
     setLoginProgress(100);
     setTimeout(() => {
       setLoginComplete(true);
     }, 500);
-  }, [accessGranted, loginComplete]);
+  }, [accessGranted, loginComplete, preloadComplete]);
 
   // Check if both contexts are ready and trigger completion
   const checkBothReady = useCallback(() => {
     console.log(
-      `🔍 Checking readiness: user=${userContextReady}, skill=${skillContextReady}`
+      `🔍 Checking readiness: user=${userContextReady}, skill=${skillContextReady}, preload=${preloadComplete}`
     );
     console.log(
       `🔍 Conditions: accessGranted=${accessGranted}, loginComplete=${loginComplete}`
@@ -92,6 +113,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
     if (
       userContextReady &&
       skillContextReady &&
+      preloadComplete &&
       accessGranted &&
       !loginComplete
     ) {
@@ -101,6 +123,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
       console.log(`❌ Conditions not met:`, {
         userContextReady,
         skillContextReady,
+        preloadComplete,
         accessGranted,
         loginComplete: !loginComplete,
       });
@@ -111,6 +134,7 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
     triggerLoginCompletion,
     userContextReady,
     skillContextReady,
+    preloadComplete,
   ]);
 
   // Expose functions for other contexts to call
