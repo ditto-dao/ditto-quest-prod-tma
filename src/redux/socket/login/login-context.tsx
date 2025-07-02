@@ -139,10 +139,16 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
 
   // Expose functions for other contexts to call
   useEffect(() => {
-    (window as any).setUserContextReady = () => {
+    (window as any).setUserContextReady = (userData?: any) => {
       console.log("🔄 Setting user context ready");
       setUserContextReady(true);
       setLoginProgress((p) => Math.max(p, 90));
+
+      // Use the existing public method
+      if (userData) {
+        console.log("🔄 Preloading user images...");
+        preloadManagerRef.current.preloadBasedOnLoginProgress(90, userData);
+      }
     };
 
     (window as any).setSkillContextReady = () => {
