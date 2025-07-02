@@ -11,10 +11,10 @@
 
 .slime-gacha-wrapper {
   position: absolute;
-  bottom: 72%; /* Overlaps the top 50% of the chest */
+  bottom: 72%;
   left: 50%;
-  transform: translate(-50%, 50%); /* Center horizontally & overlap */
-  z-index: 1;
+  transform: translate(-50%, 50%);
+  z-index: 999;
 }
 
 .bubble-firework {
@@ -41,7 +41,7 @@
 
 .stamp-text {
   position: absolute;
-  bottom: 78%; /* Position below the sequence container */
+  bottom: 84%; /* Position below the sequence container */
   left: 50%;
   transform: translateX(-50%) scale(4); /* Initially large and centered */
   font-size: 24px;
@@ -105,4 +105,32 @@
 
 .button-price-span {
   font-size: 10px;
+}
+
+/* Ensure FastImage works with existing img styles */
+.button-coin-logo.fast-image {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.gacha-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 100;
+  animation: fadeInOverlay 0.5s ease-in-out;
+  pointer-events: auto;
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

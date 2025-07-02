@@ -2,8 +2,12 @@ import "./sell-slime-modal.css";
 import { SlimeWithTraits } from "../../../../utils/types";
 import { useSocket } from "../../../../redux/socket/socket-context";
 import { useUserSocket } from "../../../../redux/socket/user/user-context";
-import { formatMaxDigits, getHighestDominantTraitRarity } from "../../../../utils/helpers";
+import {
+  formatMaxDigits,
+  getHighestDominantTraitRarity,
+} from "../../../../utils/helpers";
 import GPIcon from "../../../../assets/images/general/gold-coin.png";
+import FastImage from "../../../fast-image/fast-image";
 
 interface SellSlimeNotificationProps {
   selectedSlime: SlimeWithTraits;
@@ -30,10 +34,10 @@ function SellSlimeNotification(props: SellSlimeNotificationProps) {
 
   const confirmSell = () => {
     if (socket && canEmitEvent()) {
-        console.log(`Emitting burn-slime`);
-        socket.emit("burn-slime", props.selectedSlime.id);
-        setLastEventEmittedTimestamp(Date.now());
-        removeSlimeById(props.selectedSlime.id);
+      console.log(`Emitting burn-slime`);
+      socket.emit("burn-slime", props.selectedSlime.id);
+      setLastEventEmittedTimestamp(Date.now());
+      removeSlimeById(props.selectedSlime.id);
     }
     props.removeNotification(props.notificationId);
     props.removeNotification(props.parentNotificationId);
@@ -47,7 +51,7 @@ function SellSlimeNotification(props: SellSlimeNotificationProps) {
 
       <div className="sell-slime-value">
         <div className="sell-slime-value-img-container">
-          <img src={GPIcon} alt="GP" />
+          <FastImage src={GPIcon} alt="GP" />
         </div>
         <div className="sell-slime-value-amount">
           {formatMaxDigits(getSellValueGP(), 6)} GP

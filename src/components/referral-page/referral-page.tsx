@@ -2,13 +2,8 @@ import { useEffect, useState } from "react";
 import "./referral-page.css";
 import ReferralImage from "../../assets/images/general/referral-slimes.png";
 import FriendsImage from "../../assets/images/general/friends.png";
-import TreasureImage from "../../assets/images/general/treasure.png";
 import DittoCoin from "../../assets/images/general/ditto-coin.png";
-import {
-	formatMaxDigits,
-  formatNumberWithCommas,
-  preloadImage,
-} from "../../utils/helpers";
+import { formatMaxDigits, formatNumberWithCommas } from "../../utils/helpers";
 import { useSocket } from "../../redux/socket/socket-context";
 import {
   READ_REFERRAL_CODE,
@@ -18,6 +13,7 @@ import {
 } from "../../utils/events";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS, DQ_TMA_LINK_PREFIX } from "../../utils/config";
+import FastImage from "../fast-image/fast-image";
 
 interface ReferralStats {
   referrerUserId?: string | null;
@@ -29,7 +25,6 @@ interface ReferralStats {
 
 function ReferralPage() {
   const { socket } = useSocket();
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   const [referralLink, setReferralLink] = useState("");
   const [referralLinkLoaded, setReferralLinkLoaded] = useState(false);
   const [referralStats, setReferralStats] = useState<ReferralStats>({
@@ -39,18 +34,6 @@ function ReferralPage() {
   const [referralStatsLoaded, setReferralStatsLoaded] = useState(false);
 
   const [copied, setCopied] = useState(false);
-
-  useEffect(() => {
-    const iconsToPreload = [
-      ReferralImage,
-      FriendsImage,
-      TreasureImage,
-      DittoCoin,
-    ];
-    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
-      setImagesLoaded(true)
-    );
-  }, []);
 
   const handleCopy = () => {
     navigator.clipboard
@@ -101,7 +84,7 @@ function ReferralPage() {
   return (
     <div className="referral-page">
       <div className="referral-page-image-container">
-        <img src={ReferralImage} alt="Referral slimes" />
+        <FastImage src={ReferralImage} alt="Referral slimes" />
       </div>
       <div
         className={`referral-boost-badge ${
@@ -132,7 +115,7 @@ function ReferralPage() {
         </div>
       </div>
       <div className="my-referral-link">
-        {imagesLoaded && referralLinkLoaded ? (
+        {referralLinkLoaded ? (
           <div className="my-referral-link-inner">
             <div className="my-referral-link-text">{referralLink}</div>
             <button className="copy-button" onClick={handleCopy}>
@@ -148,7 +131,11 @@ function ReferralPage() {
         <div className="referral-stat-card">
           <div className="referral-stat-icon-wrapper">
             <div className="referral-stat-icon-circle">
-              <img src={FriendsImage} id="friends-img" alt="Friends Icon" />
+              <FastImage
+                src={FriendsImage}
+                id="friends-img"
+                alt="Friends Icon"
+              />
             </div>
           </div>
           <div className="referral-stat-value">
@@ -159,7 +146,7 @@ function ReferralPage() {
         <div className="referral-stat-card">
           <div className="referral-stat-icon-wrapper">
             <div className="referral-stat-icon-circle">
-              <img src={DittoCoin} alt="Ditto Coin Icon" />
+              <FastImage src={DittoCoin} alt="Ditto Coin Icon" />
             </div>
           </div>
           <div className="referral-stat-value">

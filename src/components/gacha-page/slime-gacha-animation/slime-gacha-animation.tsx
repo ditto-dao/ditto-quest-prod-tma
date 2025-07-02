@@ -13,7 +13,8 @@ import Slime10 from "../../../assets/images/gacha/slime-rotate/10.png";
 import Slime11 from "../../../assets/images/gacha/slime-rotate/11.png";
 import Slime12 from "../../../assets/images/gacha/slime-rotate/12.png";
 import { useGachaSocket } from "../../../redux/socket/gacha/gacha-context";
-import { preloadImage } from "../../../utils/helpers";
+import { preloadImagesBatch } from "../../../utils/image-cache";
+import FastImage from "../../../components/fast-image/fast-image";
 
 const slimes = [
   Slime1,
@@ -35,20 +36,30 @@ const SlimeGachaAnimation = () => {
 
   const [currentSlimeShown, setCurrentSlimeShown] = useState<string>(slimes[0]);
   const [isVisible, setIsVisible] = useState(false);
+  const [animationImagesLoaded, setAnimationImagesLoaded] = useState(false);
   const slimeRotationInterval = useRef<NodeJS.Timeout | null>(null);
 
   // Track if animation should play initially
   const [shouldAnimate, setShouldAnimate] = useState(!rollingSlime);
 
   useEffect(() => {
-    Promise.all(slimes.map(preloadImage)).then(() =>
-      console.log('loaded slime gacha animation images')
-    );
+    const preloadGachaAnimationImages = async () => {
+      try {
+        await preloadImagesBatch(slimes);
+        setAnimationImagesLoaded(true);
+        console.log("✅ Loaded slime gacha animation images");
+      } catch (error) {
+        console.error("Failed to preload some gacha animation images:", error);
+        setAnimationImagesLoaded(true); // Still proceed even if some images fail
+      }
+    };
+
+    preloadGachaAnimationImages();
   }, []);
 
   // Start Slime Emerge Animation + Rotation
   const startSlimeAnimation = (): void => {
-    if (!rollingSlime || !shouldAnimate) return;
+    if (!rollingSlime || !shouldAnimate || !animationImagesLoaded) return;
     setIsVisible(true);
 
     // Start rotation after rise animation completes
@@ -74,11 +85,11 @@ const SlimeGachaAnimation = () => {
 
   useEffect(() => {
     if (!shouldAnimate) {
-      setIsVisible(true)
+      setIsVisible(true);
       return; // Skip animation if rollingSlime was already true when mounted
     }
 
-    if (rollingSlime) {
+    if (rollingSlime && animationImagesLoaded) {
       setTimeout(() => {
         startSlimeAnimation();
       }, 1500);
@@ -86,12 +97,12 @@ const SlimeGachaAnimation = () => {
       setIsVisible(false);
       stopSlimeAnimation();
     }
-  }, [rollingSlime]);
+  }, [rollingSlime, animationImagesLoaded]);
 
   useEffect(() => {
     if (!shouldAnimate) {
       setShouldAnimate(true);
-      setIsVisible(true)
+      setIsVisible(true);
       if (slimeDrawn) setCurrentSlimeShown(slimeDrawn);
       return; // Skip animation if rollingSlime was already true when mounted
     }
@@ -105,7 +116,7 @@ const SlimeGachaAnimation = () => {
 
   return (
     <div className="slime-gacha-display">
-      <img
+      <FastImage
         src={currentSlimeShown}
         alt="Slime Gacha Animation"
         className={`slime-gacha-image ${

@@ -1,11 +1,9 @@
 import "./balances.css";
 import DittoCoinLogo from "../../assets/images/general/ditto-coin.png";
 import GoldCoinLogo from "../../assets/images/general/gold-coin.png";
-import {
-  formatMaxDigits,
-  getTotalFormattedBalance,
-} from "../../utils/helpers";
+import { formatMaxDigits, getTotalFormattedBalance } from "../../utils/helpers";
 import { useUserSocket } from "../../redux/socket/user/user-context";
+import FastImage from "../fast-image/fast-image";
 
 function BalancesDisplay() {
   const { userData, dittoBalance } = useUserSocket();
@@ -16,7 +14,11 @@ function BalancesDisplay() {
         <div className="balances-container">
           <div className="coin-balance">
             <div className="coin-label-row">
-              <img src={DittoCoinLogo} alt="Ditto Coin" className="coin-logo" />
+              <FastImage
+                src={DittoCoinLogo}
+                alt="Ditto Coin"
+                className="coin-logo"
+              />
               <span>DITTO</span>
             </div>
             <div className="coin-amount">
@@ -26,7 +28,11 @@ function BalancesDisplay() {
 
           <div className="coin-balance">
             <div className="coin-label-row">
-              <img src={GoldCoinLogo} alt="Gold Coin" className="coin-logo" />
+              <FastImage
+                src={GoldCoinLogo}
+                alt="Gold Coin"
+                className="coin-logo"
+              />
               <span>GP</span>
             </div>
             <div className="coin-amount">

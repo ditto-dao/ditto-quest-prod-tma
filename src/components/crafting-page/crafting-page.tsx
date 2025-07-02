@@ -14,6 +14,7 @@ import Stats from "../stats/stats";
 import { useUserSocket } from "../../redux/socket/user/user-context";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
+import FastImage from "../fast-image/fast-image";
 
 const categoryImages: { [key: string]: string } = {
   Weapon: DefaultWeapon,
@@ -46,24 +47,27 @@ function CraftingPage() {
           secondaryColour="var(--seafoam-green)"
           bgColour="var(--midnight-teal)"
         />
-        <SimpleBar className="equipment-category-buttons-scrollbar" autoHide={false}>
-        <div className="equipment-category-buttons">
-          {categories.map((category) => (
-            <div
-              key={category}
-              className={`equipment-category-button ${
-                selectedCategory === category ? "active" : ""
-              }`}
-              onClick={() => setSelectedCategory(category)}
-            >
-              <img
-                src={categoryImages[category]}
-                alt={category}
-                className="category-icon"
-              />
-            </div>
-          ))}
-        </div>
+        <SimpleBar
+          className="equipment-category-buttons-scrollbar"
+          autoHide={false}
+        >
+          <div className="equipment-category-buttons">
+            {categories.map((category) => (
+              <div
+                key={category}
+                className={`equipment-category-button ${
+                  selectedCategory === category ? "active" : ""
+                }`}
+                onClick={() => setSelectedCategory(category)}
+              >
+                <FastImage
+                  src={categoryImages[category]}
+                  alt={category}
+                  className="category-icon"
+                />
+              </div>
+            ))}
+          </div>
         </SimpleBar>
       </div>
 

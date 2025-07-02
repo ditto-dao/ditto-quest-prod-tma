@@ -20,8 +20,12 @@ import {
 import { useGachaSocket } from "../../redux/socket/gacha/gacha-context";
 import { useEffect, useRef, useState } from "react";
 import { formatUnits } from "ethers";
-import { DITTO_DECIMALS, MAX_INITIAL_SLIME_INVENTORY_SLOTS } from "../../utils/config";
+import {
+  DITTO_DECIMALS,
+  MAX_INITIAL_SLIME_INVENTORY_SLOTS,
+} from "../../utils/config";
 import BalancesDisplay from "../balances/balances";
+import FastImage from "../fast-image/fast-image";
 
 function GachaPage() {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
@@ -39,6 +43,7 @@ function GachaPage() {
 
   // Track if animation should play initially
   const [shouldAnimate, setShouldAnimate] = useState(!rollingSlime);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const containerRef = useRef<HTMLDivElement>(null); // Reference for fireworks
   const stampTextRef = useRef<HTMLDivElement>(null); // Reference for fireworks
@@ -75,6 +80,8 @@ function GachaPage() {
       telegramId &&
       !rollingSlime
     ) {
+      // Show overlay immediately when button is clicked
+      setShowOverlay(true);
       setRollingSlime(true);
       socket.emit(
         LEDGER_UPDATE_BALANCE_EVENT,
@@ -91,7 +98,9 @@ function GachaPage() {
 
   const isButtonActive = () => {
     return (
-      (userData.slimes?.length ?? 0) < (userData.maxSlimeInventorySlots ?? MAX_INITIAL_SLIME_INVENTORY_SLOTS) &&
+      (userData.slimes?.length ?? 0) <
+        (userData.maxSlimeInventorySlots ??
+          MAX_INITIAL_SLIME_INVENTORY_SLOTS) &&
       getTotalBalanceBNF(dittoBalance) > SLIME_GACHA_PRICE_DITTO_WEI &&
       !rollingSlime
     );
@@ -149,6 +158,7 @@ function GachaPage() {
 
     comboText.textContent = `${slimeObjDrawn?.rankPull} RANK!`;
     comboText.style.color = `var(--rarity-${slimeObjDrawn?.rankPull.toLowerCase()})`;
+    comboText.style.zIndex = `1000`;
 
     if (stampTextRef.current) {
       // Append the combo text
@@ -178,6 +188,8 @@ function GachaPage() {
         setTimeout(() => {
           setRollingSlime(false);
           setSlimeDrawn(null);
+          // Hide overlay after animation completes
+          setShowOverlay(false);
         }, 3000);
         setShouldAnimate(true);
         return; // Skip animation if rollingSlime was already true when mounted
@@ -189,49 +201,61 @@ function GachaPage() {
         setTimeout(() => {
           setRollingSlime(false);
           setSlimeDrawn(null);
+          // Hide overlay after animation completes
+          setShowOverlay(false);
         }, 1000);
       }, 4000);
     }
   }, [slimeDrawn]);
 
+  // Hide overlay when not rolling (cleanup/reset)
+  useEffect(() => {
+    if (!rollingSlime) {
+      setShowOverlay(false);
+    }
+  }, [rollingSlime]);
+
   return (
-    <div className="gacha-page-container" ref={stampTextRef}>
-      <BalancesDisplay />
+    <>
+      {showOverlay && <div className="gacha-overlay" />}
+      <div className="gacha-page-container" ref={stampTextRef}>
+        <BalancesDisplay />
 
-      {/* Slime should be positioned above the chest */}
-      <div className="slime-gacha-wrapper" ref={containerRef}>
-        <SlimeGachaAnimation />
-      </div>
-
-      {/* Chest is positioned normally */}
-      <TreasureChest />
-
-      <button
-        onClick={pullGachaDitto}
-        className="slime-gacha-ditto-button"
-        disabled={!isButtonActive()}
-      >
-        <div>Draw Slime</div>
-        <div className="button-coin-price">
-          <img
-            src={DittoCoinLogo}
-            alt="Ditto Coin"
-            className="button-coin-logo"
-          />
-          <span className="button-price-span">
-            {formatNumberWithSuffix(
-              parseFloat(
-                formatUnits(
-                  SLIME_GACHA_PRICE_DITTO_WEI.toString(),
-                  DITTO_DECIMALS
-                )
-              )
-            )}{" "}
-            DITTO
-          </span>
+        {/* Slime should be positioned above the chest */}
+        <div className="slime-gacha-wrapper" ref={containerRef}>
+          <SlimeGachaAnimation />
         </div>
-      </button>
-    </div>
+
+        {/* Chest is positioned normally */}
+        <TreasureChest />
+
+        <button
+          onClick={pullGachaDitto}
+          className="slime-gacha-ditto-button"
+          disabled={!isButtonActive()}
+        >
+          <div>Draw Slime</div>
+          <div className="button-coin-price">
+            <FastImage
+              src={DittoCoinLogo}
+              alt="Ditto Coin"
+              className="button-coin-logo"
+            />
+            <span className="button-price-span">
+              {formatNumberWithSuffix(
+                parseFloat(
+                  formatUnits(
+                    SLIME_GACHA_PRICE_DITTO_WEI.toString(),
+                    DITTO_DECIMALS
+                  )
+                )
+              )}{" "}
+              DITTO
+            </span>
+          </div>
+        </button>
+      </div>
+    </>
   );
 }
 

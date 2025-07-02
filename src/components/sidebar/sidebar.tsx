@@ -18,7 +18,8 @@ import TgIcon from "../../assets/images/sidebar/tg-icon.png";
 import BotIcon from "../../assets/images/sidebar/bot-icon.png";
 import WalletIcon from "../../assets/images/sidebar/wallet-icon.png";
 import { useEffect, useState } from "react";
-import { preloadImage } from "../../utils/helpers";
+import { preloadImagesBatch } from "../../utils/image-cache";
+import FastImage from "../../components/fast-image/fast-image";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -29,30 +30,38 @@ interface SidebarProps {
 function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
   const { addNotification } = useNotification();
 
-  const [_, setIconImagesLoaded] = useState(false);
+  const [_, setImagesLoaded] = useState(false);
 
   useEffect(() => {
-    const iconsToPreload = [
-      DQIcon,
-      ShopIcon,
-      AvatarIcon,
-      InventoryIcon,
-      SkillsIcon,
-      FarmingIcon,
-      CraftingIcon,
-      SlimeLabIcon,
-      CombatIcon,
-      GachaIcon,
-      ReferralIcon,
-      GetMoreDittoIcon,
-      TgIcon,
-      BotIcon,
-      WalletIcon,
-    ];
+    const preloadSidebarImages = async () => {
+      const sidebarIcons = [
+        DQIcon,
+        ShopIcon,
+        AvatarIcon,
+        InventoryIcon,
+        SkillsIcon,
+        FarmingIcon,
+        CraftingIcon,
+        SlimeLabIcon,
+        CombatIcon,
+        GachaIcon,
+        ReferralIcon,
+        GetMoreDittoIcon,
+        TgIcon,
+        BotIcon,
+        WalletIcon,
+      ];
 
-    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
-      setIconImagesLoaded(true)
-    );
+      try {
+        await preloadImagesBatch(sidebarIcons);
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error("Failed to preload some sidebar images:", error);
+        setImagesLoaded(true); // Still proceed even if some images fail
+      }
+    };
+
+    preloadSidebarImages();
   }, []);
 
   return (
@@ -61,24 +70,36 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
         ✕
       </button>
       <div className="dq-icon-container">
-        <img src={DQIcon} alt="Game Icon" className="dq-icon" />
+        <FastImage src={DQIcon} alt="Game Icon" className="dq-icon" />
         <div className="dq-icon-buttons">
           <a onClick={() => setPage("Token")}>
-            <img src={WalletIcon} alt="Bot Icon" className="dq-icon-button" />
+            <FastImage
+              src={WalletIcon}
+              alt="Wallet Icon"
+              className="dq-icon-button"
+            />
           </a>
           <a
             href="https://t.me/teamditto"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src={TgIcon} alt="Telegram Icon" className="dq-icon-button" />
+            <FastImage
+              src={TgIcon}
+              alt="Telegram Icon"
+              className="dq-icon-button"
+            />
           </a>
           <a
             href="https://t.me/the_ditto_bot"
             target="_blank"
             rel="noopener noreferrer"
           >
-            <img src={BotIcon} alt="Bot Icon" className="dq-icon-button" />
+            <FastImage
+              src={BotIcon}
+              alt="Bot Icon"
+              className="dq-icon-button"
+            />
           </a>
         </div>
       </div>
@@ -89,7 +110,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
         <ul>
           <li>
             <a onClick={() => setPage("Avatar")}>
-              <img
+              <FastImage
                 src={AvatarIcon}
                 alt="Avatar Icon"
                 className="sidebar-icon"
@@ -99,7 +120,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           </li>
           <li>
             <a onClick={() => setPage("Inventory")}>
-              <img
+              <FastImage
                 src={InventoryIcon}
                 alt="Inventory Icon"
                 className="sidebar-icon"
@@ -109,7 +130,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           </li>
           <li>
             <a onClick={() => setPage("Skills")}>
-              <img
+              <FastImage
                 src={SkillsIcon}
                 alt="Skills Icon"
                 className="sidebar-icon"
@@ -119,7 +140,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           </li>
           <li>
             <a onClick={() => setPage("Farming")}>
-              <img
+              <FastImage
                 src={FarmingIcon}
                 alt="Farming Icon"
                 className="sidebar-icon"
@@ -129,7 +150,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           </li>
           <li>
             <a onClick={() => setPage("Crafting")}>
-              <img
+              <FastImage
                 src={CraftingIcon}
                 alt="Crafting Icon"
                 className="sidebar-icon"
@@ -139,7 +160,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           </li>
           <li>
             <a onClick={() => setPage("Slime Lab")}>
-              <img
+              <FastImage
                 src={SlimeLabIcon}
                 alt="Slime Lab Icon"
                 className="sidebar-icon"
@@ -149,7 +170,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           </li>
           <li>
             <a onClick={() => setPage("Combat")}>
-              <img
+              <FastImage
                 src={CombatIcon}
                 alt="Combat Icon"
                 className="sidebar-icon"
@@ -159,19 +180,27 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
           </li>
           <li>
             <a onClick={() => setPage("Gacha")}>
-              <img src={GachaIcon} alt="Gacha Icon" className="sidebar-icon" />
+              <FastImage
+                src={GachaIcon}
+                alt="Gacha Icon"
+                className="sidebar-icon"
+              />
               Gacha
             </a>
           </li>
           <li>
             <a onClick={() => setPage("Shop")}>
-              <img src={ShopIcon} alt="Shop Icon" className="sidebar-icon" />
+              <FastImage
+                src={ShopIcon}
+                alt="Shop Icon"
+                className="sidebar-icon"
+              />
               Shop
             </a>
           </li>
           <li>
             <a onClick={() => setPage("Referral")}>
-              <img
+              <FastImage
                 src={ReferralIcon}
                 alt="Referral Icon"
                 className="sidebar-icon"
@@ -185,7 +214,7 @@ function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
                 addNotification(() => <OpenDGNotification />);
               }}
             >
-              <img
+              <FastImage
                 src={GetMoreDittoIcon}
                 alt="Get More Ditto Icon"
                 className="sidebar-icon"

@@ -13,6 +13,9 @@ import LoopingTimerBar from "../../looping-timer-bar/looping-timer-bar";
 import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
 import ExitCombatMsg from "../../notifications/notification-content/exit-combat-first/exit-combat-first";
 import { useNotification } from "../../notifications/notification-context";
+import { useState, useEffect } from "react";
+import { preloadImagesBatch } from "../../../utils/image-cache";
+import FastImage from "../../fast-image/fast-image";
 
 function SlimeLabBreedingPage() {
   const { socket } = useSocket();
@@ -26,6 +29,31 @@ function SlimeLabBreedingPage() {
   } = useIdleSkillSocket();
   const { isBattling } = useCombatSocket();
   const { addNotification } = useNotification();
+  const [slimeImagesLoaded, setSlimeImagesLoaded] = useState(false);
+
+  // Preload slime images when breeding slimes change
+  useEffect(() => {
+    const preloadBreedingSlimeImages = async () => {
+      const slimeImages = [
+        slimeToBreed0?.imageUri,
+        slimeToBreed1?.imageUri,
+      ].filter(Boolean) as string[];
+
+      if (slimeImages.length > 0) {
+        try {
+          await preloadImagesBatch(slimeImages);
+          setSlimeImagesLoaded(true);
+        } catch (error) {
+          console.error("Failed to preload some breeding slime images:", error);
+          setSlimeImagesLoaded(true); // Still proceed even if some images fail
+        }
+      } else {
+        setSlimeImagesLoaded(true); // No images to load
+      }
+    };
+
+    preloadBreedingSlimeImages();
+  }, [slimeToBreed0?.imageUri, slimeToBreed1?.imageUri]);
 
   // Generate trait probabilities when both slimes are selected
   const traitProbabilities =
@@ -68,13 +96,17 @@ function SlimeLabBreedingPage() {
         <div className="breeding-dropdown-wrapper">
           <div className="slime-preview-box">
             {slimeToBreed0 ? (
-              <img
-                src={slimeToBreed0.imageUri}
-                alt={`Slime ${slimeToBreed0.id}`}
-                className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
-                  slimeToBreed0
-                ).toLowerCase()}`}
-              />
+              slimeImagesLoaded ? (
+                <FastImage
+                  src={slimeToBreed0.imageUri}
+                  alt={`Slime ${slimeToBreed0.id}`}
+                  className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
+                    slimeToBreed0
+                  ).toLowerCase()}`}
+                />
+              ) : (
+                <div className="slime-image-placeholder shimmer" />
+              )
             ) : (
               <div className="slime-placeholder"></div>
             )}
@@ -90,13 +122,17 @@ function SlimeLabBreedingPage() {
         <div className="breeding-dropdown-wrapper">
           <div className="slime-preview-box">
             {slimeToBreed1 ? (
-              <img
-                src={slimeToBreed1.imageUri}
-                alt={`Slime ${slimeToBreed1.id}`}
-                className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
-                  slimeToBreed1
-                ).toLowerCase()}`}
-              />
+              slimeImagesLoaded ? (
+                <FastImage
+                  src={slimeToBreed1.imageUri}
+                  alt={`Slime ${slimeToBreed1.id}`}
+                  className={`slime-preview-image rarity-${getHighestDominantTraitRarity(
+                    slimeToBreed1
+                  ).toLowerCase()}`}
+                />
+              ) : (
+                <div className="slime-image-placeholder shimmer" />
+              )
             ) : (
               <div className="slime-placeholder"></div>
             )}
@@ -131,7 +167,7 @@ function SlimeLabBreedingPage() {
             {breedingStatus ? "Cancel Breed" : "Breed Slimes"}
           </button>
           <div className="breed-duration-container">
-            <img src={TimerIcon}></img>
+            <FastImage src={TimerIcon} alt="Timer Icon" />
             <div className="breed-duration-text">
               {formatDuration(
                 getBreedingTimesByGeneration(slimeToBreed0!.generation) +

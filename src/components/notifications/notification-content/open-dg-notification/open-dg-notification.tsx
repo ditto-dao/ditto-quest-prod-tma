@@ -1,23 +1,13 @@
 import "./open-dg-notification.css";
 import DGSlime from "../../../../assets/images/general/loading-sprite.gif";
-import { useEffect } from "react";
-import { preloadImage } from "../../../../utils/helpers";
+import FastImage from "../../../fast-image/fast-image";
 
 function OpenDGNotification() {
-  useEffect(() => {
-    const preloadAll = async () => {
-      const staticImages = [DGSlime];
-
-      await Promise.all(staticImages.map(preloadImage));
-    };
-
-    preloadAll();
-  }, []);
 
   return (
     <div className="open-dg-notification">
       <div className="open-dg-notification-header">
-        <img src={DGSlime} alt="Fireworks" />
+        <FastImage src={DGSlime} alt="Ditto Guess slime" />
         <div>Ditto Guess (DG)</div>
       </div>
       <div className="open-dg-message">

@@ -5,11 +5,12 @@ import GPIcon from "../../assets/images/general/gold-coin.png";
 import { formatMaxDigits } from "../../utils/helpers";
 import { useSocket } from "../../redux/socket/socket-context";
 import { useUserSocket } from "../../redux/socket/user/user-context";
+import FastImage from "../fast-image/fast-image";
 
 interface SellNotificationProps {
   selectedItem: Inventory;
   notificationId: string;
-	parentNotificationId: string;
+  parentNotificationId: string;
   removeNotification: (id: string) => void;
   isEquipped: boolean;
 }
@@ -65,8 +66,8 @@ function SellNotification(props: SellNotificationProps) {
         return;
       }
     }
-		props.removeNotification(props.notificationId);
-		props.removeNotification(props.parentNotificationId);
+    props.removeNotification(props.notificationId);
+    props.removeNotification(props.parentNotificationId);
   };
 
   return (
@@ -107,7 +108,7 @@ function SellNotification(props: SellNotificationProps) {
 
       <div className="sell-value">
         <div className="sell-value-img-container">
-          <img src={GPIcon} alt="GP" />
+          <FastImage src={GPIcon} alt="GP" />
         </div>
         <div className="sell-value-amount">
           {formatMaxDigits(sellValue, 5)} GP

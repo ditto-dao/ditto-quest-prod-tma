@@ -8,6 +8,7 @@ import { conversations } from "./conversations";
 import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../utils/config";
 import { INTL_FORMATTER_INT } from "../../utils/formatter";
+import FastImage from "../fast-image/fast-image";
 
 export function MissionModal() {
   const { mission, emitGetNextMission } = useMissionNotification();
@@ -55,7 +56,7 @@ export function MissionModal() {
             left: 0,
             height: "100vh",
             width: "100vw",
-            zIndex: 4, // ensure it’s above other UI
+            zIndex: 4, // ensure it's above other UI
             pointerEvents: "none", // let clicks pass through except the modal
           }}
         >
@@ -70,7 +71,11 @@ export function MissionModal() {
           >
             <div className="mission-box">
               <div className="mission-left">
-                <img src={GuideImg} className="guide-img" />
+                <FastImage
+                  src={GuideImg}
+                  className="guide-img"
+                  alt="Slime Guide"
+                />
               </div>
               <div className="mission-right">
                 <div className="guide-name">Slime Guide</div>
@@ -95,9 +100,15 @@ export function MissionModal() {
                       {mission.rewardDitto && (
                         <div className="mission-payout">
                           <div className="mission-payout-ditto-icon">
-                            <img src={DittoCoin}></img>
+                            <FastImage src={DittoCoin} alt="Ditto Coin" />
                           </div>
-                          <div className="mission-payout-amount">{INTL_FORMATTER_INT.format(parseFloat(formatUnits(mission.rewardDitto, DITTO_DECIMALS)))}</div>
+                          <div className="mission-payout-amount">
+                            {INTL_FORMATTER_INT.format(
+                              parseFloat(
+                                formatUnits(mission.rewardDitto, DITTO_DECIMALS)
+                              )
+                            )}
+                          </div>
                         </div>
                       )}
                       <div className="mission-progress-row">

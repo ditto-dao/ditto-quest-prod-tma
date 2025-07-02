@@ -14,11 +14,17 @@
   transition: transform 0.8s ease-out, opacity 0.8s ease-out;
   opacity: 0;
   max-width: 80%;
-  z-index: 1;
+  z-index: 999;
 }
 
 /* Class added when the slime rises */
 .slime-gacha-visible {
   transform: translateY(0); /* Move up into view */
   opacity: 1;
+}
+
+/* Ensure gacha elements are above the overlay */
+.slime-gacha-display {
+  position: relative;
+  z-index: 999;
 }

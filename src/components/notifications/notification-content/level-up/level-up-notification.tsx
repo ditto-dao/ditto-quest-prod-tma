@@ -1,7 +1,6 @@
 import "./level-up-notification.css";
 import Fireworks from "../../../../assets/images/general/celebration.png";
-import { useEffect } from "react";
-import { preloadImage } from "../../../../utils/helpers";
+import FastImage from "../../../fast-image/fast-image";
 
 interface LevelUpNotificationProps {
   lvlLabel: string;
@@ -9,20 +8,10 @@ interface LevelUpNotificationProps {
 }
 
 function LevelUpNotification(props: LevelUpNotificationProps) {
-  useEffect(() => {
-    const preloadAll = async () => {
-      const staticImages = [Fireworks];
-
-      await Promise.all(staticImages.map(preloadImage));
-    };
-
-    preloadAll();
-  }, []);
-
   return (
     <div className="level-up-notification">
       <div className="level-up-notification-header">
-        <img src={Fireworks} alt="Fireworks" />
+        <FastImage src={Fireworks} alt="Fireworks" />
         <div>Level Up</div>
       </div>
       <div className="level-up-message">

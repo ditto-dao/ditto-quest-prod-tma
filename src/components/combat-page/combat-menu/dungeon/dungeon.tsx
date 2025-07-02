@@ -17,6 +17,8 @@ import {
   formatNumberWithCommas,
   formatNumberWithSuffix,
 } from "../../../../utils/helpers";
+import { preloadImagesBatch } from "../../../../utils/image-cache";
+import FastImage from "../../../../components/fast-image/fast-image";
 import PaywallNotification from "../../../notifications/notification-content/paywall/paywall-notification";
 import LBIcon from "../../../../assets/images/general/leaderboard-icon.svg";
 import DungeonLb from "../../../notifications/notification-content/dungeon-lb/dungeon-lb";
@@ -25,6 +27,7 @@ function DungeonMenuItem(props: Dungeon) {
   const { userData } = useUserSocket();
   const { enterDungeonGp, enterDungeonDitto } = useCombatSocket();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [dynamicImagesLoaded, setDynamicImagesLoaded] = useState(false);
   const { addNotification, removeNotification } = useNotification();
 
   const [entryPriceDitto, setEntryPriceDitto] = useState(
@@ -51,6 +54,30 @@ function DungeonMenuItem(props: Dungeon) {
 
     return `≤ ${maxCombatLevel}`;
   };
+
+  // Preload dynamic images from props (dungeon and monster images from backend)
+  useEffect(() => {
+    const preloadDungeonImages = async () => {
+      const dynamicImages = [
+        props.imgsrc, // Dungeon image from backend
+        ...props.monsterSequence.map((monster) => monster.imgsrc), // Monster images from backend
+      ].filter(Boolean) as string[];
+
+      if (dynamicImages.length > 0) {
+        try {
+          await preloadImagesBatch(dynamicImages);
+          setDynamicImagesLoaded(true);
+        } catch (error) {
+          console.error("Failed to preload some dungeon images:", error);
+          setDynamicImagesLoaded(true); // Still proceed even if some images fail
+        }
+      } else {
+        setDynamicImagesLoaded(true); // No dynamic images to load
+      }
+    };
+
+    preloadDungeonImages();
+  }, [props.imgsrc, props.monsterSequence]);
 
   useEffect(() => {
     if (props.entryPriceDittoWei) {
@@ -131,26 +158,30 @@ function DungeonMenuItem(props: Dungeon) {
       <div className="dungeon-inner-container">
         <div className="dungeon-main-display">
           <div className="dungeon-img-container">
-            <img src={props.imgsrc} />
+            {dynamicImagesLoaded ? (
+              <FastImage src={props.imgsrc} alt={`${props.name} Dungeon`} />
+            ) : (
+              <div className="dungeon-image-placeholder shimmer" />
+            )}
           </div>
           <div className="dungeon-stats">
             <div className="dungeon-main-stat">
               <div className="dungeon-main-stat-header">
-                <img src={GoldMedal} />
+                <FastImage src={GoldMedal} alt="Level Icon" />
                 <div>Req. Lvl</div>
               </div>
               <div>{getDungeonReqLvl(props)}</div>
             </div>
             <div className="dungeon-main-stat">
               <div className="dungeon-main-stat-header">
-                <img src={DittoCoinIcon} />
+                <FastImage src={DittoCoinIcon} alt="Ditto Coin" />
                 <div>Entry Price</div>
               </div>
               <div>{entryPriceDitto} DITTO</div>
             </div>
             <div className="dungeon-main-stat">
               <div className="dungeon-main-stat-header">
-                <img src={GPIcon} />
+                <FastImage src={GPIcon} alt="Gold Coin" />
                 <div>Entry Price</div>
               </div>
               <div>{entryPriceGp} GP</div>
@@ -162,15 +193,25 @@ function DungeonMenuItem(props: Dungeon) {
           <div className="dungeon-description">{props.description}</div>
           <div>
             <div className="dungeon-button-group">
-              <button className="dungeon-button" onClick={handleEnterDungeon} disabled={!isWithinLevelRange(userData.level, props.minCombatLevel, props.maxCombatLevel)}>
+              <button
+                className="dungeon-button"
+                onClick={handleEnterDungeon}
+                disabled={
+                  !isWithinLevelRange(
+                    userData.level,
+                    props.minCombatLevel,
+                    props.maxCombatLevel
+                  )
+                }
+              >
                 Enter
               </button>
               <button className="lb-button" onClick={handleOpenLb}>
-                <img src={LBIcon}></img>
+                <FastImage src={LBIcon} alt="Leaderboard Icon" />
               </button>
             </div>
             <div className="dungeon-expand-row">
-              <img
+              <FastImage
                 src={isExpanded ? Minimize : Expand}
                 onClick={toggleExpand}
                 alt="Toggle Expand"
@@ -186,7 +227,7 @@ function DungeonMenuItem(props: Dungeon) {
             isExpanded ? "expanded" : "collapsed"
           }`}
         >
-          {isExpanded && (
+          {isExpanded && dynamicImagesLoaded && (
             <>
               <div className="dungeon-monsters-header">Monsters</div>
               {props.monsterSequence.map((monster, index) => {
@@ -198,7 +239,7 @@ function DungeonMenuItem(props: Dungeon) {
 
                 return (
                   <div key={monster.id} className={monsterClassName}>
-                    <img src={monster.imgsrc} alt={monster.name} />
+                    <FastImage src={monster.imgsrc} alt={monster.name} />
                     <div className="dungeon-monster-name">{monster.name}</div>
                   </div>
                 );

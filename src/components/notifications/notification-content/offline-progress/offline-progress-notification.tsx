@@ -4,7 +4,6 @@ import {
   formatDuration,
   formatNumberWithCommas,
   formatNumberWithSuffix,
-  preloadImage,
 } from "../../../../utils/helpers";
 import { formatUnits } from "ethers/utils";
 import { DITTO_DECIMALS } from "../../../../utils/config";
@@ -18,6 +17,8 @@ import CraftingIcon from "../../../../assets/images/sidebar/craft.png";
 import FarmingIcon from "../../../../assets/images/sidebar/farm.png";
 import Timer from "../../../../assets/images/general/timer.png";
 import { useState, useEffect } from "react";
+import { preloadImagesBatch } from "../../../../utils/image-cache";
+import FastImage from "../../../fast-image/fast-image";
 
 interface OfflineProgressProps {
   updates: ProgressUpdate[];
@@ -31,11 +32,12 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
     const match = label.match(/(.+?)\s([+\-×]\d.*)$/);
     const itemLabel = match ? match[1] : label;
     const value = match ? match[2] : "";
-  
+
     return (
       <div className="offline-progress-line" key={`${imgSrc}-${label}`}>
-        <img
+        <FastImage
           src={imgSrc}
+          alt={itemLabel}
           className={`offline-progress-img${iconSmall ? " small" : ""}`}
         />
         <span className="offline-progress-text">
@@ -101,6 +103,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
 
   useEffect(() => {
     const preloadAll = async () => {
+      // Static images (already cached by preloadStaticImages in App.tsx)
       const staticImages = [
         GoldMedalIcon,
         HPLevelIcon,
@@ -113,6 +116,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         Timer,
       ];
 
+      // Dynamic backend URIs (need to be cached)
       const dynamicImages = updates.flatMap((update) => {
         if (update.type === "combat") {
           const { monstersKilled, items, equipment } = update.update;
@@ -137,10 +141,12 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
         return [];
       });
 
+      // Batch preload both static and dynamic images
       const uniqueImages = Array.from(
         new Set([...staticImages, ...dynamicImages])
       );
-      await Promise.all(uniqueImages.map(preloadImage));
+
+      await preloadImagesBatch(uniqueImages);
       setImagesPreloaded(true);
     };
 
@@ -163,9 +169,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
       } = update.update;
 
       if (userDied) {
-        combatLines.push(
-          renderLine(DeathIcon, `You died`, true)
-        );
+        combatLines.push(renderLine(DeathIcon, `You died`, true));
       }
 
       monstersKilled?.forEach((monster) => {
@@ -199,10 +203,16 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
 
       if (expGained)
         combatLines.push(
-          renderLine(GoldMedalIcon, `EXP +${formatNumberWithCommas(expGained)}`, true)
+          renderLine(
+            GoldMedalIcon,
+            `EXP +${formatNumberWithCommas(expGained)}`,
+            true
+          )
         );
       if (levelsGained)
-        combatLines.push(renderLine(GoldMedalIcon, `LEVELS +${levelsGained}`, true));
+        combatLines.push(
+          renderLine(GoldMedalIcon, `LEVELS +${levelsGained}`, true)
+        );
       if (hpExpGained)
         combatLines.push(
           renderLine(
@@ -301,7 +311,7 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
     return (
       <div className="offline-progress-notification">
         <div className="offline-progress-notification-header">
-          <img src={SleepySlime} alt="Sleepy Slime" />
+          <FastImage src={SleepySlime} alt="Sleepy Slime" />
           <div>Welcome back!</div>
         </div>
         <div className="offline-progress-duration shimmer-duration">
@@ -328,12 +338,12 @@ function OfflineProgressNotification(props: OfflineProgressProps) {
   return (
     <div className="offline-progress-notification">
       <div className="offline-progress-notification-header">
-        <img src={SleepySlime} alt="Sleepy Slime" />
+        <FastImage src={SleepySlime} alt="Sleepy Slime" />
         <div>Welcome back!</div>
       </div>
       <div className="offline-progress-duration">
         <div className="offline-progress-duration-label">
-          <img src={Timer}></img>
+          <FastImage src={Timer} alt="Timer" />
           <div>Offline Progress</div>
         </div>
         <div>{formatDuration(offlineProgressMs / 1000)}</div>

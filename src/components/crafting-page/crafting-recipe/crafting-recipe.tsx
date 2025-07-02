@@ -11,6 +11,8 @@ import Minimize from "../../../assets/images/general/up.svg";
 import "./crafting-recipe.css";
 import { useState, useEffect } from "react";
 import { formatDuration } from "../../../utils/helpers";
+import { preloadImagesBatch } from "../../../utils/image-cache";
+import FastImage from "../../../components/fast-image/fast-image";
 import { EquipmentType } from "../../../utils/types";
 import { useCurrentActivityContext } from "../../../redux/socket/idle/current-activity-context";
 import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
@@ -37,20 +39,44 @@ interface CraftingRecipeProps {
 function CraftingRecipe(props: CraftingRecipeProps) {
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { userData } = useUserSocket();
-  const { startCrafting, stopCrafting } =
-    useIdleSkillSocket();
+  const { startCrafting, stopCrafting } = useIdleSkillSocket();
   const { socket } = useSocket();
   const { setCurrentActivity } = useCurrentActivityContext();
   const { isBattling } = useCombatSocket();
   const { addNotification } = useNotification();
-  
+
   const [isCraftable, setIsCraftable] = useState(false);
   const [isCrafting, setIsCrafting] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [dynamicImagesLoaded, setDynamicImagesLoaded] = useState(false);
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
   };
+
+  // Preload dynamic images from props (equipment and required item images from backend)
+  useEffect(() => {
+    const preloadCraftingImages = async () => {
+      const dynamicImages = [
+        props.imgsrc, // Equipment image from backend
+        ...props.requiredItems.map((item) => item.imgsrc), // Required item images from backend
+      ].filter(Boolean) as string[];
+
+      if (dynamicImages.length > 0) {
+        try {
+          await preloadImagesBatch(dynamicImages);
+          setDynamicImagesLoaded(true);
+        } catch (error) {
+          console.error("Failed to preload some crafting images:", error);
+          setDynamicImagesLoaded(true); // Still proceed even if some images fail
+        }
+      } else {
+        setDynamicImagesLoaded(true); // No dynamic images to load
+      }
+    };
+
+    preloadCraftingImages();
+  }, [props.imgsrc, props.requiredItems]);
 
   const handleCraftButton = () => {
     if (socket && canEmitEvent()) {
@@ -78,7 +104,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
     } else {
       setIsCrafting(true);
       setCurrentActivity({
-        type: 'crafting',
+        type: "crafting",
         id: props.equipmentId,
         name: props.equipmentName,
         startTimestamp: props.craftingStatus.startTimestamp,
@@ -110,13 +136,17 @@ function CraftingRecipe(props: CraftingRecipeProps) {
       <div className="crafting-recipe-inner-container">
         <div className="crafting-recipe-header">
           <div className="crafting-equipment-img-container">
-            <img src={props.imgsrc}></img>
+            {dynamicImagesLoaded ? (
+              <FastImage src={props.imgsrc} alt={props.equipmentName} />
+            ) : (
+              <div className="crafting-image-placeholder shimmer" />
+            )}
           </div>
           <div className="crafting-recipe-header-info">
             <div className="equipment-name">{props.equipmentName}</div>
             <div className="equipment-craft-stats">
               <div className="equipment-craft-duration">
-                <img src={TimerIcon}></img>
+                <FastImage src={TimerIcon} alt="Timer Icon" />
                 <div>{formatDuration(props.durationS)}</div>
               </div>
               <div className="equipment-craft-exp">
@@ -133,11 +163,11 @@ function CraftingRecipe(props: CraftingRecipeProps) {
             </button>
           </div>
           <div className="craft-expand-img-container">
-            <img
+            <FastImage
               src={isExpanded ? Minimize : Expand}
               onClick={toggleExpand}
               alt="Toggle Expand"
-            />{" "}
+            />
           </div>
         </div>
         {isCrafting && props.craftingStatus && (
@@ -151,7 +181,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
         <div
           className={`required-items ${isExpanded ? "expanded" : "collapsed"}`}
         >
-          {isExpanded && (
+          {isExpanded && dynamicImagesLoaded && (
             <>
               <div className="required-items-header">Required Items</div>
               {props.requiredItems.map((item, index) => {
@@ -169,7 +199,7 @@ function CraftingRecipe(props: CraftingRecipeProps) {
 
                 return (
                   <div key={index} className={itemClassName}>
-                    <img src={item.imgsrc} alt={item.itemName} />
+                    <FastImage src={item.imgsrc} alt={item.itemName} />
                     <div className="crafting-req-item-name">
                       {item.itemName}{" "}
                       <span

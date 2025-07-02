@@ -118,7 +118,6 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 0 5px;
 }
 
 .trait-table-container {
@@ -126,7 +125,7 @@
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  padding: 1.7px;
+  padding: 1.5px;
 }
 
 .trait-table-label {
@@ -192,4 +191,214 @@
 
 .sell-slime-button:not(:disabled):active {
   transform: translateY(0.5px);
+}
+
+/* Tabs Styling */
+.slime-tabs {
+  display: flex;
+  margin-top: 10px;
+  width: 75%;
+  border: 1px solid var(--sage-green);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.slime-tab {
+  flex: 1;
+  padding: 3px 0;
+  font-size: 9px;
+  font-weight: bold;
+  text-align: center;
+  background-color: transparent;
+  color: var(--sage-green);
+  border: none;
+  border-right: 1px solid var(--sage-green);
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Remove right border on last button to prevent double-border on edge */
+.slime-tab:last-child {
+  border-right: none;
+}
+
+.slime-tab.active {
+  background-color: var(--sage-green);
+  color: var(--cream-white);
+  border: none;
+}
+
+/* Stats Display Styling */
+.slime-stats {
+  width: 100%;
+  padding: 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.stats-section {
+  background-color: var(--sage-green);
+  border-radius: 10px;
+  padding: 1.7px;
+}
+
+.stats-header {
+  background-color: var(--sage-green);
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 3px;
+  color: var(--cream-white);
+}
+
+.stats-grid {
+  background-color: var(--medium-teal);
+  border-radius: 0 0 10px 10px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.combat-stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 8px;
+  background-color: var(--light-teal);
+  border-radius: 4px;
+}
+
+.stat-item:nth-child(odd) {
+  background-color: var(--light-teal);
+}
+
+.stat-item:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.combat-stat-item > .stat-label {
+  font-weight: bold;
+  color: var(--rarity-d);
+  text-align: left;
+  flex: 1;
+  font-size: 7px;
+}
+
+.combat-stat-item > .stat-value {
+  color: var(--cream-white);
+  font-weight: bold;
+  text-align: right;
+  min-width: 60px;
+  font-size: 8px;
+}
+
+.stats-special-container {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  padding: 10px;
+  background-color: var(--medium-teal);
+  border-radius: 10px;
+}
+
+.special-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stats-special-header {
+  background-color: var(--sage-green);
+  border-radius: 8px 8px 0 0;
+  text-align: center;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 3px;
+  color: var(--cream-white);
+}
+
+.stats-grid-special {
+  background-color: var(--medium-teal);
+  border-radius: 0 0 10px 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.special-stat-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--light-teal);
+  border-radius: 7px;
+  padding: 4px 8px;
+  border: 2px solid var(--medium-teal);
+}
+
+.stat-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+.special-stat-item .stat-value {
+  color: var(--cream-white);
+  font-weight: bold;
+  font-size: 8px;
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Placeholder for slime image while loading */
+.slime-modal-image-placeholder {
+  width: 200px;
+  height: 200px;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    var(--medium-teal) 25%,
+    var(--sage-green) 50%,
+    var(--medium-teal) 75%
+  );
+  background-size: 200% 100%;
+  margin: 30px;
+}
+
+.shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+/* Ensure FastImage works with existing img styles */
+.slime-image.fast-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  padding: 30px;
+  image-rendering: pixelated;
+}
+
+.slime-info-row .fast-image {
+  height: 14px;
+}
+
+.stat-icon.fast-image {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  image-rendering: pixelated;
 }

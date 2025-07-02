@@ -1,5 +1,5 @@
 import { formatUnits } from "ethers";
-import { Combat, DittoBalanceBN, Inventory, Rarity, SlimeWithTraits, StatEffect, User, UserBalanceUpdate } from "./types";
+import { DittoBalanceBN, Rarity, SlimeWithTraits, StatEffect, UserBalanceUpdate } from "./types";
 import { DEVELOPMENT_FUNDS_KEY, DITTO_DECIMALS } from "./config";
 import Decimal from "decimal.js";
 
@@ -255,283 +255,6 @@ export function getDeductionPayloadToDevFunds(
     };
 }
 
-function calculateNetStatDelta(user: User, effects: StatEffect[]) {
-    const base = {
-        maxHp: user.maxHp, atkSpd: user.atkSpd, acc: user.acc, eva: user.eva,
-        maxMeleeDmg: user.maxMeleeDmg, maxRangedDmg: user.maxRangedDmg, maxMagicDmg: user.maxMagicDmg,
-        critChance: user.critChance, critMultiplier: user.critMultiplier,
-        dmgReduction: user.dmgReduction, magicDmgReduction: user.magicDmgReduction,
-        hpRegenRate: user.hpRegenRate, hpRegenAmount: user.hpRegenAmount,
-    };
-
-    const result = {
-        maxHp: 0, atkSpd: 0, acc: 0, eva: 0, maxMeleeDmg: 0, maxRangedDmg: 0, maxMagicDmg: 0,
-        critChance: 0, critMultiplier: 0, dmgReduction: 0, magicDmgReduction: 0,
-        hpRegenRate: 0, hpRegenAmount: 0, meleeFactor: 0, rangeFactor: 0, magicFactor: 0,
-        reinforceAir: 0, reinforceWater: 0, reinforceEarth: 0, reinforceFire: 0,
-        doubleResourceOdds: 0, skillIntervalReductionMultiplier: 0,
-    };
-
-    const additive = {} as Record<keyof typeof base, number>;
-    const multiplicative = {} as Record<keyof typeof base, number[]>;
-
-    // Init base keys
-    for (const key of Object.keys(base) as (keyof typeof base)[]) {
-        additive[key] = 0;
-        multiplicative[key] = [];
-    }
-
-    const apply = (mod: number | null | undefined, effect: 'add' | 'mul' | null | undefined, key: keyof typeof base) => {
-        if (mod == null || effect == null) return;
-        if (effect === 'add') additive[key] += mod;
-        else multiplicative[key].push(mod); // expects full multiplier value like 0.9 or 1.1
-    };
-
-    for (const e of effects) {
-        apply(e.maxHpMod, e.maxHpEffect, 'maxHp');
-        apply(e.atkSpdMod, e.atkSpdEffect, 'atkSpd');
-        apply(e.accMod, e.accEffect, 'acc');
-        apply(e.evaMod, e.evaEffect, 'eva');
-        apply(e.maxMeleeDmgMod, e.maxMeleeDmgEffect, 'maxMeleeDmg');
-        apply(e.maxRangedDmgMod, e.maxRangedDmgEffect, 'maxRangedDmg');
-        apply(e.maxMagicDmgMod, e.maxMagicDmgEffect, 'maxMagicDmg');
-        apply(e.critChanceMod, e.critChanceEffect, 'critChance');
-        apply(e.critMultiplierMod, e.critMultiplierEffect, 'critMultiplier');
-        apply(e.dmgReductionMod, e.dmgReductionEffect, 'dmgReduction');
-        apply(e.magicDmgReductionMod, e.magicDmgReductionEffect, 'magicDmgReduction');
-        apply(e.hpRegenRateMod, e.hpRegenRateEffect, 'hpRegenRate');
-        apply(e.hpRegenAmountMod, e.hpRegenAmountEffect, 'hpRegenAmount');
-
-        // Simple additive values
-        result.meleeFactor += e.meleeFactor ?? 0;
-        result.rangeFactor += e.rangeFactor ?? 0;
-        result.magicFactor += e.magicFactor ?? 0;
-        result.reinforceAir += e.reinforceAir ?? 0;
-        result.reinforceWater += e.reinforceWater ?? 0;
-        result.reinforceEarth += e.reinforceEarth ?? 0;
-        result.reinforceFire += e.reinforceFire ?? 0;
-
-        result.doubleResourceOdds += e.doubleResourceOddsMod ?? 0;
-        result.skillIntervalReductionMultiplier += e.skillIntervalReductionMultiplierMod ?? 0;
-    }
-
-    // Apply all stats with additive then multiplicative chaining
-    for (const key of Object.keys(base) as (keyof typeof base)[]) {
-        const baseVal = base[key];
-        const add = additive[key];
-        const mulChain = multiplicative[key].reduce((acc, val) => acc * val, 1);
-        result[key] = (baseVal + add) * mulChain - baseVal;
-    }
-
-    return result;
-}
-
-function applyDelta(user: User, combat: Combat, delta: ReturnType<typeof calculateNetStatDelta>) {
-    user.doubleResourceOdds += delta.doubleResourceOdds;
-    user.skillIntervalReductionMultiplier += delta.skillIntervalReductionMultiplier;
-
-    combat.maxHp = Math.round(combat.maxHp + delta.maxHp);
-    combat.atkSpd = Math.round(combat.atkSpd + delta.atkSpd);
-    combat.acc = Math.round(combat.acc + delta.acc);
-    combat.eva = Math.round(combat.eva + delta.eva);
-    combat.maxMeleeDmg = Math.round(combat.maxMeleeDmg + delta.maxMeleeDmg);
-    combat.maxRangedDmg = Math.round(combat.maxRangedDmg + delta.maxRangedDmg);
-    combat.maxMagicDmg = Math.round(combat.maxMagicDmg + delta.maxMagicDmg);
-    combat.critChance += delta.critChance;
-    const bonusCrit = Math.max(combat.critMultiplier - 1, 0.29);
-    combat.critMultiplier = 1 + bonusCrit * (1 + delta.critMultiplier);
-    combat.dmgReduction = Math.round(combat.dmgReduction + delta.dmgReduction);
-    combat.magicDmgReduction = Math.round(combat.magicDmgReduction + delta.magicDmgReduction);
-    combat.hpRegenRate += delta.hpRegenRate;
-    combat.hpRegenAmount = Math.round(combat.hpRegenAmount + delta.hpRegenAmount);
-    combat.meleeFactor = Math.round(combat.meleeFactor + delta.meleeFactor);
-    combat.rangeFactor = Math.round(combat.rangeFactor + delta.rangeFactor);
-    combat.magicFactor = Math.round(combat.magicFactor + delta.magicFactor);
-    combat.reinforceAir = Math.round(combat.reinforceAir + delta.reinforceAir);
-    combat.reinforceWater = Math.round(combat.reinforceWater + delta.reinforceWater);
-    combat.reinforceEarth = Math.round(combat.reinforceEarth + delta.reinforceEarth);
-    combat.reinforceFire = Math.round(combat.reinforceFire + delta.reinforceFire);
-}
-
-export function updateUserStatsFromEquipmentAndSlime(user: User, userCombat: Combat): void {
-    const statEffects: StatEffect[] = [];
-
-    const equippedItems: (Inventory | null | undefined)[] = [
-        user.hat,
-        user.armour,
-        user.weapon,
-        user.shield,
-        user.cape,
-        user.necklace,
-    ];
-
-    // ✅ Reset to base values first
-    userCombat.hp = user.maxHp;
-    userCombat.maxHp = user.maxHp;
-    userCombat.atkSpd = user.atkSpd;
-    userCombat.acc = user.acc;
-    userCombat.eva = user.eva;
-    userCombat.maxMeleeDmg = user.maxMeleeDmg;
-    userCombat.maxRangedDmg = user.maxRangedDmg;
-    userCombat.maxMagicDmg = user.maxMagicDmg;
-    userCombat.critChance = user.critChance;
-    userCombat.critMultiplier = user.critMultiplier;
-    userCombat.dmgReduction = user.dmgReduction;
-    userCombat.magicDmgReduction = user.magicDmgReduction;
-    userCombat.hpRegenRate = user.hpRegenRate;
-    userCombat.hpRegenAmount = user.hpRegenAmount;
-
-    // ✅ Reset multipliers
-    userCombat.meleeFactor = 0;
-    userCombat.rangeFactor = 0;
-    userCombat.magicFactor = 0;
-    userCombat.reinforceAir = 0;
-    userCombat.reinforceWater = 0;
-    userCombat.reinforceEarth = 0;
-    userCombat.reinforceFire = 0;
-
-    let updatedAttackType = false;
-
-    for (const item of equippedItems) {
-        const effect = item?.equipment?.statEffect;
-        if (effect) {
-            statEffects.push(effect);
-        } else if (item?.equipment) {
-            console.error(`Equipment "${item.equipment.name}" (ID: ${item.equipment.id}) has no statEffect linked.`);
-        }
-
-        if (item?.equipment?.attackType && !updatedAttackType) {
-            userCombat.attackType = item.equipment.attackType;
-            updatedAttackType = true;
-        }
-    }
-
-    if (!updatedAttackType) userCombat.attackType = 'Melee';
-
-    // ✅ Add only DOMINANT slime traits
-    if (user.equippedSlime) {
-        const {
-            BodyDominant,
-            PatternDominant,
-            PrimaryColourDominant,
-            AccentDominant,
-            DetailDominant,
-            EyeColourDominant,
-            EyeShapeDominant,
-            MouthDominant,
-        } = user.equippedSlime;
-
-        const dominantTraits = [
-            BodyDominant,
-            PatternDominant,
-            PrimaryColourDominant,
-            AccentDominant,
-            DetailDominant,
-            EyeColourDominant,
-            EyeShapeDominant,
-            MouthDominant,
-        ];
-
-        for (const trait of dominantTraits) {
-            if (trait?.statEffect) statEffects.push(trait.statEffect);
-        }
-    }
-
-    const delta = calculateNetStatDelta(user, statEffects);
-    applyDelta(user, userCombat, delta);
-
-    userCombat.cp = calculateCombatPower(userCombat).toString();
-}
-
-function getAtkCooldownFromAtkSpd(atkSpd: number): number {
-    if (atkSpd < 10) return 4;
-
-    if (atkSpd <= 500) {
-        return 4 - ((atkSpd - 10) / (500 - 10)) * (4 - 3.5); // 4 → 3.5
-    }
-
-    if (atkSpd <= 2000) {
-        return 3.5 - ((atkSpd - 500) / (2000 - 500)) * (3.5 - 2.5); // 3.5 → 2.5
-    }
-
-    if (atkSpd <= 5000) {
-        return 2.5 - ((atkSpd - 2000) / (5000 - 2000)) * (2.5 - 1.5); // 2.5 → 1.5
-    }
-
-    if (atkSpd <= 10000) {
-        return 1.5 - ((atkSpd - 5000) / (10000 - 5000)) * (1.5 - 1.0); // 1.5 → 1.0
-    }
-
-    // Late game: 10k+ scales slowly toward 0.85s
-    return 0.85 + 0.15 * Math.exp(-0.001 * (atkSpd - 10000));
-}
-
-export function getPercentageDmgReduct(dmgReduction: number): number {
-    return 1 / (1 + dmgReduction / 5000);
-}
-
-export function calculateCombatPower(c: Combat): Decimal {
-    const maxMeleeDmg = new Decimal(c.maxMeleeDmg);
-    const maxRangedDmg = new Decimal(c.maxRangedDmg);
-    const maxMagicDmg = new Decimal(c.maxMagicDmg);
-
-    const atkSpd = new Decimal(c.atkSpd);
-    const critChance = new Decimal(c.critChance);
-    const critMultiplier = new Decimal(c.critMultiplier);
-    const acc = new Decimal(c.acc);
-    const eva = new Decimal(c.eva);
-    const dmgReduction = new Decimal(c.dmgReduction);
-    const magicDmgReduction = new Decimal(c.magicDmgReduction);
-    const hpRegenRate = new Decimal(c.hpRegenRate);
-    const hpRegenAmount = new Decimal(c.hpRegenAmount);
-    const maxHp = new Decimal(c.maxHp);
-
-    const relevantMaxDmg =
-        c.attackType === "Melee"
-            ? maxMeleeDmg
-            : c.attackType === "Ranged"
-                ? maxRangedDmg
-                : c.attackType === "Magic"
-                    ? maxMagicDmg
-                    : new Decimal(0);
-
-    // === OFFENSE SCORE ===
-    const cooldown = new Decimal(getAtkCooldownFromAtkSpd(atkSpd.toNumber())); // seconds
-    const attacksPerSecond = new Decimal(1).div(cooldown);
-    const averageHitDmg = relevantMaxDmg.mul(Decimal.add(1, critChance.mul(critMultiplier.minus(1))));
-    const dps = averageHitDmg.mul(attacksPerSecond);
-
-    // === ACCURACY & EVASION SCORE ===
-    const accuracyScore = acc.sqrt();
-    const evasionScore = eva.sqrt();
-
-    // === DEFENSE SCORE ===
-    const physMitigation = new Decimal(1).minus(
-        new Decimal(getPercentageDmgReduct(dmgReduction.toNumber()))
-    );
-    const magicMitigation = new Decimal(1).minus(
-        new Decimal(getPercentageDmgReduct(magicDmgReduction.toNumber()))
-    );
-    const avgMitigation = physMitigation.plus(magicMitigation).div(2);
-    const defenseScore = avgMitigation.mul(100); // scale to readable number
-
-    // === SUSTAIN SCORE ===
-    const sustainScore = hpRegenAmount.div(hpRegenRate); // heals per second
-
-    // === HP SCORE ===
-    const hpScore = maxHp.sqrt();
-
-    // === FINAL SCORE ===
-    const totalScore = dps.mul(10)
-        .plus(accuracyScore.mul(5))
-        .plus(evasionScore.mul(5))
-        .plus(defenseScore.mul(3))
-        .plus(sustainScore.mul(3))
-        .plus(hpScore.mul(2));
-
-    return totalScore.round();
-}
-
 export function removeUndefined<T extends object>(obj: Partial<T>): Partial<T> {
     const result: Partial<T> = {};
 
@@ -542,20 +265,6 @@ export function removeUndefined<T extends object>(obj: Partial<T>): Partial<T> {
     }
 
     return result;
-}
-
-export function preloadImage(src: string): Promise<void> {
-    return new Promise((resolve, _) => {
-        if (!src) return resolve(); // resolve instantly if no src
-
-        const img = new Image();
-        img.onload = () => resolve(); // only mark as loaded when fully decoded
-        img.onerror = () => {
-            console.error(`Failed to preload image: ${src}`);
-            resolve(); // still resolve to not block
-        };
-        img.src = src;
-    });
 }
 
 export function toRoman(num: number): string {
@@ -626,4 +335,102 @@ export function formatMaxDigits(value: number, maxDigits: number = 6): string {
     if (value < 0) result = "-" + result;
 
     return `${result}${suffixes[suffixIndex]}`;
+}
+
+type AggregatedMods = {
+    add: number;
+    mul: number;
+};
+
+type AggregatedStatEffects = {
+    maxHp: AggregatedMods;
+    atkSpd: AggregatedMods;
+    acc: AggregatedMods;
+    eva: AggregatedMods;
+    maxMeleeDmg: AggregatedMods;
+    maxRangedDmg: AggregatedMods;
+    maxMagicDmg: AggregatedMods;
+    critChance: AggregatedMods;
+    critMultiplier: AggregatedMods;
+    dmgReduction: AggregatedMods;
+    magicDmgReduction: AggregatedMods;
+    hpRegenRate: AggregatedMods;
+    hpRegenAmount: AggregatedMods;
+
+    meleeFactor: number;
+    rangeFactor: number;
+    magicFactor: number;
+    reinforceAir: number;
+    reinforceWater: number;
+    reinforceEarth: number;
+    reinforceFire: number;
+};
+
+export function aggregateStatEffects(effects: (StatEffect | undefined | null)[]): AggregatedStatEffects {
+    const result: AggregatedStatEffects = {
+        maxHp: { add: 0, mul: 1 },
+        atkSpd: { add: 0, mul: 1 },
+        acc: { add: 0, mul: 1 },
+        eva: { add: 0, mul: 1 },
+        maxMeleeDmg: { add: 0, mul: 1 },
+        maxRangedDmg: { add: 0, mul: 1 },
+        maxMagicDmg: { add: 0, mul: 1 },
+        critChance: { add: 0, mul: 1 },
+        critMultiplier: { add: 0, mul: 1 },
+        dmgReduction: { add: 0, mul: 1 },
+        magicDmgReduction: { add: 0, mul: 1 },
+        hpRegenRate: { add: 0, mul: 1 },
+        hpRegenAmount: { add: 0, mul: 1 },
+
+        meleeFactor: 0,
+        rangeFactor: 0,
+        magicFactor: 0,
+        reinforceAir: 0,
+        reinforceWater: 0,
+        reinforceEarth: 0,
+        reinforceFire: 0,
+    };
+
+    // helper for fields that use AggregatedMods
+    function applyMod<K extends keyof AggregatedStatEffects>(
+        key: K,
+        mod: number | null | undefined,
+        effect: 'add' | 'mul' | null | undefined
+    ) {
+        if (mod == null || effect == null) return;
+
+        // only apply for fields that are AggregatedMods
+        const target = result[key] as AggregatedMods;
+        if (effect === 'add') target.add += mod;
+        if (effect === 'mul') target.mul *= mod;
+    }
+
+    for (const e of effects) {
+        if (!e) continue;
+
+        applyMod('maxHp', e.maxHpMod, e.maxHpEffect);
+        applyMod('atkSpd', e.atkSpdMod, e.atkSpdEffect);
+        applyMod('acc', e.accMod, e.accEffect);
+        applyMod('eva', e.evaMod, e.evaEffect);
+        applyMod('maxMeleeDmg', e.maxMeleeDmgMod, e.maxMeleeDmgEffect);
+        applyMod('maxRangedDmg', e.maxRangedDmgMod, e.maxRangedDmgEffect);
+        applyMod('maxMagicDmg', e.maxMagicDmgMod, e.maxMagicDmgEffect);
+        applyMod('critChance', e.critChanceMod, e.critChanceEffect);
+        applyMod('critMultiplier', e.critMultiplierMod, e.critMultiplierEffect);
+        applyMod('dmgReduction', e.dmgReductionMod, e.dmgReductionEffect);
+        applyMod('magicDmgReduction', e.magicDmgReductionMod, e.magicDmgReductionEffect);
+        applyMod('hpRegenRate', e.hpRegenRateMod, e.hpRegenRateEffect);
+        applyMod('hpRegenAmount', e.hpRegenAmountMod, e.hpRegenAmountEffect);
+
+        // additive-only fields
+        result.meleeFactor += e.meleeFactor ?? 0;
+        result.rangeFactor += e.rangeFactor ?? 0;
+        result.magicFactor += e.magicFactor ?? 0;
+        result.reinforceAir += e.reinforceAir ?? 0;
+        result.reinforceWater += e.reinforceWater ?? 0;
+        result.reinforceEarth += e.reinforceEarth ?? 0;
+        result.reinforceFire += e.reinforceFire ?? 0;
+    }
+
+    return result;
 }

@@ -12,7 +12,8 @@ import { DITTO_DECIMALS } from "../../utils/config";
 import { FORMATTER_MIN_0_MAX_3_DP } from "../../utils/formatter";
 import TonLogo from "../../assets/images/general/ton-logo.png";
 import GameEcosystemLogo from "../../assets/images/sidebar/game-eco-icon.png";
-import { formatMaxDigits, preloadImage } from "../../utils/helpers";
+import { formatMaxDigits } from "../../utils/helpers";
+import FastImage from "../../components/fast-image/fast-image";
 import {
   ON_CHAIN_PRICE_UPDATE_RES_EVENT,
   READ_ON_CHAIN_PRICE_EVENT,
@@ -28,8 +29,6 @@ function TokenPage() {
   const { accessGranted } = useLoginSocket();
 
   const walletAddress = useTonAddress();
-
-  const [_, setIconImagesLoaded] = useState(false);
 
   const [pricesUsd, setPricesUsd] = useState<number[]>([0]);
   const [pricesLoaded, setPricesLoaded] = useState(false);
@@ -95,21 +94,6 @@ function TokenPage() {
   }
 
   useEffect(() => {
-    const iconsToPreload = [
-      DittoCoinLogo,
-      TonLogo,
-      GameEcosystemLogo,
-      SwapLogo,
-      TonViewerLogo,
-      StonFiLogo,
-    ];
-
-    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
-      setIconImagesLoaded(true)
-    );
-  }, []);
-
-  useEffect(() => {
     if (socket) {
       if (!pricesLoaded) {
         console.log("Emitting READ_ON_CHAIN_PRICE_EVENT");
@@ -160,8 +144,16 @@ function TokenPage() {
       </div>
       <div className="balance-card">
         <div className="balance-icon-container">
-          <img src={DittoCoinLogo} className="ditto-icon" />
-          <img src={TonLogo} className="ton-overlay-icon" />
+          <FastImage
+            src={DittoCoinLogo}
+            className="ditto-icon"
+            alt="Ditto Coin"
+          />
+          <FastImage
+            src={TonLogo}
+            className="ton-overlay-icon"
+            alt="TON Logo"
+          />
         </div>
         <div className="balance-details-container">
           <div className="balance-details-name">Dittocoin</div>
@@ -183,8 +175,16 @@ function TokenPage() {
       </div>
       <div className="balance-card">
         <div className="balance-icon-container">
-          <img src={DittoCoinLogo} className="ditto-icon" />
-          <img src={GameEcosystemLogo} className="ton-overlay-icon" />
+          <FastImage
+            src={DittoCoinLogo}
+            className="ditto-icon"
+            alt="Ditto Coin"
+          />
+          <FastImage
+            src={GameEcosystemLogo}
+            className="ton-overlay-icon"
+            alt="Game Ecosystem"
+          />
         </div>
         <div className="balance-details-container">
           <div className="balance-details-name">Dittocoin X</div>
@@ -243,7 +243,7 @@ function TokenPage() {
       <div className="stat-box-full">
         <div className="stat-value">10,000 DITTO</div>
         <div className="stat-label-img-container">
-          <img src={SwapLogo}></img>
+          <FastImage src={SwapLogo} alt="Swap Icon" />
         </div>
         <div className="stat-value">
           ${formatMaxDigits((pricesUsd[pricesUsd.length - 1] || 0) * 10000, 6)}
@@ -257,7 +257,7 @@ function TokenPage() {
           className="logo-wrapper"
         >
           <div className="logo-container">
-            <img src={StonFiLogo} alt="StonFi" />
+            <FastImage src={StonFiLogo} alt="StonFi" />
           </div>
         </a>
         <a
@@ -267,7 +267,7 @@ function TokenPage() {
           className="logo-wrapper"
         >
           <div className="logo-container tonviewer-zoom">
-            <img src={TonViewerLogo} alt="TonViewer" />
+            <FastImage src={TonViewerLogo} alt="TonViewer" />
           </div>
         </a>
       </div>

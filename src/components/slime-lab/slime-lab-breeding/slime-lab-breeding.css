@@ -162,3 +162,43 @@
 .child-trait-table tbody tr:nth-child(odd) {
   background-color: var(--light-teal); /* Alternate row color */
 }
+
+/* Placeholder for slime images while loading */
+.slime-image-placeholder {
+  width: 100%;
+  height: 150px;
+  border-radius: 10px;
+  background: linear-gradient(
+    90deg,
+    var(--medium-teal) 25%,
+    var(--sage-green) 50%,
+    var(--medium-teal) 75%
+  );
+  background-size: 200% 100%;
+}
+
+.shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+/* Ensure FastImage works with existing img styles */
+.slime-preview-image.fast-image {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 10px;
+  padding: 20px;
+  image-rendering: pixelated;
+}
+
+.breed-duration-container .fast-image {
+  height: 12px;
+}

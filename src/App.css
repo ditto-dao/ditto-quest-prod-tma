@@ -51,3 +51,10 @@
 .ReactModal__Content {
   z-index: 10000 !important;
 }
+
+img {
+  transform: translateZ(0); 
+  will-change: transform;
+  image-rendering: -webkit-optimize-contrast;
+  backface-visibility: hidden;
+}

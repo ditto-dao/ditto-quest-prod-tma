@@ -11,6 +11,8 @@ import { useCurrentActivityContext } from "../../../redux/socket/idle/current-ac
 import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
 import { useNotification } from "../../notifications/notification-context";
 import ExitCombatMsg from "../../notifications/notification-content/exit-combat-first/exit-combat-first";
+import { preloadImageCached } from "../../../utils/image-cache";
+import FastImage from "../../fast-image/fast-image";
 
 interface FarmingItemProps {
   id: number;
@@ -31,6 +33,7 @@ function FarmingItem(props: FarmingItemProps) {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
   const { userData } = useUserSocket();
   const [isFarmable, setIsFarmable] = useState(false);
+  const [dynamicImageLoaded, setDynamicImageLoaded] = useState(false);
   const { socket } = useSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { startFarming, stopFarming } = useIdleSkillSocket();
@@ -38,6 +41,25 @@ function FarmingItem(props: FarmingItemProps) {
   const { isBattling } = useCombatSocket();
   const { addNotification } = useNotification();
   const [isFarming, setIsFarming] = useState(false);
+
+  // Preload dynamic image from props (farm item image from backend)
+  useEffect(() => {
+    const preloadFarmingItemImage = async () => {
+      if (props.imgsrc) {
+        try {
+          await preloadImageCached(props.imgsrc);
+          setDynamicImageLoaded(true);
+        } catch (error) {
+          console.error("Failed to preload farming item image:", error);
+          setDynamicImageLoaded(true); // Still proceed even if image fails
+        }
+      } else {
+        setDynamicImageLoaded(true); // No image to load
+      }
+    };
+
+    preloadFarmingItemImage();
+  }, [props.imgsrc]);
 
   const handleFarmButton = () => {
     if (socket && canEmitEvent() && telegramId) {
@@ -51,7 +73,7 @@ function FarmingItem(props: FarmingItemProps) {
           addNotification(() => <ExitCombatMsg />);
           return;
         }
-        
+
         console.log(props.id);
         socket.emit("farm-item", props.id);
 
@@ -59,7 +81,6 @@ function FarmingItem(props: FarmingItemProps) {
         setIsFarming(true);
       }
       setLastEventEmittedTimestamp(Date.now());
-
     }
   };
 
@@ -71,12 +92,12 @@ function FarmingItem(props: FarmingItemProps) {
     if (props.farmingStatus !== null) {
       setIsFarming(true);
       setCurrentActivity({
-        type: 'farming',
+        type: "farming",
         id: props.id,
         name: props.name,
         startTimestamp: props.farmingStatus.startTimestamp,
         durationS: props.farmingStatus.durationS,
-        imgsrc1: props.imgsrc
+        imgsrc1: props.imgsrc,
       });
     } else {
       setIsFarming(false);
@@ -91,16 +112,23 @@ function FarmingItem(props: FarmingItemProps) {
           <div className="farm-item-name">{props.name}</div>
           <div className="farm-item-info-container">
             <div className="farm-item-duration-container">
-              <img src={TimerIcon}></img>
+              <FastImage src={TimerIcon} alt="Timer Icon" />
               <div className="farm-item-duration">
                 {props.farmingDurationS}s
               </div>
             </div>
-            <div className="farm-item-exp"><div>XP</div><div>{props.farmingExp}</div></div>
+            <div className="farm-item-exp">
+              <div>XP</div>
+              <div>{props.farmingExp}</div>
+            </div>
           </div>
         </div>
         <div className="farm-item-img-container">
-          <img src={props.imgsrc}></img>
+          {dynamicImageLoaded ? (
+            <FastImage src={props.imgsrc} alt={props.name} />
+          ) : (
+            <div className="farming-image-placeholder shimmer" />
+          )}
         </div>
         {isFarming && props.farmingStatus ? (
           <LoopingTimerBar

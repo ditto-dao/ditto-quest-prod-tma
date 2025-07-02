@@ -104,3 +104,33 @@
   font-size: 9px;
   color: var(--cream-white);
 }
+
+/* Placeholder for slime images while loading */
+.slime-image-placeholder {
+  width: 80%;
+  height: 60%;
+  border-radius: 8px;
+  background: linear-gradient(90deg, var(--muted-teal) 25%, var(--bright-teal) 50%, var(--muted-teal) 75%);
+  background-size: 200% 100%;
+  flex-shrink: 1;
+}
+
+.shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200px 0; }
+  100% { background-position: 200px 0; }
+}
+
+/* Ensure FastImage works with existing img styles */
+.slime-inventory-img.fast-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  flex-shrink: 1;
+  image-rendering: pixelated;
+}

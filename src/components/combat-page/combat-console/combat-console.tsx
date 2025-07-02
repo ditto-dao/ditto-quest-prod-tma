@@ -3,12 +3,12 @@ import { useCombatSocket } from "../../../redux/socket/idle/combat-context";
 import "./combat-console.css";
 import BattleIcon from "../../../assets/images/combat/battle-icon.png";
 import {
-  calculateCombatPower,
   formatDecimalWithCommas,
   formatDecimalWithSuffix,
   formatNumberWithCommas,
-  preloadImage,
 } from "../../../utils/helpers";
+import { preloadImagesBatch } from "../../../utils/image-cache";
+import FastImage from "../../../components/fast-image/fast-image";
 import { useUserSocket } from "../../../redux/socket/user/user-context";
 import GoldMedalIcon from "../../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../../assets/images/combat/hp-lvl.png";
@@ -47,11 +47,9 @@ function CombatConsole() {
   const userHpChangeRef = useRef<HTMLDivElement>(null);
   const monsterHpChangeRef = useRef<HTMLDivElement>(null);
 
-  const [iconImagesLoaded, setIconImagesLoaded] = useState(false);
-  const [userSlimeImageLoaded, setUserSlimeImageLoaded] = useState(false);
-  const [monsterImagesLoaded, setMonsterImagesLoaded] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-  const cp = calculateCombatPower(userData.combat || defaultCombat);
+  const cp = new Decimal(userData.combat?.cp || defaultCombat.cp);
   const monsterCp = new Decimal(monster?.combat.cp || 0);
 
   function spawnFloatingText(
@@ -90,47 +88,36 @@ function CombatConsole() {
   };
 
   useEffect(() => {
-    const iconsToPreload = [
-      BattleIcon,
-      GoldMedalIcon,
-      HPLevelIcon,
-      MeleeCombatLabel,
-      RangedCombatLabel,
-      MagicombatLabel,
-    ];
+    const preloadCombatImages = async () => {
+      // Static images (always needed)
+      const staticImages = [
+        BattleIcon,
+        GoldMedalIcon,
+        HPLevelIcon,
+        MeleeCombatLabel,
+        RangedCombatLabel,
+        MagicombatLabel,
+      ];
 
-    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
-      setIconImagesLoaded(true)
-    );
-  }, []);
+      // Dynamic images based on current combat state
+      const dynamicImages = [
+        userData?.equippedSlime?.imageUri,
+        monster?.imgsrc,
+        combatArea?.imgsrc,
+      ].filter(Boolean) as string[];
 
-  useEffect(() => {
-    if (userData?.equippedSlime?.imageUri) {
-      preloadImage(userData.equippedSlime.imageUri).then(() =>
-        setUserSlimeImageLoaded(true)
-      );
-    } else {
-      setUserSlimeImageLoaded(false);
-    }
-  }, [userData?.equippedSlime?.imageUri]);
+      try {
+        // Preload all images in parallel
+        await preloadImagesBatch([...staticImages, ...dynamicImages]);
+        setImagesLoaded(true);
+      } catch (error) {
+        console.error("Failed to preload some combat images:", error);
+        setImagesLoaded(true); // Still proceed even if some images fail
+      }
+    };
 
-  useEffect(() => {
-    const promises: Promise<void>[] = [];
-
-    if (monster?.imgsrc) {
-      promises.push(preloadImage(monster.imgsrc));
-    }
-
-    if (combatArea?.imgsrc) {
-      promises.push(preloadImage(combatArea.imgsrc));
-    }
-
-    if (promises.length > 0) {
-      Promise.all(promises).then(() => setMonsterImagesLoaded(true));
-    } else {
-      setMonsterImagesLoaded(false);
-    }
-  }, [monster?.imgsrc, combatArea?.imgsrc]);
+    preloadCombatImages();
+  }, [userData?.equippedSlime?.imageUri, monster?.imgsrc, combatArea?.imgsrc]);
 
   useEffect(() => {
     if (monsterHpChange) {
@@ -190,7 +177,7 @@ function CombatConsole() {
           )}
           <div className="battle-box-inner">
             <AnimatePresence mode="wait">
-              {!monster || !iconImagesLoaded || !monsterImagesLoaded ? (
+              {!monster || !imagesLoaded ? (
                 <motion.div
                   key="monster-loader"
                   {...fadeVariant}
@@ -205,7 +192,7 @@ function CombatConsole() {
                   className="fade-content"
                 >
                   <div className="combat-type-icon">
-                    <img
+                    <FastImage
                       className="combat-type-img"
                       src={
                         monster.combat.attackType === "Melee"
@@ -219,12 +206,12 @@ function CombatConsole() {
                   </div>
                   <div className="battle-box-left">
                     <div className="monster-img-wrapper">
-                      <img
+                      <FastImage
                         className="monster-bg-img"
-                        src={combatArea?.imgsrc}
+                        src={combatArea?.imgsrc || ""}
                         alt="Area BG"
                       />
-                      <img
+                      <FastImage
                         className="monster-img"
                         src={monster.imgsrc}
                         alt={monster.name}
@@ -272,12 +259,16 @@ function CombatConsole() {
           </div>
 
           <div className="battle-icon-container">
-            <img className="battle-icon-img" src={BattleIcon} />
+            <FastImage
+              className="battle-icon-img"
+              src={BattleIcon}
+              alt="Battle Icon"
+            />
           </div>
 
           <div className="battle-box-inner">
             <AnimatePresence mode="wait">
-              {!userData || !iconImagesLoaded || !userSlimeImageLoaded ? (
+              {!userData || !imagesLoaded ? (
                 <motion.div
                   key="user-loader"
                   {...fadeVariant}
@@ -292,7 +283,7 @@ function CombatConsole() {
                   className="fade-content"
                 >
                   <div className="combat-type-icon">
-                    <img
+                    <FastImage
                       className="combat-type-img"
                       src={
                         userCombat.attackType === "Melee"
@@ -305,9 +296,10 @@ function CombatConsole() {
                     />
                   </div>
                   <div className="battle-box-left">
-                    <img
+                    <FastImage
                       className="monster-img"
-                      src={userData.equippedSlime?.imageUri}
+                      src={userData.equippedSlime?.imageUri || ""}
+                      alt="Equipped Slime"
                     />
                   </div>
                   <div className="battle-box-right">
@@ -351,7 +343,11 @@ function CombatConsole() {
 
           <div className="combat-console-exp-progress">
             <div className="combat-console-exp">
-              <img src={GoldMedalIcon} alt="exp icon" className="exp-icon" />
+              <FastImage
+                src={GoldMedalIcon}
+                alt="exp icon"
+                className="exp-icon"
+              />
               <div className="exp-label">EXP</div>
               <div className="exp-bar">
                 <div
@@ -364,7 +360,11 @@ function CombatConsole() {
               </div>
             </div>
             <div className="combat-console-exp">
-              <img src={HPLevelIcon} alt="hp lvl icon" className="exp-icon" />
+              <FastImage
+                src={HPLevelIcon}
+                alt="hp lvl icon"
+                className="exp-icon"
+              />
               <div className="exp-label">EXP</div>
               <div className="exp-bar">
                 <div

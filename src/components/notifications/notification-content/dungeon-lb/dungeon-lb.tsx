@@ -17,6 +17,11 @@ import {
   formatNumberWithCommas,
   formatNumberWithSuffix,
 } from "../../../../utils/helpers";
+import {
+  preloadImagesBatch,
+  preloadImageCached,
+} from "../../../../utils/image-cache";
+import FastImage from "../../../../components/fast-image/fast-image";
 import TrophyIcon from "../../../../assets/images/general/trophy.png";
 import MonsterIcon from "../../../../assets/images/combat/monster-icon.png";
 import TimerIcon from "../../../../assets/images/general/timer.png";
@@ -63,25 +68,30 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [receivedFirstBatch, setReceivedFirstBatch] = useState(false);
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+  const [staticImagesLoaded, setStaticImagesLoaded] = useState(false);
   const containerRef = useRef<any>(null);
 
   const NUM_PER_PAGE = 10;
   const [hasMore, setHasMore] = useState(true);
 
-  const preloadImages = async (entry: DungeonLeaderboardEntry) => {
-    const promises = [];
+  const preloadDynamicImages = async (entry: DungeonLeaderboardEntry) => {
+    try {
+      if (entry.user.equippedSlime?.imageUri) {
+        await preloadImageCached(entry.user.equippedSlime.imageUri);
+      }
 
-    if (entry.user.equippedSlime?.imageUri) {
-      const slime = new Image();
-      slime.src = entry.user.equippedSlime.imageUri;
-      promises.push(new Promise((res) => (slime.onload = res)));
+      setLoadedMap((prev) => ({
+        ...prev,
+        [`${entry.userId}-${entry.id}`]: true,
+      }));
+    } catch (error) {
+      console.error(`Failed to preload image for user ${entry.userId}:`, error);
+      // Still mark as loaded to prevent infinite loading
+      setLoadedMap((prev) => ({
+        ...prev,
+        [`${entry.userId}-${entry.id}`]: true,
+      }));
     }
-
-    await Promise.all(promises);
-    setLoadedMap((prev) => ({
-      ...prev,
-      [`${entry.userId}-${entry.id}`]: true,
-    }));
   };
 
   const handleScroll = () => {
@@ -120,26 +130,31 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
     });
   };
 
+  // Preload static icons once
   useEffect(() => {
-    const iconsToPreload = [
-      TrophyIcon,
-      MonsterIcon,
-      TimerIcon,
-      HPIcon,
-      BattleIcon,
-    ];
+    const preloadStaticImages = async () => {
+      const staticIcons = [
+        TrophyIcon,
+        MonsterIcon,
+        TimerIcon,
+        HPIcon,
+        BattleIcon,
+        DQIcon,
+      ];
 
-    const preloadIcons = async () => {
-      const promises = iconsToPreload.map((src) => {
-        const img = new Image();
-        img.src = src;
-        return new Promise((res) => (img.onload = res));
-      });
-
-      await Promise.all(promises);
+      try {
+        await preloadImagesBatch(staticIcons);
+        setStaticImagesLoaded(true);
+      } catch (error) {
+        console.error(
+          "Failed to preload some static leaderboard images:",
+          error
+        );
+        setStaticImagesLoaded(true); // Still proceed
+      }
     };
 
-    preloadIcons();
+    preloadStaticImages();
   }, []);
 
   useEffect(() => {
@@ -160,9 +175,9 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
             (entry) => !lbList.some((e) => e.id === entry.id)
           );
 
-          for (const entry of newEntries) {
-            await preloadImages(entry);
-          }
+          // Preload dynamic images for new entries in parallel
+          const preloadPromises = newEntries.map(preloadDynamicImages);
+          await Promise.allSettled(preloadPromises);
 
           setLbList((prev) => [...prev, ...newEntries]);
           setHasMore(newEntries.length === NUM_PER_PAGE);
@@ -199,7 +214,7 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
             lbList.map((entry, index) => {
               const key = `${entry.userId}-${entry.id}`;
               const isExpanded = expandedRows.has(entry.id);
-              const isLoaded = loadedMap[key];
+              const isLoaded = loadedMap[key] && staticImagesLoaded;
 
               return (
                 <div key={key}>
@@ -219,9 +234,13 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
                             <div className="lb-detail-column">
                               <div className="lb-detail-upper">
                                 <div className="lb-detail-image">
-                                  <img
-                                    src={entry.user.equippedSlime?.imageUri || DQIcon}
+                                  <FastImage
+                                    src={
+                                      entry.user.equippedSlime?.imageUri ||
+                                      DQIcon
+                                    }
                                     alt="slime"
+                                    fallback={DQIcon}
                                   />
                                 </div>
                                 <div
@@ -249,7 +268,7 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
                             </div>
                             <div className="lb-score-column">
                               <div className="lb-trophy">
-                                <img src={TrophyIcon} alt="trophy" />
+                                <FastImage src={TrophyIcon} alt="trophy" />
                               </div>
                               <div className="lb-score-value">
                                 {entry.score > 99999
@@ -276,9 +295,10 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
                               >
                                 <div className="lb-box">
                                   <div className="lb-box-top">
-                                    <img
+                                    <FastImage
                                       src={MonsterIcon}
                                       className="lb-box-icon"
+                                      alt="Monsters Icon"
                                     />
                                     <span>Monsters</span>
                                   </div>
@@ -292,9 +312,10 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
                                 </div>
                                 <div className="lb-box">
                                   <div className="lb-box-top">
-                                    <img
+                                    <FastImage
                                       src={BattleIcon}
                                       className="lb-box-icon"
+                                      alt="Damage Icon"
                                     />
                                     <span>DMG</span>
                                   </div>
@@ -310,7 +331,11 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
                                 </div>
                                 <div className="lb-box">
                                   <div className="lb-box-top">
-                                    <img src={HPIcon} className="lb-box-icon" />
+                                    <FastImage
+                                      src={HPIcon}
+                                      className="lb-box-icon"
+                                      alt="HP Icon"
+                                    />
                                     <span>HP</span>
                                   </div>
                                   <div className="lb-box-bottom">
@@ -326,9 +351,10 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
                                 </div>
                                 <div className="lb-box">
                                   <div className="lb-box-top">
-                                    <img
+                                    <FastImage
                                       src={TimerIcon}
                                       className="lb-box-icon"
+                                      alt="Timer Icon"
                                     />
                                     <span>Time</span>
                                   </div>

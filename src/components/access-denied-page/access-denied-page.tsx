@@ -1,22 +1,17 @@
 import "./access-denied-page.css";
 import PanicSlime from "../../assets/images/general/panic-slime.png";
-import { useEffect } from "react";
-import { preloadImage } from "../../utils/helpers";
+import FastImage from "../fast-image/fast-image";
 
 interface AccessDeniedPageProps {
   msg: string;
 }
 
 function AccessDeniedPage({ msg }: AccessDeniedPageProps) {
-  useEffect(() => {
-    preloadImage(PanicSlime);
-  }, []);
-
   const showRefresh = msg.toLowerCase().includes("disconnect");
 
   return (
     <div className="access-denied-page">
-      <img
+      <FastImage
         className="access-denied-sprite"
         src={PanicSlime}
         alt="Access denied"

@@ -134,3 +134,42 @@
 .farm-button:not(:disabled):active {
   transform: translateY(0.5px);
 }
+
+/* Placeholder for farming item image while loading */
+.farming-image-placeholder {
+  width: 45px;
+  height: 45px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--pine-green) 25%,
+    var(--sage-green) 50%,
+    var(--pine-green) 75%
+  );
+  background-size: 200% 100%;
+}
+
+.shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+/* Ensure FastImage works with existing img styles */
+.farm-item-img-container .fast-image {
+  width: 45px;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.farm-item-duration-container .fast-image {
+  height: 12px;
+  width: auto;
+}

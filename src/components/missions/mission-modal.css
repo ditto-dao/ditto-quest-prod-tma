@@ -145,3 +145,16 @@
   color: var(--cream-white);
   white-space: nowrap;
 }
+
+/* Ensure FastImage works with existing img styles */
+.guide-img.fast-image {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+.mission-payout-ditto-icon .fast-image {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}

@@ -17,12 +17,15 @@ import {
   formatNumberWithCommas,
   formatNumberWithSuffix,
 } from "../../../../utils/helpers";
+import { preloadImagesBatch } from "../../../../utils/image-cache";
+import FastImage from "../../../../components/fast-image/fast-image";
 import PaywallNotification from "../../../notifications/notification-content/paywall/paywall-notification";
 
 function DomainMenuItem(props: Domain) {
   const { userData } = useUserSocket();
   const { enterDomainDitto, enterDomainGp } = useCombatSocket();
   const [isExpanded, setIsExpanded] = useState(false);
+  const [dynamicImagesLoaded, setDynamicImagesLoaded] = useState(false);
   const { addNotification, removeNotification } = useNotification();
 
   const [entryPriceDitto, setEntryPriceDitto] = useState(
@@ -41,6 +44,30 @@ function DomainMenuItem(props: Domain) {
     if (maxLevel !== null && userLevel > maxLevel) return false;
     return true;
   };
+
+  // Preload dynamic images from props (domain and monster images from backend)
+  useEffect(() => {
+    const preloadDomainImages = async () => {
+      const dynamicImages = [
+        props.imgsrc, // Domain image from backend
+        ...props.monsters.map((monster) => monster.monster.imgsrc), // Monster images from backend
+      ].filter(Boolean) as string[];
+
+      if (dynamicImages.length > 0) {
+        try {
+          await preloadImagesBatch(dynamicImages);
+          setDynamicImagesLoaded(true);
+        } catch (error) {
+          console.error("Failed to preload some domain images:", error);
+          setDynamicImagesLoaded(true); // Still proceed even if some images fail
+        }
+      } else {
+        setDynamicImagesLoaded(true); // No dynamic images to load
+      }
+    };
+
+    preloadDomainImages();
+  }, [props.imgsrc, props.monsters]);
 
   useEffect(() => {
     if (props.entryPriceDittoWei) {
@@ -133,26 +160,30 @@ function DomainMenuItem(props: Domain) {
       <div className="domain-inner-container">
         <div className="domain-main-display">
           <div className="domain-img-container">
-            <img src={props.imgsrc} />
+            {dynamicImagesLoaded ? (
+              <FastImage src={props.imgsrc} alt={`${props.name} Domain`} />
+            ) : (
+              <div className="domain-image-placeholder shimmer" />
+            )}
           </div>
           <div className="domain-stats">
             <div className="domain-main-stat">
               <div className="domain-main-stat-header">
-                <img src={GoldMedal} />
+                <FastImage src={GoldMedal} alt="Level Icon" />
                 <div>Req. Lvl</div>
               </div>
               <div>{getDomainReqLvl(props)}</div>
             </div>
             <div className="domain-main-stat">
               <div className="domain-main-stat-header">
-                <img src={DittoCoinIcon} />
+                <FastImage src={DittoCoinIcon} alt="Ditto Coin" />
                 <div>Entry Price</div>
               </div>
               <div>{entryPriceDitto} DITTO</div>
             </div>
             <div className="domain-main-stat">
               <div className="domain-main-stat-header">
-                <img src={GPIcon} />
+                <FastImage src={GPIcon} alt="Gold Coin" />
                 <div>Entry Price</div>
               </div>
               <div>{entryPriceGp} GP</div>
@@ -163,11 +194,21 @@ function DomainMenuItem(props: Domain) {
         <div className="domain-header-info">
           <div className="domain-description">{props.description}</div>
           <div>
-            <button className="domain-button" onClick={handleEnterDomain} disabled={!isWithinLevelRange(userData.level, props.minCombatLevel, props.maxCombatLevel)}>
+            <button
+              className="domain-button"
+              onClick={handleEnterDomain}
+              disabled={
+                !isWithinLevelRange(
+                  userData.level,
+                  props.minCombatLevel,
+                  props.maxCombatLevel
+                )
+              }
+            >
               Enter
             </button>
             <div className="domain-expand-row">
-              <img
+              <FastImage
                 src={isExpanded ? Minimize : Expand}
                 onClick={toggleExpand}
                 alt="Toggle Expand"
@@ -181,7 +222,7 @@ function DomainMenuItem(props: Domain) {
         <div
           className={`domain-monsters ${isExpanded ? "expanded" : "collapsed"}`}
         >
-          {isExpanded && (
+          {isExpanded && dynamicImagesLoaded && (
             <>
               <div className="domain-monsters-header">Monsters</div>
               {props.monsters.map((monster, index) => {
@@ -193,7 +234,7 @@ function DomainMenuItem(props: Domain) {
 
                 return (
                   <div key={index} className={monsterClassName}>
-                    <img
+                    <FastImage
                       src={monster.monster.imgsrc}
                       alt={monster.monster.name}
                     />

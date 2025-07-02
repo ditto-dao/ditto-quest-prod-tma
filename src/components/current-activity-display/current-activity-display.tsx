@@ -9,6 +9,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import "./current-activity-display.css";
 import { useCombatSocket } from "../../redux/socket/idle/combat-context";
 import { useCurrentActivityContext } from "../../redux/socket/idle/current-activity-context";
+import { preloadImagesBatch } from "../../utils/image-cache";
+import FastImage from "../fast-image/fast-image";
 
 function LoaderBlock({ className }: { className: string }) {
   return <div className={`shimmer ${className}`} />;
@@ -18,30 +20,41 @@ function CurrentActivityDisplay() {
   const {} = useIdleSkillSocket();
   const { monster } = useCombatSocket();
   const { currentActivity } = useCurrentActivityContext();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [dynamicImagesLoaded, setDynamicImagesLoaded] = useState(false);
 
   useEffect(() => {
     if (!currentActivity) return;
 
-    const preload: string[] = [];
+    const preloadActivityImages = async () => {
+      const dynamicImages: string[] = [];
 
-    if (currentActivity.imgsrc1) preload.push(currentActivity.imgsrc1);
-    if (
-      currentActivity.type === "breeding" &&
-      "imgsrc2" in currentActivity &&
-      currentActivity.imgsrc2
-    )
-      preload.push(currentActivity.imgsrc2);
+      // Add activity images (from backend)
+      if (currentActivity.imgsrc1) dynamicImages.push(currentActivity.imgsrc1);
+      if (
+        currentActivity.type === "breeding" &&
+        "imgsrc2" in currentActivity &&
+        currentActivity.imgsrc2
+      ) {
+        dynamicImages.push(currentActivity.imgsrc2);
+      }
 
-    if (monster?.imgsrc) preload.push(monster.imgsrc);
+      // Add monster image if in combat (from backend)
+      if (monster?.imgsrc) dynamicImages.push(monster.imgsrc);
 
-    const imagePromises = preload.map((src: string) => {
-      const img = new Image();
-      img.src = src;
-      return new Promise((res) => (img.onload = res));
-    });
+      if (dynamicImages.length > 0) {
+        try {
+          await preloadImagesBatch(dynamicImages);
+          setDynamicImagesLoaded(true);
+        } catch (error) {
+          console.error("Failed to preload some activity images:", error);
+          setDynamicImagesLoaded(true); // Still proceed even if some images fail
+        }
+      } else {
+        setDynamicImagesLoaded(true); // No dynamic images to load
+      }
+    };
 
-    Promise.all(imagePromises).then(() => setIsLoaded(true));
+    preloadActivityImages();
   }, [currentActivity, monster]);
 
   if (!currentActivity) return null;
@@ -92,18 +105,18 @@ function CurrentActivityDisplay() {
               className={`current-activity-images-container
                 ${type === "breeding" ? "breeding" : ""}
                 ${type === "combat" ? "combat" : ""}
-                ${!isLoaded ? "shimmer" : ""}
+                ${!dynamicImagesLoaded ? "shimmer" : ""}
               `}
             >
-              {!isLoaded || (type === 'combat' && !monster) ? (
+              {!dynamicImagesLoaded || (type === "combat" && !monster) ? (
                 <div className="image-loader" />
               ) : type === "breeding" && imgsrc1 && imgsrc2 ? (
                 [
-                  <img key="img1" src={imgsrc1} />,
-                  <img key="img2" src={imgsrc2} />,
+                  <FastImage key="img1" src={imgsrc1} alt="Parent Slime 1" />,
+                  <FastImage key="img2" src={imgsrc2} alt="Parent Slime 2" />,
                 ]
               ) : (
-                imgsrc1 && <img src={imgsrc1} />
+                imgsrc1 && <FastImage src={imgsrc1} alt={name} />
               )}
             </div>
 
@@ -113,24 +126,27 @@ function CurrentActivityDisplay() {
               <div className="current-activity-labels-container">
                 <div
                   className={`current-activity-img-container ${
-                    !isLoaded ? "shimmer-circle shimmer" : ""
+                    !dynamicImagesLoaded ? "shimmer-circle shimmer" : ""
                   }`}
                 >
-                  {isLoaded && <img src={logo} />}
+                  {/* Static logos are already cached, use FastImage directly */}
+                  <FastImage src={logo} alt={`${type} logo`} />
                 </div>
 
                 <div
                   className={`current-activity-label ${typeClass} ${
-                    !isLoaded ? "shimmer-block shimmer" : ""
+                    !dynamicImagesLoaded ? "shimmer-block shimmer" : ""
                   }`}
-                  style={{ color: !isLoaded ? "transparent" : undefined }}
+                  style={{
+                    color: !dynamicImagesLoaded ? "transparent" : undefined,
+                  }}
                 >
                   {type === "breeding" ? "Breeding Slimes" : name}
                 </div>
               </div>
 
               {/* TIMER or HP BAR */}
-              {!isLoaded || (type === "combat" && !monster) ? (
+              {!dynamicImagesLoaded || (type === "combat" && !monster) ? (
                 <LoaderBlock className="shimmer-bar" />
               ) : type === "combat" && monster ? (
                 <div className="combat-hp-bar">

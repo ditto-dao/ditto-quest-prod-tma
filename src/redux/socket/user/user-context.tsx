@@ -19,7 +19,6 @@ import { useSocket } from "../socket-context";
 import { useLoginSocket } from "../login/login-context";
 import {
   removeUndefined,
-  updateUserStatsFromEquipmentAndSlime,
 } from "../../../utils/helpers";
 import {
   BETA_TESTER_LOGIN_EVENT,
@@ -273,12 +272,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
           [equipmentType]: inventoryEntry,
         };
 
-        if (updatedUser.combat) {
-          updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
-        } else {
-          console.warn("Combat data missing — cannot update stats.");
-        }
-
         return updatedUser;
       } else {
         console.warn(`Cannot equip: Entry is not a valid equipment.`);
@@ -310,11 +303,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         [equipmentType]: null,
       };
 
-      // Recalculate stats only if combat exists
-      if (updatedUser.combat) {
-        updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
-      }
-
       // Emit only on successful unequip
       socket.emit("unequip-equipment", equipmentType);
       setLastEventEmittedTimestamp(Date.now());
@@ -342,10 +330,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         equippedSlime: slime,
       };
 
-      if (updatedUser.combat) {
-        updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
-      }
-
       return updatedUser;
     });
 
@@ -369,10 +353,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         equippedSlimeId: null,
         equippedSlime: null,
       };
-
-      if (updatedUser.combat) {
-        updateUserStatsFromEquipmentAndSlime(updatedUser, updatedUser.combat);
-      }
 
       return updatedUser;
     });

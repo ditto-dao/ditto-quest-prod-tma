@@ -5,11 +5,11 @@ import { DITTO_DECIMALS } from "../../../../utils/config";
 import {
   formatNumberWithCommas,
   formatNumberWithSuffix,
-  preloadImage,
 } from "../../../../utils/helpers";
 import DittoCoinIcon from "../../../../assets/images/general/ditto-coin.png";
 import GPIcon from "../../../../assets/images/general/gold-coin.png";
 import { useUserSocket } from "../../../../redux/socket/user/user-context";
+import FastImage from "../../../fast-image/fast-image";
 
 interface PaywallProps {
   notificationId: string;
@@ -33,16 +33,6 @@ function PaywallNotification(props: PaywallProps) {
 
   const [dittoAmountStr, setDittoAmountStr] = useState(dittoAmountWei || "0");
   const [gpAmountStr, setGpAmountStr] = useState(gpAmount?.toString() || "0");
-
-  useEffect(() => {
-    const preloadAll = async () => {
-      const staticImages = [DittoCoinIcon, GPIcon];
-
-      await Promise.all(staticImages.map(preloadImage));
-    };
-
-    preloadAll();
-  }, []);
 
   useEffect(() => {
     if (dittoAmountWei) {
@@ -108,7 +98,7 @@ function PaywallNotification(props: PaywallProps) {
             onClick={handlePayDitto}
           >
             <div className="paywall-button-top">
-              <img src={DittoCoinIcon} alt="Ditto" />
+              <FastImage src={DittoCoinIcon} alt="DittoCoinIcon" />
               <span>DITTO</span>
             </div>
             <div className="paywall-button-bottom">{dittoAmountStr}</div>
@@ -124,7 +114,7 @@ function PaywallNotification(props: PaywallProps) {
             onClick={handlePayGp}
           >
             <div className="paywall-button-top">
-              <img src={GPIcon} alt="GP" />
+              <FastImage src={GPIcon} alt="GP" />
               <span>GP</span>
             </div>
             <div className="paywall-button-bottom">{gpAmountStr}</div>

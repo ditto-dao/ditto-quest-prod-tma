@@ -1,3 +1,4 @@
+import FastImage from "../../fast-image/fast-image";
 import "./combat-stat.css";
 
 interface CombatStatProps {
@@ -13,7 +14,7 @@ function CombatStat(props: CombatStatProps) {
   return (
     <div className="combat-stat-container">
       <div className="combat-stat-left">
-        <img
+        <FastImage
           src={props.imgsrc}
           alt={props.statName}
           className="combat-stat-icon"

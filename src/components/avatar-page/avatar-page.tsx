@@ -9,51 +9,80 @@ import DefaultNecklace from "../../assets/images/avatar-page/default-necklace.pn
 import DefaultArmour from "../../assets/images/avatar-page/default-armour.png";
 import DefaultPet from "../../assets/images/avatar-page/default-pet.png";
 import SlimeLogo from "../../assets/images/general/slime-mage.png";
-//import DefaultSkillbook from "../../assets/images/avatar-page/default-skillbook.png";
 import CPIcon from "../../assets/images/combat/cp-logo.png";
 import GoldMedalIcon from "../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../assets/images/combat/hp-lvl.png";
 import { defaultCombat, Inventory } from "../../utils/types";
 import {
-  calculateCombatPower,
   formatDecimalWithCommas,
   formatDecimalWithSuffix,
   formatNumberWithCommas,
   getHighestDominantTraitRarity,
-  preloadImage,
 } from "../../utils/helpers";
+import { preloadImagesBatch } from "../../utils/image-cache";
+import FastImage from "../../components/fast-image/fast-image";
 import SlimeModal from "../slime-lab/slime-lab-inventory/slime-modal/slime-modal";
 import { useNotification } from "../notifications/notification-context";
 import ItemEqModal from "../item-eq-modal/item-eq-modal";
 import { useEffect, useState } from "react";
+import Decimal from "decimal.js";
 
 function AvatarPage() {
   const { addNotification, removeNotification } = useNotification();
   const { userData } = useUserSocket();
 
-  const [_, setIconImagesLoaded] = useState(false);
+  const [_, setImagesPreloaded] = useState(false);
 
-  const cp = calculateCombatPower(userData.combat || defaultCombat);
+  const cp = new Decimal(userData.combat?.cp || defaultCombat.cp);
 
   useEffect(() => {
-    const iconsToPreload = [
-      DefaultHat,
-      DefaultCape,
-      DefaultWeapon,
-      DefaultShield,
-      DefaultNecklace,
-      DefaultArmour,
-      DefaultPet,
-      SlimeLogo,
-      CPIcon,
-      GoldMedalIcon,
-      HPLevelIcon,
-    ];
+    const preloadAvatarImages = async () => {
+      // Static images (always needed)
+      const staticImages = [
+        DefaultHat,
+        DefaultCape,
+        DefaultWeapon,
+        DefaultShield,
+        DefaultNecklace,
+        DefaultArmour,
+        DefaultPet,
+        SlimeLogo,
+        CPIcon,
+        GoldMedalIcon,
+        HPLevelIcon,
+      ];
 
-    Promise.all(iconsToPreload.map(preloadImage)).then(() =>
-      setIconImagesLoaded(true)
-    );
-  }, []);
+      // Dynamic images (from userData)
+      const dynamicImages = [
+        userData.equippedSlime?.imageUri,
+        userData.hat?.equipment?.imgsrc,
+        userData.cape?.equipment?.imgsrc,
+        userData.necklace?.equipment?.imgsrc,
+        userData.shield?.equipment?.imgsrc,
+        userData.armour?.equipment?.imgsrc,
+        userData.weapon?.equipment?.imgsrc,
+      ].filter(Boolean) as string[];
+
+      try {
+        // Preload all images in parallel
+        await preloadImagesBatch([...staticImages, ...dynamicImages]);
+        setImagesPreloaded(true);
+      } catch (error) {
+        console.error("Failed to preload some avatar images:", error);
+        setImagesPreloaded(true); // Still proceed even if some images fail
+      }
+    };
+
+    preloadAvatarImages();
+  }, [
+    userData.equippedSlime?.imageUri,
+    userData.hat?.equipment?.imgsrc,
+    userData.cape?.equipment?.imgsrc,
+    userData.necklace?.equipment?.imgsrc,
+    userData.shield?.equipment?.imgsrc,
+    userData.armour?.equipment?.imgsrc,
+    userData.weapon?.equipment?.imgsrc,
+  ]);
 
   // Slime Modal
   const openSlimeModal = () => {
@@ -101,15 +130,17 @@ function AvatarPage() {
                   >
                     {getHighestDominantTraitRarity(userData.equippedSlime)}
                   </div>
-                  <img
+                  <FastImage
                     src={userData.equippedSlime.imageUri}
                     alt="Equipped Slime"
+                    fallback={SlimeLogo}
                     onClick={() => openSlimeModal()}
+                    style={{ cursor: "pointer" }}
                   />
                 </div>
               ) : (
                 <div className="equipped-slime-avatar empty">
-                  <img src={SlimeLogo}></img>
+                  <FastImage src={SlimeLogo} alt="Default Slime" />
                 </div>
               )}
             </div>
@@ -118,7 +149,7 @@ function AvatarPage() {
               <div className="stats-summary-field-with-progress">
                 <div className="stats-summary-field">
                   <div className="stats-summary-label">
-                    <img src={GoldMedalIcon} />
+                    <FastImage src={GoldMedalIcon} alt="Level Icon" />
                     <div>LVL</div>
                   </div>
                   <div>{formatNumberWithCommas(userData.level)}</div>
@@ -139,7 +170,7 @@ function AvatarPage() {
               <div className="stats-summary-field-with-progress">
                 <div className="stats-summary-field">
                   <div className="stats-summary-label">
-                    <img src={HPLevelIcon} />
+                    <FastImage src={HPLevelIcon} alt="HP Level Icon" />
                     <div>HPLVL</div>
                   </div>
                   <div>{formatNumberWithCommas(userData.hpLevel)}</div>
@@ -160,7 +191,7 @@ function AvatarPage() {
               <div className="stats-summary-field-no-progress">
                 <div className="stats-summary-field">
                   <div className="stats-summary-label">
-                    <img src={CPIcon} />
+                    <FastImage src={CPIcon} alt="Combat Power Icon" />
                     <div>CP</div>
                   </div>
                   <div>
@@ -189,13 +220,20 @@ function AvatarPage() {
               }}
             >
               {userData.hat ? (
-                <img
+                <FastImage
                   className="slot-image"
                   src={userData.hat.equipment!.imgsrc}
+                  alt="Hat"
+                  fallback={DefaultHat}
                   onClick={() => handleEquipmentOpenModal(userData.hat!)}
-                ></img>
+                  style={{ cursor: "pointer" }}
+                />
               ) : (
-                <img className="slot-image-default" src={DefaultHat}></img>
+                <FastImage
+                  className="slot-image-default"
+                  src={DefaultHat}
+                  alt="Default Hat"
+                />
               )}
             </div>
           </div>
@@ -212,13 +250,20 @@ function AvatarPage() {
               }}
             >
               {userData.cape ? (
-                <img
+                <FastImage
                   className="slot-image"
                   src={userData.cape.equipment!.imgsrc}
+                  alt="Cape"
+                  fallback={DefaultCape}
                   onClick={() => handleEquipmentOpenModal(userData.cape!)}
-                ></img>
+                  style={{ cursor: "pointer" }}
+                />
               ) : (
-                <img className="slot-image-default" src={DefaultCape}></img>
+                <FastImage
+                  className="slot-image-default"
+                  src={DefaultCape}
+                  alt="Default Cape"
+                />
               )}
             </div>
             <div
@@ -231,17 +276,28 @@ function AvatarPage() {
               }}
             >
               {userData.necklace ? (
-                <img
+                <FastImage
                   className="slot-image"
                   src={userData.necklace.equipment!.imgsrc}
+                  alt="Necklace"
+                  fallback={DefaultNecklace}
                   onClick={() => handleEquipmentOpenModal(userData.necklace!)}
-                ></img>
+                  style={{ cursor: "pointer" }}
+                />
               ) : (
-                <img className="slot-image-default" src={DefaultNecklace}></img>
+                <FastImage
+                  className="slot-image-default"
+                  src={DefaultNecklace}
+                  alt="Default Necklace"
+                />
               )}
             </div>
             <div className="pet-slot">
-              <img className="slot-image-default" src={DefaultPet}></img>
+              <FastImage
+                className="slot-image-default"
+                src={DefaultPet}
+                alt="Default Pet"
+              />
             </div>
           </div>
 
@@ -257,13 +313,20 @@ function AvatarPage() {
               }}
             >
               {userData.shield ? (
-                <img
+                <FastImage
                   className="slot-image"
                   src={userData.shield.equipment!.imgsrc}
+                  alt="Shield"
+                  fallback={DefaultShield}
                   onClick={() => handleEquipmentOpenModal(userData.shield!)}
-                ></img>
+                  style={{ cursor: "pointer" }}
+                />
               ) : (
-                <img className="slot-image-default" src={DefaultShield}></img>
+                <FastImage
+                  className="slot-image-default"
+                  src={DefaultShield}
+                  alt="Default Shield"
+                />
               )}
             </div>
             <div
@@ -276,13 +339,20 @@ function AvatarPage() {
               }}
             >
               {userData.armour ? (
-                <img
+                <FastImage
                   className="slot-image"
                   src={userData.armour.equipment!.imgsrc}
+                  alt="Armour"
+                  fallback={DefaultArmour}
                   onClick={() => handleEquipmentOpenModal(userData.armour!)}
-                ></img>
+                  style={{ cursor: "pointer" }}
+                />
               ) : (
-                <img className="slot-image-default" src={DefaultArmour}></img>
+                <FastImage
+                  className="slot-image-default"
+                  src={DefaultArmour}
+                  alt="Default Armour"
+                />
               )}
             </div>
             <div
@@ -295,13 +365,20 @@ function AvatarPage() {
               }}
             >
               {userData.weapon ? (
-                <img
+                <FastImage
                   className="slot-image"
                   src={userData.weapon.equipment!.imgsrc}
+                  alt="Weapon"
+                  fallback={DefaultWeapon}
                   onClick={() => handleEquipmentOpenModal(userData.weapon!)}
-                ></img>
+                  style={{ cursor: "pointer" }}
+                />
               ) : (
-                <img className="slot-image-default" src={DefaultWeapon}></img>
+                <FastImage
+                  className="slot-image-default"
+                  src={DefaultWeapon}
+                  alt="Default Weapon"
+                />
               )}
             </div>
           </div>
@@ -314,13 +391,13 @@ function AvatarPage() {
 
           <div className="avatar-row">
             <div className="spellbook-slot">
-              <img className="slot-image-default" src={DefaultSkillbook}></img>
+              <FastImage className="slot-image-default" src={DefaultSkillbook} alt="Default Skillbook" />
             </div>
             <div className="spellbook-slot">
-              <img className="slot-image-default" src={DefaultSkillbook}></img>
+              <FastImage className="slot-image-default" src={DefaultSkillbook} alt="Default Skillbook" />
             </div>
             <div className="spellbook-slot">
-              <img className="slot-image-default" src={DefaultSkillbook}></img>
+              <FastImage className="slot-image-default" src={DefaultSkillbook} alt="Default Skillbook" />
             </div>
           </div>
         </div>

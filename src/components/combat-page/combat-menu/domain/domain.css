@@ -198,3 +198,55 @@
   font-size: 8px;
   height: 100%;
 }
+
+/* Placeholder for domain image while loading */
+.domain-image-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background: linear-gradient(
+    90deg,
+    var(--medium-teal) 25%,
+    var(--light-teal) 50%,
+    var(--medium-teal) 75%
+  );
+  background-size: 200% 100%;
+}
+
+.shimmer {
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+/* Ensure FastImage works with existing img styles */
+.domain-img-container .fast-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 5px;
+}
+
+.domain-main-stat-header .fast-image {
+  height: 14px;
+  width: auto;
+}
+
+.domain-monster .fast-image {
+  width: 25px;
+  height: auto;
+}
+
+.expand-button.fast-image {
+  width: 25px;
+  height: 25px;
+  cursor: pointer;
+}

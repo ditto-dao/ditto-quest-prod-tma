@@ -34,6 +34,7 @@ import { FloatingUpdateDisplay } from "../floating-update-display/floating-updat
 import { useFloatingUpdate } from "../../redux/socket/idle/floating-update-context";
 import { MissionModal } from "../missions/mission-modal";
 import TokenPage from "../token-page/token-page";
+import FastImage from "../fast-image/fast-image";
 
 const pageIcons: Record<string, string> = {
   Shop: ShopIcon,
@@ -143,7 +144,7 @@ function MainPage() {
               </div>
               <div className="header-title">
                 {pageIcons[currentPage] && (
-                  <img
+                  <FastImage
                     src={pageIcons[currentPage]}
                     alt={`${currentPage} Icon`}
                     className="header-icon"

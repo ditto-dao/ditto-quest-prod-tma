@@ -5,6 +5,9 @@ import ItemIcon from "../../assets/images/general/item-icon.png";
 import { EquipmentType, Inventory } from "../../utils/types";
 import { useNotification } from "../notifications/notification-context";
 import SellNotification from "../sell-modal/sell-modal";
+import { useState, useEffect } from "react";
+import { preloadImageCached } from "../../utils/image-cache";
+import FastImage from "../fast-image/fast-image";
 
 interface ItemEqModalProps {
   selectedItem: Inventory;
@@ -23,6 +26,29 @@ export default function ItemEqModal({
 }: ItemEqModalProps) {
   const { userData, equip, unequip } = useUserSocket();
   const { addNotification } = useNotification();
+  const [itemImageLoaded, setItemImageLoaded] = useState(false);
+
+  // Preload the item/equipment image
+  useEffect(() => {
+    const preloadItemImage = async () => {
+      const imageSrc =
+        selectedItem.item?.imgsrc || selectedItem.equipment?.imgsrc;
+
+      if (imageSrc) {
+        try {
+          await preloadImageCached(imageSrc);
+          setItemImageLoaded(true);
+        } catch (error) {
+          console.error("Failed to preload item image:", error);
+          setItemImageLoaded(true); // Still proceed even if image fails
+        }
+      } else {
+        setItemImageLoaded(true); // No image to load
+      }
+    };
+
+    preloadItemImage();
+  }, [selectedItem]);
 
   const meetsLvlReq = (reqLvl: number) => {
     return reqLvl <= userData.level;
@@ -62,11 +88,23 @@ export default function ItemEqModal({
           >
             {selectedItem.item?.rarity || selectedItem.equipment?.rarity}
           </div>
-          <img
-            src={selectedItem.item?.imgsrc || selectedItem.equipment?.imgsrc}
-            alt={selectedItem.item?.name || selectedItem.equipment?.name}
-            className="item-image"
-          />
+          {itemImageLoaded ? (
+            <FastImage
+              src={
+                selectedItem.item?.imgsrc ||
+                selectedItem.equipment?.imgsrc ||
+                ""
+              }
+              alt={
+                selectedItem.item?.name ||
+                selectedItem.equipment?.name ||
+                "Item"
+              }
+              className="item-image"
+            />
+          ) : (
+            <div className="item-image-placeholder shimmer" />
+          )}
         </div>
       </div>
       <div className="item-details">
@@ -74,9 +112,13 @@ export default function ItemEqModal({
           <div className="inv-modal-item-description-container">
             <div className="item-header">
               {selectedItem.itemId ? (
-                <img src={ItemIcon} alt="Item icon" className="item-icon" />
+                <FastImage
+                  src={ItemIcon}
+                  alt="Item icon"
+                  className="item-icon"
+                />
               ) : (
-                <img
+                <FastImage
                   src={EquipmentIcon}
                   alt="Equipment icon"
                   className="equipment-icon"
