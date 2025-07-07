@@ -161,7 +161,7 @@ function DungeonMenuItem(props: Dungeon) {
             {dynamicImagesLoaded ? (
               <FastImage src={props.imgsrc} alt={`${props.name} Dungeon`} />
             ) : (
-              <div className="dungeon-image-placeholder shimmer" />
+              <div className="dungeon-image-placeholder shimmer-dungeon" />
             )}
           </div>
           <div className="dungeon-stats">

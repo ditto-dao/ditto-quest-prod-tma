@@ -163,7 +163,7 @@ function DomainMenuItem(props: Domain) {
             {dynamicImagesLoaded ? (
               <FastImage src={props.imgsrc} alt={`${props.name} Domain`} />
             ) : (
-              <div className="domain-image-placeholder shimmer" />
+              <div className="domain-image-placeholder shimmer-domain" />
             )}
           </div>
           <div className="domain-stats">

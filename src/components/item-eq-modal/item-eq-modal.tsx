@@ -8,6 +8,8 @@ import SellNotification from "../sell-modal/sell-modal";
 import { useState, useEffect } from "react";
 import { preloadImageCached } from "../../utils/image-cache";
 import FastImage from "../fast-image/fast-image";
+import { aggregateStatEffects } from "../../utils/helpers";
+import CombatStats from "../combat-stats/combat-stats";
 
 interface ItemEqModalProps {
   selectedItem: Inventory;
@@ -27,6 +29,7 @@ export default function ItemEqModal({
   const { userData, equip, unequip } = useUserSocket();
   const { addNotification } = useNotification();
   const [itemImageLoaded, setItemImageLoaded] = useState(false);
+  const [activeTab, setActiveTab] = useState<"info" | "stats">("info");
 
   // Preload the item/equipment image
   useEffect(() => {
@@ -76,6 +79,11 @@ export default function ItemEqModal({
     return false;
   };
 
+  // Calculate aggregated stats for equipment
+  const itemAggregatedStats = selectedItem.equipment
+    ? aggregateStatEffects([selectedItem.equipment.statEffect])
+    : null;
+
   return (
     <div className="item-eq-content">
       <div className="item-image-wrapper">
@@ -107,62 +115,91 @@ export default function ItemEqModal({
           )}
         </div>
       </div>
-      <div className="item-details">
-        <div className="item-content">
-          <div className="inv-modal-item-description-container">
-            <div className="item-header">
-              {selectedItem.itemId ? (
-                <FastImage
-                  src={ItemIcon}
-                  alt="Item icon"
-                  className="item-icon"
-                />
-              ) : (
-                <FastImage
-                  src={EquipmentIcon}
-                  alt="Equipment icon"
-                  className="equipment-icon"
-                />
-              )}
-              <div className="inv-modal-header-name">
-                {selectedItem.item?.name || selectedItem.equipment?.name}
-              </div>
-            </div>
 
-            {selectedItem.equipmentId && (
-              <div className="inv-eq-tab-info">
-                {selectedItem.equipment?.attackType && (
-                  <div
-                    className={`attack-type ${
-                      selectedItem.equipment.attackType === "Melee"
-                        ? "melee"
-                        : selectedItem.equipment.attackType === "Ranged"
-                        ? "ranged"
-                        : selectedItem.equipment.attackType === "Magic"
-                        ? "magic"
-                        : ""
-                    }`}
-                  >
-                    {selectedItem.equipment.attackType}
+      {/* Only show tabs for equipment */}
+      {selectedItem.equipment && (
+        <div className="item-tabs">
+          <button
+            className={`item-tab ${activeTab === "info" ? "active" : ""}`}
+            onClick={() => setActiveTab("info")}
+          >
+            Info
+          </button>
+          <button
+            className={`item-tab ${activeTab === "stats" ? "active" : ""}`}
+            onClick={() => setActiveTab("stats")}
+          >
+            Stats
+          </button>
+        </div>
+      )}
+      
+      <div className="tab-content-container">
+        {selectedItem.equipment &&
+        activeTab === "stats" &&
+        itemAggregatedStats ? (
+          <CombatStats stats={itemAggregatedStats} colorScheme="item" />
+        ) : (
+          <div className="item-details">
+            <div className="item-content">
+              <div className="inv-modal-item-description-container">
+                <div className="item-header">
+                  {selectedItem.itemId ? (
+                    <FastImage
+                      src={ItemIcon}
+                      alt="Item icon"
+                      className="item-icon"
+                    />
+                  ) : (
+                    <FastImage
+                      src={EquipmentIcon}
+                      alt="Equipment icon"
+                      className="equipment-icon"
+                    />
+                  )}
+                  <div className="inv-modal-header-name">
+                    {selectedItem.item?.name || selectedItem.equipment?.name}
+                  </div>
+                </div>
+
+                {selectedItem.equipment && (
+                  <div className="inv-eq-tab-info">
+                    {selectedItem.equipment.attackType && (
+                      <div
+                        className={`attack-type ${
+                          selectedItem.equipment.attackType === "Melee"
+                            ? "melee"
+                            : selectedItem.equipment.attackType === "Ranged"
+                            ? "ranged"
+                            : selectedItem.equipment.attackType === "Magic"
+                            ? "magic"
+                            : ""
+                        }`}
+                      >
+                        {selectedItem.equipment.attackType}
+                      </div>
+                    )}
+                    <div
+                      className={`required-lvl ${
+                        selectedItem.equipment.requiredLvlCombat >
+                        userData.level
+                          ? "red"
+                          : ""
+                      }`}
+                    >
+                      Req. Lvl. {selectedItem.equipment.requiredLvlCombat}
+                    </div>
                   </div>
                 )}
-                <div
-                  className={`required-lvl ${
-                    selectedItem.equipment!.requiredLvlCombat > userData.level
-                      ? "red"
-                      : ""
-                  }`}
-                >
-                  Req. Lvl. {selectedItem.equipment!.requiredLvlCombat}
+
+                <div className="description-text">
+                  {selectedItem.item?.description ||
+                    selectedItem.equipment?.description}
                 </div>
               </div>
-            )}
-            <div className="description-text">
-              {selectedItem.item?.description ||
-                selectedItem.equipment?.description}
             </div>
           </div>
-        </div>
+        )}
       </div>
 
       <div className="inv-buttons-div">

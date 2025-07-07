@@ -342,7 +342,7 @@ type AggregatedMods = {
     mul: number;
 };
 
-type AggregatedStatEffects = {
+export type AggregatedStatEffects = {
     maxHp: AggregatedMods;
     atkSpd: AggregatedMods;
     acc: AggregatedMods;

@@ -41,7 +41,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .item-image-wrapper {
@@ -69,11 +69,11 @@
   top: 5px;
   right: 5px;
   padding: 4px 8px;
-  border-radius: 8px; /* Rounded corners for the badge */
-  font-size: 10px; /* Adjust size for readability */
+  border-radius: 8px;
+  font-size: 10px;
   font-weight: bold;
-  color: #f4f1de; /* Cream white for text */
-  text-transform: uppercase; /* Make the rarity text uppercase */
+  color: #f4f1de;
+  text-transform: uppercase;
 }
 
 .item-image {
@@ -84,7 +84,7 @@
 }
 
 .inv-modal-item-description-container {
-  border: 1.5px solid  var(--muted-teal-green);
+  border: 1.5px solid var(--muted-teal-green);
   border-radius: 8px;
   background-color: var(--deep-teal);
   font-size: 8px;
@@ -112,7 +112,8 @@
   background-color: var(--magic);
 }
 
-.inv-eq-tab-info .required-lvl, .attack-type {
+.inv-eq-tab-info .required-lvl,
+.attack-type {
   font-size: 7px;
   padding: 3px 10px;
   border-radius: 4px;
@@ -129,18 +130,23 @@
   background-color: var(--deep-warm-red);
 }
 
-.inv-modal-item-description {
-  text-align: left;
-  font-size: 10px;
-}
-
 .description-text {
   padding: 15px;
+}
+
+.tab-content-container {
+  width: 100%;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .inv-buttons-div {
   display: flex;
   gap: 10px;
+  margin-top: auto;
 }
 
 .equip-button {
@@ -198,7 +204,12 @@
   width: 64px;
   height: 64px;
   border-radius: 6px;
-  background: linear-gradient(90deg, var(--cream-white) 25%, var(--bright-teal) 50%, var(--cream-white) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--cream-white) 25%,
+    var(--bright-teal) 50%,
+    var(--cream-white) 75%
+  );
   background-size: 200% 100%;
 }
 
@@ -207,8 +218,12 @@
 }
 
 @keyframes shimmer {
-  0% { background-position: -200px 0; }
-  100% { background-position: 200px 0; }
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
 }
 
 /* Ensure FastImage works with existing img styles */
@@ -227,4 +242,92 @@
   width: auto;
   height: 25px;
   margin: 5px 2px;
+}
+
+/* Tabs Styling for Item Modal */
+.item-tabs {
+  display: flex;
+  margin-top: 15px;
+  width: 75%;
+  background-color: var(--midnight-teal);
+  border: 2px solid var(--dark-navy);
+  border-radius: 8px;
+  box-shadow: 0 3px 0 0 var(--dark-navy), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  position: relative;
+  transition: all 0.1s ease;
+}
+
+/* Move entire container when any tab is active */
+.item-tabs:has(.item-tab.active) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 0 var(--dark-navy), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.item-tab {
+  flex: 1;
+  padding: 5px 12px;
+  font-size: 9px;
+  font-weight: bold;
+  text-align: center;
+  background: linear-gradient(135deg, var(--medium-teal), var(--deep-teal));
+  color: var(--cream-white);
+  border: none;
+  border-right: 1px solid var(--dark-navy);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Remove right border on last button */
+.item-tab:last-child {
+  border-right: none;
+}
+
+/* Active tab styling */
+.item-tab.active {
+  background: linear-gradient(
+    135deg,
+    var(--sage-green),
+    var(--muted-teal-green)
+  );
+  color: var(--deep-navy);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Active tab indicator line */
+.item-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--bright-teal), var(--emerald-green));
+  box-shadow: 0 0 4px var(--bright-teal);
+}
+
+/* Subtle glow effect on active tab */
+.item-tab.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1),
+    transparent 50%,
+    rgba(255, 255, 255, 0.05)
+  );
+  pointer-events: none;
+}
+
+/* Press effect for all tabs */
+.item-tab:active {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
 }
