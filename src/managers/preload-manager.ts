@@ -4,11 +4,13 @@ import {
     getCacheStats,
     isImageCached
 } from '../utils/image-cache';
+import PixelOperatorFont from '../assets/fonts/PixelOperatorMono8-Bold.ttf';
 
 interface PreloadProgress {
     staticImages: boolean;
     dynamicUserData: boolean;
     gameAssets: boolean;
+    fonts: boolean;
     complete: boolean;
 }
 
@@ -20,6 +22,7 @@ class PreloadManager {
         staticImages: false,
         dynamicUserData: false,
         gameAssets: false,
+        fonts: false,
         complete: false
     };
 
@@ -44,7 +47,8 @@ class PreloadManager {
         this.progress.complete =
             this.progress.staticImages &&
             this.progress.dynamicUserData &&
-            this.progress.gameAssets;
+            this.progress.gameAssets &&
+            this.progress.fonts;
 
         this.progressCallbacks.forEach(callback => callback({ ...this.progress }));
     }
@@ -57,7 +61,8 @@ class PreloadManager {
         await Promise.allSettled([
             this.preloadAllStaticImages(),
             this.preloadDynamicUserData(userData),
-            this.preloadGameAssets()
+            this.preloadGameAssets(),
+            this.preloadFonts()
         ]);
 
         console.log('✅ Comprehensive preload complete!');
@@ -66,15 +71,30 @@ class PreloadManager {
 
     private async preloadAllStaticImages() {
         try {
-            // Use your existing preloadStaticImages function - it uses glob to get ALL assets automatically!
             await preloadStaticImages();
-
             this.progress.staticImages = true;
             this.updateProgress();
             console.log('✅ All static images preloaded via glob');
         } catch (error) {
             console.error('❌ Static images preload failed:', error);
             this.progress.staticImages = true; // Mark as done to not block
+            this.updateProgress();
+        }
+    }
+
+    private async preloadFonts() {
+        try {
+            // Preload the font using FontFace API
+            const fontFace = new FontFace('PixelOperatorMono8', `url(${PixelOperatorFont})`);
+            await fontFace.load();
+            document.fonts.add(fontFace);
+
+            this.progress.fonts = true;
+            this.updateProgress();
+            console.log('✅ Fonts preloaded');
+        } catch (error) {
+            console.error('❌ Font preload failed:', error);
+            this.progress.fonts = true; // Mark as done to not block
             this.updateProgress();
         }
     }
@@ -138,7 +158,6 @@ class PreloadManager {
 
     private async preloadGameAssets() {
         try {
-            // Preload crafting recipes, monsters, etc. from JSON files
             const gameAssetImages: string[] = [];
 
             // Import crafting recipes
@@ -151,17 +170,7 @@ class PreloadManager {
                 console.log('No crafting-recipes.json found');
             }
 
-            // Import monsters (if you have a monsters.json)
-            try {
-                const monsters = await import('../assets/json/monsters.json');
-                monsters.default.forEach((monster: any) => {
-                    if (monster.imgsrc) gameAssetImages.push(monster.imgsrc);
-                });
-            } catch (e) {
-                console.log('No monsters.json found');
-            }
-
-            // Import items (if you have an items.json)
+            // Import items
             try {
                 const items = await import('../assets/json/items.json');
                 items.default.forEach((item: any) => {
@@ -169,6 +178,40 @@ class PreloadManager {
                 });
             } catch (e) {
                 console.log('No items.json found');
+            }
+
+            // Import domains
+            try {
+                const domains = await import('../assets/json/domains.json');
+                domains.default.forEach((domain: any) => {
+                    if (domain.imgsrc) gameAssetImages.push(domain.imgsrc);
+
+                    // Also check for monster images within domains
+                    if (domain.monsters) {
+                        domain.monsters.forEach((monster: any) => {
+                            if (monster.imgsrc) gameAssetImages.push(monster.imgsrc);
+                        });
+                    }
+                });
+            } catch (e) {
+                console.log('No domains.json found');
+            }
+
+            // Import dungeons
+            try {
+                const dungeons = await import('../assets/json/dungeons.json');
+                dungeons.default.forEach((dungeon: any) => {
+                    if (dungeon.imgsrc) gameAssetImages.push(dungeon.imgsrc);
+
+                    // Also check for monster images within dungeons
+                    if (dungeon.monsters) {
+                        dungeon.monsters.forEach((monster: any) => {
+                            if (monster.imgsrc) gameAssetImages.push(monster.imgsrc);
+                        });
+                    }
+                });
+            } catch (e) {
+                console.log('No dungeons.json found');
             }
 
             // Filter out already cached images
@@ -197,24 +240,6 @@ class PreloadManager {
 
     getProgress(): PreloadProgress {
         return { ...this.progress };
-    }
-
-    // New method to integrate with your login system
-    async preloadBasedOnLoginProgress(loginProgress: number, userData?: any) {
-        // Start static preload immediately (0-50% login progress)
-        if (loginProgress >= 0 && !this.progress.staticImages) {
-            this.preloadAllStaticImages();
-        }
-
-        // Start user data preload when user data is available (50-85% login progress)
-        if (loginProgress >= 50 && userData && !this.progress.dynamicUserData) {
-            this.preloadDynamicUserData(userData);
-        }
-
-        // Start game assets preload in parallel (70-100% login progress)
-        if (loginProgress >= 70 && !this.progress.gameAssets) {
-            this.preloadGameAssets();
-        }
     }
 }
 

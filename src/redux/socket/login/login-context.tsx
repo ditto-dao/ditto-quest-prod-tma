@@ -146,8 +146,8 @@ export const LoginSocketProvider: React.FC<SocketProviderProps> = ({
 
       // Use the existing public method
       if (userData) {
-        console.log("🔄 Preloading user images...");
-        preloadManagerRef.current.preloadBasedOnLoginProgress(90, userData);
+        console.log("🔄 Preloading images...");
+        PreloadManager.getInstance().preloadEverything(userData)
       }
     };
 
