@@ -158,7 +158,6 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
   // Prevent click spam
   const [lastEventEmittedTimestamp, setLastEventEmittedTimestamp] = useState(0);
-
   function processInventoryUpdate(
     inventory: Inventory[],
     update: Inventory,
@@ -168,18 +167,20 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
     const idToMatch = update[idKey];
 
     if (update.quantity === 0) {
-      // Remove item/equipment with quantity 0
       const indexToRemove = inventory.findIndex(
         (entry) => entry[idKey] === idToMatch
       );
       if (indexToRemove !== -1) {
+        // Capture the original item data BEFORE removing it
+        const originalItem = inventory[indexToRemove];
+
         if (accessGranted) {
-          // ✅ Defer the floating update to avoid render warning
           setTimeout(() => {
             addFloatingUpdate({
-              icon: update.equipment?.imgsrc ?? update.item?.imgsrc!,
-              text: update.equipment?.name ?? update.item?.name!,
-              amount: inventory[indexToRemove].quantity,
+              icon:
+                originalItem.equipment?.imgsrc ?? originalItem.item?.imgsrc!,
+              text: originalItem.equipment?.name ?? originalItem.item?.name!,
+              amount: -originalItem.quantity, // Negative because we're removing
             });
           }, 0);
         }
