@@ -86,14 +86,16 @@
 /* Background image (area) */
 .monster-bg-img {
   position: absolute;
-  bottom: -10px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 120px;
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
   image-rendering: pixelated;
   image-rendering: crisp-edges;
   z-index: 0;
+  object-fit: contain;
+  filter: brightness(0.6);
 }
 
 /* Foreground monster image */
@@ -106,6 +108,10 @@
   object-fit: contain;
   margin: auto;
   display: block;
+}
+
+.monster-bright {
+  filter: brightness(1.1);
 }
 
 .monster-stats {
@@ -280,9 +286,9 @@
 }
 
 .run-button:disabled {
-  background-color: #aaa; 
+  background-color: #aaa;
   cursor: not-allowed;
-  opacity: 0.6; 
+  opacity: 0.6;
 }
 
 /* SMOOTH SHIMMER ANIMATION USING YOUR THEME COLORS */
@@ -351,38 +357,62 @@
   }
 }
 
+/* Clean EXP Bar Styles */
+
 .combat-console-exp-progress {
   width: 100%;
   margin-top: 6px;
   padding: 0 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .combat-console-exp-progress > .combat-console-exp {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+/* Top row: Icon + EXP label + percentage */
+.combat-console-exp-progress > .combat-console-exp > .exp-header {
+  display: flex;
   align-items: center;
   gap: 6px;
   width: 100%;
-  height: 16px;
 }
 
-.combat-console-exp-progress > .combat-console-exp > .exp-icon {
+.combat-console-exp-progress > .combat-console-exp > .exp-header > .exp-icon {
   width: 16px;
   height: 16px;
   object-fit: contain;
-  display: block;
 }
 
-.combat-console-exp-progress > .combat-console-exp > .exp-label {
-  font-size: 9px;
+.combat-console-exp-progress > .combat-console-exp > .exp-header > .exp-label {
+  font-size: 8px;
   font-weight: bold;
   color: var(--cream-white);
   white-space: nowrap;
   line-height: 1;
 }
 
+.combat-console-exp-progress
+  > .combat-console-exp
+  > .exp-header
+  > .exp-percentage {
+  font-size: 7px;
+  font-weight: bold;
+  color: var(--rarity-s);
+  white-space: nowrap;
+  line-height: 1;
+  margin-left: auto;
+}
+
+/* Bottom row: Progress bar */
 .combat-console-exp-progress > .combat-console-exp > .exp-bar {
-  flex: 1;
-  height: 8px;
+  width: 100%;
+  height: 5px;
   background-color: var(--deep-navy-blue);
   border-radius: 6px;
   overflow: hidden;
@@ -396,7 +426,34 @@
   > .exp-progress-bar {
   height: 100%;
   border-radius: 6px;
-  transition: width 0.3s ease-in-out;
+  transition: width 0.4s ease-out;
+  position: relative;
+  overflow: hidden;
+
+  /* Simple solid color fill */
+  background: var(--rarity-s);
+}
+
+/* 95%+ Glow Effect - More precise selectors */
+.combat-console-exp-progress
+  > .combat-console-exp
+  > .exp-bar
+  > .exp-progress-bar[style*="width: 9"][style*="%"],
+.combat-console-exp-progress
+  > .combat-console-exp
+  > .exp-bar
+  > .exp-progress-bar[style*="width: 100%"] {
+  animation: almostThere 1.5s ease-in-out infinite !important;
+}
+
+@keyframes almostThere {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.3);
+  }
 }
 
 .fade-content {
@@ -404,4 +461,345 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+/* ========== BOSS ANIMATIONS ========== */
+
+/* Boss Battle Box - Dramatic styling */
+.battle-box-inner.boss {
+  position: relative;
+  background: linear-gradient(
+    -45deg,
+    #2C1E4A,  /* midnight royal purple */
+    #4B306A,  /* deep velvet violet */
+    #D4AF37,  /* burnished gold */
+    #592C1B,  /* rich umber */
+    #1E293B   /* slate navy */
+  );
+  background-size: 400% 400%;
+  animation: bossBoxGradient 10s ease infinite;
+  border: 1px solid var(--cream-white);
+  box-shadow: 0 0 20px rgba(255, 165, 0, 0.3),
+    inset 0 0 20px rgba(244, 241, 222, 0.08);
+  z-index: 0;
+}
+
+/* Boss Monster Image - Floating Animation */
+.monster-img.boss {
+  animation: bossFloat 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 165, 0, 0.7))
+    drop-shadow(0 0 16px rgba(255, 69, 0, 0.5)) brightness(1.1);
+}
+
+/* Boss Monster Wrapper - Enhanced styling */
+.monster-img-wrapper.boss {
+  box-shadow: 0 0 15px rgba(255, 165, 0, 0.6),
+    inset 0 0 10px rgba(255, 255, 255, 0.2);
+  animation: bossWrapperPulse 2s ease-in-out infinite;
+  border: 1px solid var(--cream-white);
+}
+
+/* Boss HP Bar - Epic styling */
+.hp-bar-monster.boss {
+  background: linear-gradient(
+    90deg,
+    var(--deep-navy-blue) 0%,
+    var(--midnight-teal) 100%
+  );
+  border: 1px solid var(--misty-teal);
+  box-shadow: 0 0 10px rgba(79, 169, 154, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: bossHpBarGlow 2s ease-in-out infinite;
+}
+
+/* Boss HP Bar Fill - Animated gradient */
+.hp-bar-monster.boss .hp-progress-bar {
+  background: linear-gradient(
+    90deg,
+    var(--emerald-green) 0%,
+    var(--bright-teal) 30%,
+    var(--seafoam-green) 60%,
+    var(--emerald-green) 100%
+  );
+  background-size: 200% 100%;
+  animation: bossHpFlow 3s ease-in-out infinite;
+  box-shadow: 0 0 8px rgba(79, 169, 154, 0.8),
+    inset 0 1px 2px rgba(244, 241, 222, 0.3);
+}
+
+/* Boss Combat Type Icon - Enhanced */
+.combat-type-icon.boss {
+  animation: bossIconPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(79, 169, 154, 0.8)) brightness(1.2);
+}
+
+/* Boss Text Elements - Glowing effect */
+.monster-name.boss {
+  color: var(--cream-white);
+}
+
+.monster-level.boss,
+.monster-cp.boss {
+  position: relative;
+  font-weight: bold;
+  font-size: 7px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  overflow: hidden;
+  text-align: center;
+  z-index: 0;
+}
+
+/* ===== LEVEL: Animated D-rank Badge with Grey + Teal Flow ===== */
+.monster-level.boss {
+  background: linear-gradient(
+    135deg,
+    #a6a6a6,
+    #9caea9,
+    #b0b0b0
+  ); /* Subtle complementary blend */
+  color: black;
+  text-shadow: none;
+}
+
+.monster-level.boss span {
+  position: relative;
+  z-index: 2;
+}
+
+.monster-level.boss::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+  animation: smoothShimmer 2.5s linear infinite;
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+}
+
+/* ===== CP: Blue Gradient Badge with Flow ===== */
+.monster-cp.boss {
+  background: linear-gradient(135deg, #5b86e5, #36d1dc);
+  color: var(--cream-white);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.7);
+}
+
+.monster-cp.boss span {
+  position: relative;
+  z-index: 2;
+}
+
+.monster-cp.boss::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 60%
+  );
+  background-size: 200% 100%;
+  animation: smoothShimmer 2.5s linear infinite;
+  mix-blend-mode: overlay;
+  opacity: 0.4;
+}
+
+/* ===== Shared Animation ===== */
+@keyframes smoothShimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes bossBoxGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Silky smooth flowing background effect */
+@keyframes bossFlowSilky {
+  0% {
+    background-position: 0% 0%;
+    opacity: 0.3;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+  25% {
+    background-position: 25% 25%;
+    opacity: 0.5;
+    transform: translateX(3px) translateY(-2px) scale(1.005);
+  }
+  50% {
+    background-position: 50% 50%;
+    opacity: 0.7;
+    transform: translateX(5px) translateY(-3px) scale(1.01);
+  }
+  75% {
+    background-position: 75% 75%;
+    opacity: 0.5;
+    transform: translateX(3px) translateY(-2px) scale(1.005);
+  }
+  100% {
+    background-position: 100% 100%;
+    opacity: 0.3;
+    transform: translateX(0) translateY(0) scale(1);
+  }
+}
+
+/* Boss Monster Float Animation */
+@keyframes bossFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+/* Boss Monster Wrapper Pulse */
+@keyframes bossWrapperPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(255, 165, 0, 0.4),
+      inset 0 0 10px rgba(255, 255, 255, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 165, 0, 0.7),
+      inset 0 0 15px rgba(255, 255, 255, 0.3);
+    transform: scale(1.01);
+  }
+}
+
+/* Boss HP Bar Glow */
+@keyframes bossHpBarGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 10px rgba(79, 169, 154, 0.3),
+      inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 15px rgba(79, 169, 154, 0.6),
+      inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Boss HP Bar Flow Animation */
+@keyframes bossHpFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Boss Combat Icon Pulse */
+@keyframes bossIconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 5px rgba(255, 165, 0, 0.8)) brightness(1.2);
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 10px rgba(255, 165, 0, 1)) brightness(1.3);
+  }
+}
+
+/* Boss Text Glow Effect */
+@keyframes bossTextGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba(255, 165, 0, 0.8), 0 0 10px rgba(255, 165, 0, 0.6),
+      0 0 15px rgba(255, 165, 0, 0.4);
+  }
+  50% {
+    text-shadow: 0 0 8px rgba(255, 165, 0, 1), 0 0 15px rgba(255, 165, 0, 0.8),
+      0 0 20px rgba(255, 165, 0, 0.6);
+  }
+}
+
+/* Boss Stats Pulse */
+@keyframes bossStatsPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 8px rgba(255, 165, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 16px rgba(255, 165, 0, 0.8), 0 3px 8px rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+  }
+}
+
+/* Boss Stats Shimmer Animation */
+@keyframes bossStatsShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ========== BONUS EFFECTS ========== */
+
+/* Subtle particle effect (optional) */
+
+@keyframes bossParticles {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes bossShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-2px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(2px);
+  }
 }
