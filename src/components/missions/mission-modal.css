@@ -74,12 +74,13 @@
   margin: 0 0 3px 0;
   line-height: 13px;
   text-align: left;
+  white-space: pre-line;
 }
 
 .nav-buttons {
   display: flex;
   justify-content: flex-end;
-  gap: 10px; /* Add space between buttons */
+  gap: 10px;
 }
 
 .nav-buttons button {
