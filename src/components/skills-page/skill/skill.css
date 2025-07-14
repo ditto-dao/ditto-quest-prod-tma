@@ -74,10 +74,10 @@
 /* Tooltip Styles */
 .skill-tooltip {
   position: fixed;
-  background-color: var(--midnight-teal);
-  border: 2px solid var(--light-teal);
+  background-color: var(--forest-green);
+  border: 1px solid var(--cream-white);
   border-radius: 6px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   z-index: 10000;
   min-width: 250px;
   max-width: 300px;
@@ -86,9 +86,9 @@
 }
 
 .skill-tooltip-header {
-  background-color: var(--light-teal);
+  background-color: var(--sage-green);
   color: var(--cream-white);
-  padding: 3px 10px;
+  padding: 4px 10px;
   font-size: 9px;
   font-weight: bold;
   border-radius: 4px 4px 0 0;

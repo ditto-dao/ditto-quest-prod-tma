@@ -17,8 +17,6 @@ import SimpleBar from "simplebar-react";
 import TgIcon from "../../assets/images/sidebar/tg-icon.png";
 import BotIcon from "../../assets/images/sidebar/bot-icon.png";
 import WalletIcon from "../../assets/images/sidebar/wallet-icon.png";
-import { useEffect, useState } from "react";
-import { preloadImagesBatch } from "../../utils/image-cache";
 import FastImage from "../../components/fast-image/fast-image";
 
 interface SidebarProps {
@@ -29,40 +27,6 @@ interface SidebarProps {
 
 function Sidebar({ isOpen, toggleSidebar, setPage }: SidebarProps) {
   const { addNotification } = useNotification();
-
-  const [_, setImagesLoaded] = useState(false);
-
-  useEffect(() => {
-    const preloadSidebarImages = async () => {
-      const sidebarIcons = [
-        DQIcon,
-        ShopIcon,
-        AvatarIcon,
-        InventoryIcon,
-        SkillsIcon,
-        FarmingIcon,
-        CraftingIcon,
-        SlimeLabIcon,
-        CombatIcon,
-        GachaIcon,
-        ReferralIcon,
-        GetMoreDittoIcon,
-        TgIcon,
-        BotIcon,
-        WalletIcon,
-      ];
-
-      try {
-        await preloadImagesBatch(sidebarIcons);
-        setImagesLoaded(true);
-      } catch (error) {
-        console.error("Failed to preload some sidebar images:", error);
-        setImagesLoaded(true); // Still proceed even if some images fail
-      }
-    };
-
-    preloadSidebarImages();
-  }, []);
 
   return (
     <div className={`sidebar ${isOpen ? "open" : ""}`}>

@@ -1,0 +1,107 @@
+.efficiency-stat-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background-color: var(--steel-blue);
+  border: 2px solid var(--dark-navy);
+  box-shadow: 0 2px 0 0 var(--dark-navy);
+  position: relative; /* Added for tooltip positioning */
+}
+
+.efficiency-stat-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+}
+
+.efficiency-stat-name {
+  color: var(--dark-navy);
+  font-weight: bolder;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 8px;
+  line-height: 1.2;
+}
+
+.efficiency-stat-wrapper.clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.2s ease, transform 0.1s ease;
+}
+
+.efficiency-stat-wrapper.clickable {
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.efficiency-stat-wrapper.clickable:active {
+  transform: translateY(1px);
+  background-color: var(--burnt-orange);
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.4);
+}
+
+.efficiency-stat-level {
+  color: var(--cream-white);
+  font-weight: 700;
+  font-size: 10px;
+  margin-top: 1px;
+}
+
+/* Efficiency Tooltip Styles */
+.efficiency-stat-tooltip {
+  position: fixed;
+  background-color: var(--ocean-blue);
+  border: 1px solid var(--cream-white);
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  min-width: 250px;
+  max-width: 300px;
+  animation: efficiencyTooltipFadeIn 0.2s ease-out;
+  pointer-events: none;
+}
+
+.efficiency-stat-tooltip-header {
+  background-color: var(--steel-blue);
+  color: var(--cream-white);
+  padding: 4px 10px;
+  font-size: 8px;
+  font-weight: bold;
+  border-radius: 4px 4px 0 0;
+  text-align: center;
+  border-bottom: 1px solid var(--dark-navy);
+}
+
+.efficiency-stat-tooltip-content {
+  padding: 10px;
+  font-size: 7px;
+  line-height: 14px;
+  color: var(--cream-white);
+  text-align: left;
+}
+
+@keyframes efficiencyTooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive positioning for mobile */
+@media (max-width: 480px) {
+  .efficiency-stat-tooltip {
+    right: 0;
+    left: 0;
+    min-width: auto;
+    max-width: 280px;
+  }
+}

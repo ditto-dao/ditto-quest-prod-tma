@@ -1,5 +1,6 @@
 import { useUserSocket } from "../../redux/socket/user/user-context";
 import CombatStat from "./combat-stat/combat-stat";
+import EfficiencyStat from "./efficiency-stat/efficiency-stat";
 import Skill from "./skill/skill";
 import "./skills-page.css";
 import MaxHpIcon from "../../assets/images/combat/max-hp.png";
@@ -25,7 +26,8 @@ import ReinforceFireIcon from "../../assets/images/combat/reinforce-fire.png";
 import { useEffect, useState } from "react";
 
 function SkillsPage() {
-  const { userData, pumpStats, isUpgradingStats } = useUserSocket();
+  const { userData, userEfficiencyStats, pumpStats, isUpgradingStats } =
+    useUserSocket();
 
   const [numStrToPump, setNumStrToPump] = useState(0);
   const [numDefToPump, setNumDefToPump] = useState(0);
@@ -34,7 +36,9 @@ function SkillsPage() {
   const [numMagicToPump, setNumMagicToPump] = useState(0);
   const [numHpLevelToPump, setNumhpLevelToPump] = useState(0);
 
-  const [remainingPoints, setRemainingPoints] = useState(userData.outstandingSkillPoints);
+  const [remainingPoints, setRemainingPoints] = useState(
+    userData.outstandingSkillPoints
+  );
 
   const handlePumpStats = () => {
     if (isUpgradingStats) return;
@@ -77,7 +81,7 @@ function SkillsPage() {
   ]);
 
   function toPercentage(value: number): string {
-    return (value * 100).toFixed(2) + "%";
+    return (value * 100).toFixed(1) + "%";
   }
 
   return (
@@ -140,7 +144,7 @@ function SkillsPage() {
                   : "assign-stats-button active"
               }
               onClick={() => {
-                handlePumpStats()
+                handlePumpStats();
               }}
             >
               {isUpgradingStats ? "Upgrading..." : "Assign"}
@@ -148,6 +152,7 @@ function SkillsPage() {
           )}
         </div>
       </div>
+
       <div className="combat-stats-container">
         <div className="combat-stats-header">Combat Stats</div>
         <div className="combat-stats-inner-container">
@@ -201,14 +206,12 @@ function SkillsPage() {
               imgsrc={CritChanceIcon}
               fontSize={8}
             />
-
             <CombatStat
               statName="CRIT % DMG"
               level={toPercentage(userData.combat?.critMultiplier || 1.29)}
               imgsrc={CritMulIcon}
               fontSize={8}
             />
-
             <CombatStat
               statName="DMG REDUCTION"
               level={Math.floor(userData.combat?.dmgReduction || 10)}
@@ -257,7 +260,6 @@ function SkillsPage() {
           </div>
           <div className="reinforce-container">
             <div className="combat-calc-header">Elemental</div>
-
             <CombatStat
               statName="AIR"
               level={Math.floor(userData.combat?.reinforceAir || 0)}
@@ -280,6 +282,50 @@ function SkillsPage() {
               statName="FIRE"
               level={Math.floor(userData.combat?.reinforceFire || 0)}
               imgsrc={ReinforceFireIcon}
+              fontSize={8}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="efficiency-stats-container">
+        <div className="efficiency-stats-header">Efficiency Stats</div>
+        <div className="efficiency-stats-inner-container">
+          <div className="efficiency-calc-container">
+            <div className="efficiency-calc-header">Resource & Speed</div>
+            <EfficiencyStat
+              statName="SKILL DURATION RED"
+              level={`-${toPercentage(
+                userEfficiencyStats.skillIntervalMultiplier
+              )}`}
+              fontSize={8}
+            />
+            <EfficiencyStat
+              statName="DOUBLE RESOURCE CHANCE"
+              level={toPercentage(userEfficiencyStats.doubleResourceChance)}
+              fontSize={8}
+            />
+          </div>
+          <div className="efficiency-exp-container">
+            <div className="efficiency-calc-header">EXP Bonuses</div>
+            <EfficiencyStat
+              statName="DOUBLE SKILL EXP CHANCE"
+              level={toPercentage(userEfficiencyStats.doubleSkillExpChance)}
+              fontSize={8}
+            />
+            <EfficiencyStat
+              statName="DOUBLE COMBAT EXP CHANCE"
+              level={toPercentage(userEfficiencyStats.doubleCombatExpChance)}
+              fontSize={8}
+            />
+            <EfficiencyStat
+              statName="SKILL EXP BOOST"
+              level={`+${toPercentage(userEfficiencyStats.flatSkillExpBoost)}`}
+              fontSize={8}
+            />
+            <EfficiencyStat
+              statName="COMBAT EXP BOOST"
+              level={`+${toPercentage(userEfficiencyStats.flatCombatExpBoost)}`}
               fontSize={8}
             />
           </div>

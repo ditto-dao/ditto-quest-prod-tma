@@ -66,7 +66,21 @@ export default function CombatStats({
     stats.reinforceFire !== 0,
   ].some(Boolean);
 
-  if (!hasCombatStats && !hasCombatTriangle && !hasElementalStats) {
+  const hasEfficiencyStats = [
+    stats.efficiencySkillIntervalMod !== 0,
+    stats.efficiencyDoubleResourceMod !== 0,
+    stats.efficiencyDoubleSkillExpMod !== 0,
+    stats.efficiencyDoubleCombatExpMod !== 0,
+    stats.efficiencyFlatSkillExpMod !== 0,
+    stats.efficiencyFlatCombatExpMod !== 0,
+  ].some(Boolean);
+
+  if (
+    !hasCombatStats &&
+    !hasCombatTriangle &&
+    !hasElementalStats &&
+    !hasEfficiencyStats
+  ) {
     return null; // Don't render anything if no stats
   }
 
@@ -405,6 +419,63 @@ export default function CombatStats({
                 </div>
                 <span className="stat-value">
                   {formatStatValueAdd(stats.reinforceFire)}
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Efficiency Section */}
+      {hasEfficiencyStats && (
+        <div className="stats-section">
+          <div className="stats-header">Efficiency</div>
+          <div className="stats-grid">
+            {stats.efficiencySkillIntervalMod !== 0 && (
+              <div className="combat-stat-item">
+                <span className="stat-label">SKILL INTERVAL RED</span>
+                <span className="stat-value">
+                  {formatStatValueMul(stats.efficiencySkillIntervalMod)}
+                </span>
+              </div>
+            )}
+            {stats.efficiencyDoubleResourceMod !== 0 && (
+              <div className="combat-stat-item">
+                <span className="stat-label">DBL RESOURCE CHANCE</span>
+                <span className="stat-value">
+                  {formatStatValueMul(stats.efficiencyDoubleResourceMod)}
+                </span>
+              </div>
+            )}
+            {stats.efficiencyDoubleSkillExpMod !== 0 && (
+              <div className="combat-stat-item">
+                <span className="stat-label">DBL SKILL EXP CHANCE</span>
+                <span className="stat-value">
+                  {formatStatValueMul(stats.efficiencyDoubleSkillExpMod)}
+                </span>
+              </div>
+            )}
+            {stats.efficiencyDoubleCombatExpMod !== 0 && (
+              <div className="combat-stat-item">
+                <span className="stat-label">DBL COMBAT EXP CHANCE</span>
+                <span className="stat-value">
+                  {formatStatValueMul(stats.efficiencyDoubleCombatExpMod)}
+                </span>
+              </div>
+            )}
+            {stats.efficiencyFlatSkillExpMod !== 0 && (
+              <div className="combat-stat-item">
+                <span className="stat-label">SKILL EXP BOOST</span>
+                <span className="stat-value">
+                  {formatStatValueMul(stats.efficiencyFlatSkillExpMod)}
+                </span>
+              </div>
+            )}
+            {stats.efficiencyFlatCombatExpMod !== 0 && (
+              <div className="combat-stat-item">
+                <span className="stat-label">COMBAT EXP BOOST</span>
+                <span className="stat-value">
+                  {formatStatValueMul(stats.efficiencyFlatCombatExpMod)}
                 </span>
               </div>
             )}

@@ -5,7 +5,8 @@
   gap: 20px;
 }
 
-.skills-container, .combat-stats-container {
+/* Default green theme for skills */
+.skills-container {
   background-color: var(--sage-green);
   border-radius: 8px;
   border: 2px solid var(--dark-navy);
@@ -13,14 +14,14 @@
   padding: 1px;
 }
 
-.skills-header, .combat-stats-header {
+.skills-header {
   font-size: 10px;
   border-radius: 6px 6px 0 0;
   padding: 3px;
   background-color: var(--sage-green);
 }
 
-.skills-inner-container, .combat-stats-inner-container {
+.skills-inner-container {
   padding: 12px;
   display: flex;
   flex-direction: column;
@@ -29,12 +30,65 @@
   border-radius: 0 0 6px 6px;
 }
 
-.combat-calc-container {
+/* Teal theme for combat stats */
+.combat-stats-container {
+  background-color: var(--seafoam-green);
+  border-radius: 8px;
+  border: 2px solid var(--dark-navy);
+  box-shadow: 0 4px 0 0 var(--dark-navy);
+  padding: 1px;
+}
+
+.combat-stats-header {
+  font-size: 10px;
+  border-radius: 6px 6px 0 0;
+  padding: 3px;
+  background-color: var(--seafoam-green);
+}
+
+.combat-stats-inner-container {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--medium-teal);
+  border-radius: 0 0 6px 6px;
+}
+
+/* Navy blue theme for efficiency stats */
+.efficiency-stats-container {
+  background-color: var(--steel-blue);
+  border-radius: 8px;
+  border: 2px solid var(--dark-navy);
+  box-shadow: 0 4px 0 0 var(--dark-navy);
+  padding: 1px;
+}
+
+.efficiency-stats-header {
+  font-size: 10px;
+  border-radius: 6px 6px 0 0;
+  padding: 3px;
+  background-color: var(--steel-blue);
+}
+
+.efficiency-stats-inner-container {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background-color: var(--ocean-blue);
+  border-radius: 0 0 6px 6px;
+}
+
+.combat-calc-container,
+.efficiency-calc-container,
+.efficiency-exp-container {
   display: flex;
   flex-direction: column;
 }
 
-.combat-calc-header {
+.combat-calc-header,
+.efficiency-calc-header {
   font-size: 11px;
   text-align: left;
   padding: 10px 0;

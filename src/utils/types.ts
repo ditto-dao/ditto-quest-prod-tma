@@ -22,6 +22,7 @@ export interface User {
     expHp: number;
     expToNextHpLevel: number;
     outstandingSkillPoints: number;
+    statResetPoints: number;
 
     // Base combat stats (directly on User)
     maxHp: number;
@@ -97,6 +98,7 @@ export const defaultUser: User = {
     expHp: 0,
     expToNextHpLevel: 83,
     outstandingSkillPoints: 0,
+    statResetPoints: 0,
     maxHp: 100,
     atkSpd: 10,
     acc: 100,
@@ -290,8 +292,12 @@ export interface StatEffect {
     reinforceEarth?: number | null;
     reinforceFire?: number | null;
 
-    doubleResourceOddsMod?: number | null;
-    skillIntervalReductionMultiplierMod?: number | null;
+    efficiencySkillIntervalMod?: number | null;
+    efficiencyDoubleResourceMod?: number | null;
+    efficiencyDoubleSkillExpMod?: number | null;
+    efficiencyDoubleCombatExpMod?: number | null;
+    efficiencyFlatSkillExpMod?: number | null;
+    efficiencyFlatCombatExpMod?: number | null;
 
     durationS?: number | null;
 }
@@ -558,3 +564,29 @@ export type UserMission = {
     createdAt: string; // ISO string
     updatedAt: string; // ISO string
 };
+
+export interface UserEfficiencyStats {
+    id: number;
+    userId: string;
+    skillIntervalMultiplier: number;
+    doubleResourceChance: number;
+    doubleSkillExpChance: number;
+    doubleCombatExpChance: number;
+    flatSkillExpBoost: number;
+    flatCombatExpBoost: number;
+    createdAt: string; // ISO date string
+    updatedAt: string; // ISO date string
+}
+
+export const defaultEfficiencyStats: UserEfficiencyStats = {
+    id: -1,
+    userId: "",
+    skillIntervalMultiplier: 0.0,
+    doubleResourceChance: 0.0,
+    doubleSkillExpChance: 0.0,
+    doubleCombatExpChance: 0.0,
+    flatSkillExpBoost: 0,
+    flatCombatExpBoost: 0,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+}

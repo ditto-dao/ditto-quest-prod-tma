@@ -17,6 +17,8 @@ export const USE_REFERRAL_CODE_SUCCESS = 'use-referral-code-success';
 
 export const BETA_TESTER_LOGIN_EVENT = 'beta-tester-login-event';
 
+export const EFFICIENCY_STATS_UPDATE_EVENT = 'efficiency-stats-update';
+
 // Combat
 export const START_COMBAT_DOMAIN_EVENT = 'start-combat-domain';
 

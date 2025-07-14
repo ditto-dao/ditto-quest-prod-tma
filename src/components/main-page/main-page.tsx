@@ -35,6 +35,7 @@ import { useFloatingUpdate } from "../../redux/socket/idle/floating-update-conte
 import { MissionModal } from "../missions/mission-modal";
 import TokenPage from "../token-page/token-page";
 import FastImage from "../fast-image/fast-image";
+import Shop from "../shop/shop";
 
 const pageIcons: Record<string, string> = {
   Shop: ShopIcon,
@@ -71,7 +72,7 @@ function MainPage() {
   const renderPage = () => {
     switch (currentPage) {
       case "Shop":
-        return <div>Shop Page Content</div>;
+        return <Shop />;
       case "Avatar":
         return <AvatarPage />;
       case "Inventory":

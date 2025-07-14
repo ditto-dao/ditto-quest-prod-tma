@@ -364,6 +364,13 @@ export type AggregatedStatEffects = {
     reinforceWater: number;
     reinforceEarth: number;
     reinforceFire: number;
+
+    efficiencySkillIntervalMod: number;
+    efficiencyDoubleResourceMod: number;
+    efficiencyDoubleSkillExpMod: number;
+    efficiencyDoubleCombatExpMod: number;
+    efficiencyFlatSkillExpMod: number;
+    efficiencyFlatCombatExpMod: number;
 };
 
 export function aggregateStatEffects(effects: (StatEffect | undefined | null)[]): AggregatedStatEffects {
@@ -389,6 +396,13 @@ export function aggregateStatEffects(effects: (StatEffect | undefined | null)[])
         reinforceWater: 0,
         reinforceEarth: 0,
         reinforceFire: 0,
+
+        efficiencySkillIntervalMod: 0,
+        efficiencyDoubleResourceMod: 0,
+        efficiencyDoubleSkillExpMod: 0,
+        efficiencyDoubleCombatExpMod: 0,
+        efficiencyFlatSkillExpMod: 0,
+        efficiencyFlatCombatExpMod: 0
     };
 
     // helper for fields that use AggregatedMods
@@ -430,6 +444,13 @@ export function aggregateStatEffects(effects: (StatEffect | undefined | null)[])
         result.reinforceWater += e.reinforceWater ?? 0;
         result.reinforceEarth += e.reinforceEarth ?? 0;
         result.reinforceFire += e.reinforceFire ?? 0;
+
+        result.efficiencySkillIntervalMod += e.efficiencySkillIntervalMod ?? 0;
+        result.efficiencyDoubleResourceMod += e.efficiencyDoubleResourceMod ?? 0;
+        result.efficiencyDoubleSkillExpMod += e.efficiencyDoubleSkillExpMod ?? 0;
+        result.efficiencyDoubleCombatExpMod += e.efficiencyDoubleCombatExpMod ?? 0;
+        result.efficiencyFlatSkillExpMod += e.efficiencyFlatSkillExpMod ?? 0;
+        result.efficiencyFlatCombatExpMod += e.efficiencyFlatCombatExpMod ?? 0;
     }
 
     return result;

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import {
   Combat,
+  defaultEfficiencyStats,
   defaultUser,
   DittoBalanceBN,
   EquipmentType,
@@ -14,6 +15,7 @@ import {
   SlimeWithTraits,
   SocketProviderProps,
   User,
+  UserEfficiencyStats,
 } from "../../../utils/types";
 import { useSocket } from "../socket-context";
 import { useLoginSocket } from "../login/login-context";
@@ -21,6 +23,7 @@ import { removeUndefined } from "../../../utils/helpers";
 import {
   BETA_TESTER_LOGIN_EVENT,
   COMBAT_EXP_UPDATE_EVENT,
+  EFFICIENCY_STATS_UPDATE_EVENT,
   FIRST_LOGIN_EVENT,
   USE_REFERRAL_CODE_SUCCESS,
 } from "../../../utils/events";
@@ -92,6 +95,7 @@ interface StatsToPumpPayload {
 // Context
 interface UserContext {
   userData: User;
+  userEfficiencyStats: UserEfficiencyStats;
   dittoBalance: DittoBalanceBN;
   userContextLoaded: boolean;
   equip: (inventoryId: number, equipmentType: EquipmentType) => void;
@@ -109,6 +113,7 @@ interface UserContext {
 
 const UserContext = createContext<UserContext>({
   userData: defaultUser,
+  userEfficiencyStats: defaultEfficiencyStats,
   dittoBalance: {
     liveBalance: 0n,
     accumulatedBalance: 0n,
@@ -140,6 +145,10 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   // User
   const [userData, setUserData] = useState<User>(defaultUser);
   const [userLoaded, setUserLoaded] = useState(false); // no need export
+  const [userEfficiencyStats, setUserEfficiencyStats] =
+    useState<UserEfficiencyStats>(defaultEfficiencyStats);
+  const [userEfficiencyStatsLoaded, setUserEfficiencyStatsLoaded] =
+    useState(false); // no need export
   const [userContextLoaded, setUserContextLoaded] = useState(false);
   const prevFarmingExpRef = useRef(userData.farmingExp);
   const prevCraftingExpRef = useRef(userData.craftingExp);
@@ -534,6 +543,21 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
       });
 
       socket.on(
+        EFFICIENCY_STATS_UPDATE_EVENT,
+        (userEfficiencyStats: UserEfficiencyStats) => {
+          console.log(
+            `Received EFFICIENCY_STATS_UPDATE_EVENT: ${JSON.stringify(
+              userEfficiencyStats,
+              null,
+              2
+            )}`
+          );
+          setUserEfficiencyStats(userEfficiencyStats);
+          setUserEfficiencyStatsLoaded(true);
+        }
+      );
+
+      socket.on(
         "ditto-ledger-socket-balance-update",
         (balance: UserBalanceUpdateRes) => {
           console.log(`liveBalance: ${balance.liveBalance}`);
@@ -586,6 +610,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         socket.off("user-data-on-login");
         socket.off("user-update");
         socket.off("ditto-ledger-socket-balance-update");
+        socket.off(EFFICIENCY_STATS_UPDATE_EVENT);
       };
     }
   }, [socket, loadingSocket, accessGranted]);
@@ -972,7 +997,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
     console.log(
       `Login state check: userLoaded=${userLoaded}, dittoBalanceLoaded=${dittoBalanceLoaded}, userContextLoaded=${userContextLoaded}`
     );
-    if (userLoaded && dittoBalanceLoaded && !userContextLoaded) {
+    if (userLoaded && dittoBalanceLoaded && userEfficiencyStatsLoaded && !userContextLoaded) {
       setUserContextLoaded(true);
       console.log(`✅ User context now loaded`);
 
@@ -987,6 +1012,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
     <UserContext.Provider
       value={{
         userData,
+        userEfficiencyStats,
         dittoBalance,
         userContextLoaded,
         equip,
