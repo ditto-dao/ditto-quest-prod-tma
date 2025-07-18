@@ -63,7 +63,7 @@ function SkillsPage() {
 
   const remainingSkillPoints =
     userData.outstandingSkillPoints - totalPositiveChanges;
-  const remainingResetPoints = userData.statResetPoints - totalNegativeChanges;
+    const remainingResetPoints = (userData.statResetPoints ?? 0) - totalNegativeChanges;
 
   const handlePumpStats = () => {
     if (isUpgradingStats) return;
