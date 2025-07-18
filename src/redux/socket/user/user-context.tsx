@@ -21,10 +21,12 @@ import { useSocket } from "../socket-context";
 import { useLoginSocket } from "../login/login-context";
 import { removeUndefined } from "../../../utils/helpers";
 import {
+  ADD_STICKERS_FOR_SLIME_SUCCESS,
   BETA_TESTER_LOGIN_EVENT,
   COMBAT_EXP_UPDATE_EVENT,
   EFFICIENCY_STATS_UPDATE_EVENT,
   FIRST_LOGIN_EVENT,
+  STARS_INVOICE_CREATED_EVENT,
   USE_REFERRAL_CODE_SUCCESS,
 } from "../../../utils/events";
 import { useNotification } from "../../../components/notifications/notification-context";
@@ -44,6 +46,13 @@ import { formatUnits } from "ethers";
 import { DITTO_DECIMALS } from "../../../utils/config";
 import ReferralSuccessNotification from "../../../components/notifications/notification-content/referral-notification/referral-notification";
 import BetaTestersLoginNotif from "../../../components/notifications/notification-content/beta-testers-login/beta-testers-login";
+import WebApp from "@twa-dev/sdk";
+import PurchaseSuccessNotification from "../../../components/notifications/notification-content/purchase-success/purchase-success-notification";
+import ElixerOfUnmakingIcon from "../../../assets/images/general/elixir-of-unmaking.png";
+import SatcherDraughtIcon from "../../../assets/images/general/satchel-draught.png";
+import SlimebondSerumIcon from "../../../assets/images/general/slimebond-serum.png";
+import { preloadImageCached } from "../../../utils/image-cache";
+import { FloatingUpdate } from "../../../components/floating-update-display/floating-update-display";
 
 interface FarmingExpPayload {
   farmingLevel: number;
@@ -109,6 +118,8 @@ interface UserContext {
   canEmitEvent: () => boolean;
   setLastEventEmittedTimestamp: React.Dispatch<React.SetStateAction<number>>;
   removeSlimeById: (slimeId: number) => void;
+  canGenerateStickers: boolean;
+  setCanGenerateStickers: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const UserContext = createContext<UserContext>({
@@ -132,6 +143,8 @@ const UserContext = createContext<UserContext>({
   canEmitEvent: () => false,
   setLastEventEmittedTimestamp: () => {},
   removeSlimeById: () => {},
+  canGenerateStickers: true,
+  setCanGenerateStickers: () => {},
 });
 
 export const useUserSocket = () => useContext(UserContext);
@@ -140,7 +153,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const { socket, loadingSocket } = useSocket();
   const { accessGranted } = useLoginSocket();
   const { addNotification } = useNotification();
-  const { addFloatingUpdate } = useFloatingUpdate();
+  const { addFloatingUpdate, addMultipleFloatingUpdates } = useFloatingUpdate();
 
   // User
   const [userData, setUserData] = useState<User>(defaultUser);
@@ -421,9 +434,9 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   const pumpStats = (statsToPump: StatsToPumpPayload) => {
     if (!socket || !canEmitEvent()) return;
 
-    // Remove keys with value 0 or undefined
+    // Remove keys with value 0 or undefined, but keep negative values
     const filteredStats = Object.fromEntries(
-      Object.entries(statsToPump).filter(([_, v]) => v && v > 0)
+      Object.entries(statsToPump).filter(([_, v]) => v !== undefined && v !== 0)
     ) as StatsToPumpPayload;
 
     if (Object.keys(filteredStats).length === 0) return;
@@ -504,20 +517,93 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         const cleanPartialupdate = removeUndefined(partialUpdate);
         console.log("Received user-update:", cleanPartialupdate);
 
-        let goldDelta = 0;
-
         setUserData((prev) => {
           if (!prev) return prev;
 
+          let goldDelta = 0;
+          let statResetPointsDelta = 0;
+          let maxInventorySlotsDelta = 0;
+          let maxSlimeInventorySlotsDelta = 0;
+
           if (
-            partialUpdate.goldBalance &&
+            partialUpdate.goldBalance !== undefined &&
             prev.goldBalance !== partialUpdate.goldBalance &&
             accessGranted
           ) {
             goldDelta = partialUpdate.goldBalance - prev.goldBalance;
           }
 
-          const updated = {
+          if (
+            partialUpdate.statResetPoints !== undefined &&
+            prev.statResetPoints !== partialUpdate.statResetPoints &&
+            accessGranted
+          ) {
+            statResetPointsDelta =
+              partialUpdate.statResetPoints - prev.statResetPoints;
+          }
+
+          if (
+            partialUpdate.maxInventorySlots !== undefined &&
+            prev.maxInventorySlots !== partialUpdate.maxInventorySlots &&
+            accessGranted
+          ) {
+            maxInventorySlotsDelta =
+              partialUpdate.maxInventorySlots - prev.maxInventorySlots;
+          }
+
+          if (
+            partialUpdate.maxSlimeInventorySlots !== undefined &&
+            prev.maxSlimeInventorySlots !==
+              partialUpdate.maxSlimeInventorySlots &&
+            accessGranted
+          ) {
+            maxSlimeInventorySlotsDelta =
+              partialUpdate.maxSlimeInventorySlots -
+              prev.maxSlimeInventorySlots;
+          }
+
+          // Process floating updates here, inside the callback
+          setTimeout(() => {
+            const pendingUpdates: Omit<FloatingUpdate, "id">[] = [];
+
+            if (goldDelta !== 0) {
+              pendingUpdates.push({
+                icon: GoldIcon,
+                text: "GP",
+                amount: goldDelta,
+              });
+            }
+
+            if (statResetPointsDelta !== 0) {
+              pendingUpdates.push({
+                icon: ElixerOfUnmakingIcon,
+                text: "Elixir of Unmaking",
+                amount: statResetPointsDelta,
+              });
+            }
+
+            if (maxInventorySlotsDelta !== 0) {
+              pendingUpdates.push({
+                icon: SatcherDraughtIcon,
+                text: "Inventory Slots",
+                amount: maxInventorySlotsDelta,
+              });
+            }
+
+            if (maxSlimeInventorySlotsDelta !== 0) {
+              pendingUpdates.push({
+                icon: SlimebondSerumIcon,
+                text: "Slime Inventory Slots",
+                amount: maxSlimeInventorySlotsDelta,
+              });
+            }
+
+            if (pendingUpdates.length > 0) {
+              addMultipleFloatingUpdates(pendingUpdates);
+            }
+          }, 0);
+
+          return {
             ...prev,
             ...cleanPartialupdate,
             inventory: cleanPartialupdate.inventory
@@ -526,20 +612,7 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
                 )
               : prev.inventory,
           };
-
-          return updated;
         });
-
-        // 💡 floating update done AFTER setUserData commit
-        if (goldDelta !== 0) {
-          setTimeout(() => {
-            addFloatingUpdate({
-              icon: GoldIcon,
-              text: "GP",
-              amount: goldDelta,
-            });
-          }, 0);
-        }
       });
 
       socket.on(
@@ -682,6 +755,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
             slimes: updatedSlimes,
           };
         });
+
+        preloadImageCached(slime.imageUri);
 
         if (shouldAdd && accessGranted) {
           setTimeout(() => {
@@ -972,6 +1047,9 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
       socket.on("error", (msg: string) => {
         addNotification(() => <ErrorNotification msg={msg} />);
+        if (msg.toLowerCase().includes("sticker")) {
+          setCanGenerateStickers(true);
+        }
       });
 
       // Clean up on unmount
@@ -994,10 +1072,86 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
   }, [socket, loadingSocket, accessGranted]);
 
   useEffect(() => {
+    if (!socket) return;
+
+    const handleStarsInvoiceCreated = (data: {
+      userId: string;
+      invoiceUrl: any;
+      shopItemId: number;
+      shopItemName: string;
+      quantity: number;
+      totalStars: number;
+    }) => {
+      console.log("Stars invoice created:", data); // Log the whole object properly
+
+      // Open Telegram payment interface
+      if (WebApp) {
+        WebApp.openInvoice(data.invoiceUrl, (status: string) => {
+          if (status === "paid") {
+            console.log("Payment successful!");
+            addNotification(() => (
+              <PurchaseSuccessNotification
+                msg={`You have purchased ${data.shopItemName} x${data.quantity} for ${data.totalStars} Stars!`}
+              />
+            ));
+          } else if (status === "cancelled") {
+            console.log("Payment cancelled");
+            addNotification(() => (
+              <ErrorNotification msg={"Payment cancelled"} />
+            ));
+          } else if (status === "failed") {
+            console.log("Payment failed");
+            addNotification(() => <ErrorNotification msg={"Payment failed"} />);
+          }
+        });
+      } else {
+        // Fallback: open invoice URL directly
+        window.open(data.invoiceUrl, "_blank");
+      }
+    };
+
+    socket.on(STARS_INVOICE_CREATED_EVENT, handleStarsInvoiceCreated);
+
+    return () => {
+      socket.off(STARS_INVOICE_CREATED_EVENT, handleStarsInvoiceCreated);
+    };
+  }, [socket]);
+
+  const [canGenerateStickers, setCanGenerateStickers] = useState(true);
+
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleStickerGenerationSuccess = () => {
+      console.log("ADD_STICKERS_FOR_SLIME_SUCCESS received");
+      addNotification(() => (
+        <PurchaseSuccessNotification
+          msg={`Stickers generated! Check the Ditto Quest Bot for the download link.`}
+        />
+      ));
+      setCanGenerateStickers(true);
+    };
+
+    socket.on(ADD_STICKERS_FOR_SLIME_SUCCESS, handleStickerGenerationSuccess);
+
+    return () => {
+      socket.off(
+        ADD_STICKERS_FOR_SLIME_SUCCESS,
+        handleStickerGenerationSuccess
+      );
+    };
+  }, [socket]);
+
+  useEffect(() => {
     console.log(
       `Login state check: userLoaded=${userLoaded}, dittoBalanceLoaded=${dittoBalanceLoaded}, userContextLoaded=${userContextLoaded}`
     );
-    if (userLoaded && dittoBalanceLoaded && userEfficiencyStatsLoaded && !userContextLoaded) {
+    if (
+      userLoaded &&
+      dittoBalanceLoaded &&
+      userEfficiencyStatsLoaded &&
+      !userContextLoaded
+    ) {
       setUserContextLoaded(true);
       console.log(`✅ User context now loaded`);
 
@@ -1026,6 +1180,8 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         canEmitEvent,
         setLastEventEmittedTimestamp,
         removeSlimeById,
+        canGenerateStickers,
+        setCanGenerateStickers,
       }}
     >
       {children}

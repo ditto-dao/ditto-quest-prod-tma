@@ -10,6 +10,7 @@ interface PreloadProgress {
     staticImages: boolean;
     dynamicUserData: boolean;
     gameAssets: boolean;
+    shopAssets: boolean;
     fonts: boolean;
     complete: boolean;
 }
@@ -22,6 +23,7 @@ class PreloadManager {
         staticImages: false,
         dynamicUserData: false,
         gameAssets: false,
+        shopAssets: false,
         fonts: false,
         complete: false
     };
@@ -48,6 +50,7 @@ class PreloadManager {
             this.progress.staticImages &&
             this.progress.dynamicUserData &&
             this.progress.gameAssets &&
+            this.progress.shopAssets &&
             this.progress.fonts;
 
         this.progressCallbacks.forEach(callback => callback({ ...this.progress }));
@@ -62,6 +65,7 @@ class PreloadManager {
             this.preloadAllStaticImages(),
             this.preloadDynamicUserData(userData),
             this.preloadGameAssets(),
+            this.preloadShopAssets(),
             this.preloadFonts()
         ]);
 
@@ -230,6 +234,40 @@ class PreloadManager {
         } catch (error) {
             console.error('❌ Game assets preload failed:', error);
             this.progress.gameAssets = true; // Mark as done to not block
+            this.updateProgress();
+        }
+    }
+
+    private async preloadShopAssets() {
+        try {
+            const shopAssetImages: string[] = [];
+
+            // Import shop items
+            try {
+                const shop = await import('../assets/json/shop.json');
+                shop.default.forEach((shopItem: any) => {
+                    if (shopItem.imgsrc) shopAssetImages.push(shopItem.imgsrc);
+                });
+            } catch (e) {
+                console.log('No shop.json found');
+            }
+
+            // Filter out already cached images
+            const uncachedShopAssets = shopAssetImages.filter(src => !isImageCached(src));
+
+            if (uncachedShopAssets.length > 0) {
+                console.log(`🔄 Preloading ${uncachedShopAssets.length} shop asset images...`);
+                await preloadImagesBatch(uncachedShopAssets);
+            } else {
+                console.log('✅ All shop asset images already cached');
+            }
+
+            this.progress.shopAssets = true;
+            this.updateProgress();
+            console.log('✅ Shop assets preloaded');
+        } catch (error) {
+            console.error('❌ Shop assets preload failed:', error);
+            this.progress.shopAssets = true; // Mark as done to not block
             this.updateProgress();
         }
     }

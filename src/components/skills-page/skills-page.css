@@ -94,20 +94,31 @@
   padding: 10px 0;
 }
 
+.points-container {
+  display: flex;
+  gap: 12px;
+}
+
 .outstanding-stat-points {
-  background-color: var(--sage-green);
+  border: 2px solid var(--muted-teal-green);
   font-size: 9px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
+  padding: 5px 8px;
   border-radius: 6px;
+  gap: 10px;
+}
+
+.stat-points-label > img {
+  height: 24px;
 }
 
 .outstanding-stat-points > .user-stat-points {
-  background-color: var(--forest-green);
+  background-color: var(--muted-teal-green);
   padding: 8px 10px;
   border-radius: 6px;
+  min-width: 32px;
 }
 
 .skills-inner-container > .assign-stats-button {

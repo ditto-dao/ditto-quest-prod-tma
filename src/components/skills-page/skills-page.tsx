@@ -23,12 +23,14 @@ import ReinforceAirIcon from "../../assets/images/combat/reinforce-air.png";
 import ReinforceWaterIcon from "../../assets/images/combat/reinforce-water.png";
 import ReinforceEarthIcon from "../../assets/images/combat/reinforce-earth.png";
 import ReinforceFireIcon from "../../assets/images/combat/reinforce-fire.png";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import ElixirOfUnmakingIcon from "../../assets/images/general/elixir-of-unmaking.png";
 
 function SkillsPage() {
   const { userData, userEfficiencyStats, pumpStats, isUpgradingStats } =
     useUserSocket();
 
+  // Change these to track net changes (can be positive or negative)
   const [numStrToPump, setNumStrToPump] = useState(0);
   const [numDefToPump, setNumDefToPump] = useState(0);
   const [numDexToPump, setNumDexToPump] = useState(0);
@@ -36,21 +38,48 @@ function SkillsPage() {
   const [numMagicToPump, setNumMagicToPump] = useState(0);
   const [numHpLevelToPump, setNumhpLevelToPump] = useState(0);
 
-  const [remainingPoints, setRemainingPoints] = useState(
-    userData.outstandingSkillPoints
-  );
+  // Calculate points used
+  const totalPositiveChanges = [
+    numStrToPump,
+    numDefToPump,
+    numDexToPump,
+    numLukToPump,
+    numMagicToPump,
+    numHpLevelToPump,
+  ]
+    .filter((change) => change > 0)
+    .reduce((sum, change) => sum + change, 0);
+
+  const totalNegativeChanges = [
+    numStrToPump,
+    numDefToPump,
+    numDexToPump,
+    numLukToPump,
+    numMagicToPump,
+    numHpLevelToPump,
+  ]
+    .filter((change) => change < 0)
+    .reduce((sum, change) => sum + Math.abs(change), 0);
+
+  const remainingSkillPoints =
+    userData.outstandingSkillPoints - totalPositiveChanges;
+  const remainingResetPoints = userData.statResetPoints - totalNegativeChanges;
 
   const handlePumpStats = () => {
     if (isUpgradingStats) return;
 
-    pumpStats({
-      str: numStrToPump,
-      def: numDefToPump,
-      dex: numDexToPump,
-      luk: numLukToPump,
-      magic: numMagicToPump,
-      hpLevel: numHpLevelToPump,
-    });
+    // Only send non-zero changes
+    const changes: any = {};
+    if (numStrToPump !== 0) changes.str = numStrToPump;
+    if (numDefToPump !== 0) changes.def = numDefToPump;
+    if (numDexToPump !== 0) changes.dex = numDexToPump;
+    if (numLukToPump !== 0) changes.luk = numLukToPump;
+    if (numMagicToPump !== 0) changes.magic = numMagicToPump;
+    if (numHpLevelToPump !== 0) changes.hpLevel = numHpLevelToPump;
+
+    if (Object.keys(changes).length > 0) {
+      pumpStats(changes);
+    }
 
     setNumStrToPump(0);
     setNumDefToPump(0);
@@ -60,25 +89,7 @@ function SkillsPage() {
     setNumhpLevelToPump(0);
   };
 
-  useEffect(() => {
-    setRemainingPoints(
-      userData.outstandingSkillPoints -
-        numStrToPump -
-        numDefToPump -
-        numDexToPump -
-        numLukToPump -
-        numMagicToPump -
-        numHpLevelToPump
-    );
-  }, [
-    userData.outstandingSkillPoints,
-    numStrToPump,
-    numDefToPump,
-    numDexToPump,
-    numLukToPump,
-    numMagicToPump,
-    numHpLevelToPump,
-  ]);
+  const hasChanges = totalPositiveChanges > 0 || totalNegativeChanges > 0;
 
   function toPercentage(value: number): string {
     return (value * 100).toFixed(1) + "%";
@@ -94,65 +105,100 @@ function SkillsPage() {
             level={userData.str}
             pointsToPump={numStrToPump}
             setPointsToPump={setNumStrToPump}
-            canIncrement={remainingPoints > 0}
+            canIncrement={remainingSkillPoints > 0}
+            canDecrement={
+              numStrToPump > 0 ||
+              (remainingResetPoints > 0 && userData.str + numStrToPump > 1)
+            }
           />
           <Skill
             skill="def"
             level={userData.def}
             pointsToPump={numDefToPump}
             setPointsToPump={setNumDefToPump}
-            canIncrement={remainingPoints > 0}
+            canIncrement={remainingSkillPoints > 0}
+            canDecrement={
+              numDefToPump > 0 ||
+              (remainingResetPoints > 0 && userData.def + numDefToPump > 1)
+            }
           />
           <Skill
             skill="dex"
             level={userData.dex}
             pointsToPump={numDexToPump}
             setPointsToPump={setNumDexToPump}
-            canIncrement={remainingPoints > 0}
+            canIncrement={remainingSkillPoints > 0}
+            canDecrement={
+              numDexToPump > 0 ||
+              (remainingResetPoints > 0 && userData.dex + numDexToPump > 1)
+            }
           />
           <Skill
             skill="agi"
             level={userData.luk}
             pointsToPump={numLukToPump}
             setPointsToPump={setNumLukToPump}
-            canIncrement={remainingPoints > 0}
+            canIncrement={remainingSkillPoints > 0}
+            canDecrement={
+              numLukToPump > 0 ||
+              (remainingResetPoints > 0 && userData.luk + numLukToPump > 1)
+            }
           />
           <Skill
             skill="magic"
             level={userData.magic}
             pointsToPump={numMagicToPump}
             setPointsToPump={setNumMagicToPump}
-            canIncrement={remainingPoints > 0}
+            canIncrement={remainingSkillPoints > 0}
+            canDecrement={
+              numMagicToPump > 0 ||
+              (remainingResetPoints > 0 && userData.magic + numMagicToPump > 1)
+            }
           />
           <Skill
             skill="HP LVL"
             level={userData.hpLevel}
             pointsToPump={numHpLevelToPump}
             setPointsToPump={setNumhpLevelToPump}
-            canIncrement={remainingPoints > 0}
+            canIncrement={remainingSkillPoints > 0}
+            canDecrement={
+              numHpLevelToPump > 0 ||
+              (remainingResetPoints > 0 &&
+                userData.hpLevel + numHpLevelToPump > 1)
+            }
           />
-          <div className="outstanding-stat-points">
-            <div className="stat-points-label">STAT POINTS</div>
-            <div className="user-stat-points">{remainingPoints}</div>
+
+          <div className="points-container">
+            <div className="outstanding-stat-points">
+              <div className="stat-points-label">SP</div>
+              <div className="user-stat-points">{remainingSkillPoints}</div>
+            </div>
+            <div className="outstanding-stat-points">
+              <div className="stat-points-label">
+                <img src={ElixirOfUnmakingIcon} alt="Reset Points" />
+              </div>
+              <div className="user-stat-points">{remainingResetPoints}</div>
+            </div>
           </div>
-          {userData.outstandingSkillPoints > 0 && (
+
+          {hasChanges && (
             <div
               className={
                 isUpgradingStats ||
-                remainingPoints === userData.outstandingSkillPoints
+                remainingSkillPoints < 0 ||
+                remainingResetPoints < 0
                   ? "assign-stats-button disabled"
                   : "assign-stats-button active"
               }
-              onClick={() => {
-                handlePumpStats();
-              }}
+              onClick={handlePumpStats}
             >
-              {isUpgradingStats ? "Upgrading..." : "Assign"}
+              {isUpgradingStats ? "Applying..." : "Apply Changes"}
             </div>
           )}
         </div>
       </div>
 
+      {/* Rest stays exactly the same */}
       <div className="combat-stats-container">
         <div className="combat-stats-header">Combat Stats</div>
         <div className="combat-stats-inner-container">
@@ -295,7 +341,7 @@ function SkillsPage() {
             <div className="efficiency-calc-header">Resource & Speed</div>
             <EfficiencyStat
               statName="SKILL DURATION RED"
-              level={`-${toPercentage(
+              level={`${toPercentage(
                 userEfficiencyStats.skillIntervalMultiplier
               )}`}
               fontSize={8}
@@ -320,12 +366,12 @@ function SkillsPage() {
             />
             <EfficiencyStat
               statName="SKILL EXP BOOST"
-              level={`+${toPercentage(userEfficiencyStats.flatSkillExpBoost)}`}
+              level={`${toPercentage(userEfficiencyStats.flatSkillExpBoost)}`}
               fontSize={8}
             />
             <EfficiencyStat
               statName="COMBAT EXP BOOST"
-              level={`+${toPercentage(userEfficiencyStats.flatCombatExpBoost)}`}
+              level={`${toPercentage(userEfficiencyStats.flatCombatExpBoost)}`}
               fontSize={8}
             />
           </div>

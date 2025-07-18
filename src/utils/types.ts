@@ -49,10 +49,6 @@ export interface User {
     craftingExp: number;
     expToNextCraftingLevel: number;
 
-    // Buffs
-    doubleResourceOdds: number;
-    skillIntervalReductionMultiplier: number;
-
     // Max inventory
     maxInventorySlots: number;
     maxSlimeInventorySlots: number;
@@ -119,8 +115,6 @@ export const defaultUser: User = {
     craftingLevel: 1,
     craftingExp: 0,
     expToNextCraftingLevel: 570,
-    doubleResourceOdds: 0.01,
-    skillIntervalReductionMultiplier: 1,
     maxInventorySlots: 40,
     maxSlimeInventorySlots: 40,
     hatInventoryId: null,
@@ -589,4 +583,27 @@ export const defaultEfficiencyStats: UserEfficiencyStats = {
     flatCombatExpBoost: 0,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
+}
+
+export type ShopItemType = "EQUIPMENT" | "ITEM" | "SERVICE";
+
+export type ServiceType =
+    | "STAT_RESET_POINT"
+    | "INVENTORY_SLOT"
+    | "SLIME_INVENTORY_SLOT";
+
+export interface ShopItemData {
+    id: number;
+    name: string;
+    type: ShopItemType;
+    equipmentId: number | null;
+    itemId: number | null;
+    serviceType: ServiceType | null;
+    priceGP: number;
+    priceDittoWei: string;
+    priceStars: number | null;
+    isActive: boolean;
+    imgsrc: string;
+    description: string;
+    createdAt: Date;
 }

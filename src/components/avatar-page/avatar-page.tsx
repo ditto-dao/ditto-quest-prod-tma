@@ -8,7 +8,7 @@ import DefaultShield from "../../assets/images/avatar-page/default-shield.png";
 import DefaultNecklace from "../../assets/images/avatar-page/default-necklace.png";
 import DefaultArmour from "../../assets/images/avatar-page/default-armour.png";
 import DefaultPet from "../../assets/images/avatar-page/default-pet.png";
-import SlimeLogo from "../../assets/images/general/slime-mage.png";
+import SlimeLogo from "../../assets/images/general/dq-logo.png";
 import CPIcon from "../../assets/images/combat/cp-logo.png";
 import GoldMedalIcon from "../../assets/images/combat/gold-medal.png";
 import HPLevelIcon from "../../assets/images/combat/hp-lvl.png";

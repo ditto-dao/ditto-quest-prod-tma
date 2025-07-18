@@ -28,6 +28,12 @@ const formatStatValueMul = (value: number): string => {
   return delta > 0 ? `+${formatted}` : `${formatted}`;
 };
 
+const formatEfficiencyStatValue = (value: number): string => {
+  const delta = value * 100;
+  const formatted = delta.toFixed(1) + "%";
+  return formatted;
+};
+
 export default function CombatStats({
   stats,
   colorScheme = "slime",
@@ -433,9 +439,9 @@ export default function CombatStats({
           <div className="stats-grid">
             {stats.efficiencySkillIntervalMod !== 0 && (
               <div className="combat-stat-item">
-                <span className="stat-label">SKILL INTERVAL RED</span>
+                <span className="stat-label">SKILL DURATION RED</span>
                 <span className="stat-value">
-                  {formatStatValueMul(stats.efficiencySkillIntervalMod)}
+                  {formatEfficiencyStatValue(stats.efficiencySkillIntervalMod)}
                 </span>
               </div>
             )}
@@ -443,7 +449,7 @@ export default function CombatStats({
               <div className="combat-stat-item">
                 <span className="stat-label">DBL RESOURCE CHANCE</span>
                 <span className="stat-value">
-                  {formatStatValueMul(stats.efficiencyDoubleResourceMod)}
+                  {formatEfficiencyStatValue(stats.efficiencyDoubleResourceMod)}
                 </span>
               </div>
             )}
@@ -451,7 +457,7 @@ export default function CombatStats({
               <div className="combat-stat-item">
                 <span className="stat-label">DBL SKILL EXP CHANCE</span>
                 <span className="stat-value">
-                  {formatStatValueMul(stats.efficiencyDoubleSkillExpMod)}
+                  {formatEfficiencyStatValue(stats.efficiencyDoubleSkillExpMod)}
                 </span>
               </div>
             )}
@@ -459,7 +465,9 @@ export default function CombatStats({
               <div className="combat-stat-item">
                 <span className="stat-label">DBL COMBAT EXP CHANCE</span>
                 <span className="stat-value">
-                  {formatStatValueMul(stats.efficiencyDoubleCombatExpMod)}
+                  {formatEfficiencyStatValue(
+                    stats.efficiencyDoubleCombatExpMod
+                  )}
                 </span>
               </div>
             )}
@@ -467,7 +475,7 @@ export default function CombatStats({
               <div className="combat-stat-item">
                 <span className="stat-label">SKILL EXP BOOST</span>
                 <span className="stat-value">
-                  {formatStatValueMul(stats.efficiencyFlatSkillExpMod)}
+                  {formatEfficiencyStatValue(stats.efficiencyFlatSkillExpMod)}
                 </span>
               </div>
             )}
@@ -475,7 +483,7 @@ export default function CombatStats({
               <div className="combat-stat-item">
                 <span className="stat-label">COMBAT EXP BOOST</span>
                 <span className="stat-value">
-                  {formatStatValueMul(stats.efficiencyFlatCombatExpMod)}
+                  {formatEfficiencyStatValue(stats.efficiencyFlatCombatExpMod)}
                 </span>
               </div>
             )}

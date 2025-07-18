@@ -1,0 +1,24 @@
+.purchase-success-notification {
+  color: var(--cream-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  padding-top: 0;
+}
+
+.purchase-success-notification > .purchase-success-header {
+  font-size: 12px;
+  margin-bottom: 6px;
+  background-color: var(--sage-green);
+  padding: 8px 20px;
+  border-radius: 5px;
+}
+
+.purchase-success-message {
+  padding: 11px;
+  padding-top: 0;
+  font-size: 10px;
+  line-height: 15px;
+}

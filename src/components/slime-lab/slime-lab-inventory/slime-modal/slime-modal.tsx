@@ -13,6 +13,9 @@ import SellSlimeNotification from "../sell-slime-modal/sell-slime-modal";
 import { preloadImageCached } from "../../../../utils/image-cache";
 import FastImage from "../../../fast-image/fast-image";
 import CombatStats from "../../../combat-stats/combat-stats";
+import { useSocket } from "../../../../redux/socket/socket-context";
+import { ADD_STICKERS_FOR_SLIME } from "../../../../utils/events";
+import TGStickerIcon from ".././../../../assets/images/general/tg-sticker.png";
 
 const TRAIT_KEYS = [
   "Body",
@@ -40,7 +43,16 @@ export default function SlimeModal({
   closeOnUnequip,
   removeNotification,
 }: SlimeModalProps) {
-  const { userData, equipSlime, unequipSlime } = useUserSocket();
+  const { socket } = useSocket();
+  const {
+    userData,
+    equipSlime,
+    unequipSlime,
+    canEmitEvent,
+    setLastEventEmittedTimestamp,
+    canGenerateStickers,
+    setCanGenerateStickers,
+  } = useUserSocket();
   const { breedingStatus, slimeToBreed0, slimeToBreed1, setSlimeToBreed } =
     useIdleSkillSocket();
   const { addNotification } = useNotification();
@@ -94,6 +106,15 @@ export default function SlimeModal({
     );
   };
 
+  const generateStickers = () => {
+    if (socket && canEmitEvent()) {
+      console.log(`Emitting ADD_STICKERS_FOR_SLIME`);
+      socket.emit(ADD_STICKERS_FOR_SLIME, selectedSlime.id);
+      setLastEventEmittedTimestamp(Date.now());
+      setCanGenerateStickers(false);
+    }
+  };
+
   return (
     <div className="slime-modal-content">
       {/* Slime Image */}
@@ -114,11 +135,26 @@ export default function SlimeModal({
             alt={`#${selectedSlime.id}`}
             className={`slime-image rarity-${getHighestDominantTraitRarity(
               selectedSlime
-            ).toLowerCase()}`}
+            )[0].toLowerCase()}`}
           />
         ) : (
           <div className="slime-modal-image-placeholder shimmer" />
         )}
+        <div
+          className={`export-sticker-button ${
+            !canGenerateStickers ? "disabled" : ""
+          }`}
+          onClick={() => {
+            if (canGenerateStickers) generateStickers();
+          }}
+        >
+          {!canGenerateStickers ? (
+            <div className="loading-spinner"></div>
+          ) : (
+            <img src={TGStickerIcon} alt="Telegram Sticker" />
+          )}
+          <span>TG Stickers</span>
+        </div>
       </div>
 
       {/* Slime ID and Rarity */}

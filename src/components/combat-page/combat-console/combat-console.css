@@ -80,7 +80,6 @@
   width: 70px;
   height: 70px;
   border-radius: 8px;
-  overflow: hidden;
 }
 
 /* Background image (area) */
@@ -96,6 +95,7 @@
   z-index: 0;
   object-fit: contain;
   filter: brightness(0.6);
+  border-radius: 8px;
 }
 
 /* Foreground monster image */

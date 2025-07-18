@@ -130,7 +130,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
   const { socket, loadingSocket } = useSocket();
   const { addNotification } = useNotification();
   const { accessGranted } = useLoginSocket();
-  const { userData } = useUserSocket();
+  const { userData, userEfficiencyStats } = useUserSocket();
   const { setCurrentActivity } = useCurrentActivityContext();
 
   // Farming
@@ -148,7 +148,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
       [itemId]: { startTimestamp, durationS },
     })); */
     setFarmingStatuses({
-      [itemId]: { startTimestamp, durationS },
+      [itemId]: { startTimestamp, durationS: durationS * (1 - userEfficiencyStats.skillIntervalMultiplier) },
     });
     console.log(`Started farming for item ID ${itemId}`);
   };
@@ -177,7 +177,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
       [equipmentId]: { startTimestamp, durationS },
     })); */
     setCraftingStatuses({
-      [equipmentId]: { startTimestamp, durationS },
+      [equipmentId]: { startTimestamp, durationS: durationS * (1 - userEfficiencyStats.skillIntervalMultiplier) },
     });
     console.log(`Started crafting for equipment ID ${equipmentId}`);
   };
