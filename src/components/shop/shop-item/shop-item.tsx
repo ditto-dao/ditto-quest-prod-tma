@@ -76,7 +76,7 @@ function ShopItem({ item, allowMultiple }: ShopItemProps) {
         getDeductionPayloadToDevFunds(
           telegramId.toString(),
           dittoBalance,
-          shopItemPriceDittoWei,
+          shopItemPriceDittoWei * BigInt(quantity || 1),
           generateShopPurchaseDittoTxNote(shopItemId, quantity || 1)
         )
       );
