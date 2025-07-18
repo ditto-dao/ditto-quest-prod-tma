@@ -41,7 +41,7 @@
         "priceStars": 150,
         "isActive": true,
         "imgsrc": "https://kibble.s3.ap-southeast-2.amazonaws.com/ditto-quest/08-necklace-amulet/15-Necklace-of-Everlearn.png",
-        "description": "+20% XP Boost\n\nLvl 40 Combat Required",
+        "description": "+20% Double XP Chance\n\nLvl 40 Combat Required",
         "createdAt": "2025-07-14T09:26:45.562Z"
     },
     {
@@ -56,7 +56,7 @@
         "priceStars": 600,
         "isActive": true,
         "imgsrc": "https://kibble.s3.ap-southeast-2.amazonaws.com/ditto-quest/08-necklace-amulet/13-Sigil-of-Mastery.png",
-        "description": "+40% XP Boost\n\nLvl 80 Combat Required",
+        "description": "+40% Double XP Chance\n\nLvl 80 Combat Required",
         "createdAt": "2025-07-14T09:26:45.573Z"
     },
     {
@@ -101,7 +101,7 @@
         "priceStars": 250,
         "isActive": true,
         "imgsrc": "https://kibble.s3.ap-southeast-2.amazonaws.com/ditto-quest/08-necklace-amulet/44-Amulet-of-Echoed-Insight.png",
-        "description": "+20% Double XP Chance\n\nLvl 40 Combat Required",
+        "description": "+20% XP Boost\n\nLvl 40 Combat Required",
         "createdAt": "2025-07-14T09:26:45.599Z"
     },
     {
@@ -116,7 +116,7 @@
         "priceStars": 1200,
         "isActive": true,
         "imgsrc": "https://kibble.s3.ap-southeast-2.amazonaws.com/ditto-quest/08-necklace-amulet/36-Pendant-of-the-Remembered-Path.png",
-        "description": "+40% Double XP Chance\n\nLvl 80 Combat Required",
+        "description": "+40% XP Boost\n\nLvl 80 Combat Required",
         "createdAt": "2025-07-14T09:26:45.607Z"
     },
     {
