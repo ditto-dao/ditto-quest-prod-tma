@@ -8,7 +8,7 @@ import { SocketProvider } from "./redux/socket/socket-context";
 import { UserProvider } from "./redux/socket/user/user-context";
 //import { initEruda } from "./utils/eruda";
 import MainPage from "./components/main-page/main-page";
-import { LoginSocketProvider } from "./redux/socket/login/login-context";
+import { LoginProvider } from "./redux/socket/login/login-context";
 import { IdleSkillSocketProvider } from "./redux/socket/idle/skill-context";
 import { GachaSocketProvider } from "./redux/socket/gacha/gacha-context";
 import { CombatSocketProvider } from "./redux/socket/idle/combat-context";
@@ -112,7 +112,7 @@ function App() {
       <Provider store={store}>
         <NotificationProvider>
           <SocketProvider>
-            <LoginSocketProvider>
+            <LoginProvider>
               <FloatingUpdateProvider>
                 <UserProvider>
                   <CurrentActivityProvider>
@@ -129,7 +129,7 @@ function App() {
                   </CurrentActivityProvider>
                 </UserProvider>
               </FloatingUpdateProvider>
-            </LoginSocketProvider>
+            </LoginProvider>
           </SocketProvider>
         </NotificationProvider>
       </Provider>

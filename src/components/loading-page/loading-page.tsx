@@ -2,12 +2,10 @@ import "./loading-page.css";
 import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { getRandomTooltip } from "./loading-tooltips";
+import { useLogin } from "../../redux/socket/login/login-context";
 
-interface LoadingPageProps {
-  progress: number;
-}
-
-function LoadingPage({ progress }: LoadingPageProps) {
+function LoadingPage() {
+  const { step, progress } = useLogin();
   const animationDuration = progress >= 100 ? 1 : 10;
   const tooltip = useMemo(() => getRandomTooltip(), []);
 
@@ -19,6 +17,9 @@ function LoadingPage({ progress }: LoadingPageProps) {
 
       <div className="loading-bottom">
         <div className="loading-tooltip">{tooltip}</div>
+
+        <div className="loading-status">{step}</div>
+
         <div className="loading-progress-container">
           <motion.div
             className="loading-progress-bar"

@@ -8,7 +8,6 @@ import {
 } from "react";
 import { UserMission } from "../../utils/types";
 import { useSocket } from "../../redux/socket/socket-context";
-import { useLoginSocket } from "../../redux/socket/login/login-context";
 import { GET_NEXT_MISSION, MISSION_UPDATE } from "../../utils/events";
 import { useUserSocket } from "../../redux/socket/user/user-context";
 
@@ -40,7 +39,6 @@ export function MissionNotificationProvider({
   children: ReactNode;
 }) {
   const { socket } = useSocket();
-  const { accessGranted } = useLoginSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
 
   const [mission, setMission] = useState<UserMission | null>(null);
@@ -67,7 +65,7 @@ export function MissionNotificationProvider({
   };
 
   useEffect(() => {
-    if (socket && accessGranted) {
+    if (socket) {
       socket.on(MISSION_UPDATE, (data: UserMission | null) => {
         console.log(
           `Received MISSION_UPDATE: ${JSON.stringify(data, null, 2)}`
@@ -84,7 +82,7 @@ export function MissionNotificationProvider({
         socket.off(MISSION_UPDATE);
       };
     }
-  }, [socket, accessGranted]);
+  }, [socket]);
 
   useEffect(() => {
     setModalOpen(!!mission);

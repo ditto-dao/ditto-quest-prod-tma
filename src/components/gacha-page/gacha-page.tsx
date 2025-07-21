@@ -2,7 +2,6 @@ import "./gacha-page.css";
 import TreasureChest from "./treasure-chest/treasure-chest";
 import SlimeGachaAnimation from "./slime-gacha-animation/slime-gacha-animation";
 import { useSocket } from "../../redux/socket/socket-context";
-import { useLoginSocket } from "../../redux/socket/login/login-context";
 import DittoCoinLogo from "../../assets/images/general/ditto-coin.png";
 import {
   formatNumberWithSuffix,
@@ -31,7 +30,6 @@ function GachaPage() {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
   const { socket, loadingSocket } = useSocket();
-  const { accessGranted } = useLoginSocket();
   const { dittoBalance, userData } = useUserSocket();
   const {
     rollingSlime,
@@ -76,7 +74,6 @@ function GachaPage() {
       socket &&
       canEmitEvent() &&
       !loadingSocket &&
-      accessGranted &&
       telegramId &&
       !rollingSlime
     ) {

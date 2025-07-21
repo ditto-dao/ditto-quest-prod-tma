@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useSocket } from "../socket-context";
 import { SlimeWithTraits, SocketProviderProps } from "../../../utils/types";
-import { useLoginSocket } from "../login/login-context";
 import { useUserSocket } from "../user/user-context";
 import { useNotification } from "../../../components/notifications/notification-context";
 import OfflineProgressNotification from "../../../components/notifications/notification-content/offline-progress/offline-progress-notification";
 import DQLogo from "../../../assets/images/general/dq-logo.png";
 import { useCurrentActivityContext } from "./current-activity-context";
+import LoginManager from "../../../managers/login-manager";
 
 export interface FarmingStatus {
   startTimestamp: number;
@@ -129,7 +129,6 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
 }) => {
   const { socket, loadingSocket } = useSocket();
   const { addNotification } = useNotification();
-  const { accessGranted } = useLoginSocket();
   const { userData, userEfficiencyStats } = useUserSocket();
   const { setCurrentActivity } = useCurrentActivityContext();
 
@@ -405,10 +404,8 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
           // ✅ ALWAYS set this to true when event is received
           setOfflineProgressUpdatesReceived(true);
 
-          // Signal to login-context that skill context is ready
-          if ((window as any).setSkillContextReady) {
-            (window as any).setSkillContextReady();
-          }
+          // NEW: Just call the manager instead of window function
+          LoginManager.getInstance().setSkillDataLoaded();
 
           // Only show notification if there are meaningful updates
           if (data.updates && data.updates.length > 0) {
@@ -453,7 +450,7 @@ export const IdleSkillSocketProvider: React.FC<SocketProviderProps> = ({
         socket.off("idle-progress-update");
       };
     }
-  }, [socket, loadingSocket, accessGranted]);
+  }, [socket, loadingSocket]);
 
   // Resolve unresolved IDs to slimes once userData.slimes is available
   useEffect(() => {

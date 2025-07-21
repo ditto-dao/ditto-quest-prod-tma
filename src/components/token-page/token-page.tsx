@@ -1,4 +1,3 @@
-import { useLoginSocket } from "../../redux/socket/login/login-context";
 import { useSocket } from "../../redux/socket/socket-context";
 import { useUserSocket } from "../../redux/socket/user/user-context";
 import { TonConnectButton, useTonAddress } from "@tonconnect/ui-react";
@@ -26,7 +25,6 @@ function TokenPage() {
   const telegramId = useSelector((state: RootState) => state.telegramId.id);
   const { dittoBalance } = useUserSocket();
   const { socket } = useSocket();
-  const { accessGranted } = useLoginSocket();
 
   const walletAddress = useTonAddress();
 
@@ -124,7 +122,7 @@ function TokenPage() {
   }, [socket]);
 
   useEffect(() => {
-    if (socket && accessGranted) {
+    if (socket) {
       if (walletAddress.length > 0 && telegramId) {
         socket.emit(`update-user-wallet-address`, walletAddress);
         console.log(
@@ -132,7 +130,7 @@ function TokenPage() {
         );
       }
     }
-  }, [walletAddress, socket, accessGranted, telegramId]);
+  }, [walletAddress, socket, telegramId]);
 
   return (
     <div className="token-page">

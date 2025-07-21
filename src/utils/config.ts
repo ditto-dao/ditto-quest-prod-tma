@@ -22,7 +22,7 @@ export const DITTO_DECIMALS = 9
 
 export const DEVELOPMENT_FUNDS_KEY = "DEVELOPMENT_FUNDS"
 
-export const LEVERAGE_POOL_KEY = "LEVERAGE_POOL" 
+export const LEVERAGE_POOL_KEY = "LEVERAGE_POOL"
 
 export const DQ_TMA_LINK_PREFIX = "https://t.me/ditto_quest_bot/dqgame?startapp="
 
@@ -36,6 +36,6 @@ export const MAX_INITIAL_INVENTORY_SLOTS = 40;
 
 export const MAX_INITIAL_SLIME_INVENTORY_SLOTS = 40;
 
-export const MANIFEST_URL="https://ditto-dao.github.io/click-game-tma-vite/tonconnect-manifest.json"
+export const MANIFEST_URL = "https://ditto-dao.github.io/click-game-tma-vite/tonconnect-manifest.json"
 
-export const REDIRECT_URL="https://ditto-dao.github.io/ditto-quest-prod-tma/"
+export const REDIRECT_URL = "https://ditto-dao.github.io/ditto-quest-prod-tma/"

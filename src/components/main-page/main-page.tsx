@@ -14,11 +14,13 @@ import LoadingPage from "../loading-page/loading-page";
 import AccessDeniedPage from "../access-denied-page/access-denied-page";
 import CurrentActivityDisplay from "../current-activity-display/current-activity-display";
 import ReferralPage from "../referral-page/referral-page";
+import TokenPage from "../token-page/token-page";
+import Shop from "../shop/shop";
 import { AnimatePresence, motion } from "framer-motion";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 
-import { useLoginSocket } from "../../redux/socket/login/login-context";
+import { useLogin } from "../../redux/socket/login/login-context";
 
 import ShopIcon from "../../assets/images/sidebar/shop.png";
 import AvatarIcon from "../../assets/images/sidebar/avatar.png";
@@ -33,9 +35,7 @@ import ReferralIcon from "../../assets/images/sidebar/referral.png";
 import { FloatingUpdateDisplay } from "../floating-update-display/floating-update-display";
 import { useFloatingUpdate } from "../../redux/socket/idle/floating-update-context";
 import { MissionModal } from "../missions/mission-modal";
-import TokenPage from "../token-page/token-page";
 import FastImage from "../fast-image/fast-image";
-import Shop from "../shop/shop";
 
 const pageIcons: Record<string, string> = {
   Shop: ShopIcon,
@@ -51,8 +51,7 @@ const pageIcons: Record<string, string> = {
 };
 
 function MainPage() {
-  const { accessGranted, accessDeniedMessage, loginProgress, loginComplete } =
-    useLoginSocket();
+  const { isComplete, error } = useLogin();
   const { updates } = useFloatingUpdate();
 
   const [view, setView] = useState<"loading" | "main" | "access-denied">(
@@ -62,12 +61,12 @@ function MainPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (loginComplete && accessGranted) {
-      setTimeout(() => setView("main"), 1000); // slight delay for smooth UX
-    } else if (loginComplete && !accessGranted && accessDeniedMessage.trim()) {
+    if (isComplete) {
+      setTimeout(() => setView("main"), 2000); // slight delay for smooth UX
+    } else if (error) {
       setView("access-denied");
     }
-  }, [loginComplete, accessGranted, accessDeniedMessage]);
+  }, [isComplete, error]);
 
   const renderPage = () => {
     switch (currentPage) {
@@ -110,7 +109,7 @@ function MainPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <LoadingPage progress={loginProgress} />
+            <LoadingPage />
           </motion.div>
         )}
 
@@ -123,7 +122,7 @@ function MainPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <AccessDeniedPage msg={accessDeniedMessage} />
+            <AccessDeniedPage msg={error || "Access denied"} />
           </motion.div>
         )}
 

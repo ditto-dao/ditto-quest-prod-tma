@@ -6,7 +6,6 @@ import {
   DUNGEON_LB_UPDATE_EVENT,
   GET_DUNGEON_LB,
 } from "../../../../utils/events";
-import { useLoginSocket } from "../../../../redux/socket/login/login-context";
 import { useUserSocket } from "../../../../redux/socket/user/user-context";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
@@ -60,7 +59,6 @@ interface DungeonLbProps {
 
 function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
   const { socket, loadingSocket } = useSocket();
-  const { accessGranted } = useLoginSocket();
   const { canEmitEvent, setLastEventEmittedTimestamp } = useUserSocket();
 
   const [lbList, setLbList] = useState<DungeonLeaderboardEntry[]>([]);
@@ -167,7 +165,7 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
   }, []);
 
   useEffect(() => {
-    if (socket && !loadingSocket && accessGranted) {
+    if (socket && !loadingSocket) {
       socket.on(
         DUNGEON_LB_UPDATE_EVENT,
         async (data: { lb: DungeonLeaderboardEntry[] }) => {
@@ -190,7 +188,7 @@ function DungeonLb({ dungeonId, dungeonName }: DungeonLbProps) {
         socket.off(DUNGEON_LB_UPDATE_EVENT);
       };
     }
-  }, [socket, loadingSocket, accessGranted, receivedFirstBatch]);
+  }, [socket, loadingSocket, receivedFirstBatch]);
 
   return (
     <div className="dungeon-lb-notification">
