@@ -435,19 +435,28 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
 
     console.log(`pumping stats: ${JSON.stringify(filteredStats, null, 2)}`);
 
+    // Calculate points used for positive and negative changes
+    const positiveChanges = Object.values(filteredStats)
+      .filter((v) => v > 0)
+      .reduce((sum, v) => sum + v, 0);
+    const negativeChanges = Object.values(filteredStats)
+      .filter((v) => v < 0)
+      .reduce((sum, v) => sum + Math.abs(v), 0);
+
+    // Set upgrading state immediately to prevent UI flickering
+    setIsUpgradingStats(true);
+
+    // Optimistically update user data - this is the key fix!
     setUserData((prev) => {
       if (!prev) return prev;
 
-      const updated = {
+      return {
         ...prev,
-        outstandingSkillPoints:
-          prev.outstandingSkillPoints -
-          (statsToPump.str || 0) -
-          (statsToPump.def || 0) -
-          (statsToPump.dex || 0) -
-          (statsToPump.luk || 0) -
-          (statsToPump.magic || 0) -
-          (statsToPump.hpLevel || 0),
+        // Update skill points (spent on positive changes)
+        outstandingSkillPoints: prev.outstandingSkillPoints - positiveChanges,
+        // Update reset points (spent on negative changes) - THIS WAS MISSING!
+        statResetPoints: (prev.statResetPoints ?? 0) - negativeChanges,
+        // Update individual stats
         str: prev.str + (statsToPump.str || 0),
         def: prev.def + (statsToPump.def || 0),
         dex: prev.dex + (statsToPump.dex || 0),
@@ -455,14 +464,11 @@ export const UserProvider: React.FC<SocketProviderProps> = ({ children }) => {
         magic: prev.magic + (statsToPump.magic || 0),
         hpLevel: prev.hpLevel + (statsToPump.hpLevel || 0),
       };
-
-      return updated;
     });
 
     socket.emit("pump-stats", filteredStats);
     setLastEventEmittedTimestamp(Date.now());
   };
-
   const canEmitEvent = () => {
     return Date.now() - lastEventEmittedTimestamp >= 500;
   };

@@ -63,7 +63,8 @@ function SkillsPage() {
 
   const remainingSkillPoints =
     userData.outstandingSkillPoints - totalPositiveChanges;
-    const remainingResetPoints = (userData.statResetPoints ?? 0) - totalNegativeChanges;
+  const remainingResetPoints =
+    (userData.statResetPoints ?? 0) - totalNegativeChanges;
 
   const handlePumpStats = () => {
     if (isUpgradingStats) return;
@@ -105,7 +106,9 @@ function SkillsPage() {
             level={userData.str}
             pointsToPump={numStrToPump}
             setPointsToPump={setNumStrToPump}
-            canIncrement={remainingSkillPoints > 0}
+            canIncrement={
+              remainingSkillPoints > 0 || numStrToPump < 0
+            }
             canDecrement={
               numStrToPump > 0 ||
               (remainingResetPoints > 0 && userData.str + numStrToPump > 1)
@@ -116,7 +119,9 @@ function SkillsPage() {
             level={userData.def}
             pointsToPump={numDefToPump}
             setPointsToPump={setNumDefToPump}
-            canIncrement={remainingSkillPoints > 0}
+            canIncrement={
+              remainingSkillPoints > 0 || numDefToPump < 0
+            }
             canDecrement={
               numDefToPump > 0 ||
               (remainingResetPoints > 0 && userData.def + numDefToPump > 1)
@@ -127,7 +132,9 @@ function SkillsPage() {
             level={userData.dex}
             pointsToPump={numDexToPump}
             setPointsToPump={setNumDexToPump}
-            canIncrement={remainingSkillPoints > 0}
+            canIncrement={
+              remainingSkillPoints > 0 || numDexToPump < 0
+            }
             canDecrement={
               numDexToPump > 0 ||
               (remainingResetPoints > 0 && userData.dex + numDexToPump > 1)
@@ -138,7 +145,9 @@ function SkillsPage() {
             level={userData.luk}
             pointsToPump={numLukToPump}
             setPointsToPump={setNumLukToPump}
-            canIncrement={remainingSkillPoints > 0}
+            canIncrement={
+              remainingSkillPoints > 0 || numLukToPump < 0
+            }
             canDecrement={
               numLukToPump > 0 ||
               (remainingResetPoints > 0 && userData.luk + numLukToPump > 1)
@@ -149,7 +158,9 @@ function SkillsPage() {
             level={userData.magic}
             pointsToPump={numMagicToPump}
             setPointsToPump={setNumMagicToPump}
-            canIncrement={remainingSkillPoints > 0}
+            canIncrement={
+              remainingSkillPoints > 0 || numMagicToPump < 0
+            }
             canDecrement={
               numMagicToPump > 0 ||
               (remainingResetPoints > 0 && userData.magic + numMagicToPump > 1)
@@ -160,7 +171,9 @@ function SkillsPage() {
             level={userData.hpLevel}
             pointsToPump={numHpLevelToPump}
             setPointsToPump={setNumhpLevelToPump}
-            canIncrement={remainingSkillPoints > 0}
+            canIncrement={
+              remainingSkillPoints > 0 || numHpLevelToPump < 0
+            }
             canDecrement={
               numHpLevelToPump > 0 ||
               (remainingResetPoints > 0 &&
