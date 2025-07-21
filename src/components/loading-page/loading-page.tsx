@@ -5,7 +5,7 @@ import { getRandomTooltip } from "./loading-tooltips";
 import { useLogin } from "../../redux/socket/login/login-context";
 
 function LoadingPage() {
-  const { step, progress } = useLogin();
+  const { /* step, */ progress } = useLogin();
   const animationDuration = progress >= 100 ? 1 : 10;
   const tooltip = useMemo(() => getRandomTooltip(), []);
 
@@ -18,7 +18,7 @@ function LoadingPage() {
       <div className="loading-bottom">
         <div className="loading-tooltip">{tooltip}</div>
 
-        <div className="loading-status">{step}</div>
+        {/* <div className="loading-status">{step}</div> */}
 
         <div className="loading-progress-container">
           <motion.div
