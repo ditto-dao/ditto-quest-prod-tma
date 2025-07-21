@@ -241,7 +241,13 @@ class LoginManager {
 
         this.socket.on("disconnect", () => {
             if (this.state.accessGranted) {
-                this.setError(LoginStep.DISCONNECTED, "Lost connection to server");
+                // Reset the complete state to ensure UI shows access denied page
+                this.updateState({
+                    step: LoginStep.DISCONNECTED,
+                    error: "Disconnected from server",
+                    isComplete: false,  
+                    accessGranted: false
+                });
             }
         });
     }
