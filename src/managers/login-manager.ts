@@ -106,10 +106,7 @@ class LoginManager {
                 this.updateState({ step: LoginStep.CONNECTING, progress: 5 });
                 this.validateTelegramAccess();
             } else if (data.status === 'MAINTENANCE') {
-                //this.setError(LoginStep.MAINTENANCE);
-                this.conditions.serverOnline = true;
-                this.updateState({ step: LoginStep.CONNECTING, progress: 5 });
-                this.validateTelegramAccess();
+                this.setError(LoginStep.MAINTENANCE);
             } else {
                 this.setError(LoginStep.ERROR);
             }
